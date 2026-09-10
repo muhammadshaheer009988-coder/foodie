@@ -22,10 +22,16 @@
             <a href="#home" class="active">Home</a>
             <a href="#features">Why Us</a>
             <a href="#menu">Menu</a>
+            <a href="#order-history">My Orders</a>
             <a href="#reviews">Reviews</a>
             <a href="#admin">Admin Panel</a>
         </nav>
         <div class="nav-actions">
+            <!-- Dark / Light Mode Toggle Button -->
+            <button onclick="toggleDarkMode()" id="theme-btn" title="Toggle Dark/Light Mode">
+                <i class="fa-solid fa-moon" id="theme-icon"></i>
+            </button>
+
             <button id="auth-btn" class="nav-login-btn" onclick="openAuthModal()">
                 <i class="fa-solid fa-right-to-bracket"></i> Login / Sign Up
             </button>
@@ -80,6 +86,11 @@
             <h2>Our Popular Menu</h2>
             <p>Explore top rated dishes curated for you</p>
         </div>
+
+        <!-- Search Bar -->
+        <div style="max-width: 500px; margin: 0 auto 25px auto; display: flex; gap: 10px;">
+            <input type="text" id="search-input" onkeyup="searchMenu()" placeholder="🔍 Search dishes (e.g. Biryani, Burger, Kebab)..." style="width: 100%; padding: 12px 18px; border: 1px solid #ddd; border-radius: 25px; outline: none; font-size: 14px; transition: 0.3s;">
+        </div>
         
         <!-- Category Filters -->
         <div class="category-filters">
@@ -117,6 +128,17 @@
                 <div class="step-icon"><i class="fa-solid fa-house-circle-check"></i></div>
                 <p>Delivered</p>
             </div>
+        </div>
+    </section>
+
+    <!-- Customer Order History Section -->
+    <section id="order-history" class="features-section" style="padding: 40px 20px;">
+        <div class="section-header">
+            <h2>My Order History</h2>
+            <p>Your previous orders and receipts</p>
+        </div>
+        <div id="history-container" style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
+            <p style="text-align: center; color: #888;">No orders placed yet!</p>
         </div>
     </section>
 
@@ -235,6 +257,13 @@
         </div>
         <div id="cart-items" class="cart-items"></div>
         <div class="cart-footer">
+            <!-- Coupon Code Section -->
+            <div class="coupon-section" style="margin-bottom: 12px; display: flex; gap: 6px;">
+                <input type="text" id="coupon-code" placeholder="Promo Code (Try: FOODIE50)" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 6px;">
+                <button onclick="applyCoupon()" style="background: #333; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">Apply</button>
+            </div>
+            <div id="discount-msg" style="color: #2ed573; font-size: 13px; margin-bottom: 8px; font-weight: bold;"></div>
+
             <div class="total-price">Total Amount: <strong>Rs. <span id="cart-total">0</span></strong></div>
             <button class="btn-primary checkout-btn" onclick="checkout()">Proceed To Checkout</button>
         </div>
@@ -259,6 +288,42 @@
                     <input type="password" placeholder="Password" required>
                 </div>
                 <button type="submit" class="btn-primary auth-submit">Login Now</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeCheckoutModal()">&times;</span>
+            <div class="auth-header">
+                <i class="fa-solid fa-truck-ramp-box"></i>
+                <h3>Delivery Details</h3>
+                <p>Enter your location & payment method</p>
+            </div>
+            <form id="checkout-form" onsubmit="processOrder(event)">
+                <div class="input-group">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="cust-name" placeholder="Full Name" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-phone"></i>
+                    <input type="tel" id="cust-phone" placeholder="Phone Number" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <input type="text" id="cust-address" placeholder="Complete Delivery Address" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-credit-card"></i>
+                    <select id="payment-method" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
+                        <option value="">Select Payment Method</option>
+                        <option value="Cash on Delivery">Cash on Delivery (COD)</option>
+                        <option value="JazzCash / EasyPaisa">JazzCash / EasyPaisa</option>
+                        <option value="Debit / Credit Card">Debit / Credit Card</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary auth-submit">Confirm & Place Order</button>
             </form>
         </div>
     </div>
