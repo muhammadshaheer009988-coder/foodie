@@ -1,4 +1,6 @@
-/* Advance Variables & Styling */
+/* ==========================================
+   ADVANCE VARIABLES & CORE STYLING
+   ========================================== */
 :root {
     --primary: #ff4757;
     --primary-gradient: linear-gradient(135deg, #ff4757 0%, #ff6b81 100%);
@@ -24,10 +26,12 @@
 body {
     background-color: var(--light-bg);
     color: var(--text-color);
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color 0.4s ease, color 0.4s ease;
 }
 
-/* Header Navbar */
+/* ==========================================
+   HEADER & NAVBAR STYLING
+   ========================================== */
 header {
     display: flex;
     justify-content: space-between;
@@ -38,7 +42,7 @@ header {
     position: sticky;
     top: 0;
     z-index: 1000;
-    transition: background 0.3s ease;
+    transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .logo {
@@ -64,37 +68,52 @@ nav a {
 
 nav a:hover, nav a.active { color: var(--primary); }
 
-/* Login Button & Actions */
+/* Navigation Actions */
 .nav-actions { 
     display: flex !important; 
     align-items: center !important; 
     gap: 15px !important; 
 }
 
-/* Dark Mode Toggle Button Styling */
+/* ==========================================
+   PREMIUM THEME TOGGLE BUTTON (LIGHT MODE)
+   ========================================== */
 #theme-btn {
-    display: flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    background-color: #f0f0f0 !important;
-    color: #333333 !important;
-    border: 1px solid #cccccc !important;
-    width: 40px !important;
-    height: 40px !important;
-    border-radius: 50% !important;
-    justify-content: center !important;
+    display: inline-flex !important;
     align-items: center !important;
+    justify-content: center !important;
+    background: linear-gradient(135deg, #ff4757, #ff6b81) !important;
+    color: #ffffff !important;
+    border: none !important;
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 50% !important;
     cursor: pointer !important;
     font-size: 18px !important;
-    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 15px rgba(255, 71, 87, 0.35) !important;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    outline: none !important;
     z-index: 999 !important;
 }
 
 #theme-btn:hover {
-    transform: scale(1.1);
-    background-color: #e0e0e0 !important;
+    transform: translateY(-3px) scale(1.08) !important;
+    box-shadow: 0 8px 22px rgba(255, 71, 87, 0.5) !important;
 }
 
+#theme-btn:active {
+    transform: translateY(0) scale(0.95) !important;
+}
+
+#theme-icon {
+    transition: transform 0.4s ease;
+}
+
+#theme-btn:hover #theme-icon {
+    transform: rotate(25deg);
+}
+
+/* Auth / Login Button */
 .nav-login-btn {
     background: var(--primary-gradient);
     color: var(--white);
@@ -150,7 +169,9 @@ nav a:hover, nav a.active { color: var(--primary); }
     align-items: center;
 }
 
-/* Hero Section */
+/* ==========================================
+   HERO SECTION
+   ========================================== */
 .hero {
     height: 75vh;
     background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.75)), 
@@ -226,13 +247,14 @@ nav a:hover, nav a.active { color: var(--primary); }
 
 .btn-secondary:hover { background: var(--white); color: var(--dark); }
 
-/* Section Base */
+/* ==========================================
+   SECTIONS BASE & FEATURES
+   ========================================== */
 section { padding: 70px 8%; }
 .section-header { text-align: center; margin-bottom: 45px; }
 .section-header h2 { font-size: 34px; font-weight: 700; margin-bottom: 8px; }
 .section-header p { color: #718096; font-size: 16px; }
 
-/* Features Section */
 .features-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -263,7 +285,9 @@ section { padding: 70px 8%; }
     margin: 0 auto 20px;
 }
 
-/* Category Filters */
+/* ==========================================
+   MENU & CATEGORY FILTERS
+   ========================================== */
 .category-filters { display: flex; justify-content: center; gap: 12px; margin-bottom: 40px; flex-wrap: wrap; }
 
 .filter-btn {
@@ -284,7 +308,6 @@ section { padding: 70px 8%; }
     box-shadow: 0 6px 15px rgba(255, 71, 87, 0.3);
 }
 
-/* Menu Grid */
 .menu-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
@@ -309,7 +332,9 @@ section { padding: 70px 8%; }
 .food-card .price { color: var(--primary); font-weight: 700; font-size: 18px; margin-bottom: 15px; }
 .food-card .btn-primary { width: 100%; justify-content: center; }
 
-/* Order Tracking */
+/* ==========================================
+   ORDER TRACKING & REVIEWS
+   ========================================== */
 .hidden { display: none !important; }
 
 .status-stepper {
@@ -335,13 +360,14 @@ section { padding: 70px 8%; }
     margin: 0 auto 10px;
 }
 
-/* Reviews */
 .reviews-container { display: flex; gap: 25px; justify-content: center; flex-wrap: wrap; }
 .review-card { background: var(--card-bg); padding: 30px; border-radius: var(--border-radius); box-shadow: var(--shadow); max-width: 380px; flex: 1; }
 .user-info { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
 .user-info img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
 
-/* Admin Panel */
+/* ==========================================
+   ADMIN PANEL & ANALYTICS
+   ========================================== */
 .admin-section { background: var(--light-bg); }
 .admin-analytics { display: flex; gap: 25px; justify-content: center; margin-bottom: 40px; flex-wrap: wrap; }
 .stat-card { background: var(--card-bg); padding: 25px 40px; border-radius: var(--border-radius); box-shadow: var(--shadow); display: flex; align-items: center; gap: 20px; min-width: 250px; }
@@ -352,7 +378,9 @@ section { padding: 70px 8%; }
 .admin-form-container form { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
 .admin-form-container input, .admin-form-container select { padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; outline: none; background: var(--card-bg); color: var(--text-color); }
 
-/* Footer */
+/* ==========================================
+   FOOTER
+   ========================================== */
 footer { background: var(--dark); color: var(--white); padding-top: 60px; }
 .footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; padding: 0 8% 50px; }
 .footer-col h4 { margin-bottom: 20px; font-size: 18px; }
@@ -363,7 +391,9 @@ footer { background: var(--dark); color: var(--white); padding-top: 60px; }
 .social-icons a { font-size: 20px; }
 .footer-bottom { text-align: center; padding: 20px; background: #111827; color: #718096; font-size: 13px; }
 
-/* Cart Drawer */
+/* ==========================================
+   CART DRAWER & MODALS
+   ========================================== */
 .cart-sidebar {
     position: fixed;
     top: 0; right: -420px;
@@ -384,7 +414,6 @@ footer { background: var(--dark); color: var(--white); padding-top: 60px; }
 .cart-footer { padding: 20px; border-top: 1px solid var(--border-color); }
 .checkout-btn { width: 100%; justify-content: center; }
 
-/* Login Modal */
 .modal {
     display: none;
     position: fixed;
@@ -417,33 +446,50 @@ footer { background: var(--dark); color: var(--white); padding-top: 60px; }
 .auth-submit { width: 100%; justify-content: center; }
 .close-btn { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #a0aec0; }
 
-
 /* ========================================================= */
-/* FULL DARK THEME OVERRIDES (Jab dark-theme active hoga)    */
+/* INTERNATIONAL LUXURY DARK THEME OVERRIDES                 */
 /* ========================================================= */
 
 body.dark-theme {
-    --light-bg: #121212 !important;
+    --light-bg: #0f172a !important;
     --dark: #ffffff !important;
-    --white: #1e1e1e !important;
-    --card-bg: #1e1e1e !important;
-    --text-color: #f1f1f1 !important;
-    --border-color: #333333 !important;
-    background-color: #121212 !important;
-    color: #f1f1f1 !important;
+    --white: #1e293b !important;
+    --card-bg: #1e293b !important;
+    --text-color: #f8fafc !important;
+    --border-color: rgba(255, 255, 255, 0.1) !important;
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
 }
 
+/* Glassmorphism Header in Dark Theme */
 body.dark-theme header {
-    background-color: #1e1e1e !important;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
+    background: rgba(15, 23, 42, 0.85) !important;
+    backdrop-filter: blur(12px) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 
+body.dark-theme nav a {
+    color: #cbd5e1 !important;
+}
+
+body.dark-theme nav a.active,
+body.dark-theme nav a:hover {
+    color: #ff4757 !important;
+}
+
+/* Glowing Theme Toggle Button in Dark Mode */
 body.dark-theme #theme-btn {
-    background-color: #333333 !important;
-    color: #ffdd59 !important; /* Sun icon light yellow */
-    border-color: #555555 !important;
+    background: linear-gradient(135deg, #f1c40f, #f39c12) !important;
+    color: #0f172a !important;
+    box-shadow: 0 4px 18px rgba(241, 196, 15, 0.4) !important;
 }
 
+body.dark-theme #theme-btn:hover {
+    box-shadow: 0 8px 25px rgba(241, 196, 15, 0.6) !important;
+}
+
+/* Luxury Card Styling for Dark Theme */
 body.dark-theme .feature-card,
 body.dark-theme .food-card,
 body.dark-theme .review-card,
@@ -452,27 +498,48 @@ body.dark-theme .admin-form-container,
 body.dark-theme .status-stepper,
 body.dark-theme .modal-content,
 body.dark-theme .cart-sidebar {
-    background-color: #1e1e1e !important;
+    background-color: #1e293b !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35) !important;
+}
+
+body.dark-theme .food-card-details h3,
+body.dark-theme .feature-card h3,
+body.dark-theme .review-card h4,
+body.dark-theme .section-header h2 {
     color: #ffffff !important;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5) !important;
+}
+
+body.dark-theme .section-header p,
+body.dark-theme .feature-card p,
+body.dark-theme .review-card p {
+    color: #94a3b8 !important;
 }
 
 body.dark-theme .filter-btn {
-    background-color: #2a2a2a !important;
-    color: #ffffff !important;
+    background-color: #334155 !important;
+    color: #f8fafc !important;
 }
 
 body.dark-theme .filter-btn.active {
     background: var(--primary-gradient) !important;
+    color: #ffffff !important;
 }
 
 body.dark-theme input, 
 body.dark-theme select {
-    background-color: #2b2b2b !important;
+    background-color: #0f172a !important;
     color: #ffffff !important;
-    border-color: #444444 !important;
+    border-color: #334155 !important;
 }
 
-body.dark-theme .section-header p {
-    color: #aaaaaa !important;
+body.dark-theme .cart-icon {
+    background: #334155 !important;
+    color: #ff4757 !important;
+}
+
+body.dark-theme .cart-icon:hover {
+    background: #ff4757 !important;
+    color: #ffffff !important;
 }
