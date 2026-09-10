@@ -92,6 +92,14 @@ function toggleCart() {
     if (sidebar) sidebar.classList.toggle('open');
 }
 
+// Toggle Mobile Menu (Hamburger Drawer)
+function toggleMobileMenu() {
+    const navMenu = document.getElementById('nav-menu');
+    if (navMenu) {
+        navMenu.classList.toggle('active');
+    }
+}
+
 // Save Cart to LocalStorage
 function saveCartToStorage() {
     localStorage.setItem('foodieCart', JSON.stringify(cart));
@@ -308,32 +316,25 @@ function deleteMenuItem(id) {
     }
 }
 
-// Updated Auth Modal Controls (Separate Login vs Signup & Dynamic Switcher)
+// Auth Modal Controls (Login vs Signup switcher)
 function openAuthModal(mode = 'login') {
     currentAuthMode = mode;
     const authModal = document.getElementById('auth-modal');
-    const authTitle = document.getElementById('auth-title');
-    const submitBtn = document.querySelector('.auth-submit');
-    const switchContainer = document.getElementById('auth-switch-container');
+    const loginScreen = document.getElementById('login-screen');
+    const signupScreen = document.getElementById('signup-screen');
 
-    if (authTitle) {
-        authTitle.innerText = mode === 'signup' ? 'Create An Account' : 'Welcome Back';
-    }
-    if (submitBtn) {
-        submitBtn.innerText = mode === 'signup' ? 'Sign Up Now' : 'Login Now';
-    }
-    if (switchContainer) {
-        if (mode === 'signup') {
-            switchContainer.innerHTML = `Already have an account? <a href="javascript:void(0)" onclick="toggleAuthMode('login')">Login</a>`;
-        } else {
-            switchContainer.innerHTML = `Don't have an account? <a href="javascript:void(0)" onclick="toggleAuthMode('signup')">Sign Up</a>`;
-        }
+    if (mode === 'signup') {
+        if (loginScreen) loginScreen.classList.add('hidden');
+        if (signupScreen) signupScreen.classList.remove('hidden');
+    } else {
+        if (signupScreen) signupScreen.classList.add('hidden');
+        if (loginScreen) loginScreen.classList.remove('hidden');
     }
 
     if (authModal) authModal.classList.add('active');
 }
 
-function toggleAuthMode(mode) {
+function switchAuthScreen(mode) {
     openAuthModal(mode);
 }
 
@@ -342,9 +343,9 @@ function closeAuthModal() {
     if (authModal) authModal.classList.remove('active');
 }
 
-function handleAuth(e) {
+function handleAuth(e, type) {
     e.preventDefault();
-    if (currentAuthMode === 'signup') {
+    if (type === 'signup') {
         alert('Account created & logged in successfully!');
     } else {
         alert('Logged in successfully!');
