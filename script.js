@@ -8,12 +8,13 @@ let defaultItems = [
 
 let menuItems = JSON.parse(localStorage.getItem('foodieMenuItems')) || defaultItems;
 
-// Local Storage se cart load karein
+// Local Storage se Cart aur Orders History load karein
 let cart = JSON.parse(localStorage.getItem('foodieCart')) || [];
+let orderHistory = JSON.parse(localStorage.getItem('foodieOrderHistory')) || [];
 let totalOrders = localStorage.getItem('totalOrders') ? parseInt(localStorage.getItem('totalOrders')) : 0;
 let totalRevenue = localStorage.getItem('totalRevenue') ? parseInt(localStorage.getItem('totalRevenue')) : 0;
 
-// Current Auth Mode (Login vs Signup)
+// Current Auth Mode
 let currentAuthMode = 'login';
 
 // Discount Tracker Variable
@@ -24,7 +25,7 @@ function saveMenuItemsToStorage() {
     localStorage.setItem('foodieMenuItems', JSON.stringify(menuItems));
 }
 
-// Render Menu (With Admin Delete Button Support)
+// Render Menu
 function renderMenu(items) {
     const container = document.getElementById('menu-container');
     if (!container) return;
@@ -75,9 +76,9 @@ function filterMenu(category) {
     const buttons = document.querySelectorAll('.filter-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
     
-    if (window.event && window.event.target) {
-        window.event.target.classList.add('active');
-    }
+    // Set active button safely
+    const clickedBtn = Array.from(buttons).find(btn => btn.textContent.includes(category) || (category === 'All' && btn.textContent.includes('All')));
+    if (clickedBtn) clickedBtn.classList.add('active');
 
     if (category === 'All') {
         renderMenu(menuItems);
@@ -90,14 +91,6 @@ function filterMenu(category) {
 function toggleCart() {
     const sidebar = document.getElementById('cart-sidebar');
     if (sidebar) sidebar.classList.toggle('open');
-}
-
-// Toggle Mobile Menu (Hamburger Drawer)
-function toggleMobileMenu() {
-    const navMenu = document.getElementById('nav-menu');
-    if (navMenu) {
-        navMenu.classList.toggle('active');
-    }
 }
 
 // Save Cart to LocalStorage
@@ -121,6 +114,20 @@ function addToCart(itemId) {
     saveCartToStorage();
     updateCartUI();
     alert(`${item.name} Cart mein add ho gaya hai!`);
+}
+
+// Quantity Adjustments (+ / -)
+function updateQuantity(itemId, change) {
+    const cartItem = cart.find(p => p.id === itemId);
+    if (!cartItem) return;
+
+    cartItem.quantity += change;
+    if (cartItem.quantity <= 0) {
+        cart = cart.filter(p => p.id !== itemId);
+    }
+
+    saveCartToStorage();
+    updateCartUI();
 }
 
 // Apply Promo Code Function
@@ -150,7 +157,7 @@ function applyCoupon() {
     updateCartUI();
 }
 
-// Update Cart UI & Calculate Total with Discount
+// Update Cart UI & Total Calculation
 function updateCartUI() {
     const container = document.getElementById('cart-items');
     let total = 0, count = 0;
@@ -170,12 +177,19 @@ function updateCartUI() {
         } else {
             cart.forEach(item => {
                 container.innerHTML += `
-                    <div class="cart-item">
+                    <div class="cart-item" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #eee;">
                         <div>
-                            <h4>${item.name}</h4>
-                            <p>Rs. ${item.price} x ${item.quantity}</p>
+                            <h4 style="margin: 0; font-size: 15px;">${item.name}</h4>
+                            <p style="margin: 4px 0 0 0; color: #666; font-size: 13px;">Rs. ${item.price} x ${item.quantity}</p>
                         </div>
-                        <button class="btn-primary" onclick="removeFromCart(${item.id})" style="padding: 4px 10px; font-size:12px;">X</button>
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <button onclick="updateQuantity(${item.id}, -1)" style="padding: 2px 8px; cursor: pointer;">-</button>
+                            <span>${item.quantity}</span>
+                            <button onclick="updateQuantity(${item.id}, 1)" style="padding: 2px 8px; cursor: pointer;">+</button>
+                            <button onclick="removeFromCart(${item.id})" style="background: #ff4757; color: white; border: none; padding: 4px 8px; border-radius: 4px; margin-left: 6px; cursor: pointer;">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
                     </div>
                 `;
             });
@@ -226,7 +240,7 @@ function closeCheckoutModal() {
     }
 }
 
-// Process Order after form submission
+// Process Order Function
 function processOrder(e) {
     e.preventDefault();
 
@@ -241,9 +255,20 @@ function processOrder(e) {
     totalRevenue += orderTotal;
     totalOrders++;
 
+    // Save Order History
+    const newOrder = {
+        id: 'ORD-' + Math.floor(1000 + Math.random() * 9000),
+        items: [...cart],
+        amount: orderTotal,
+        date: new Date().toLocaleDateString(),
+        status: 'Processing'
+    };
+    orderHistory.unshift(newOrder);
+
     // Local Storage Update
     localStorage.setItem('totalOrders', totalOrders);
     localStorage.setItem('totalRevenue', totalRevenue);
+    localStorage.setItem('foodieOrderHistory', JSON.stringify(orderHistory));
 
     alert(`Shukriya ${name}! Aap ka order (Rs. ${orderTotal}) successfully place ho gaya hai.\nPayment Method: ${payment}\nDelivery Address: ${address}`);
 
@@ -257,11 +282,41 @@ function processOrder(e) {
 
     saveCartToStorage();
     updateCartUI();
+    renderOrderHistory();
     document.getElementById('checkout-form').reset();
     closeCheckoutModal();
 
     // Live Tracking Start
     startOrderTrackingSimulation();
+}
+
+// Render Order History UI
+function renderOrderHistory() {
+    const historyContainer = document.getElementById('history-container');
+    if (!historyContainer) return;
+
+    if (orderHistory.length === 0) {
+        historyContainer.innerHTML = `<p style="text-align: center; color: #888;">No orders placed yet!</p>`;
+        return;
+    }
+
+    historyContainer.innerHTML = '';
+    orderHistory.forEach(order => {
+        let itemsSummary = order.items.map(i => `${i.name} (x${i.quantity})`).join(', ');
+        historyContainer.innerHTML += `
+            <div style="background: var(--card-bg, #fff); padding: 15px; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 8px;">
+                    <span>Order ID: ${order.id}</span>
+                    <span style="color: #2ed573;">Rs. ${order.amount}</span>
+                </div>
+                <p style="margin: 0 0 6px 0; font-size: 14px; color: #555;"><strong>Items:</strong> ${itemsSummary}</p>
+                <div style="display: flex; justify-content: space-between; font-size: 12px; color: #888;">
+                    <span>Date: ${order.date}</span>
+                    <span>Status: <strong>${order.status}</strong></span>
+                </div>
+            </div>
+        `;
+    });
 }
 
 function startOrderTrackingSimulation() {
@@ -316,7 +371,7 @@ function deleteMenuItem(id) {
     }
 }
 
-// Auth Modal Controls (Login vs Signup switcher)
+// Auth Modal Controls
 function openAuthModal(mode = 'login') {
     currentAuthMode = mode;
     const authModal = document.getElementById('auth-modal');
@@ -353,40 +408,33 @@ function handleAuth(e, type) {
     closeAuthModal();
 }
 
-// Premium Dark / Light Mode Toggle Function
+// Dark / Light Mode Toggle
 function toggleDarkMode() {
     document.body.classList.toggle('dark-theme');
     const themeIcon = document.getElementById('theme-icon');
     
     if (document.body.classList.contains('dark-theme')) {
-        if (themeIcon) {
-            themeIcon.className = 'fa-solid fa-sun';
-        }
+        if (themeIcon) themeIcon.className = 'fa-solid fa-sun';
         localStorage.setItem('theme', 'dark');
     } else {
-        if (themeIcon) {
-            themeIcon.className = 'fa-solid fa-moon';
-        }
+        if (themeIcon) themeIcon.className = 'fa-solid fa-moon';
         localStorage.setItem('theme', 'light');
     }
 }
 
-// Window Load setup
+// Window Load Setup
 window.onload = () => {
     renderMenu(menuItems);
     updateCartUI();
+    renderOrderHistory();
 
     // Check Local Storage for Saved Theme
     const savedTheme = localStorage.getItem('theme');
     const themeIcon = document.getElementById('theme-icon');
     if (savedTheme === 'dark') {
         document.body.classList.add('dark-theme');
-        if (themeIcon) {
-            themeIcon.className = 'fa-solid fa-sun';
-        }
+        if (themeIcon) themeIcon.className = 'fa-solid fa-sun';
     } else {
-        if (themeIcon) {
-            themeIcon.className = 'fa-solid fa-moon';
-        }
+        if (themeIcon) themeIcon.className = 'fa-solid fa-moon';
     }
 };
