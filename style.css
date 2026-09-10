@@ -72,7 +72,44 @@ nav a:hover, nav a.active { color: var(--primary); }
 .nav-actions { 
     display: flex !important; 
     align-items: center !important; 
-    gap: 15px !important; 
+    gap: 12px !important; 
+}
+
+/* Dynamic Nav Buttons (Login & Sign Up) */
+.nav-btn {
+    border: none;
+    padding: 9px 20px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-login {
+    background: transparent;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.btn-login:hover {
+    background: #f1f2f6;
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-signup {
+    background: var(--primary-gradient);
+    color: var(--white);
+    box-shadow: 0 5px 15px rgba(255, 71, 87, 0.35);
+}
+
+.btn-signup:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 71, 87, 0.5);
 }
 
 /* ==========================================
@@ -111,28 +148,6 @@ nav a:hover, nav a.active { color: var(--primary); }
 
 #theme-btn:hover #theme-icon {
     transform: rotate(25deg);
-}
-
-/* Auth / Login Button */
-.nav-login-btn {
-    background: var(--primary-gradient);
-    color: var(--white);
-    border: none;
-    padding: 10px 22px;
-    border-radius: 30px;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(255, 71, 87, 0.35);
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.nav-login-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(255, 71, 87, 0.5);
 }
 
 /* Cart Icon */
@@ -446,6 +461,24 @@ footer { background: var(--dark); color: var(--white); padding-top: 60px; }
 .auth-submit { width: 100%; justify-content: center; }
 .close-btn { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #a0aec0; }
 
+/* Modal Auth Switcher Link Styling */
+.auth-switch {
+    text-align: center;
+    margin-top: 18px;
+    font-size: 13px;
+    color: #a0aec0;
+}
+
+.auth-switch a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.auth-switch a:hover {
+    text-decoration: underline;
+}
+
 /* ========================================================= */
 /* INTERNATIONAL LUXURY DARK THEME OVERRIDES                 */
 /* ========================================================= */
@@ -475,6 +508,16 @@ body.dark-theme nav a {
 
 body.dark-theme nav a.active,
 body.dark-theme nav a:hover {
+    color: #ff4757 !important;
+}
+
+body.dark-theme .btn-login {
+    color: #cbd5e1 !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+body.dark-theme .btn-login:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
     color: #ff4757 !important;
 }
 
