@@ -56,7 +56,7 @@ header {
 
 .logo i, .logo .highlight { color: var(--primary); }
 
-nav { display: flex; gap: 25px; }
+nav { display: flex; gap: 25px; align-items: center; }
 
 nav a {
     text-decoration: none;
@@ -67,6 +67,14 @@ nav a {
 }
 
 nav a:hover, nav a.active { color: var(--primary); }
+
+/* Hamburger Menu Toggle Icon (Mobile) */
+.menu-toggle {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--text-color);
+}
 
 /* Navigation Actions */
 .nav-actions { 
@@ -359,6 +367,8 @@ section { padding: 70px 8%; }
     padding: 40px 20px;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
 .step { text-align: center; color: #a0aec0; }
@@ -480,7 +490,7 @@ footer { background: var(--dark); color: var(--white); padding-top: 60px; }
 }
 
 /* ========================================================= */
-/* INTERNATIONAL LUXURY DARK THEME OVERRIDES                 */
+/* INTERNATIONAL LUXURY DARK THEME OVERRIDES                  */
 /* ========================================================= */
 
 body.dark-theme {
@@ -585,4 +595,33 @@ body.dark-theme .cart-icon {
 body.dark-theme .cart-icon:hover {
     background: #ff4757 !important;
     color: #ffffff !important;
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN (MEDIA QUERIES)
+   ========================================== */
+@media (max-width: 768px) {
+    header { padding: 15px 5%; }
+    .menu-toggle { display: block; }
+    
+    nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--card-bg);
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 0;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+        transition: 0.4s ease-in-out;
+    }
+
+    nav.active {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+
+    .hero-content h1 { font-size: 32px; }
+    .hero-content p { font-size: 15px; }
 }
