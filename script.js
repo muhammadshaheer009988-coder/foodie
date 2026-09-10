@@ -66,7 +66,7 @@ function searchMenu() {
 function filterMenu(category) {
     const buttons = document.querySelectorAll('.filter-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
-    if (event && event.target) event.target.classList.add('active');
+    if (window.event && window.event.target) window.event.target.classList.add('active');
 
     if (category === 'All') {
         renderMenu(menuItems);
@@ -294,11 +294,13 @@ function deleteMenuItem(id) {
 
 // Login Modal Controls
 function openAuthModal() {
-    document.getElementById('auth-modal').classList.add('active');
+    const authModal = document.getElementById('auth-modal');
+    if(authModal) authModal.classList.add('active');
 }
 
 function closeAuthModal() {
-    document.getElementById('auth-modal').classList.remove('active');
+    const authModal = document.getElementById('auth-modal');
+    if(authModal) authModal.classList.remove('active');
 }
 
 function handleAuth(e) {
@@ -307,21 +309,19 @@ function handleAuth(e) {
     closeAuthModal();
 }
 
-// Dark / Light Mode Toggle Function
+// Premium Dark / Light Mode Toggle Function
 function toggleDarkMode() {
     document.body.classList.toggle('dark-theme');
     const themeIcon = document.getElementById('theme-icon');
     
     if (document.body.classList.contains('dark-theme')) {
         if(themeIcon) {
-            themeIcon.classList.remove('fa-moon');
-            themeIcon.classList.add('fa-sun');
+            themeIcon.className = 'fa-solid fa-sun';
         }
         localStorage.setItem('theme', 'dark');
     } else {
         if(themeIcon) {
-            themeIcon.classList.remove('fa-sun');
-            themeIcon.classList.add('fa-moon');
+            themeIcon.className = 'fa-solid fa-moon';
         }
         localStorage.setItem('theme', 'light');
     }
@@ -332,14 +332,17 @@ window.onload = () => {
     renderMenu(menuItems);
     updateCartUI();
 
-    // Check Local Storage for Theme
+    // Check Local Storage for Saved Theme
     const savedTheme = localStorage.getItem('theme');
     const themeIcon = document.getElementById('theme-icon');
     if (savedTheme === 'dark') {
         document.body.classList.add('dark-theme');
         if(themeIcon) {
-            themeIcon.classList.remove('fa-moon');
-            themeIcon.classList.add('fa-sun');
+            themeIcon.className = 'fa-solid fa-sun';
+        }
+    } else {
+        if(themeIcon) {
+            themeIcon.className = 'fa-solid fa-moon';
         }
     }
 };
