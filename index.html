@@ -5,51 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Foodie Express - Premium Online Food Ordering Platform</title>
 
-    <!-- Open Graph Meta Tags for WhatsApp/Facebook Link Preview -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Foodie Express - Order Delicious Food Online">
     <meta property="og:description" content="Order fresh and hot meals with fast delivery and live order tracking!">
     <meta property="og:image" content="https://i.imgur.com/YOUR_IMAGE_ID.jpg">
 
     <link rel="stylesheet" href="style.css">
-    <!-- Font Awesome Icons (Latest v6.5.1 CDN) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <!-- Header Navigation -->
     <header>
         <div class="logo">
             <i class="fa-solid fa-fire-flame-curved"></i>
             <span>Foodie<span class="highlight">Express</span></span>
         </div>
-
-        <!-- Navigation Links -->
-        <nav id="nav-menu">
-            <div class="mobile-nav-header">
-                <div class="logo">
-                    <i class="fa-solid fa-fire-flame-curved"></i>
-                    <span>Foodie<span class="highlight">Express</span></span>
-                </div>
-                <button class="close-menu-btn" onclick="toggleMobileMenu()">&times;</button>
-            </div>
-            <a href="#home" class="active" onclick="toggleMobileMenu()">Home</a>
-            <a href="#features" onclick="toggleMobileMenu()">Why Us</a>
-            <a href="#menu" onclick="toggleMobileMenu()">Menu</a>
-            <a href="#order-history" onclick="toggleMobileMenu()">My Orders</a>
-            <a href="#reviews" onclick="toggleMobileMenu()">Reviews</a>
-            <a href="#admin" onclick="toggleMobileMenu()">Admin Panel</a>
+        <nav>
+            <a href="#home" class="active">Home</a>
+            <a href="#features">Why Us</a>
+            <a href="#menu">Menu</a>
+            <a href="#order-history">My Orders</a>
+            <a href="#reviews">Reviews</a>
+            <a href="#admin">Admin Panel</a>
         </nav>
-
         <div class="nav-actions">
-            <!-- Dark / Light Mode Toggle Button -->
             <button onclick="toggleDarkMode()" id="theme-btn" class="theme-btn" title="Toggle Dark/Light Mode">
                 <i class="fa-solid fa-moon" id="theme-icon"></i>
             </button>
 
-            <!-- Separate Login & Sign Up Buttons -->
             <button class="nav-btn btn-login" onclick="openAuthModal('login')">
                 <i class="fa-solid fa-right-to-bracket"></i> Login
             </button>
@@ -61,15 +45,9 @@
                 <i class="fa-solid fa-bag-shopping"></i>
                 <span id="cart-count">0</span>
             </div>
-
-            <!-- Hamburger Menu Button for Mobile/Tablet -->
-            <button class="hamburger-btn" onclick="toggleMobileMenu()" id="hamburger-btn">
-                <i class="fa-solid fa-bars"></i>
-            </button>
         </div>
     </header>
 
-    <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-content">
             <span class="badge"><i class="fa-solid fa-bolt"></i> Super Fast Delivery</span>
@@ -82,7 +60,6 @@
         </div>
     </section>
 
-    <!-- Why Choose Us Section -->
     <section id="features" class="features-section">
         <div class="section-header">
             <h2>Why Choose Foodie Express?</h2>
@@ -107,19 +84,16 @@
         </div>
     </section>
 
-    <!-- Food Menu Section -->
     <section id="menu" class="menu-section">
         <div class="section-header">
             <h2>Our Popular Menu</h2>
             <p>Explore top rated dishes curated for you</p>
         </div>
 
-        <!-- Search Bar -->
-        <div class="search-bar-container">
-            <input type="text" id="search-input" onkeyup="searchMenu()" placeholder="🔍 Search dishes (e.g. Biryani, Burger, Kebab)...">
+        <div style="max-width: 500px; margin: 0 auto 25px auto; display: flex; gap: 10px;">
+            <input type="text" id="search-input" onkeyup="searchMenu()" placeholder="🔍 Search dishes (e.g. Biryani, Burger, Kebab)..." style="width: 100%; padding: 12px 18px; border: 1px solid #ddd; border-radius: 25px; outline: none; font-size: 14px; transition: 0.3s;">
         </div>
         
-        <!-- Category Filters -->
         <div class="category-filters">
             <button class="filter-btn active" onclick="filterMenu('All')">All Dishes</button>
             <button class="filter-btn" onclick="filterMenu('Fast Food')">Fast Food</button>
@@ -128,11 +102,9 @@
             <button class="filter-btn" onclick="filterMenu('Drinks')">Beverages</button>
         </div>
 
-        <!-- Menu Grid -->
         <div class="menu-grid" id="menu-container"></div>
     </section>
 
-    <!-- Live Order Tracking Section -->
     <section id="tracking-section" class="tracking-section hidden">
         <div class="section-header">
             <h2>Live Order Status</h2>
@@ -158,18 +130,16 @@
         </div>
     </section>
 
-    <!-- Customer Order History Section -->
     <section id="order-history" class="features-section" style="padding: 40px 20px;">
         <div class="section-header">
             <h2>My Order History</h2>
             <p>Your previous orders and receipts</p>
         </div>
-        <div id="history-container">
+        <div id="history-container" style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
             <p style="text-align: center; color: #888;">No orders placed yet!</p>
         </div>
     </section>
 
-    <!-- Customer Reviews Section -->
     <section id="reviews" class="reviews-section">
         <div class="section-header">
             <h2>What Our Customers Say</h2>
@@ -199,7 +169,6 @@
         </div>
     </section>
 
-    <!-- Admin Section -->
     <section id="admin" class="admin-section">
         <div class="section-header">
             <h2>Admin Analytics Dashboard</h2>
@@ -241,7 +210,6 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
         <div class="footer-container">
             <div class="footer-col">
@@ -276,7 +244,6 @@
         </div>
     </footer>
 
-    <!-- Cart Sidebar -->
     <div id="cart-sidebar" class="cart-sidebar">
         <div class="cart-header">
             <h3><i class="fa-solid fa-cart-shopping"></i> Your Shopping Bag</h3>
@@ -284,23 +251,21 @@
         </div>
         <div id="cart-items" class="cart-items"></div>
         <div class="cart-footer">
-            <div class="coupon-section">
-                <input type="text" id="coupon-code" placeholder="Promo Code (Try: FOODIE50)">
-                <button onclick="applyCoupon()">Apply</button>
+            <div class="coupon-section" style="margin-bottom: 12px; display: flex; gap: 6px;">
+                <input type="text" id="coupon-code" placeholder="Promo Code (Try: FOODIE50)" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 6px;">
+                <button onclick="applyCoupon()" style="background: #333; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">Apply</button>
             </div>
-            <div id="discount-msg"></div>
+            <div id="discount-msg" style="color: #2ed573; font-size: 13px; margin-bottom: 8px; font-weight: bold;"></div>
 
             <div class="total-price">Total Amount: <strong>Rs. <span id="cart-total">0</span></strong></div>
             <button class="btn-primary checkout-btn" onclick="checkout()">Proceed To Checkout</button>
         </div>
     </div>
 
-    <!-- Auth Modal -->
     <div id="auth-modal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeAuthModal()">&times;</span>
             
-            <!-- LOGIN SCREEN -->
             <div id="login-screen" class="auth-screen">
                 <div class="auth-header">
                     <i class="fa-solid fa-circle-user"></i>
@@ -321,7 +286,6 @@
                 <p class="auth-switch">Don't have an account? <a href="#" onclick="switchAuthScreen('signup')">Sign Up here</a></p>
             </div>
 
-            <!-- SIGN UP SCREEN -->
             <div id="signup-screen" class="auth-screen hidden">
                 <div class="auth-header">
                     <i class="fa-solid fa-user-plus"></i>
@@ -349,10 +313,10 @@
                 </form>
                 <p class="auth-switch">Already have an account? <a href="#" onclick="switchAuthScreen('login')">Login here</a></p>
             </div>
+
         </div>
     </div>
 
-    <!-- Checkout Modal -->
     <div id="checkout-modal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeCheckoutModal()">&times;</span>
@@ -376,7 +340,7 @@
                 </div>
                 <div class="input-group">
                     <i class="fa-solid fa-credit-card"></i>
-                    <select id="payment-method" required>
+                    <select id="payment-method" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
                         <option value="">Select Payment Method</option>
                         <option value="Cash on Delivery">Cash on Delivery (COD)</option>
                         <option value="JazzCash / EasyPaisa">JazzCash / EasyPaisa</option>
