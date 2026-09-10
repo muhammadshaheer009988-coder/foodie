@@ -13,6 +13,9 @@ let cart = JSON.parse(localStorage.getItem('foodieCart')) || [];
 let totalOrders = localStorage.getItem('totalOrders') ? parseInt(localStorage.getItem('totalOrders')) : 0;
 let totalRevenue = localStorage.getItem('totalRevenue') ? parseInt(localStorage.getItem('totalRevenue')) : 0;
 
+// Current Auth Mode (Login vs Signup)
+let currentAuthMode = 'login';
+
 // Discount Tracker Variable
 let discountAmount = 0;
 
@@ -26,6 +29,11 @@ function renderMenu(items) {
     const container = document.getElementById('menu-container');
     if (!container) return;
     container.innerHTML = '';
+
+    if (items.length === 0) {
+        container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #a0aec0; font-size: 18px;">Koi item nahi mila.</p>`;
+        return;
+    }
 
     items.forEach(item => {
         container.innerHTML += `
@@ -66,7 +74,10 @@ function searchMenu() {
 function filterMenu(category) {
     const buttons = document.querySelectorAll('.filter-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
-    if (window.event && window.event.target) window.event.target.classList.add('active');
+    
+    if (window.event && window.event.target) {
+        window.event.target.classList.add('active');
+    }
 
     if (category === 'All') {
         renderMenu(menuItems);
@@ -78,7 +89,7 @@ function filterMenu(category) {
 // Toggle Cart Sidebar
 function toggleCart() {
     const sidebar = document.getElementById('cart-sidebar');
-    if(sidebar) sidebar.classList.toggle('open');
+    if (sidebar) sidebar.classList.toggle('open');
 }
 
 // Save Cart to LocalStorage
@@ -89,6 +100,8 @@ function saveCartToStorage() {
 // Add To Cart
 function addToCart(itemId) {
     const item = menuItems.find(p => p.id === itemId);
+    if (!item) return;
+
     const cartItem = cart.find(p => p.id === itemId);
 
     if (cartItem) {
@@ -112,7 +125,7 @@ function applyCoupon() {
 
     if (code === 'FOODIE50') {
         discountAmount = 100; // Rs. 100 Flat Discount
-        if(msgEl) {
+        if (msgEl) {
             msgEl.style.color = '#2ed573';
             msgEl.innerText = 'Promo code applied! Rs. 100 Discount Added 🎉';
         }
@@ -120,7 +133,7 @@ function applyCoupon() {
         alert('Pehle promo code enter karein.');
     } else {
         discountAmount = 0;
-        if(msgEl) {
+        if (msgEl) {
             msgEl.style.color = '#ff4757';
             msgEl.innerText = 'Invalid Promo Code! (Try: FOODIE50)';
         }
@@ -139,36 +152,39 @@ function updateCartUI() {
         count += item.quantity;
     });
 
-    // Subtotal mein se discount minus karna
     let finalTotal = total - discountAmount;
     if (finalTotal < 0) finalTotal = 0;
 
     if (container) {
         container.innerHTML = '';
-        cart.forEach(item => {
-            container.innerHTML += `
-                <div class="cart-item">
-                    <div>
-                        <h4>${item.name}</h4>
-                        <p>Rs. ${item.price} x ${item.quantity}</p>
+        if (cart.length === 0) {
+            container.innerHTML = `<p style="text-align: center; color: #a0aec0; margin-top: 20px;">Aap ka cart khali hai.</p>`;
+        } else {
+            cart.forEach(item => {
+                container.innerHTML += `
+                    <div class="cart-item">
+                        <div>
+                            <h4>${item.name}</h4>
+                            <p>Rs. ${item.price} x ${item.quantity}</p>
+                        </div>
+                        <button class="btn-primary" onclick="removeFromCart(${item.id})" style="padding: 4px 10px; font-size:12px;">X</button>
                     </div>
-                    <button class="btn-primary" onclick="removeFromCart(${item.id})" style="padding: 4px 10px; font-size:12px;">X</button>
-                </div>
-            `;
-        });
+                `;
+            });
+        }
     }
 
     const totalEl = document.getElementById('cart-total');
     const countEl = document.getElementById('cart-count');
     
-    if(totalEl) totalEl.innerText = finalTotal;
-    if(countEl) countEl.innerText = count;
+    if (totalEl) totalEl.innerText = finalTotal;
+    if (countEl) countEl.innerText = count;
 
     // Admin Stats Update
     const ordersEl = document.getElementById('total-orders-count');
     const revenueEl = document.getElementById('total-revenue-count');
-    if(ordersEl) ordersEl.innerText = totalOrders;
-    if(revenueEl) revenueEl.innerText = `Rs. ${totalRevenue}`;
+    if (ordersEl) ordersEl.innerText = totalOrders;
+    if (revenueEl) revenueEl.innerText = `Rs. ${totalRevenue}`;
 }
 
 function removeFromCart(itemId) {
@@ -185,7 +201,7 @@ function checkout() {
     }
 
     const sidebar = document.getElementById('cart-sidebar');
-    if(sidebar && sidebar.classList.contains('open')) {
+    if (sidebar && sidebar.classList.contains('open')) {
         toggleCart();
     }
 
@@ -228,8 +244,8 @@ function processOrder(e) {
     discountAmount = 0;
     const msgEl = document.getElementById('discount-msg');
     const couponInput = document.getElementById('coupon-code');
-    if(msgEl) msgEl.innerText = '';
-    if(couponInput) couponInput.value = '';
+    if (msgEl) msgEl.innerText = '';
+    if (couponInput) couponInput.value = '';
 
     saveCartToStorage();
     updateCartUI();
@@ -242,7 +258,7 @@ function processOrder(e) {
 
 function startOrderTrackingSimulation() {
     const trackingSection = document.getElementById('tracking-section');
-    if(!trackingSection) return;
+    if (!trackingSection) return;
 
     trackingSection.classList.remove('hidden');
     trackingSection.scrollIntoView({ behavior: 'smooth' });
@@ -250,17 +266,17 @@ function startOrderTrackingSimulation() {
     let step = 1;
     [1, 2, 3, 4].forEach(s => {
         const el = document.getElementById(`step-${s}`);
-        if(el) el.classList.remove('active');
+        if (el) el.classList.remove('active');
     });
     
     const step1 = document.getElementById('step-1');
-    if(step1) step1.classList.add('active');
+    if (step1) step1.classList.add('active');
 
     const interval = setInterval(() => {
         step++;
         if (step <= 4) {
             const currentStep = document.getElementById(`step-${step}`);
-            if(currentStep) currentStep.classList.add('active');
+            if (currentStep) currentStep.classList.add('active');
         } else {
             clearInterval(interval);
         }
@@ -292,20 +308,47 @@ function deleteMenuItem(id) {
     }
 }
 
-// Login Modal Controls
-function openAuthModal() {
+// Updated Auth Modal Controls (Separate Login vs Signup & Dynamic Switcher)
+function openAuthModal(mode = 'login') {
+    currentAuthMode = mode;
     const authModal = document.getElementById('auth-modal');
-    if(authModal) authModal.classList.add('active');
+    const authTitle = document.getElementById('auth-title');
+    const submitBtn = document.querySelector('.auth-submit');
+    const switchContainer = document.getElementById('auth-switch-container');
+
+    if (authTitle) {
+        authTitle.innerText = mode === 'signup' ? 'Create An Account' : 'Welcome Back';
+    }
+    if (submitBtn) {
+        submitBtn.innerText = mode === 'signup' ? 'Sign Up Now' : 'Login Now';
+    }
+    if (switchContainer) {
+        if (mode === 'signup') {
+            switchContainer.innerHTML = `Already have an account? <a href="javascript:void(0)" onclick="toggleAuthMode('login')">Login</a>`;
+        } else {
+            switchContainer.innerHTML = `Don't have an account? <a href="javascript:void(0)" onclick="toggleAuthMode('signup')">Sign Up</a>`;
+        }
+    }
+
+    if (authModal) authModal.classList.add('active');
+}
+
+function toggleAuthMode(mode) {
+    openAuthModal(mode);
 }
 
 function closeAuthModal() {
     const authModal = document.getElementById('auth-modal');
-    if(authModal) authModal.classList.remove('active');
+    if (authModal) authModal.classList.remove('active');
 }
 
 function handleAuth(e) {
     e.preventDefault();
-    alert('Logged in successfully!');
+    if (currentAuthMode === 'signup') {
+        alert('Account created & logged in successfully!');
+    } else {
+        alert('Logged in successfully!');
+    }
     closeAuthModal();
 }
 
@@ -315,12 +358,12 @@ function toggleDarkMode() {
     const themeIcon = document.getElementById('theme-icon');
     
     if (document.body.classList.contains('dark-theme')) {
-        if(themeIcon) {
+        if (themeIcon) {
             themeIcon.className = 'fa-solid fa-sun';
         }
         localStorage.setItem('theme', 'dark');
     } else {
-        if(themeIcon) {
+        if (themeIcon) {
             themeIcon.className = 'fa-solid fa-moon';
         }
         localStorage.setItem('theme', 'light');
@@ -337,11 +380,11 @@ window.onload = () => {
     const themeIcon = document.getElementById('theme-icon');
     if (savedTheme === 'dark') {
         document.body.classList.add('dark-theme');
-        if(themeIcon) {
+        if (themeIcon) {
             themeIcon.className = 'fa-solid fa-sun';
         }
     } else {
-        if(themeIcon) {
+        if (themeIcon) {
             themeIcon.className = 'fa-solid fa-moon';
         }
     }
