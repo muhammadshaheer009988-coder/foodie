@@ -9,7 +9,6 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="Foodie Express - Order Delicious Food Online">
     <meta property="og:description" content="Order fresh and hot meals with fast delivery and live order tracking!">
-    <!-- Yahan Apni Pic Ka Link Paste Karein (e.g. Imgur Link) -->
     <meta property="og:image" content="https://i.imgur.com/YOUR_IMAGE_ID.jpg">
 
     <link rel="stylesheet" href="style.css">
@@ -26,14 +25,24 @@
             <i class="fa-solid fa-fire-flame-curved"></i>
             <span>Foodie<span class="highlight">Express</span></span>
         </div>
-        <nav>
-            <a href="#home" class="active">Home</a>
-            <a href="#features">Why Us</a>
-            <a href="#menu">Menu</a>
-            <a href="#order-history">My Orders</a>
-            <a href="#reviews">Reviews</a>
-            <a href="#admin">Admin Panel</a>
+
+        <!-- Navigation Links -->
+        <nav id="nav-menu">
+            <div class="mobile-nav-header">
+                <div class="logo">
+                    <i class="fa-solid fa-fire-flame-curved"></i>
+                    <span>Foodie<span class="highlight">Express</span></span>
+                </div>
+                <button class="close-menu-btn" onclick="toggleMobileMenu()">&times;</button>
+            </div>
+            <a href="#home" class="active" onclick="toggleMobileMenu()">Home</a>
+            <a href="#features" onclick="toggleMobileMenu()">Why Us</a>
+            <a href="#menu" onclick="toggleMobileMenu()">Menu</a>
+            <a href="#order-history" onclick="toggleMobileMenu()">My Orders</a>
+            <a href="#reviews" onclick="toggleMobileMenu()">Reviews</a>
+            <a href="#admin" onclick="toggleMobileMenu()">Admin Panel</a>
         </nav>
+
         <div class="nav-actions">
             <!-- Dark / Light Mode Toggle Button -->
             <button onclick="toggleDarkMode()" id="theme-btn" class="theme-btn" title="Toggle Dark/Light Mode">
@@ -52,6 +61,11 @@
                 <i class="fa-solid fa-bag-shopping"></i>
                 <span id="cart-count">0</span>
             </div>
+
+            <!-- Hamburger Menu Button for Mobile/Tablet -->
+            <button class="hamburger-btn" onclick="toggleMobileMenu()" id="hamburger-btn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
         </div>
     </header>
 
@@ -101,8 +115,8 @@
         </div>
 
         <!-- Search Bar -->
-        <div style="max-width: 500px; margin: 0 auto 25px auto; display: flex; gap: 10px;">
-            <input type="text" id="search-input" onkeyup="searchMenu()" placeholder="🔍 Search dishes (e.g. Biryani, Burger, Kebab)..." style="width: 100%; padding: 12px 18px; border: 1px solid #ddd; border-radius: 25px; outline: none; font-size: 14px; transition: 0.3s;">
+        <div class="search-bar-container">
+            <input type="text" id="search-input" onkeyup="searchMenu()" placeholder="🔍 Search dishes (e.g. Biryani, Burger, Kebab)...">
         </div>
         
         <!-- Category Filters -->
@@ -150,7 +164,7 @@
             <h2>My Order History</h2>
             <p>Your previous orders and receipts</p>
         </div>
-        <div id="history-container" style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
+        <div id="history-container">
             <p style="text-align: center; color: #888;">No orders placed yet!</p>
         </div>
     </section>
@@ -270,19 +284,18 @@
         </div>
         <div id="cart-items" class="cart-items"></div>
         <div class="cart-footer">
-            <!-- Coupon Code Section -->
-            <div class="coupon-section" style="margin-bottom: 12px; display: flex; gap: 6px;">
-                <input type="text" id="coupon-code" placeholder="Promo Code (Try: FOODIE50)" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 6px;">
-                <button onclick="applyCoupon()" style="background: #333; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">Apply</button>
+            <div class="coupon-section">
+                <input type="text" id="coupon-code" placeholder="Promo Code (Try: FOODIE50)">
+                <button onclick="applyCoupon()">Apply</button>
             </div>
-            <div id="discount-msg" style="color: #2ed573; font-size: 13px; margin-bottom: 8px; font-weight: bold;"></div>
+            <div id="discount-msg"></div>
 
             <div class="total-price">Total Amount: <strong>Rs. <span id="cart-total">0</span></strong></div>
             <button class="btn-primary checkout-btn" onclick="checkout()">Proceed To Checkout</button>
         </div>
     </div>
 
-    <!-- Auth Modal (Proper Screens for Login and Sign Up) -->
+    <!-- Auth Modal -->
     <div id="auth-modal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeAuthModal()">&times;</span>
@@ -336,7 +349,6 @@
                 </form>
                 <p class="auth-switch">Already have an account? <a href="#" onclick="switchAuthScreen('login')">Login here</a></p>
             </div>
-
         </div>
     </div>
 
@@ -364,7 +376,7 @@
                 </div>
                 <div class="input-group">
                     <i class="fa-solid fa-credit-card"></i>
-                    <select id="payment-method" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
+                    <select id="payment-method" required>
                         <option value="">Select Payment Method</option>
                         <option value="Cash on Delivery">Cash on Delivery (COD)</option>
                         <option value="JazzCash / EasyPaisa">JazzCash / EasyPaisa</option>
