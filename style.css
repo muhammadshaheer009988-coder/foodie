@@ -974,6 +974,13 @@ footer {
     cursor: pointer;
     font-size: 0.95rem;
     font-weight: 600;
+    background-color: var(--primary);
+    color: #fff;
+    transition: var(--transition);
+}
+
+.checkout-btn:hover {
+    background-color: var(--primary-dark);
 }
 
 /* --- Modals (Auth & Checkout) --- */
