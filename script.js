@@ -59,7 +59,7 @@ function saveMenuItemsToStorage() {
     localStorage.setItem('foodieMenuItems', JSON.stringify(menuItems));
 }
 
-// Render Menu (Dustbin Hata Diya Gaya Hai)
+// Render Menu
 function renderMenu(items) {
     const container = document.getElementById('menu-container');
     if (!container) return;
@@ -128,9 +128,8 @@ function saveCartToStorage() {
     localStorage.setItem('foodieCart', JSON.stringify(cart));
 }
 
-// Add To Cart (With Browser Native Sound Trigger)
+// Add To Cart
 function addToCart(itemId) {
-    // Play Cart Sound Effect (High Pitch Beep)
     playCustomSound(850, 0.1, 'sine');
 
     const item = menuItems.find(p => p.id === itemId);
@@ -150,7 +149,6 @@ function addToCart(itemId) {
 
 // Quantity Adjustments (+ / -)
 function updateQuantity(itemId, change) {
-    // Play Click Sound
     playCustomSound(400, 0.08, 'triangle');
 
     const cartItem = cart.find(p => p.id === itemId);
@@ -235,9 +233,11 @@ function updateCartUI() {
 
     const totalEl = document.getElementById('cart-total');
     const countEl = document.getElementById('cart-count');
+    const floatingCountEl = document.getElementById('floating-cart-count');
     
     if (totalEl) totalEl.innerText = finalTotal;
     if (countEl) countEl.innerText = count;
+    if (floatingCountEl) floatingCountEl.innerText = count;
 
     // Admin Stats Update
     const ordersEl = document.getElementById('total-orders-count');
@@ -251,6 +251,19 @@ function removeFromCart(itemId) {
     cart = cart.filter(item => item.id !== itemId);
     saveCartToStorage();
     updateCartUI();
+}
+
+// Toggle Payment Details Box based on Payment Method Selection
+function togglePaymentInfo() {
+    const paymentSelect = document.getElementById('payment-method');
+    const detailsBox = document.getElementById('online-payment-details');
+    if (!paymentSelect || !detailsBox) return;
+
+    if (paymentSelect.value === 'JazzCash / EasyPaisa' || paymentSelect.value === 'Debit / Credit Card') {
+        detailsBox.style.display = 'block';
+    } else {
+        detailsBox.style.display = 'none';
+    }
 }
 
 // Open Checkout Modal
@@ -282,7 +295,6 @@ function closeCheckoutModal() {
 function processOrder(e) {
     e.preventDefault();
 
-    // Play Success Chime Sound
     playCustomSound(523, 0.1, 'sine');
     setTimeout(() => playCustomSound(659, 0.1, 'sine'), 100);
     setTimeout(() => playCustomSound(783, 0.2, 'sine'), 200);
@@ -347,6 +359,7 @@ function processOrder(e) {
     updateCartUI();
     renderOrderHistory();
     document.getElementById('checkout-form').reset();
+    togglePaymentInfo(); // Hide details box after reset
     closeCheckoutModal();
 
     // Redirect to WhatsApp
