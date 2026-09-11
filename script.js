@@ -39,11 +39,17 @@ let defaultItems = [
 
 let menuItems = JSON.parse(localStorage.getItem('foodieMenuItems')) || defaultItems;
 
-// Local Storage se Cart aur Orders History load karein
+// Local Storage se Cart, Orders History, Currency aur Loyalty Coins load karein
 let cart = JSON.parse(localStorage.getItem('foodieCart')) || [];
 let orderHistory = JSON.parse(localStorage.getItem('foodieOrderHistory')) || [];
 let totalOrders = localStorage.getItem('totalOrders') ? parseInt(localStorage.getItem('totalOrders')) : 0;
 let totalRevenue = localStorage.getItem('totalRevenue') ? parseInt(localStorage.getItem('totalRevenue')) : 0;
+
+// New Global State Variables
+let currentCurrency = localStorage.getItem('foodieCurrency') || 'PKR';
+let currencyRates = { PKR: 1, USD: 0.0036, EUR: 0.0033, GBP: 0.0028 };
+let currencySymbols = { PKR: 'Rs. ', USD: '$', EUR: '€', GBP: '£' };
+let loyaltyCoins = localStorage.getItem('foodieCoins') ? parseInt(localStorage.getItem('foodieCoins')) : 50; // Welcome bonus 50 coins
 
 // Admin WhatsApp Number Configuration (Bina + ya 00 ke)
 const adminWhatsAppNumber = "923312969666";
@@ -57,6 +63,103 @@ let discountAmount = 0;
 // Save Menu Items to Local Storage
 function saveMenuItemsToStorage() {
     localStorage.setItem('foodieMenuItems', JSON.stringify(menuItems));
+}
+
+// Convert Price based on Selected Currency
+function formatPrice(amountInPKR) {
+    let rate = currencyRates[currentCurrency] || 1;
+    let symbol = currencySymbols[currentCurrency] || 'Rs. ';
+    let converted = (amountInPKR * rate).toFixed(currentCurrency === 'PKR' ? 0 : 2);
+    return `${symbol}${converted}`;
+}
+
+// Handle Currency Change from Dropdown
+function changeCurrency() {
+    const dropdown = document.getElementById('currency-selector');
+    if (!dropdown) return;
+    currentCurrency = dropdown.value;
+    localStorage.setItem('foodieCurrency', currentCurrency);
+    
+    // Re-render components to reflect currency change
+    renderMenu(menuItems);
+    updateCartUI();
+    renderOrderHistory();
+    playCustomSound(600, 0.08, 'sine');
+}
+
+// Update Loyalty Coins UI
+function updateLoyaltyUI() {
+    const coinEl = document.getElementById('loyalty-coin-count');
+    if (coinEl) coinEl.innerText = loyaltyCoins;
+    localStorage.setItem('foodieCoins', loyaltyCoins);
+}
+
+// Voice Search using Web Speech API
+function startVoiceSearch() {
+    const searchInput = document.getElementById('search-input');
+    const voiceBtn = document.getElementById('voice-search-btn');
+    
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        alert("Aap ka browser Voice Search support nahi karta.");
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    if (voiceBtn) voiceBtn.classList.add('listening');
+    playCustomSound(500, 0.1, 'sine');
+
+    recognition.start();
+
+    recognition.onresult = (event) => {
+        const speechToText = event.results[0][0].transcript;
+        if (searchInput) {
+            searchInput.value = speechToText;
+            searchMenu();
+        }
+        if (voiceBtn) voiceBtn.classList.remove('listening');
+    };
+
+    recognition.onerror = () => {
+        if (voiceBtn) voiceBtn.classList.remove('listening');
+    };
+
+    recognition.onspeechend = () => {
+        if (voiceBtn) voiceBtn.classList.remove('listening');
+        recognition.stop();
+    };
+}
+
+// Fetch GPS Location and populate Address input
+function fetchUserLocation() {
+    const addressInput = document.getElementById('cust-address');
+    if (!addressInput) return;
+
+    if (!navigator.geolocation) {
+        alert("Geolocation is not supported by your browser");
+        return;
+    }
+
+    playCustomSound(700, 0.1, 'triangle');
+    addressInput.value = "Detecting precise GPS location...";
+
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const lat = position.coords.latitude.toFixed(4);
+            const lng = position.coords.longitude.toFixed(4);
+            addressInput.value = `GPS Location: Lat ${lat}, Lng ${lng} (Near You)`;
+            playCustomSound(900, 0.15, 'sine');
+        },
+        () => {
+            addressInput.value = "";
+            alert("Location access denied or unavailable. Please type manually.");
+        },
+        { timeout: 10000 }
+    );
 }
 
 // Render Menu
@@ -80,7 +183,7 @@ function renderMenu(items) {
                     <div>
                         <div class="food-title-price">
                             <h4>${item.name}</h4>
-                            <span>Rs. ${item.price}</span>
+                            <span>${formatPrice(item.price)}</span>
                         </div>
                         <p class="food-desc">${item.desc || 'Delicious and freshly prepared meal.'}</p>
                     </div>
@@ -223,7 +326,7 @@ function updateCartUI() {
                     <div class="cart-item-card">
                         <div class="cart-item-info">
                             <h5>${item.name}</h5>
-                            <p>Rs. ${item.price} x ${item.quantity}</p>
+                            <p>${formatPrice(item.price)} x ${item.quantity}</p>
                         </div>
                         <div class="cart-item-actions">
                             <button onclick="updateQuantity(${item.id}, -1)">-</button>
@@ -241,7 +344,7 @@ function updateCartUI() {
     const countEl = document.getElementById('cart-count');
     const floatingCountEl = document.getElementById('floating-cart-count');
     
-    if (totalEl) totalEl.innerText = finalTotal;
+    if (totalEl) totalEl.innerText = formatPrice(finalTotal).replace(/[^0-9.]/g, ''); // Numeric or symbol supported display
     if (countEl) countEl.innerText = count;
     if (floatingCountEl) floatingCountEl.innerText = count;
 
@@ -249,7 +352,9 @@ function updateCartUI() {
     const ordersEl = document.getElementById('total-orders-count');
     const revenueEl = document.getElementById('total-revenue-count');
     if (ordersEl) ordersEl.innerText = totalOrders;
-    if (revenueEl) revenueEl.innerText = `Rs. ${totalRevenue}`;
+    if (revenueEl) revenueEl.innerText = formatPrice(totalRevenue);
+
+    updateLoyaltyUI();
 }
 
 function removeFromCart(itemId) {
@@ -317,6 +422,10 @@ function processOrder(e) {
     totalRevenue += orderTotal;
     totalOrders++;
 
+    // Earn loyalty coins (10% of total spent converted to coins)
+    let earnedCoins = Math.floor(orderTotal * 0.05);
+    loyaltyCoins += earnedCoins;
+
     // Save Order History
     const newOrder = {
         id: orderId,
@@ -335,7 +444,7 @@ function processOrder(e) {
     // Prepare WhatsApp Message
     let itemsListText = "";
     cart.forEach(item => {
-        itemsListText += `• ${item.name} (x${item.quantity}) - Rs. ${item.price * item.quantity}\n`;
+        itemsListText += `• ${item.name} (x${item.quantity}) - ${formatPrice(item.price * item.quantity)}\n`;
     });
 
     const waMessage = `🛍️ *Naya Order Aaya Hai! (Foodie Express)*\n\n` +
@@ -345,13 +454,13 @@ function processOrder(e) {
                       `📍 *Address:* ${address}\n` +
                       `💳 *Payment Method:* ${payment}\n\n` +
                       `🍔 *Order Items:*\n${itemsListText}\n` +
-                      `💰 *Total Amount:* Rs. ${orderTotal}\n\n` +
+                      `💰 *Total Amount:* ${formatPrice(orderTotal)}\n\n` +
                       `Meherbani karke order confirm karein.`;
 
     const encodedMessage = encodeURIComponent(waMessage);
     const whatsappUrl = `https://wa.me/${adminWhatsAppNumber}?text=${encodedMessage}`;
 
-    alert(`Shukriya ${name}! Aap ka order (Rs. ${orderTotal}) successfully place ho gaya hai.\nAbhi aap ko WhatsApp par redirect kiya ja raha hai.`);
+    alert(`Shukriya ${name}! Aap ka order successfully place ho gaya hai (+${earnedCoins} Loyalty Coins earned!).\nAbhi aap ko WhatsApp par redirect kiya ja raha hai.`);
 
     // Reset Cart, Discount & Form
     cart = [];
@@ -392,7 +501,7 @@ function renderOrderHistory() {
             <div class="history-card">
                 <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 8px;">
                     <span>Order ID: ${order.id}</span>
-                    <span style="color: var(--primary);">Rs. ${order.amount}</span>
+                    <span style="color: var(--primary);">${formatPrice(order.amount)}</span>
                 </div>
                 <p style="margin: 0 0 6px 0; font-size: 14px; color: var(--text-muted);"><strong>Items:</strong> ${itemsSummary}</p>
                 <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
@@ -493,7 +602,7 @@ function setupAIRecommender() {
                             <div>
                                 <div class="food-title-price">
                                     <h4>${matchedItem.name}</h4>
-                                    <span>Rs. ${matchedItem.price}</span>
+                                    <span>${formatPrice(matchedItem.price)}</span>
                                 </div>
                                 <p class="food-desc">${matchedItem.desc || 'AI Recommended perfection.'}</p>
                             </div>
@@ -596,10 +705,17 @@ function toggleDarkMode() {
 
 // Window Load Setup
 window.onload = () => {
+    // Set currency selector value from storage if exists
+    const currencyDropdown = document.getElementById('currency-selector');
+    if (currencyDropdown) {
+        currencyDropdown.value = currentCurrency;
+    }
+
     renderMenu(menuItems);
     updateCartUI();
     renderOrderHistory();
     setupAIRecommender();
+    updateLoyaltyUI();
 
     const savedTheme = localStorage.getItem('theme');
     const themeIcon = document.getElementById('theme-icon');
