@@ -1,3 +1,7 @@
+// Sound Effects Audio Objects
+const cartSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
+const orderSound = new Audio('https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3');
+
 // Default Menu Items (LocalStorage se load honge agar saved hon)
 let defaultItems = [
     { id: 1, name: 'Zinger Burger Deluxe', category: 'Fast Food', price: 550, img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500' },
@@ -13,6 +17,9 @@ let cart = JSON.parse(localStorage.getItem('foodieCart')) || [];
 let orderHistory = JSON.parse(localStorage.getItem('foodieOrderHistory')) || [];
 let totalOrders = localStorage.getItem('totalOrders') ? parseInt(localStorage.getItem('totalOrders')) : 0;
 let totalRevenue = localStorage.getItem('totalRevenue') ? parseInt(localStorage.getItem('totalRevenue')) : 0;
+
+// Admin WhatsApp Number Configuration (Bina + ya 00 ke)
+const adminWhatsAppNumber = "923312969666";
 
 // Current Auth Mode
 let currentAuthMode = 'login';
@@ -98,8 +105,11 @@ function saveCartToStorage() {
     localStorage.setItem('foodieCart', JSON.stringify(cart));
 }
 
-// Add To Cart
+// Add To Cart (Sound Effect Added)
 function addToCart(itemId) {
+    // Play Cart Sound Effect
+    cartSound.play().catch(e => console.log('Audio playback failed:', e));
+
     const item = menuItems.find(p => p.id === itemId);
     if (!item) return;
 
@@ -240,9 +250,12 @@ function closeCheckoutModal() {
     }
 }
 
-// Process Order Function
+// Process Order Function (Updated with Sound & WhatsApp Feature)
 function processOrder(e) {
     e.preventDefault();
+
+    // Play Order Success Sound Effect
+    orderSound.play().catch(e => console.log('Audio playback failed:', e));
 
     const name = document.getElementById('cust-name').value;
     const phone = document.getElementById('cust-phone').value;
@@ -251,13 +264,14 @@ function processOrder(e) {
 
     const rawTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const orderTotal = Math.max(0, rawTotal - discountAmount);
+    const orderId = 'ORD-' + Math.floor(1000 + Math.random() * 9000);
 
     totalRevenue += orderTotal;
     totalOrders++;
 
     // Save Order History
     const newOrder = {
-        id: 'ORD-' + Math.floor(1000 + Math.random() * 9000),
+        id: orderId,
         items: [...cart],
         amount: orderTotal,
         date: new Date().toLocaleDateString(),
@@ -270,7 +284,26 @@ function processOrder(e) {
     localStorage.setItem('totalRevenue', totalRevenue);
     localStorage.setItem('foodieOrderHistory', JSON.stringify(orderHistory));
 
-    alert(`Shukriya ${name}! Aap ka order (Rs. ${orderTotal}) successfully place ho gaya hai.\nPayment Method: ${payment}\nDelivery Address: ${address}`);
+    // Prepare WhatsApp Message
+    let itemsListText = "";
+    cart.forEach(item => {
+        itemsListText += `• ${item.name} (x${item.quantity}) - Rs. ${item.price * item.quantity}\n`;
+    });
+
+    const waMessage = `🛍️ *Naya Order Aaya Hai! (Foodie Express)*\n\n` +
+                      `🆔 *Order ID:* ${orderId}\n` +
+                      `👤 *Name:* ${name}\n` +
+                      `📞 *Phone:* ${phone}\n` +
+                      `📍 *Address:* ${address}\n` +
+                      `💳 *Payment Method:* ${payment}\n\n` +
+                      `🍔 *Order Items:*\n${itemsListText}\n` +
+                      `💰 *Total Amount:* Rs. ${orderTotal}\n\n` +
+                      `Meherbani karke order confirm karein.`;
+
+    const encodedMessage = encodeURIComponent(waMessage);
+    const whatsappUrl = `https://wa.me/${adminWhatsAppNumber}?text=${encodedMessage}`;
+
+    alert(`Shukriya ${name}! Aap ka order (Rs. ${orderTotal}) successfully place ho gaya hai.\nAbhi aap ko WhatsApp par redirect kiya ja raha hai.`);
 
     // Reset Cart, Discount & Form
     cart = [];
@@ -285,6 +318,9 @@ function processOrder(e) {
     renderOrderHistory();
     document.getElementById('checkout-form').reset();
     closeCheckoutModal();
+
+    // Redirect to WhatsApp
+    window.open(whatsappUrl, '_blank');
 
     // Live Tracking Start
     startOrderTrackingSimulation();
