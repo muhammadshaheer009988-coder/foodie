@@ -33,6 +33,18 @@
             <a href="#reviews">Reviews</a>
         </nav>
         <div class="nav-actions">
+            <!-- Multi-Currency Selector -->
+            <select id="currency-selector" onchange="changeCurrency()" class="currency-dropdown" title="Select Currency">
+                <option value="PKR">PKR (Rs)</option>
+                <option value="USD">USD ($)</option>
+                <option value="EUR">EUR (€)</option>
+            </select>
+
+            <!-- Loyalty Coins Display -->
+            <div class="loyalty-badge" title="Your Loyalty Coins">
+                <i class="fa-solid fa-coins" style="color: #f1c40f;"></i> <span id="coin-count">150</span>
+            </div>
+
             <button onclick="toggleDarkMode()" id="theme-btn" class="theme-btn" title="Toggle Dark/Light Mode">
                 <i class="fa-solid fa-moon" id="theme-icon"></i>
             </button>
@@ -100,6 +112,10 @@
             <div class="search-container">
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
                 <input type="text" id="search-input" onkeyup="searchMenu()" placeholder="Search gourmet dishes (e.g. Biryani, Burger, Kebab)...">
+                <!-- Voice Search Button -->
+                <button type="button" onclick="startVoiceSearch()" class="voice-search-btn" title="Search with Voice">
+                    <i class="fa-solid fa-microphone"></i>
+                </button>
             </div>
             
             <div class="category-filters">
@@ -283,7 +299,7 @@
             </div>
             <div id="discount-msg" class="discount-msg"></div>
 
-            <div class="total-price">Total Amount: <strong>Rs. <span id="cart-total">0</span></strong></div>
+            <div class="total-price">Total Amount: <strong id="currency-symbol">Rs. </strong><strong id="cart-total">0</strong></div>
             <button class="btn-primary checkout-btn" onclick="checkout()">Proceed To Checkout</button>
         </div>
     </div>
@@ -361,9 +377,12 @@
                     <i class="fa-solid fa-phone"></i>
                     <input type="tel" id="cust-phone" placeholder="Phone Number" required>
                 </div>
-                <div class="input-group">
+                <div class="input-group address-group">
                     <i class="fa-solid fa-location-dot"></i>
                     <input type="text" id="cust-address" placeholder="Complete Delivery Address" required>
+                    <button type="button" onclick="detectUserLocation()" class="gps-btn" title="Detect GPS Location">
+                        <i class="fa-solid fa-location-crosshairs"></i>
+                    </button>
                 </div>
                 <div class="input-group">
                     <i class="fa-solid fa-credit-card"></i>
