@@ -1,4 +1,4 @@
-// Web Audio API Sound Generator (Guaranteed to work without external links/files)
+// Web Audio API Sound Generator
 function playCustomSound(freq = 600, duration = 0.12, type = 'sine') {
     try {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -29,38 +29,37 @@ function playCustomSound(freq = 600, duration = 0.12, type = 'sine') {
     }
 }
 
-// Default Menu Items (LocalStorage se load honge agar saved hon)
-let defaultItems = [
+// Default Menu Items
+const defaultItems = [
     { id: 1, name: 'Zinger Burger Deluxe', category: 'Fast Food', price: 550, img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500' },
     { id: 2, name: 'Special Chicken Biryani', category: 'Desi', price: 380, img: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500' },
     { id: 3, name: 'Smoky BBQ Seekh Kebab', category: 'BBQ', price: 750, img: 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=500' },
     { id: 4, name: 'Chilled Soft Drink', category: 'Drinks', price: 120, img: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500' }
 ];
 
+// App State Management
 let menuItems = JSON.parse(localStorage.getItem('foodieMenuItems')) || defaultItems;
-
-// Local Storage se Cart aur Orders History load karein
 let cart = JSON.parse(localStorage.getItem('foodieCart')) || [];
 let orderHistory = JSON.parse(localStorage.getItem('foodieOrderHistory')) || [];
-let totalOrders = localStorage.getItem('totalOrders') ? parseInt(localStorage.getItem('totalOrders')) : 0;
-let totalRevenue = localStorage.getItem('totalRevenue') ? parseInt(localStorage.getItem('totalRevenue')) : 0;
+let totalOrders = localStorage.getItem('totalOrders') ? parseInt(localStorage.getItem('totalOrders'), 10) : 0;
+let totalRevenue = localStorage.getItem('totalRevenue') ? parseInt(localStorage.getItem('totalRevenue'), 10) : 0;
 
-// Admin WhatsApp Number Configuration (Bina + ya 00 ke)
+// Configuration
 const adminWhatsAppNumber = "923312969666";
-
-// Current Auth Mode
 let currentAuthMode = 'login';
-
-// Discount Tracker Variable
 let discountAmount = 0;
 
-// Save Menu Items to Local Storage
+// LocalStorage Helpers
 function saveMenuItemsToStorage() {
     localStorage.setItem('foodieMenuItems', JSON.stringify(menuItems));
 }
 
+function saveCartToStorage() {
+    localStorage.setItem('foodieCart', JSON.stringify(cart));
+}
+
 // Render Menu
-function renderMenu(items) {
+function renderMenu(items = menuItems, isAdmin = false) {
     const container = document.getElementById('menu-container');
     if (!container) return;
     container.innerHTML = '';
@@ -78,9 +77,14 @@ function renderMenu(items) {
                     <h3>${item.name}</h3>
                     <p class="price">Rs. ${item.price}</p>
                     <div style="display: flex; gap: 8px; margin-top: 10px;">
-                        <button class="btn-primary" style="width: 100%;" onclick="addToCart(${item.id})">
+                        <button class="btn-primary" style="flex: 1;" onclick="addToCart(${item.id})">
                             <i class="fa-solid fa-cart-plus"></i> Add To Cart
                         </button>
+                        ${isAdmin ? `
+                            <button onclick="deleteMenuItem(${item.id})" style="background: #ff4757; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        ` : ''}
                     </div>
                 </div>
             </div>
@@ -88,7 +92,7 @@ function renderMenu(items) {
     });
 }
 
-// Search Menu Functionality
+// Search Menu
 function searchMenu() {
     const searchInput = document.getElementById('search-input');
     if (!searchInput) return;
@@ -107,7 +111,9 @@ function filterMenu(category) {
     const buttons = document.querySelectorAll('.filter-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
     
-    const clickedBtn = Array.from(buttons).find(btn => btn.textContent.includes(category) || (category === 'All' && btn.textContent.includes('All')));
+    const clickedBtn = Array.from(buttons).find(btn => 
+        btn.textContent.includes(category) || (category === 'All' && btn.textContent.includes('All'))
+    );
     if (clickedBtn) clickedBtn.classList.add('active');
 
     if (category === 'All') {
@@ -121,11 +127,6 @@ function filterMenu(category) {
 function toggleCart() {
     const sidebar = document.getElementById('cart-sidebar');
     if (sidebar) sidebar.classList.toggle('open');
-}
-
-// Save Cart to LocalStorage
-function saveCartToStorage() {
-    localStorage.setItem('foodieCart', JSON.stringify(cart));
 }
 
 // Add To Cart
@@ -147,7 +148,7 @@ function addToCart(itemId) {
     updateCartUI();
 }
 
-// Quantity Adjustments (+ / -)
+// Update Quantity (+ / -)
 function updateQuantity(itemId, change) {
     playCustomSound(400, 0.08, 'triangle');
 
@@ -163,7 +164,15 @@ function updateQuantity(itemId, change) {
     updateCartUI();
 }
 
-// Apply Promo Code Function
+// Remove from Cart
+function removeFromCart(itemId) {
+    playCustomSound(300, 0.15, 'sawtooth');
+    cart = cart.filter(item => item.id !== itemId);
+    saveCartToStorage();
+    updateCartUI();
+}
+
+// Apply Promo Code
 function applyCoupon() {
     const codeInput = document.getElementById('coupon-code');
     const msgEl = document.getElementById('discount-msg');
@@ -192,7 +201,7 @@ function applyCoupon() {
     updateCartUI();
 }
 
-// Update Cart UI & Total Calculation
+// Update Cart UI & Totals
 function updateCartUI() {
     const container = document.getElementById('cart-items');
     let total = 0, count = 0;
@@ -202,8 +211,7 @@ function updateCartUI() {
         count += item.quantity;
     });
 
-    let finalTotal = total - discountAmount;
-    if (finalTotal < 0) finalTotal = 0;
+    const finalTotal = Math.max(0, total - discountAmount);
 
     if (container) {
         container.innerHTML = '';
@@ -246,14 +254,7 @@ function updateCartUI() {
     if (revenueEl) revenueEl.innerText = `Rs. ${totalRevenue}`;
 }
 
-function removeFromCart(itemId) {
-    playCustomSound(300, 0.15, 'sawtooth');
-    cart = cart.filter(item => item.id !== itemId);
-    saveCartToStorage();
-    updateCartUI();
-}
-
-// Toggle Payment Details Box based on Payment Method Selection
+// Payment Selection Controls
 function togglePaymentInfo() {
     const paymentSelect = document.getElementById('payment-method');
     const detailsBox = document.getElementById('online-payment-details');
@@ -266,7 +267,7 @@ function togglePaymentInfo() {
     }
 }
 
-// Open Checkout Modal
+// Checkout Modal Handlers
 function checkout() {
     if (cart.length === 0) {
         alert("Your cart is empty!");
@@ -279,19 +280,15 @@ function checkout() {
     }
 
     const checkoutModal = document.getElementById('checkout-modal');
-    if (checkoutModal) {
-        checkoutModal.classList.add('active');
-    }
+    if (checkoutModal) checkoutModal.classList.add('active');
 }
 
 function closeCheckoutModal() {
     const checkoutModal = document.getElementById('checkout-modal');
-    if (checkoutModal) {
-        checkoutModal.classList.remove('active');
-    }
+    if (checkoutModal) checkoutModal.classList.remove('active');
 }
 
-// Process Order Function
+// Process Order
 function processOrder(e) {
     e.preventDefault();
 
@@ -299,10 +296,10 @@ function processOrder(e) {
     setTimeout(() => playCustomSound(659, 0.1, 'sine'), 100);
     setTimeout(() => playCustomSound(783, 0.2, 'sine'), 200);
 
-    const name = document.getElementById('cust-name').value;
-    const phone = document.getElementById('cust-phone').value;
-    const address = document.getElementById('cust-address').value;
-    const payment = document.getElementById('payment-method').value;
+    const name = document.getElementById('cust-name')?.value || 'Customer';
+    const phone = document.getElementById('cust-phone')?.value || 'N/A';
+    const address = document.getElementById('cust-address')?.value || 'N/A';
+    const payment = document.getElementById('payment-method')?.value || 'Cash on Delivery';
 
     const rawTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const orderTotal = Math.max(0, rawTotal - discountAmount);
@@ -311,7 +308,7 @@ function processOrder(e) {
     totalRevenue += orderTotal;
     totalOrders++;
 
-    // Save Order History
+    // New Order Record
     const newOrder = {
         id: orderId,
         items: [...cart],
@@ -321,12 +318,12 @@ function processOrder(e) {
     };
     orderHistory.unshift(newOrder);
 
-    // Local Storage Update
+    // Save States
     localStorage.setItem('totalOrders', totalOrders);
     localStorage.setItem('totalRevenue', totalRevenue);
     localStorage.setItem('foodieOrderHistory', JSON.stringify(orderHistory));
 
-    // Prepare WhatsApp Message
+    // WhatsApp Payload
     let itemsListText = "";
     cart.forEach(item => {
         itemsListText += `• ${item.name} (x${item.quantity}) - Rs. ${item.price * item.quantity}\n`;
@@ -347,7 +344,7 @@ function processOrder(e) {
 
     alert(`Shukriya ${name}! Aap ka order (Rs. ${orderTotal}) successfully place ho gaya hai.\nAbhi aap ko WhatsApp par redirect kiya ja raha hai.`);
 
-    // Reset Cart, Discount & Form
+    // Reset Form & Cart
     cart = [];
     discountAmount = 0;
     const msgEl = document.getElementById('discount-msg');
@@ -358,14 +355,17 @@ function processOrder(e) {
     saveCartToStorage();
     updateCartUI();
     renderOrderHistory();
-    document.getElementById('checkout-form').reset();
-    togglePaymentInfo(); // Hide details box after reset
+    
+    const checkoutForm = document.getElementById('checkout-form');
+    if (checkoutForm) checkoutForm.reset();
+    
+    togglePaymentInfo();
     closeCheckoutModal();
 
     // Redirect to WhatsApp
     window.open(whatsappUrl, '_blank');
 
-    // Live Tracking Start
+    // Live Tracking Simulation
     startOrderTrackingSimulation();
 }
 
@@ -381,9 +381,9 @@ function renderOrderHistory() {
 
     historyContainer.innerHTML = '';
     orderHistory.forEach(order => {
-        let itemsSummary = order.items.map(i => `${i.name} (x${i.quantity})`).join(', ');
+        const itemsSummary = order.items.map(i => `${i.name} (x${i.quantity})`).join(', ');
         historyContainer.innerHTML += `
-            <div style="background: var(--card-bg, #fff); padding: 15px; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+            <div style="background: var(--card-bg, #fff); padding: 15px; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 10px;">
                 <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 8px;">
                     <span>Order ID: ${order.id}</span>
                     <span style="color: #2ed573;">Rs. ${order.amount}</span>
@@ -398,6 +398,7 @@ function renderOrderHistory() {
     });
 }
 
+// Order Tracking System Simulation
 function startOrderTrackingSimulation() {
     const trackingSection = document.getElementById('tracking-section');
     if (!trackingSection) return;
@@ -428,10 +429,15 @@ function startOrderTrackingSimulation() {
 // Admin Add Product
 function addMenuItem(e) {
     e.preventDefault();
-    const name = document.getElementById('item-name').value;
+    const name = document.getElementById('item-name').value.trim();
     const category = document.getElementById('item-category').value;
-    const price = parseInt(document.getElementById('item-price').value);
-    const img = document.getElementById('item-img').value;
+    const price = parseInt(document.getElementById('item-price').value, 10);
+    const img = document.getElementById('item-img').value.trim() || 'https://via.placeholder.com/150';
+
+    if (!name || isNaN(price)) {
+        alert('Please fill out all fields correctly!');
+        return;
+    }
 
     menuItems.push({ id: Date.now(), name, category, price, img });
     saveMenuItemsToStorage();
@@ -479,15 +485,11 @@ function closeAuthModal() {
 
 function handleAuth(e, type) {
     e.preventDefault();
-    if (type === 'signup') {
-        alert('Account created & logged in successfully!');
-    } else {
-        alert('Logged in successfully!');
-    }
+    alert(type === 'signup' ? 'Account created & logged in successfully!' : 'Logged in successfully!');
     closeAuthModal();
 }
 
-// Dark / Light Mode Toggle
+// Dark / Light Theme Toggle
 function toggleDarkMode() {
     document.body.classList.toggle('dark-theme');
     const themeIcon = document.getElementById('theme-icon');
@@ -501,7 +503,7 @@ function toggleDarkMode() {
     }
 }
 
-// Window Load Setup
+// App Initialization
 window.onload = () => {
     renderMenu(menuItems);
     updateCartUI();
