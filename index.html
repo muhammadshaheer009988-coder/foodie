@@ -5,30 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Foodie Express - Premium Online Food Ordering Platform</title>
 
+    <!-- Open Graph / Meta Tags -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Foodie Express - Order Delicious Food Online">
     <meta property="og:description" content="Order fresh and hot meals with fast delivery and live order tracking!">
     <meta property="og:image" content="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200">
 
+    <!-- External CSS & Fonts -->
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <!-- Header Section -->
-    <header>
+    <header class="navbar">
         <div class="logo">
             <i class="fa-solid fa-fire-flame-curved"></i>
             <span>Foodie<span class="highlight">Express</span></span>
         </div>
-        <nav>
+        <nav class="nav-links">
             <a href="#home" class="active">Home</a>
             <a href="#features">Why Us</a>
             <a href="#menu">Menu</a>
+            <a href="#ai-matchmaker"><i class="fa-solid fa-robot" style="color: var(--primary);"></i> AI Recommender</a>
             <a href="#order-history">My Orders</a>
             <a href="#reviews">Reviews</a>
-            <a href="#admin">Admin Panel</a>
         </nav>
         <div class="nav-actions">
             <button onclick="toggleDarkMode()" id="theme-btn" class="theme-btn" title="Toggle Dark/Light Mode">
@@ -49,174 +51,187 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <span class="badge"><i class="fa-solid fa-bolt"></i> Super Fast Delivery</span>
-            <h1>Delicious Meals, Delivered Hot & Fresh To Your Doorstep!</h1>
-            <p>Order from your favorite dishes with real-time tracking & exclusive discounts.</p>
-            <div class="hero-btns">
-                <a href="#menu" class="btn-primary">Explore Menu <i class="fa-solid fa-arrow-right"></i></a>
-                <a href="#tracking-section" class="btn-secondary">Track Order</a>
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <span class="badge"><i class="fa-solid fa-bolt"></i> Super Fast Delivery</span>
+                <h1>Delicious Meals, Delivered Hot & Fresh To Your Doorstep!</h1>
+                <p>Order your favorite dishes with real-time tracking & exclusive discounts.</p>
+                <div class="hero-btns">
+                    <a href="#menu" class="btn-primary">Explore Menu <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="#tracking-section" class="btn-secondary">Track Order</a>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Features Section -->
-    <section id="features" class="features-section">
-        <div class="section-header">
-            <h2>Why Choose Foodie Express?</h2>
-            <p>We deliver happiness with every bite</p>
-        </div>
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="icon-box"><i class="fa-solid fa-truck-fast"></i></div>
-                <h3>30 Min Delivery</h3>
-                <p>Lightning fast delivery to keep your food hot and fresh.</p>
+        <!-- Features Section -->
+        <section id="features" class="features-section">
+            <div class="section-header">
+                <h2>Why Choose Foodie Express?</h2>
+                <p>We deliver happiness with every bite</p>
             </div>
-            <div class="feature-card">
-                <div class="icon-box"><i class="fa-solid fa-utensils"></i></div>
-                <h3>Fresh Ingredients</h3>
-                <p>Prepared daily by certified top chefs with high hygiene standards.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="icon-box"><i class="fa-solid fa-truck-fast"></i></div>
+                    <h3>30 Min Delivery</h3>
+                    <p>Lightning fast delivery to keep your food hot and fresh.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon-box"><i class="fa-solid fa-utensils"></i></div>
+                    <h3>Fresh Ingredients</h3>
+                    <p>Prepared daily by certified top chefs with high hygiene standards.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon-box"><i class="fa-solid fa-headset"></i></div>
+                    <h3>24/7 Support</h3>
+                    <p>Dedicated customer service available around the clock.</p>
+                </div>
             </div>
-            <div class="feature-card">
-                <div class="icon-box"><i class="fa-solid fa-headset"></i></div>
-                <h3>24/7 Support</h3>
-                <p>Dedicated customer service available around the clock.</p>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Menu Section -->
-    <section id="menu" class="menu-section">
-        <div class="section-header">
-            <h2>Our Popular Menu</h2>
-            <p>Explore top rated dishes curated for you</p>
-        </div>
-
-        <div style="max-width: 500px; margin: 0 auto 25px auto; display: flex; gap: 10px;">
-            <input type="text" id="search-input" onkeyup="searchMenu()" placeholder="🔍 Search dishes (e.g. Biryani, Burger, Kebab)..." style="width: 100%; padding: 12px 18px; border: 1px solid #ddd; border-radius: 25px; outline: none; font-size: 14px; transition: 0.3s;">
-        </div>
-        
-        <div class="category-filters">
-            <button class="filter-btn active" onclick="filterMenu('All')">All Dishes</button>
-            <button class="filter-btn" onclick="filterMenu('Fast Food')">Fast Food</button>
-            <button class="filter-btn" onclick="filterMenu('Desi')">Desi Special</button>
-            <button class="filter-btn" onclick="filterMenu('BBQ')">BBQ & Grill</button>
-            <button class="filter-btn" onclick="filterMenu('Drinks')">Beverages</button>
-        </div>
-
-        <div class="menu-grid" id="menu-container"></div>
-    </section>
-
-    <!-- Live Order Tracking Section -->
-    <section id="tracking-section" class="tracking-section hidden">
-        <div class="section-header">
-            <h2>Live Order Status</h2>
-            <p>Real-time progress of your food order</p>
-        </div>
-        <div class="status-stepper">
-            <div class="step active" id="step-1">
-                <div class="step-icon"><i class="fa-solid fa-file-invoice"></i></div>
-                <p>Order Placed</p>
+        <!-- Menu Section -->
+        <section id="menu" class="menu-section">
+            <div class="section-header">
+                <h2>Our Popular Menu</h2>
+                <p>Explore top rated dishes curated for you</p>
             </div>
-            <div class="step" id="step-2">
-                <div class="step-icon"><i class="fa-solid fa-fire-burner"></i></div>
-                <p>Preparing</p>
-            </div>
-            <div class="step" id="step-3">
-                <div class="step-icon"><i class="fa-solid fa-motorcycle"></i></div>
-                <p>Out For Delivery</p>
-            </div>
-            <div class="step" id="step-4">
-                <div class="step-icon"><i class="fa-solid fa-house-circle-check"></i></div>
-                <p>Delivered</p>
-            </div>
-        </div>
-    </section>
 
-    <!-- Order History Section -->
-    <section id="order-history" class="features-section" style="padding: 40px 20px;">
-        <div class="section-header">
-            <h2>My Order History</h2>
-            <p>Your previous orders and receipts</p>
-        </div>
-        <div id="history-container" style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
-            <p style="text-align: center; color: #888;">No orders placed yet!</p>
-        </div>
-    </section>
+            <div class="search-container">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="search-input" onkeyup="searchMenu()" placeholder="Search dishes (e.g. Biryani, Burger, Kebab)...">
+            </div>
+            
+            <div class="category-filters">
+                <button class="filter-btn active" onclick="filterMenu('All')">All Dishes</button>
+                <button class="filter-btn" onclick="filterMenu('Fast Food')">Fast Food</button>
+                <button class="filter-btn" onclick="filterMenu('Desi')">Desi Special</button>
+                <button class="filter-btn" onclick="filterMenu('BBQ')">BBQ & Grill</button>
+                <button class="filter-btn" onclick="filterMenu('Drinks')">Beverages</button>
+            </div>
 
-    <!-- Reviews Section -->
-    <section id="reviews" class="reviews-section">
-        <div class="section-header">
-            <h2>What Our Customers Say</h2>
-            <p>Real feedback from food lovers</p>
-        </div>
-        <div class="reviews-container">
-            <div class="review-card">
-                <div class="user-info">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" alt="User">
-                    <div>
-                        <h4>Ayesha Khan</h4>
-                        <div class="stars">⭐⭐⭐⭐⭐</div>
+            <div class="menu-grid" id="menu-container"></div>
+        </section>
+
+        <!-- AI Mood & Taste Matchmaker Section -->
+        <section id="ai-matchmaker" class="ai-section">
+            <div class="section-header">
+                <span class="badge-ai"><i class="fa-solid fa-robot"></i> AI Powered</span>
+                <h2>Find Food By Your Mood</h2>
+                <p>Select your mood and craving. Our AI algorithm will curate the perfect luxury dish for you!</p>
+            </div>
+
+            <div class="ai-card-wrapper">
+                <div class="ai-options-grid">
+                    <!-- Mood Selection -->
+                    <div class="ai-group">
+                        <label><i class="fa-solid fa-face-smile"></i> What's Your Current Mood?</label>
+                        <div class="ai-chips" id="mood-chips">
+                            <button class="ai-chip active" data-value="spicy"><i class="fa-solid fa-pepper-hot"></i> Spicy & Bold</button>
+                            <button class="ai-chip" data-value="cheesy"><i class="fa-solid fa-cheese"></i> Cheesy & Comforting</button>
+                            <button class="ai-chip" data-value="healthy"><i class="fa-solid fa-leaf"></i> Light & Healthy</button>
+                            <button class="ai-chip" data-value="sweet"><i class="fa-solid fa-ice-cream"></i> Sweet Craving</button>
+                        </div>
+                    </div>
+
+                    <!-- Time / Occasion -->
+                    <div class="ai-group">
+                        <label><i class="fa-solid fa-clock"></i> What's the Time & Occasion?</label>
+                        <div class="ai-chips" id="occasion-chips">
+                            <button class="ai-chip active" data-value="quick"><i class="fa-solid fa-bolt"></i> Quick Bite</button>
+                            <button class="ai-chip" data-value="dinner"><i class="fa-solid fa-utensils"></i> Luxurious Dinner</button>
+                            <button class="ai-chip" data-value="late"><i class="fa-solid fa-moon"></i> Late Night Craving</button>
+                        </div>
                     </div>
                 </div>
-                <p>"The food arrived piping hot! Zinger burger was super crispy. Best food app in town."</p>
-            </div>
-            <div class="review-card">
-                <div class="user-info">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" alt="User">
-                    <div>
-                        <h4>Hamza Ali</h4>
-                        <div class="stars">⭐⭐⭐⭐⭐</div>
+
+                <button id="ai-find-btn" class="btn-primary ai-submit-btn">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> AI Match My Food
+                </button>
+
+                <!-- AI Match Result Box -->
+                <div id="ai-result-box" class="ai-result-box hidden">
+                    <div class="ai-result-header">
+                        <i class="fa-solid fa-sparkles"></i>
+                        <div>
+                            <h3>AI Recommended Match</h3>
+                            <p id="ai-result-reason">Based on your mood preferences</p>
+                        </div>
+                    </div>
+                    <div id="ai-recommended-items" class="menu-grid">
+                        <!-- AI Matched Food Card will be rendered here dynamically -->
                     </div>
                 </div>
-                <p>"Biryani taste was authentic. Live tracking feature is extremely accurate!"</p>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Admin Section -->
-    <section id="admin" class="admin-section">
-        <div class="section-header">
-            <h2>Admin Analytics Dashboard</h2>
-            <p>Live stats and menu management</p>
-        </div>
-        
-        <div class="admin-analytics">
-            <div class="stat-card">
-                <i class="fa-solid fa-chart-line"></i>
-                <div>
-                    <h3>Total Orders</h3>
-                    <p id="total-orders-count">0</p>
+        <!-- Live Order Tracking Section -->
+        <section id="tracking-section" class="tracking-section hidden">
+            <div class="section-header">
+                <h2>Live Order Status</h2>
+                <p>Real-time progress of your food order</p>
+            </div>
+            <div class="status-stepper">
+                <div class="step active" id="step-1">
+                    <div class="step-icon"><i class="fa-solid fa-file-invoice"></i></div>
+                    <p>Order Placed</p>
+                </div>
+                <div class="step" id="step-2">
+                    <div class="step-icon"><i class="fa-solid fa-fire-burner"></i></div>
+                    <p>Preparing</p>
+                </div>
+                <div class="step" id="step-3">
+                    <div class="step-icon"><i class="fa-solid fa-motorcycle"></i></div>
+                    <p>Out For Delivery</p>
+                </div>
+                <div class="step" id="step-4">
+                    <div class="step-icon"><i class="fa-solid fa-house-circle-check"></i></div>
+                    <p>Delivered</p>
                 </div>
             </div>
-            <div class="stat-card">
-                <i class="fa-solid fa-wallet"></i>
-                <div>
-                    <h3>Total Revenue</h3>
-                    <p id="total-revenue-count">Rs. 0</p>
+        </section>
+
+        <!-- Order History Section -->
+        <section id="order-history" class="features-section history-section">
+            <div class="section-header">
+                <h2>My Order History</h2>
+                <p>Your previous orders and receipts</p>
+            </div>
+            <div id="history-container" class="history-container">
+                <p class="no-history-msg">No orders placed yet!</p>
+            </div>
+        </section>
+
+        <!-- Reviews Section -->
+        <section id="reviews" class="reviews-section">
+            <div class="section-header">
+                <h2>What Our Customers Say</h2>
+                <p>Real feedback from food lovers</p>
+            </div>
+            <div class="reviews-container">
+                <div class="review-card">
+                    <div class="user-info">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" alt="Customer Ayesha">
+                        <div>
+                            <h4>Ayesha Khan</h4>
+                            <div class="stars">⭐⭐⭐⭐⭐</div>
+                        </div>
+                    </div>
+                    <p>"The food arrived piping hot! Zinger burger was super crispy. Best food app in town."</p>
+                </div>
+                <div class="review-card">
+                    <div class="user-info">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" alt="Customer Hamza">
+                        <div>
+                            <h4>Hamza Ali</h4>
+                            <div class="stars">⭐⭐⭐⭐⭐</div>
+                        </div>
+                    </div>
+                    <p>"Biryani taste was authentic. Live tracking feature is extremely accurate!"</p>
                 </div>
             </div>
-        </div>
-
-        <div class="admin-form-container">
-            <h3><i class="fa-solid fa-plus"></i> Add New Menu Item</h3>
-            <form id="add-menu-form" onsubmit="addMenuItem(event)">
-                <input type="text" id="item-name" placeholder="Item Title" required>
-                <select id="item-category" required>
-                    <option value="">Select Category</option>
-                    <option value="Fast Food">Fast Food</option>
-                    <option value="Desi">Desi</option>
-                    <option value="BBQ">BBQ</option>
-                    <option value="Drinks">Drinks</option>
-                </select>
-                <input type="number" id="item-price" placeholder="Price (PKR)" required>
-                <input type="text" id="item-img" placeholder="Image URL" required>
-                <button type="submit" class="btn-primary">Add Product To Menu</button>
-            </form>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <!-- Footer -->
     <footer>
@@ -232,6 +247,7 @@
                 <h4>Quick Links</h4>
                 <a href="#home">Home</a>
                 <a href="#menu">Menu</a>
+                <a href="#ai-matchmaker">AI Matchmaker</a>
                 <a href="#reviews">Reviews</a>
             </div>
             <div class="footer-col">
@@ -242,9 +258,9 @@
             <div class="footer-col">
                 <h4>Follow Us</h4>
                 <div class="social-icons">
-                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
-                    <a href="https://www.instagram.com/hafiz_shaheer987" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="https://www.instagram.com/hafiz_shaheer987" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
                 </div>
             </div>
         </div>
@@ -261,11 +277,11 @@
         </div>
         <div id="cart-items" class="cart-items"></div>
         <div class="cart-footer">
-            <div class="coupon-section" style="margin-bottom: 12px; display: flex; gap: 6px;">
-                <input type="text" id="coupon-code" placeholder="Promo Code (Try: FOODIE50)" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 6px;">
-                <button onclick="applyCoupon()" style="background: #333; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">Apply</button>
+            <div class="coupon-section">
+                <input type="text" id="coupon-code" placeholder="Promo Code (Try: FOODIE50)">
+                <button onclick="applyCoupon()" class="btn-coupon">Apply</button>
             </div>
-            <div id="discount-msg" style="color: #2ed573; font-size: 13px; margin-bottom: 8px; font-weight: bold;"></div>
+            <div id="discount-msg" class="discount-msg"></div>
 
             <div class="total-price">Total Amount: <strong>Rs. <span id="cart-total">0</span></strong></div>
             <button class="btn-primary checkout-btn" onclick="checkout()">Proceed To Checkout</button>
@@ -351,7 +367,7 @@
                 </div>
                 <div class="input-group">
                     <i class="fa-solid fa-credit-card"></i>
-                    <select id="payment-method" onchange="togglePaymentInfo()" required style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; outline: none;">
+                    <select id="payment-method" onchange="togglePaymentInfo()" required class="custom-select">
                         <option value="">Select Payment Method</option>
                         <option value="Cash on Delivery">Cash on Delivery (COD)</option>
                         <option value="JazzCash / EasyPaisa">JazzCash / EasyPaisa</option>
@@ -359,12 +375,12 @@
                     </select>
                 </div>
 
-                <!-- Online Payment Information Box (Auto Toggle) -->
-                <div id="online-payment-details" style="display: none; background: #f8f9fa; border: 1px dashed #ff4757; padding: 12px; border-radius: 8px; margin-bottom: 15px; font-size: 13px;">
-                    <p style="margin: 0 0 5px 0; color: #ff4757; font-weight: bold;"><i class="fa-solid fa-circle-info"></i> Account Details for Online Payment:</p>
-                    <p style="margin: 2px 0;"><strong>JazzCash / EasyPaisa:</strong> 0331-2969666</p>
-                    <p style="margin: 2px 0;"><strong>Account Title:</strong> Foodie Express / Hafiz Shaheer</p>
-                    <p style="margin: 5px 0 0 0; color: #666; font-size: 12px;">* Order confirm karne ke baad payment screen-shot WhatsApp par send karein.</p>
+                <!-- Online Payment Details Box -->
+                <div id="online-payment-details" class="online-payment-box" style="display: none;">
+                    <p class="payment-title"><i class="fa-solid fa-circle-info"></i> Account Details for Online Payment:</p>
+                    <p><strong>JazzCash / EasyPaisa:</strong> 0331-2969666</p>
+                    <p><strong>Account Title:</strong> Foodie Express / Hafiz Shaheer</p>
+                    <p class="payment-note">* Order confirm karne ke baad payment screen-shot WhatsApp par send karein.</p>
                 </div>
 
                 <button type="submit" class="btn-primary auth-submit">Confirm & Place Order</button>
@@ -378,6 +394,7 @@
         <span class="floating-cart-badge" id="floating-cart-count">0</span>
     </div>
 
+    <!-- Custom Script -->
     <script src="script.js"></script>
 </body>
 </html>
