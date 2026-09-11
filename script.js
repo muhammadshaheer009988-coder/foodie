@@ -1,6 +1,19 @@
-// Sound Effects Audio Objects
+// Sound Effects Audio Objects (Working Sounds)
 const cartSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
 const orderSound = new Audio('https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3');
+
+// Preload audio files
+cartSound.preload = 'auto';
+orderSound.preload = 'auto';
+
+// User Interaction Tracker (Browser Audio Unlocker)
+document.addEventListener('click', function unlockAudio() {
+    cartSound.play().then(() => {
+        cartSound.pause();
+        cartSound.currentTime = 0;
+    }).catch(() => {});
+    document.removeEventListener('click', unlockAudio);
+}, { once: true });
 
 // Default Menu Items (LocalStorage se load honge agar saved hon)
 let defaultItems = [
@@ -101,11 +114,18 @@ function saveCartToStorage() {
     localStorage.setItem('foodieCart', JSON.stringify(cart));
 }
 
-// Add To Cart (Fast Sound Effect - Alert Removed)
+// Add To Cart (With Fast Sound Trigger)
 function addToCart(itemId) {
-    // Immediate Sound Playback
-    cartSound.currentTime = 0;
-    cartSound.play().catch(e => console.log('Audio error:', e));
+    // Play Sound Effect
+    try {
+        cartSound.currentTime = 0;
+        let playPromise = cartSound.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(e => console.log('Sound error handled:', e));
+        }
+    } catch (e) {
+        console.log('Audio error:', e);
+    }
 
     const item = menuItems.find(p => p.id === itemId);
     if (!item) return;
@@ -251,8 +271,12 @@ function processOrder(e) {
     e.preventDefault();
 
     // Sound Playback on Success
-    orderSound.currentTime = 0;
-    orderSound.play().catch(e => console.log('Audio error:', e));
+    try {
+        orderSound.currentTime = 0;
+        orderSound.play().catch(e => console.log('Sound error:', e));
+    } catch (e) {
+        console.log('Audio error:', e);
+    }
 
     const name = document.getElementById('cust-name').value;
     const phone = document.getElementById('cust-phone').value;
