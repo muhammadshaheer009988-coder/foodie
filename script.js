@@ -1,4 +1,4 @@
-// Web Audio API Sound Generator
+// Web Audio API Sound Generator (Guaranteed to work without external links/files)
 function playCustomSound(freq = 600, duration = 0.12, type = 'sine') {
     try {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -29,62 +29,66 @@ function playCustomSound(freq = 600, duration = 0.12, type = 'sine') {
     }
 }
 
-// Default Menu Items
-const defaultItems = [
-    { id: 1, name: 'Zinger Burger Deluxe', category: 'Fast Food', price: 550, img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500' },
-    { id: 2, name: 'Special Chicken Biryani', category: 'Desi', price: 380, img: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500' },
-    { id: 3, name: 'Smoky BBQ Seekh Kebab', category: 'BBQ', price: 750, img: 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=500' },
-    { id: 4, name: 'Chilled Soft Drink', category: 'Drinks', price: 120, img: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500' }
+// Default Menu Items (LocalStorage se load honge agar saved hon)
+let defaultItems = [
+    { id: 1, name: 'Zinger Burger Deluxe', category: 'Fast Food', price: 550, desc: 'Crispy chicken fillet with spicy mayo and fresh lettuce.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500' },
+    { id: 2, name: 'Special Chicken Biryani', category: 'Desi', price: 380, desc: 'Aromatic basmati rice cooked with tender chicken pieces and spices.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500' },
+    { id: 3, name: 'Smoky BBQ Seekh Kebab', category: 'BBQ', price: 750, desc: 'Juicy minced meat skewers grilled over glowing charcoal.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=500' },
+    { id: 4, name: 'Chilled Soft Drink', category: 'Drinks', price: 120, desc: 'Refreshing ice-cold carbonated beverage.', rating: '4.5 ⭐', img: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500' }
 ];
 
-// App State Management
 let menuItems = JSON.parse(localStorage.getItem('foodieMenuItems')) || defaultItems;
+
+// Local Storage se Cart aur Orders History load karein
 let cart = JSON.parse(localStorage.getItem('foodieCart')) || [];
 let orderHistory = JSON.parse(localStorage.getItem('foodieOrderHistory')) || [];
-let totalOrders = localStorage.getItem('totalOrders') ? parseInt(localStorage.getItem('totalOrders'), 10) : 0;
-let totalRevenue = localStorage.getItem('totalRevenue') ? parseInt(localStorage.getItem('totalRevenue'), 10) : 0;
+let totalOrders = localStorage.getItem('totalOrders') ? parseInt(localStorage.getItem('totalOrders')) : 0;
+let totalRevenue = localStorage.getItem('totalRevenue') ? parseInt(localStorage.getItem('totalRevenue')) : 0;
 
-// Configuration
+// Admin WhatsApp Number Configuration (Bina + ya 00 ke)
 const adminWhatsAppNumber = "923312969666";
+
+// Current Auth Mode
 let currentAuthMode = 'login';
+
+// Discount Tracker Variable
 let discountAmount = 0;
 
-// LocalStorage Helpers
+// Save Menu Items to Local Storage
 function saveMenuItemsToStorage() {
     localStorage.setItem('foodieMenuItems', JSON.stringify(menuItems));
 }
 
-function saveCartToStorage() {
-    localStorage.setItem('foodieCart', JSON.stringify(cart));
-}
-
 // Render Menu
-function renderMenu(items = menuItems, isAdmin = false) {
+function renderMenu(items) {
     const container = document.getElementById('menu-container');
     if (!container) return;
     container.innerHTML = '';
 
     if (items.length === 0) {
-        container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #a0aec0; font-size: 18px;">Koi item nahi mila.</p>`;
+        container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); font-size: 18px;">Koi item nahi mila.</p>`;
         return;
     }
 
     items.forEach(item => {
         container.innerHTML += `
             <div class="food-card">
-                <img src="${item.img}" alt="${item.name}">
-                <div class="food-card-details">
-                    <h3>${item.name}</h3>
-                    <p class="price">Rs. ${item.price}</p>
-                    <div style="display: flex; gap: 8px; margin-top: 10px;">
-                        <button class="btn-primary" style="flex: 1;" onclick="addToCart(${item.id})">
-                            <i class="fa-solid fa-cart-plus"></i> Add To Cart
+                <div class="food-img-container">
+                    <img src="${item.img}" alt="${item.name}">
+                </div>
+                <div class="food-details">
+                    <div>
+                        <div class="food-title-price">
+                            <h4>${item.name}</h4>
+                            <span>Rs. ${item.price}</span>
+                        </div>
+                        <p class="food-desc">${item.desc || 'Delicious and freshly prepared meal.'}</p>
+                    </div>
+                    <div class="food-footer">
+                        <span class="food-rating">${item.rating || '4.5 ⭐'}</span>
+                        <button class="btn-add-cart" onclick="addToCart(${item.id})">
+                            <i class="fa-solid fa-cart-plus"></i> Add
                         </button>
-                        ${isAdmin ? `
-                            <button onclick="deleteMenuItem(${item.id})" style="background: #ff4757; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer;">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        ` : ''}
                     </div>
                 </div>
             </div>
@@ -92,7 +96,7 @@ function renderMenu(items = menuItems, isAdmin = false) {
     });
 }
 
-// Search Menu
+// Search Menu Functionality
 function searchMenu() {
     const searchInput = document.getElementById('search-input');
     if (!searchInput) return;
@@ -111,9 +115,7 @@ function filterMenu(category) {
     const buttons = document.querySelectorAll('.filter-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
     
-    const clickedBtn = Array.from(buttons).find(btn => 
-        btn.textContent.includes(category) || (category === 'All' && btn.textContent.includes('All'))
-    );
+    const clickedBtn = Array.from(buttons).find(btn => btn.textContent.includes(category) || (category === 'All' && btn.textContent.includes('All')));
     if (clickedBtn) clickedBtn.classList.add('active');
 
     if (category === 'All') {
@@ -126,7 +128,12 @@ function filterMenu(category) {
 // Toggle Cart Sidebar
 function toggleCart() {
     const sidebar = document.getElementById('cart-sidebar');
-    if (sidebar) sidebar.classList.toggle('open');
+    if (sidebar) sidebar.classList.toggle('active');
+}
+
+// Save Cart to LocalStorage
+function saveCartToStorage() {
+    localStorage.setItem('foodieCart', JSON.stringify(cart));
 }
 
 // Add To Cart
@@ -148,7 +155,7 @@ function addToCart(itemId) {
     updateCartUI();
 }
 
-// Update Quantity (+ / -)
+// Quantity Adjustments (+ / -)
 function updateQuantity(itemId, change) {
     playCustomSound(400, 0.08, 'triangle');
 
@@ -164,15 +171,7 @@ function updateQuantity(itemId, change) {
     updateCartUI();
 }
 
-// Remove from Cart
-function removeFromCart(itemId) {
-    playCustomSound(300, 0.15, 'sawtooth');
-    cart = cart.filter(item => item.id !== itemId);
-    saveCartToStorage();
-    updateCartUI();
-}
-
-// Apply Promo Code
+// Apply Promo Code Function
 function applyCoupon() {
     const codeInput = document.getElementById('coupon-code');
     const msgEl = document.getElementById('discount-msg');
@@ -201,7 +200,7 @@ function applyCoupon() {
     updateCartUI();
 }
 
-// Update Cart UI & Totals
+// Update Cart UI & Total Calculation
 function updateCartUI() {
     const container = document.getElementById('cart-items');
     let total = 0, count = 0;
@@ -211,27 +210,26 @@ function updateCartUI() {
         count += item.quantity;
     });
 
-    const finalTotal = Math.max(0, total - discountAmount);
+    let finalTotal = total - discountAmount;
+    if (finalTotal < 0) finalTotal = 0;
 
     if (container) {
         container.innerHTML = '';
         if (cart.length === 0) {
-            container.innerHTML = `<p style="text-align: center; color: #a0aec0; margin-top: 20px;">Aap ka cart khali hai.</p>`;
+            container.innerHTML = `<p style="text-align: center; color: var(--text-muted); margin-top: 20px;">Aap ka cart khali hai.</p>`;
         } else {
             cart.forEach(item => {
                 container.innerHTML += `
-                    <div class="cart-item" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #eee;">
-                        <div>
-                            <h4 style="margin: 0; font-size: 15px;">${item.name}</h4>
-                            <p style="margin: 4px 0 0 0; color: #666; font-size: 13px;">Rs. ${item.price} x ${item.quantity}</p>
+                    <div class="cart-item-card">
+                        <div class="cart-item-info">
+                            <h5>${item.name}</h5>
+                            <p>Rs. ${item.price} x ${item.quantity}</p>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 6px;">
-                            <button onclick="updateQuantity(${item.id}, -1)" style="padding: 2px 8px; cursor: pointer;">-</button>
+                        <div class="cart-item-actions">
+                            <button onclick="updateQuantity(${item.id}, -1)">-</button>
                             <span>${item.quantity}</span>
-                            <button onclick="updateQuantity(${item.id}, 1)" style="padding: 2px 8px; cursor: pointer;">+</button>
-                            <button onclick="removeFromCart(${item.id})" style="background: #ff4757; color: white; border: none; padding: 4px 8px; border-radius: 4px; margin-left: 6px; cursor: pointer;">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
+                            <button onclick="updateQuantity(${item.id}, 1)">+</button>
+                            <button onclick="removeFromCart(${item.id})" style="background: var(--primary); color: white; border: none;"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </div>
                 `;
@@ -254,7 +252,14 @@ function updateCartUI() {
     if (revenueEl) revenueEl.innerText = `Rs. ${totalRevenue}`;
 }
 
-// Payment Selection Controls
+function removeFromCart(itemId) {
+    playCustomSound(300, 0.15, 'sawtooth');
+    cart = cart.filter(item => item.id !== itemId);
+    saveCartToStorage();
+    updateCartUI();
+}
+
+// Toggle Payment Details Box based on Payment Method Selection
 function togglePaymentInfo() {
     const paymentSelect = document.getElementById('payment-method');
     const detailsBox = document.getElementById('online-payment-details');
@@ -267,7 +272,7 @@ function togglePaymentInfo() {
     }
 }
 
-// Checkout Modal Handlers
+// Open Checkout Modal
 function checkout() {
     if (cart.length === 0) {
         alert("Your cart is empty!");
@@ -275,20 +280,24 @@ function checkout() {
     }
 
     const sidebar = document.getElementById('cart-sidebar');
-    if (sidebar && sidebar.classList.contains('open')) {
+    if (sidebar && sidebar.classList.contains('active')) {
         toggleCart();
     }
 
     const checkoutModal = document.getElementById('checkout-modal');
-    if (checkoutModal) checkoutModal.classList.add('active');
+    if (checkoutModal) {
+        checkoutModal.classList.add('active');
+    }
 }
 
 function closeCheckoutModal() {
     const checkoutModal = document.getElementById('checkout-modal');
-    if (checkoutModal) checkoutModal.classList.remove('active');
+    if (checkoutModal) {
+        checkoutModal.classList.remove('active');
+    }
 }
 
-// Process Order
+// Process Order Function
 function processOrder(e) {
     e.preventDefault();
 
@@ -296,10 +305,10 @@ function processOrder(e) {
     setTimeout(() => playCustomSound(659, 0.1, 'sine'), 100);
     setTimeout(() => playCustomSound(783, 0.2, 'sine'), 200);
 
-    const name = document.getElementById('cust-name')?.value || 'Customer';
-    const phone = document.getElementById('cust-phone')?.value || 'N/A';
-    const address = document.getElementById('cust-address')?.value || 'N/A';
-    const payment = document.getElementById('payment-method')?.value || 'Cash on Delivery';
+    const name = document.getElementById('cust-name').value;
+    const phone = document.getElementById('cust-phone').value;
+    const address = document.getElementById('cust-address').value;
+    const payment = document.getElementById('payment-method').value;
 
     const rawTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const orderTotal = Math.max(0, rawTotal - discountAmount);
@@ -308,7 +317,7 @@ function processOrder(e) {
     totalRevenue += orderTotal;
     totalOrders++;
 
-    // New Order Record
+    // Save Order History
     const newOrder = {
         id: orderId,
         items: [...cart],
@@ -318,12 +327,12 @@ function processOrder(e) {
     };
     orderHistory.unshift(newOrder);
 
-    // Save States
+    // Local Storage Update
     localStorage.setItem('totalOrders', totalOrders);
     localStorage.setItem('totalRevenue', totalRevenue);
     localStorage.setItem('foodieOrderHistory', JSON.stringify(orderHistory));
 
-    // WhatsApp Payload
+    // Prepare WhatsApp Message
     let itemsListText = "";
     cart.forEach(item => {
         itemsListText += `• ${item.name} (x${item.quantity}) - Rs. ${item.price * item.quantity}\n`;
@@ -344,7 +353,7 @@ function processOrder(e) {
 
     alert(`Shukriya ${name}! Aap ka order (Rs. ${orderTotal}) successfully place ho gaya hai.\nAbhi aap ko WhatsApp par redirect kiya ja raha hai.`);
 
-    // Reset Form & Cart
+    // Reset Cart, Discount & Form
     cart = [];
     discountAmount = 0;
     const msgEl = document.getElementById('discount-msg');
@@ -355,17 +364,14 @@ function processOrder(e) {
     saveCartToStorage();
     updateCartUI();
     renderOrderHistory();
-    
-    const checkoutForm = document.getElementById('checkout-form');
-    if (checkoutForm) checkoutForm.reset();
-    
-    togglePaymentInfo();
+    document.getElementById('checkout-form').reset();
+    togglePaymentInfo(); 
     closeCheckoutModal();
 
     // Redirect to WhatsApp
     window.open(whatsappUrl, '_blank');
 
-    // Live Tracking Simulation
+    // Live Tracking Start
     startOrderTrackingSimulation();
 }
 
@@ -375,35 +381,33 @@ function renderOrderHistory() {
     if (!historyContainer) return;
 
     if (orderHistory.length === 0) {
-        historyContainer.innerHTML = `<p style="text-align: center; color: #888;">No orders placed yet!</p>`;
+        historyContainer.innerHTML = `<div class="no-history-msg">No orders placed yet!</div>`;
         return;
     }
 
     historyContainer.innerHTML = '';
     orderHistory.forEach(order => {
-        const itemsSummary = order.items.map(i => `${i.name} (x${i.quantity})`).join(', ');
+        let itemsSummary = order.items.map(i => `${i.name} (x${i.quantity})`).join(', ');
         historyContainer.innerHTML += `
-            <div style="background: var(--card-bg, #fff); padding: 15px; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 10px;">
+            <div class="history-card">
                 <div style="display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 8px;">
                     <span>Order ID: ${order.id}</span>
-                    <span style="color: #2ed573;">Rs. ${order.amount}</span>
+                    <span style="color: var(--primary);">Rs. ${order.amount}</span>
                 </div>
-                <p style="margin: 0 0 6px 0; font-size: 14px; color: #555;"><strong>Items:</strong> ${itemsSummary}</p>
-                <div style="display: flex; justify-content: space-between; font-size: 12px; color: #888;">
+                <p style="margin: 0 0 6px 0; font-size: 14px; color: var(--text-muted);"><strong>Items:</strong> ${itemsSummary}</p>
+                <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
                     <span>Date: ${order.date}</span>
-                    <span>Status: <strong>${order.status}</strong></span>
+                    <span>Status: <strong style="color: var(--accent);">${order.status}</strong></span>
                 </div>
             </div>
         `;
     });
 }
 
-// Order Tracking System Simulation
 function startOrderTrackingSimulation() {
     const trackingSection = document.getElementById('tracking-section');
     if (!trackingSection) return;
 
-    trackingSection.classList.remove('hidden');
     trackingSection.scrollIntoView({ behavior: 'smooth' });
 
     let step = 1;
@@ -426,18 +430,58 @@ function startOrderTrackingSimulation() {
     }, 3500);
 }
 
+// AI Matchmaker Helper Function
+function selectAiChip(element, groupName) {
+    const parent = element.parentElement;
+    parent.querySelectorAll('.ai-chip').forEach(chip => chip.classList.remove('active'));
+    element.classList.add('active');
+}
+
+// AI Matchmaker Generator
+function findAiRecommendation() {
+    playCustomSound(700, 0.15, 'sine');
+    const moodActive = document.querySelector('#ai-mood-chips .ai-chip.active');
+    const timeActive = document.querySelector('#ai-time-chips .ai-chip.active');
+    const resultBox = document.getElementById('ai-result-box');
+    const resultTitle = document.getElementById('ai-result-title');
+    const resultDesc = document.getElementById('ai-result-desc');
+
+    if (!moodActive || !timeActive) {
+        alert("Pehle mood aur time select karein!");
+        return;
+    }
+
+    const mood = moodActive.textContent.trim();
+    let recommended = menuItems[0];
+
+    if (mood.includes('Spicy')) {
+        recommended = menuItems.find(i => i.category === 'Fast Food') || menuItems[0];
+    } else if (mood.includes('Desi')) {
+        recommended = menuItems.find(i => i.category === 'Desi') || menuItems[1];
+    } else if (mood.includes('BBQ')) {
+        recommended = menuItems.find(i => i.category === 'BBQ') || menuItems[2];
+    } else {
+        recommended = menuItems[3];
+    }
+
+    if (resultTitle && resultDesc && resultBox) {
+        resultTitle.innerText = `Aap ke liye best match: ${recommended.name} (Rs. ${recommended.price})`;
+    }
+    if (resultDesc) {
+        resultDesc.innerText = `Aap ke mood (${mood}) ke mutabiq yeh sab se behtareen choice hai. Foran order karein!`;
+    }
+    if (resultBox) {
+        resultBox.classList.remove('hidden');
+    }
+}
+
 // Admin Add Product
 function addMenuItem(e) {
     e.preventDefault();
-    const name = document.getElementById('item-name').value.trim();
+    const name = document.getElementById('item-name').value;
     const category = document.getElementById('item-category').value;
-    const price = parseInt(document.getElementById('item-price').value, 10);
-    const img = document.getElementById('item-img').value.trim() || 'https://via.placeholder.com/150';
-
-    if (!name || isNaN(price)) {
-        alert('Please fill out all fields correctly!');
-        return;
-    }
+    const price = parseInt(document.getElementById('item-price').value);
+    const img = document.getElementById('item-img').value;
 
     menuItems.push({ id: Date.now(), name, category, price, img });
     saveMenuItemsToStorage();
@@ -485,25 +529,31 @@ function closeAuthModal() {
 
 function handleAuth(e, type) {
     e.preventDefault();
-    alert(type === 'signup' ? 'Account created & logged in successfully!' : 'Logged in successfully!');
+    if (type === 'signup') {
+        alert('Account created & logged in successfully!');
+    } else {
+        alert('Logged in successfully!');
+    }
     closeAuthModal();
 }
 
-// Dark / Light Theme Toggle
+// Dark / Light Mode Toggle
 function toggleDarkMode() {
-    document.body.classList.toggle('dark-theme');
+    const htmlElement = document.documentElement;
     const themeIcon = document.getElementById('theme-icon');
     
-    if (document.body.classList.contains('dark-theme')) {
-        if (themeIcon) themeIcon.className = 'fa-solid fa-sun';
-        localStorage.setItem('theme', 'dark');
-    } else {
+    if (htmlElement.getAttribute('data-theme') === 'dark') {
+        htmlElement.removeAttribute('data-theme');
         if (themeIcon) themeIcon.className = 'fa-solid fa-moon';
         localStorage.setItem('theme', 'light');
+    } else {
+        htmlElement.setAttribute('data-theme', 'dark');
+        if (themeIcon) themeIcon.className = 'fa-solid fa-sun';
+        localStorage.setItem('theme', 'dark');
     }
 }
 
-// App Initialization
+// Window Load Setup
 window.onload = () => {
     renderMenu(menuItems);
     updateCartUI();
@@ -512,7 +562,7 @@ window.onload = () => {
     const savedTheme = localStorage.getItem('theme');
     const themeIcon = document.getElementById('theme-icon');
     if (savedTheme === 'dark') {
-        document.body.classList.add('dark-theme');
+        document.documentElement.setAttribute('data-theme', 'dark');
         if (themeIcon) themeIcon.className = 'fa-solid fa-sun';
     } else {
         if (themeIcon) themeIcon.className = 'fa-solid fa-moon';
