@@ -112,7 +112,6 @@
             <div class="search-container">
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
                 <input type="text" id="search-input" onkeyup="searchMenu()" placeholder="Search gourmet dishes (e.g. Biryani, Burger, Kebab)...">
-                <!-- Voice Search Button -->
                 <button type="button" onclick="startVoiceSearch()" class="voice-search-btn" title="Search with Voice">
                     <i class="fa-solid fa-microphone"></i>
                 </button>
@@ -139,7 +138,6 @@
 
             <div class="ai-card-wrapper">
                 <div class="ai-options-grid">
-                    <!-- Mood Selection -->
                     <div class="ai-group">
                         <label><i class="fa-solid fa-face-smile"></i> What's Your Current Mood?</label>
                         <div class="ai-chips" id="mood-chips">
@@ -150,7 +148,6 @@
                         </div>
                     </div>
 
-                    <!-- Time / Occasion -->
                     <div class="ai-group">
                         <label><i class="fa-solid fa-clock"></i> What's the Time & Occasion?</label>
                         <div class="ai-chips" id="occasion-chips">
@@ -165,7 +162,6 @@
                     <i class="fa-solid fa-wand-magic-sparkles"></i> AI Match My Food
                 </button>
 
-                <!-- AI Match Result Box -->
                 <div id="ai-result-box" class="ai-result-box hidden">
                     <div class="ai-result-header">
                         <i class="fa-solid fa-sparkles"></i>
@@ -174,9 +170,7 @@
                             <p id="ai-result-reason">Based on your sophisticated mood preferences</p>
                         </div>
                     </div>
-                    <div id="ai-recommended-items" class="menu-grid">
-                        <!-- AI Matched Food Card will be rendered here dynamically -->
-                    </div>
+                    <div id="ai-recommended-items" class="menu-grid"></div>
                 </div>
             </div>
         </section>
