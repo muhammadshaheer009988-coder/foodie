@@ -49,15 +49,13 @@ let totalRevenue = localStorage.getItem('totalRevenue') ? parseInt(localStorage.
 let currentCurrency = localStorage.getItem('foodieCurrency') || 'PKR';
 let currencyRates = { PKR: 1, USD: 0.0036, EUR: 0.0033, GBP: 0.0028 };
 let currencySymbols = { PKR: 'Rs. ', USD: '$', EUR: '€', GBP: '£' };
-let loyaltyCoins = localStorage.getItem('foodieCoins') ? parseInt(localStorage.getItem('foodieCoins')) : 50; // Welcome bonus 50 coins
+let loyaltyCoins = localStorage.getItem('foodieCoins') ? parseInt(localStorage.getItem('foodieCoins')) : 50; 
 
-// Admin WhatsApp Number Configuration (Bina + ya 00 ke)
+// Admin WhatsApp Number Configuration
 const adminWhatsAppNumber = "923312969666";
 
-// Current Auth Mode
+// Current Auth Mode & Discount Tracker
 let currentAuthMode = 'login';
-
-// Discount Tracker Variable
 let discountAmount = 0;
 
 // Save Menu Items to Local Storage
@@ -80,7 +78,6 @@ function changeCurrency() {
     currentCurrency = dropdown.value;
     localStorage.setItem('foodieCurrency', currentCurrency);
     
-    // Re-render components to reflect currency change
     renderMenu(menuItems);
     updateCartUI();
     renderOrderHistory();
@@ -344,11 +341,10 @@ function updateCartUI() {
     const countEl = document.getElementById('cart-count');
     const floatingCountEl = document.getElementById('floating-cart-count');
     
-    if (totalEl) totalEl.innerText = formatPrice(finalTotal).replace(/[^0-9.]/g, ''); // Numeric or symbol supported display
+    if (totalEl) totalEl.innerText = formatPrice(finalTotal).replace(/[^0-9.]/g, '');
     if (countEl) countEl.innerText = count;
     if (floatingCountEl) floatingCountEl.innerText = count;
 
-    // Admin Stats Update
     const ordersEl = document.getElementById('total-orders-count');
     const revenueEl = document.getElementById('total-revenue-count');
     if (ordersEl) ordersEl.innerText = totalOrders;
@@ -422,11 +418,9 @@ function processOrder(e) {
     totalRevenue += orderTotal;
     totalOrders++;
 
-    // Earn loyalty coins (10% of total spent converted to coins)
     let earnedCoins = Math.floor(orderTotal * 0.05);
     loyaltyCoins += earnedCoins;
 
-    // Save Order History
     const newOrder = {
         id: orderId,
         items: [...cart],
@@ -436,12 +430,10 @@ function processOrder(e) {
     };
     orderHistory.unshift(newOrder);
 
-    // Local Storage Update
     localStorage.setItem('totalOrders', totalOrders);
     localStorage.setItem('totalRevenue', totalRevenue);
     localStorage.setItem('foodieOrderHistory', JSON.stringify(orderHistory));
 
-    // Prepare WhatsApp Message
     let itemsListText = "";
     cart.forEach(item => {
         itemsListText += `• ${item.name} (x${item.quantity}) - ${formatPrice(item.price * item.quantity)}\n`;
@@ -462,7 +454,6 @@ function processOrder(e) {
 
     alert(`Shukriya ${name}! Aap ka order successfully place ho gaya hai (+${earnedCoins} Loyalty Coins earned!).\nAbhi aap ko WhatsApp par redirect kiya ja raha hai.`);
 
-    // Reset Cart, Discount & Form
     cart = [];
     discountAmount = 0;
     const msgEl = document.getElementById('discount-msg');
@@ -477,10 +468,7 @@ function processOrder(e) {
     togglePaymentInfo(); 
     closeCheckoutModal();
 
-    // Redirect to WhatsApp
     window.open(whatsappUrl, '_blank');
-
-    // Live Tracking Start
     startOrderTrackingSimulation();
 }
 
@@ -705,7 +693,6 @@ function toggleDarkMode() {
 
 // Window Load Setup
 window.onload = () => {
-    // Set currency selector value from storage if exists
     const currencyDropdown = document.getElementById('currency-selector');
     if (currencyDropdown) {
         currencyDropdown.value = currentCurrency;
