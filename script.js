@@ -1,19 +1,33 @@
-// Sound Effects Audio Objects (Working Sounds)
-const cartSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
-const orderSound = new Audio('https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3');
+// Web Audio API Sound Generator (Guaranteed to work without external links/files)
+function playCustomSound(freq = 600, duration = 0.12, type = 'sine') {
+    try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        
+        const audioCtx = new AudioContext();
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
 
-// Preload audio files
-cartSound.preload = 'auto';
-orderSound.preload = 'auto';
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
 
-// User Interaction Tracker (Browser Audio Unlocker)
-document.addEventListener('click', function unlockAudio() {
-    cartSound.play().then(() => {
-        cartSound.pause();
-        cartSound.currentTime = 0;
-    }).catch(() => {});
-    document.removeEventListener('click', unlockAudio);
-}, { once: true });
+        oscillator.type = type;
+        oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        
+        // Volume Fade Out
+        gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + duration);
+    } catch (e) {
+        console.log("Audio play error:", e);
+    }
+}
 
 // Default Menu Items (LocalStorage se load honge agar saved hon)
 let defaultItems = [
@@ -114,18 +128,10 @@ function saveCartToStorage() {
     localStorage.setItem('foodieCart', JSON.stringify(cart));
 }
 
-// Add To Cart (With Fast Sound Trigger)
+// Add To Cart (With Browser Native Sound Trigger)
 function addToCart(itemId) {
-    // Play Sound Effect
-    try {
-        cartSound.currentTime = 0;
-        let playPromise = cartSound.play();
-        if (playPromise !== undefined) {
-            playPromise.catch(e => console.log('Sound error handled:', e));
-        }
-    } catch (e) {
-        console.log('Audio error:', e);
-    }
+    // Play Cart Sound Effect (High Pitch Beep)
+    playCustomSound(850, 0.1, 'sine');
 
     const item = menuItems.find(p => p.id === itemId);
     if (!item) return;
@@ -144,6 +150,9 @@ function addToCart(itemId) {
 
 // Quantity Adjustments (+ / -)
 function updateQuantity(itemId, change) {
+    // Play Click Sound
+    playCustomSound(400, 0.08, 'triangle');
+
     const cartItem = cart.find(p => p.id === itemId);
     if (!cartItem) return;
 
@@ -170,6 +179,7 @@ function applyCoupon() {
             msgEl.style.color = '#2ed573';
             msgEl.innerText = 'Promo code applied! Rs. 100 Discount Added 🎉';
         }
+        playCustomSound(950, 0.2, 'sine');
     } else if (code === '') {
         alert('Pehle promo code enter karein.');
     } else {
@@ -178,6 +188,7 @@ function applyCoupon() {
             msgEl.style.color = '#ff4757';
             msgEl.innerText = 'Invalid Promo Code! (Try: FOODIE50)';
         }
+        playCustomSound(250, 0.2, 'sawtooth');
     }
 
     updateCartUI();
@@ -236,6 +247,7 @@ function updateCartUI() {
 }
 
 function removeFromCart(itemId) {
+    playCustomSound(300, 0.15, 'sawtooth');
     cart = cart.filter(item => item.id !== itemId);
     saveCartToStorage();
     updateCartUI();
@@ -270,13 +282,10 @@ function closeCheckoutModal() {
 function processOrder(e) {
     e.preventDefault();
 
-    // Sound Playback on Success
-    try {
-        orderSound.currentTime = 0;
-        orderSound.play().catch(e => console.log('Sound error:', e));
-    } catch (e) {
-        console.log('Audio error:', e);
-    }
+    // Play Success Chime Sound
+    playCustomSound(523, 0.1, 'sine');
+    setTimeout(() => playCustomSound(659, 0.1, 'sine'), 100);
+    setTimeout(() => playCustomSound(783, 0.2, 'sine'), 200);
 
     const name = document.getElementById('cust-name').value;
     const phone = document.getElementById('cust-phone').value;
