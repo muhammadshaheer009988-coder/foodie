@@ -32,7 +32,7 @@ function saveMenuItemsToStorage() {
     localStorage.setItem('foodieMenuItems', JSON.stringify(menuItems));
 }
 
-// Render Menu
+// Render Menu (Dustbin Hata Diya Gaya Hai)
 function renderMenu(items) {
     const container = document.getElementById('menu-container');
     if (!container) return;
@@ -51,11 +51,8 @@ function renderMenu(items) {
                     <h3>${item.name}</h3>
                     <p class="price">Rs. ${item.price}</p>
                     <div style="display: flex; gap: 8px; margin-top: 10px;">
-                        <button class="btn-primary" style="flex: 1;" onclick="addToCart(${item.id})">
+                        <button class="btn-primary" style="width: 100%;" onclick="addToCart(${item.id})">
                             <i class="fa-solid fa-cart-plus"></i> Add To Cart
-                        </button>
-                        <button onclick="deleteMenuItem(${item.id})" style="background: #ff4757; color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer;" title="Delete Item from Menu">
-                            <i class="fa-solid fa-trash"></i>
                         </button>
                     </div>
                 </div>
@@ -83,7 +80,6 @@ function filterMenu(category) {
     const buttons = document.querySelectorAll('.filter-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
     
-    // Set active button safely
     const clickedBtn = Array.from(buttons).find(btn => btn.textContent.includes(category) || (category === 'All' && btn.textContent.includes('All')));
     if (clickedBtn) clickedBtn.classList.add('active');
 
@@ -105,10 +101,11 @@ function saveCartToStorage() {
     localStorage.setItem('foodieCart', JSON.stringify(cart));
 }
 
-// Add To Cart (Sound Effect Added)
+// Add To Cart (Fast Sound Effect - Alert Removed)
 function addToCart(itemId) {
-    // Play Cart Sound Effect
-    cartSound.play().catch(e => console.log('Audio playback failed:', e));
+    // Immediate Sound Playback
+    cartSound.currentTime = 0;
+    cartSound.play().catch(e => console.log('Audio error:', e));
 
     const item = menuItems.find(p => p.id === itemId);
     if (!item) return;
@@ -123,7 +120,6 @@ function addToCart(itemId) {
     
     saveCartToStorage();
     updateCartUI();
-    alert(`${item.name} Cart mein add ho gaya hai!`);
 }
 
 // Quantity Adjustments (+ / -)
@@ -149,7 +145,7 @@ function applyCoupon() {
     const code = codeInput.value.trim().toUpperCase();
 
     if (code === 'FOODIE50') {
-        discountAmount = 100; // Rs. 100 Flat Discount
+        discountAmount = 100;
         if (msgEl) {
             msgEl.style.color = '#2ed573';
             msgEl.innerText = 'Promo code applied! Rs. 100 Discount Added 🎉';
@@ -250,12 +246,13 @@ function closeCheckoutModal() {
     }
 }
 
-// Process Order Function (Updated with Sound & WhatsApp Feature)
+// Process Order Function
 function processOrder(e) {
     e.preventDefault();
 
-    // Play Order Success Sound Effect
-    orderSound.play().catch(e => console.log('Audio playback failed:', e));
+    // Sound Playback on Success
+    orderSound.currentTime = 0;
+    orderSound.play().catch(e => console.log('Audio error:', e));
 
     const name = document.getElementById('cust-name').value;
     const phone = document.getElementById('cust-phone').value;
@@ -464,7 +461,6 @@ window.onload = () => {
     updateCartUI();
     renderOrderHistory();
 
-    // Check Local Storage for Saved Theme
     const savedTheme = localStorage.getItem('theme');
     const themeIcon = document.getElementById('theme-icon');
     if (savedTheme === 'dark') {
