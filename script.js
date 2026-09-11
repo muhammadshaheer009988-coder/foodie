@@ -408,6 +408,7 @@ function startOrderTrackingSimulation() {
     const trackingSection = document.getElementById('tracking-section');
     if (!trackingSection) return;
 
+    trackingSection.classList.remove('hidden');
     trackingSection.scrollIntoView({ behavior: 'smooth' });
 
     let step = 1;
@@ -430,48 +431,88 @@ function startOrderTrackingSimulation() {
     }, 3500);
 }
 
-// AI Matchmaker Helper Function
-function selectAiChip(element, groupName) {
-    const parent = element.parentElement;
-    parent.querySelectorAll('.ai-chip').forEach(chip => chip.classList.remove('active'));
-    element.classList.add('active');
-}
+// AI Matchmaker Chips Handling & Generator Function
+function setupAIRecommender() {
+    const moodChips = document.querySelectorAll('#mood-chips .ai-chip');
+    const occasionChips = document.querySelectorAll('#occasion-chips .ai-chip');
+    const aiFindBtn = document.getElementById('ai-find-btn');
 
-// AI Matchmaker Generator
-function findAiRecommendation() {
-    playCustomSound(700, 0.15, 'sine');
-    const moodActive = document.querySelector('#ai-mood-chips .ai-chip.active');
-    const timeActive = document.querySelector('#ai-time-chips .ai-chip.active');
-    const resultBox = document.getElementById('ai-result-box');
-    const resultTitle = document.getElementById('ai-result-title');
-    const resultDesc = document.getElementById('ai-result-desc');
+    moodChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            moodChips.forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+        });
+    });
 
-    if (!moodActive || !timeActive) {
-        alert("Pehle mood aur time select karein!");
-        return;
-    }
+    occasionChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            occasionChips.forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+        });
+    });
 
-    const mood = moodActive.textContent.trim();
-    let recommended = menuItems[0];
+    if (aiFindBtn) {
+        aiFindBtn.addEventListener('click', () => {
+            playCustomSound(700, 0.15, 'sine');
+            
+            const activeMood = document.querySelector('#mood-chips .ai-chip.active');
+            const activeOccasion = document.querySelector('#occasion-chips .ai-chip.active');
+            const resultBox = document.getElementById('ai-result-box');
+            const recommendedContainer = document.getElementById('ai-recommended-items');
+            const reasonText = document.getElementById('ai-result-reason');
 
-    if (mood.includes('Spicy')) {
-        recommended = menuItems.find(i => i.category === 'Fast Food') || menuItems[0];
-    } else if (mood.includes('Desi')) {
-        recommended = menuItems.find(i => i.category === 'Desi') || menuItems[1];
-    } else if (mood.includes('BBQ')) {
-        recommended = menuItems.find(i => i.category === 'BBQ') || menuItems[2];
-    } else {
-        recommended = menuItems[3];
-    }
+            if (!activeMood || !activeOccasion) {
+                alert("Pehle mood aur occasion select karein!");
+                return;
+            }
 
-    if (resultTitle && resultDesc && resultBox) {
-        resultTitle.innerText = `Aap ke liye best match: ${recommended.name} (Rs. ${recommended.price})`;
-    }
-    if (resultDesc) {
-        resultDesc.innerText = `Aap ke mood (${mood}) ke mutabiq yeh sab se behtareen choice hai. Foran order karein!`;
-    }
-    if (resultBox) {
-        resultBox.classList.remove('hidden');
+            const moodVal = activeMood.getAttribute('data-value');
+            let matchedItem = menuItems[0];
+
+            if (moodVal === 'spicy') {
+                matchedItem = menuItems.find(i => i.category === 'Fast Food') || menuItems[0];
+            } else if (moodVal === 'cheesy') {
+                matchedItem = menuItems.find(i => i.category === 'Fast Food') || menuItems[1];
+            } else if (moodVal === 'healthy') {
+                matchedItem = menuItems.find(i => i.category === 'Desi') || menuItems[1];
+            } else if (moodVal === 'sweet') {
+                matchedItem = menuItems.find(i => i.category === 'Drinks') || menuItems[3];
+            }
+
+            if (reasonText) {
+                reasonText.innerText = `Matched for your selected mood & preference!`;
+            }
+
+            if (recommendedContainer) {
+                recommendedContainer.innerHTML = `
+                    <div class="food-card" style="width: 100%; margin: 0 auto;">
+                        <div class="food-img-container">
+                            <img src="${matchedItem.img}" alt="${matchedItem.name}">
+                        </div>
+                        <div class="food-details">
+                            <div>
+                                <div class="food-title-price">
+                                    <h4>${matchedItem.name}</h4>
+                                    <span>Rs. ${matchedItem.price}</span>
+                                </div>
+                                <p class="food-desc">${matchedItem.desc || 'AI Recommended perfection.'}</p>
+                            </div>
+                            <div class="food-footer">
+                                <span class="food-rating">${matchedItem.rating || '4.9 ⭐'}</span>
+                                <button class="btn-add-cart" onclick="addToCart(${matchedItem.id})">
+                                    <i class="fa-solid fa-cart-plus"></i> Add To Bag
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (resultBox) {
+                resultBox.classList.remove('hidden');
+                resultBox.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
     }
 }
 
@@ -558,6 +599,7 @@ window.onload = () => {
     renderMenu(menuItems);
     updateCartUI();
     renderOrderHistory();
+    setupAIRecommender();
 
     const savedTheme = localStorage.getItem('theme');
     const themeIcon = document.getElementById('theme-icon');
