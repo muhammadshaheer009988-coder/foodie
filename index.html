@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foodie Express - Premium Online Food Ordering Platform</title>
+    <title>Foodie Express - Luxury Online Food Ordering & AI Dining Platform</title>
 
     <!-- Open Graph / Meta Tags -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Foodie Express - Order Delicious Food Online">
-    <meta property="og:description" content="Order fresh and hot meals with fast delivery and live order tracking!">
+    <meta property="og:title" content="Foodie Express - Order Luxury Meals Online">
+    <meta property="og:description" content="Experience gourmet meals with lightning-fast delivery, live order tracking, and AI-powered taste matching!">
     <meta property="og:image" content="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200">
 
     <!-- External CSS & Fonts -->
@@ -27,7 +27,7 @@
         <nav class="nav-links">
             <a href="#home" class="active">Home</a>
             <a href="#features">Why Us</a>
-            <a href="#menu">Menu</a>
+            <a href="#menu">Gourmet Menu</a>
             <a href="#ai-matchmaker"><i class="fa-solid fa-robot" style="color: var(--primary);"></i> AI Recommender</a>
             <a href="#order-history">My Orders</a>
             <a href="#reviews">Reviews</a>
@@ -55,12 +55,12 @@
         <!-- Hero Section -->
         <section id="home" class="hero">
             <div class="hero-content">
-                <span class="badge"><i class="fa-solid fa-bolt"></i> Super Fast Delivery</span>
-                <h1>Delicious Meals, Delivered Hot & Fresh To Your Doorstep!</h1>
-                <p>Order your favorite dishes with real-time tracking & exclusive discounts.</p>
+                <span class="badge"><i class="fa-solid fa-bolt"></i> VIP Super Fast Delivery</span>
+                <h1>Experience Luxury Dining, Delivered Hot & Fresh To Your Doorstep!</h1>
+                <p>Indulge in hand-crafted gourmet dishes with real-time tracking & exclusive royal discounts.</p>
                 <div class="hero-btns">
                     <a href="#menu" class="btn-primary">Explore Menu <i class="fa-solid fa-arrow-right"></i></a>
-                    <a href="#tracking-section" class="btn-secondary">Track Order</a>
+                    <a href="#tracking-section" class="btn-secondary">Track Active Order</a>
                 </div>
             </div>
         </section>
@@ -69,23 +69,23 @@
         <section id="features" class="features-section">
             <div class="section-header">
                 <h2>Why Choose Foodie Express?</h2>
-                <p>We deliver happiness with every bite</p>
+                <p>We deliver culinary excellence & happiness with every single bite</p>
             </div>
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="icon-box"><i class="fa-solid fa-truck-fast"></i></div>
-                    <h3>30 Min Delivery</h3>
-                    <p>Lightning fast delivery to keep your food hot and fresh.</p>
+                    <h3>30 Min Express Delivery</h3>
+                    <p>Lightning-fast transit fleet to keep your gourmet food steaming hot and fresh.</p>
                 </div>
                 <div class="feature-card">
                     <div class="icon-box"><i class="fa-solid fa-utensils"></i></div>
-                    <h3>Fresh Ingredients</h3>
-                    <p>Prepared daily by certified top chefs with high hygiene standards.</p>
+                    <h3>Master Chef Ingredients</h3>
+                    <p>Prepared daily by certified world-class chefs maintaining strict 5-star hygiene standards.</p>
                 </div>
                 <div class="feature-card">
                     <div class="icon-box"><i class="fa-solid fa-headset"></i></div>
-                    <h3>24/7 Support</h3>
-                    <p>Dedicated customer service available around the clock.</p>
+                    <h3>24/7 Concierge Support</h3>
+                    <p>Dedicated luxury customer service available around the clock to assist you.</p>
                 </div>
             </div>
         </section>
@@ -93,17 +93,17 @@
         <!-- Menu Section -->
         <section id="menu" class="menu-section">
             <div class="section-header">
-                <h2>Our Popular Menu</h2>
-                <p>Explore top rated dishes curated for you</p>
+                <h2>Our Exclusive Menu</h2>
+                <p>Explore top-rated luxury dishes curated specially for your palate</p>
             </div>
 
             <div class="search-container">
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <input type="text" id="search-input" onkeyup="searchMenu()" placeholder="Search dishes (e.g. Biryani, Burger, Kebab)...">
+                <input type="text" id="search-input" onkeyup="searchMenu()" placeholder="Search gourmet dishes (e.g. Biryani, Burger, Kebab)...">
             </div>
             
             <div class="category-filters">
-                <button class="filter-btn active" onclick="filterMenu('All')">All Dishes</button>
+                <button class="filter-btn active" onclick="filterMenu('All')">All Delicacies</button>
                 <button class="filter-btn" onclick="filterMenu('Fast Food')">Fast Food</button>
                 <button class="filter-btn" onclick="filterMenu('Desi')">Desi Special</button>
                 <button class="filter-btn" onclick="filterMenu('BBQ')">BBQ & Grill</button>
@@ -116,9 +116,9 @@
         <!-- AI Mood & Taste Matchmaker Section -->
         <section id="ai-matchmaker" class="ai-section">
             <div class="section-header">
-                <span class="badge-ai"><i class="fa-solid fa-robot"></i> AI Powered</span>
-                <h2>Find Food By Your Mood</h2>
-                <p>Select your mood and craving. Our AI algorithm will curate the perfect luxury dish for you!</p>
+                <span class="badge-ai"><i class="fa-solid fa-robot"></i> AI Powered Taste Engine</span>
+                <h2>Find Food By Your Exact Mood</h2>
+                <p>Select your current mood and occasion. Our intelligent AI algorithm will curate the ultimate luxury dish for you!</p>
             </div>
 
             <div class="ai-card-wrapper">
@@ -155,7 +155,7 @@
                         <i class="fa-solid fa-sparkles"></i>
                         <div>
                             <h3>AI Recommended Match</h3>
-                            <p id="ai-result-reason">Based on your mood preferences</p>
+                            <p id="ai-result-reason">Based on your sophisticated mood preferences</p>
                         </div>
                     </div>
                     <div id="ai-recommended-items" class="menu-grid">
@@ -168,8 +168,8 @@
         <!-- Live Order Tracking Section -->
         <section id="tracking-section" class="tracking-section hidden">
             <div class="section-header">
-                <h2>Live Order Status</h2>
-                <p>Real-time progress of your food order</p>
+                <h2>Live Royal Order Status</h2>
+                <p>Real-time telemetry progress of your food dispatch</p>
             </div>
             <div class="status-stepper">
                 <div class="step active" id="step-1">
@@ -178,7 +178,7 @@
                 </div>
                 <div class="step" id="step-2">
                     <div class="step-icon"><i class="fa-solid fa-fire-burner"></i></div>
-                    <p>Preparing</p>
+                    <p>Master Chef Cooking</p>
                 </div>
                 <div class="step" id="step-3">
                     <div class="step-icon"><i class="fa-solid fa-motorcycle"></i></div>
@@ -195,18 +195,18 @@
         <section id="order-history" class="features-section history-section">
             <div class="section-header">
                 <h2>My Order History</h2>
-                <p>Your previous orders and receipts</p>
+                <p>Review your past royal receipts and luxury transactions</p>
             </div>
             <div id="history-container" class="history-container">
-                <p class="no-history-msg">No orders placed yet!</p>
+                <p class="no-history-msg">No luxury orders placed yet!</p>
             </div>
         </section>
 
         <!-- Reviews Section -->
         <section id="reviews" class="reviews-section">
             <div class="section-header">
-                <h2>What Our Customers Say</h2>
-                <p>Real feedback from food lovers</p>
+                <h2>What Our Elite Patrons Say</h2>
+                <p>Authentic feedback from true food aficionados</p>
             </div>
             <div class="reviews-container">
                 <div class="review-card">
@@ -217,7 +217,7 @@
                             <div class="stars">⭐⭐⭐⭐⭐</div>
                         </div>
                     </div>
-                    <p>"The food arrived piping hot! Zinger burger was super crispy. Best food app in town."</p>
+                    <p>"The food arrived piping hot! The gourmet zinger burger was super crispy and premium. Best food platform in town."</p>
                 </div>
                 <div class="review-card">
                     <div class="user-info">
@@ -227,7 +227,7 @@
                             <div class="stars">⭐⭐⭐⭐⭐</div>
                         </div>
                     </div>
-                    <p>"Biryani taste was authentic. Live tracking feature is extremely accurate!"</p>
+                    <p>"The biryani flavor was exceptionally authentic. The live real-time tracking feature is extremely precise and high-tech!"</p>
                 </div>
             </div>
         </section>
@@ -241,7 +241,7 @@
                     <i class="fa-solid fa-fire-flame-curved"></i>
                     <span>Foodie<span class="highlight">Express</span></span>
                 </div>
-                <p>Delivering fresh, delicious food straight to your door with love & care.</p>
+                <p>Delivering fresh, elite gourmet dishes straight to your doorstep with absolute care & elegance.</p>
             </div>
             <div class="footer-col">
                 <h4>Quick Links</h4>
@@ -265,7 +265,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2026 Foodie Express. All Rights Reserved.</p>
+            <p>&copy; 2026 Foodie Express. All Rights Reserved. Crafted for Luxury Experience.</p>
         </div>
     </footer>
 
@@ -297,7 +297,7 @@
                 <div class="auth-header">
                     <i class="fa-solid fa-circle-user"></i>
                     <h3>Welcome Back</h3>
-                    <p>Sign in to your account</p>
+                    <p>Sign in to your VIP account</p>
                 </div>
                 <form id="login-form" onsubmit="handleAuth(event, 'login')">
                     <div class="input-group">
@@ -317,7 +317,7 @@
                 <div class="auth-header">
                     <i class="fa-solid fa-user-plus"></i>
                     <h3>Create An Account</h3>
-                    <p>Join Foodie Express today</p>
+                    <p>Join Foodie Express luxury family today</p>
                 </div>
                 <form id="signup-form" onsubmit="handleAuth(event, 'signup')">
                     <div class="input-group">
@@ -350,7 +350,7 @@
             <div class="auth-header">
                 <i class="fa-solid fa-truck-ramp-box"></i>
                 <h3>Delivery Details</h3>
-                <p>Enter your location & payment method</p>
+                <p>Enter your location & secure payment method</p>
             </div>
             <form id="checkout-form" onsubmit="processOrder(event)">
                 <div class="input-group">
