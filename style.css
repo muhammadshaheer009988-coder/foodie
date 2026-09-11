@@ -92,7 +92,38 @@ body {
 .nav-actions {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
+}
+
+/* Currency & Loyalty Badges */
+.currency-dropdown {
+    background: var(--surface-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 6px 10px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    outline: none;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.currency-dropdown:hover {
+    border-color: var(--primary);
+}
+
+.loyalty-badge {
+    background: rgba(241, 196, 15, 0.15);
+    border: 1px solid #f1c40f;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .theme-btn, .cart-icon {
@@ -316,7 +347,7 @@ section {
 
 .search-container input {
     width: 100%;
-    padding: 14px 20px 14px 50px;
+    padding: 14px 50px 14px 50px;
     border-radius: 30px;
     border: 1px solid var(--border-color);
     background-color: var(--surface-color);
@@ -329,6 +360,31 @@ section {
 
 .search-container input:focus {
     border-color: var(--primary);
+}
+
+/* Voice Search Button Inside Search Bar */
+.voice-search-btn {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.voice-search-btn:hover, .voice-search-btn.listening {
+    color: var(--primary);
+    animation: pulse-glow 1.5s infinite;
+}
+
+@keyframes pulse-glow {
+    0% { transform: translateY(-50%) scale(1); }
+    50% { transform: translateY(-50%) scale(1.2); color: var(--primary); }
+    100% { transform: translateY(-50%) scale(1); }
 }
 
 .category-filters {
@@ -362,7 +418,7 @@ section {
     gap: 25px;
 }
 
-/* Dynamic Food Card Styling (Used in JS rendering) */
+/* Dynamic Food Card Styling */
 .food-card {
     background-color: var(--surface-color);
     border-radius: 16px;
@@ -1010,6 +1066,33 @@ footer {
     font-size: 0.9rem;
     outline: none;
     transition: var(--transition);
+}
+
+/* GPS Button inside Address Input Group */
+.address-group {
+    display: flex;
+    align-items: center;
+}
+
+.address-group input {
+    padding-right: 45px;
+}
+
+.gps-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.gps-btn:hover {
+    transform: translateY(-50%) scale(1.15);
 }
 
 .input-group input:focus, .input-group select:focus {
