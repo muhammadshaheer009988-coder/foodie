@@ -29,7 +29,7 @@ function playCustomSound(freq = 600, duration = 0.12, type = 'sine') {
     }
 }
 
-// Default Menu Items (LocalStorage se load honge agar saved hon)
+// Default Menu Items
 let defaultItems = [
     { id: 1, name: 'Zinger Burger Deluxe', category: 'Fast Food', price: 550, desc: 'Crispy chicken fillet with spicy mayo and fresh lettuce.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500' },
     { id: 2, name: 'Special Chicken Biryani', category: 'Desi', price: 380, desc: 'Aromatic basmati rice cooked with tender chicken pieces and spices.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500' },
@@ -39,17 +39,18 @@ let defaultItems = [
 
 let menuItems = JSON.parse(localStorage.getItem('foodieMenuItems')) || defaultItems;
 
-// Local Storage se Cart, Orders History, Currency aur Loyalty Coins load karein
+// Local Storage data load
 let cart = JSON.parse(localStorage.getItem('foodieCart')) || [];
+let wishlist = JSON.parse(localStorage.getItem('foodieWishlist')) || [];
 let orderHistory = JSON.parse(localStorage.getItem('foodieOrderHistory')) || [];
 let totalOrders = localStorage.getItem('totalOrders') ? parseInt(localStorage.getItem('totalOrders')) : 0;
 let totalRevenue = localStorage.getItem('totalRevenue') ? parseInt(localStorage.getItem('totalRevenue')) : 0;
 
-// New Global State Variables
+// Global State Variables
 let currentCurrency = localStorage.getItem('foodieCurrency') || 'PKR';
-let currencyRates = { PKR: 1, USD: 0.0036, EUR: 0.0033, GBP: 0.0028 };
-let currencySymbols = { PKR: 'Rs. ', USD: '$', EUR: '€', GBP: '£' };
-let loyaltyCoins = localStorage.getItem('foodieCoins') ? parseInt(localStorage.getItem('foodieCoins')) : 50; 
+let currencyRates = { PKR: 1, USD: 0.0036, EUR: 0.0033 };
+let currencySymbols = { PKR: 'Rs. ', USD: '$', EUR: '€' };
+let loyaltyCoins = localStorage.getItem('foodieCoins') ? parseInt(localStorage.getItem('foodieCoins')) : 150; 
 
 // Admin WhatsApp Number Configuration
 const adminWhatsAppNumber = "923312969666";
@@ -57,6 +58,7 @@ const adminWhatsAppNumber = "923312969666";
 // Current Auth Mode & Discount Tracker
 let currentAuthMode = 'login';
 let discountAmount = 0;
+let isLoggedIn = localStorage.getItem('foodieLoggedIn') === 'true';
 
 // Save Menu Items to Local Storage
 function saveMenuItemsToStorage() {
@@ -86,19 +88,41 @@ function changeCurrency() {
 
 // Update Loyalty Coins UI
 function updateLoyaltyUI() {
-    const coinEl = document.getElementById('loyalty-coin-count');
+    const coinEl = document.getElementById('coin-count');
+    const dashCoins = document.getElementById('dash-user-coins');
     if (coinEl) coinEl.innerText = loyaltyCoins;
+    if (dashCoins) dashCoins.innerText = loyaltyCoins;
     localStorage.setItem('foodieCoins', loyaltyCoins);
+}
+
+// Toast Notification System
+function showToast(message, type = 'success') {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `
+        <i class="fa-solid ${type === 'success' ? 'fa-circle-check' : 'fa-triangle-exclamation'}"></i>
+        <span>${message}</span>
+    `;
+
+    container.appendChild(toast);
+    setTimeout(() => toast.classList.add('show'), 100);
+
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
 }
 
 // Voice Search using Web Speech API
 function startVoiceSearch() {
     const searchInput = document.getElementById('search-input');
-    const voiceBtn = document.getElementById('voice-search-btn');
-    
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    
     if (!SpeechRecognition) {
-        alert("Aap ka browser Voice Search support nahi karta.");
+        showToast("Your browser does not support Voice Search.", "error");
         return;
     }
 
@@ -107,9 +131,7 @@ function startVoiceSearch() {
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
-    if (voiceBtn) voiceBtn.classList.add('listening');
     playCustomSound(500, 0.1, 'sine');
-
     recognition.start();
 
     recognition.onresult = (event) => {
@@ -118,26 +140,20 @@ function startVoiceSearch() {
             searchInput.value = speechToText;
             searchMenu();
         }
-        if (voiceBtn) voiceBtn.classList.remove('listening');
     };
 
     recognition.onerror = () => {
-        if (voiceBtn) voiceBtn.classList.remove('listening');
-    };
-
-    recognition.onspeechend = () => {
-        if (voiceBtn) voiceBtn.classList.remove('listening');
-        recognition.stop();
+        showToast("Voice recognition error occurred.", "error");
     };
 }
 
-// Fetch GPS Location and populate Address input
-function fetchUserLocation() {
+// Fetch GPS Location
+function detectUserLocation() {
     const addressInput = document.getElementById('cust-address');
     if (!addressInput) return;
 
     if (!navigator.geolocation) {
-        alert("Geolocation is not supported by your browser");
+        showToast("Geolocation is not supported by your browser", "error");
         return;
     }
 
@@ -150,10 +166,11 @@ function fetchUserLocation() {
             const lng = position.coords.longitude.toFixed(4);
             addressInput.value = `GPS Location: Lat ${lat}, Lng ${lng} (Near You)`;
             playCustomSound(900, 0.15, 'sine');
+            showToast("Location detected successfully!");
         },
         () => {
             addressInput.value = "";
-            alert("Location access denied or unavailable. Please type manually.");
+            showToast("Location access denied. Please type manually.", "error");
         },
         { timeout: 10000 }
     );
@@ -166,15 +183,19 @@ function renderMenu(items) {
     container.innerHTML = '';
 
     if (items.length === 0) {
-        container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); font-size: 18px;">Koi item nahi mila.</p>`;
+        container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); font-size: 18px;">No gourmet dishes found.</p>`;
         return;
     }
 
     items.forEach(item => {
+        const isWishlisted = wishlist.some(w => w.id === item.id);
         container.innerHTML += `
             <div class="food-card">
                 <div class="food-img-container">
                     <img src="${item.img}" alt="${item.name}">
+                    <button class="wishlist-btn ${isWishlisted ? 'active' : ''}" onclick="toggleWishlist(${item.id})">
+                        <i class="fa-solid fa-heart"></i>
+                    </button>
                 </div>
                 <div class="food-details">
                     <div>
@@ -215,13 +236,69 @@ function filterMenu(category) {
     const buttons = document.querySelectorAll('.filter-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
     
-    const clickedBtn = Array.from(buttons).find(btn => btn.textContent.includes(category) || (category === 'All' && btn.textContent.includes('All')));
-    if (clickedBtn) clickedBtn.classList.add('active');
+    event.currentTarget.classList.add('active');
 
     if (category === 'All') {
         renderMenu(menuItems);
     } else {
         renderMenu(menuItems.filter(item => item.category === category));
+    }
+}
+
+// Wishlist System
+function toggleWishlist(itemId) {
+    const item = menuItems.find(p => p.id === itemId);
+    if (!item) return;
+
+    const index = wishlist.findIndex(w => w.id === itemId);
+    if (index > -1) {
+        wishlist.splice(index, 1);
+        showToast("Removed from wishlist");
+    } else {
+        wishlist.push(item);
+        showToast("Added to wishlist ❤️");
+        playCustomSound(750, 0.1, 'sine');
+    }
+
+    localStorage.setItem('foodieWishlist', JSON.stringify(wishlist));
+    updateWishlistUI();
+    renderMenu(menuItems);
+}
+
+function updateWishlistUI() {
+    const countEl = document.getElementById('wishlist-count');
+    const container = document.getElementById('wishlist-items');
+    
+    if (countEl) countEl.innerText = wishlist.length;
+
+    if (container) {
+        if (wishlist.length === 0) {
+            container.innerHTML = `<p class="no-history-msg">No favorite dishes added yet!</p>`;
+        } else {
+            container.innerHTML = '';
+            wishlist.forEach(item => {
+                container.innerHTML += `
+                    <div class="cart-item-card">
+                        <div class="cart-item-info">
+                            <h5>${item.name}</h5>
+                            <p>${formatPrice(item.price)}</p>
+                        </div>
+                        <div class="cart-item-actions">
+                            <button onclick="addToCart(${item.id}); toggleWishlistModal();" class="btn-primary" style="padding: 5px 10px; font-size: 12px;">Add to Bag</button>
+                            <button onclick="toggleWishlist(${item.id})" style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 5px;"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+    }
+}
+
+function toggleWishlistModal() {
+    const modal = document.getElementById('wishlist-modal');
+    if (modal) {
+        modal.classList.toggle('active');
+        updateWishlistUI();
     }
 }
 
@@ -239,12 +316,10 @@ function saveCartToStorage() {
 // Add To Cart
 function addToCart(itemId) {
     playCustomSound(850, 0.1, 'sine');
-
     const item = menuItems.find(p => p.id === itemId);
     if (!item) return;
 
     const cartItem = cart.find(p => p.id === itemId);
-
     if (cartItem) {
         cartItem.quantity++;
     } else {
@@ -253,12 +328,12 @@ function addToCart(itemId) {
     
     saveCartToStorage();
     updateCartUI();
+    showToast(`${item.name} added to cart!`);
 }
 
 // Quantity Adjustments (+ / -)
 function updateQuantity(itemId, change) {
     playCustomSound(400, 0.08, 'triangle');
-
     const cartItem = cart.find(p => p.id === itemId);
     if (!cartItem) return;
 
@@ -269,6 +344,14 @@ function updateQuantity(itemId, change) {
 
     saveCartToStorage();
     updateCartUI();
+}
+
+function removeFromCart(itemId) {
+    playCustomSound(300, 0.15, 'sawtooth');
+    cart = cart.filter(item => item.id !== itemId);
+    saveCartToStorage();
+    updateCartUI();
+    showToast("Item removed from cart");
 }
 
 // Apply Promo Code Function
@@ -286,8 +369,7 @@ function applyCoupon() {
             msgEl.innerText = 'Promo code applied! Rs. 100 Discount Added 🎉';
         }
         playCustomSound(950, 0.2, 'sine');
-    } else if (code === '') {
-        alert('Pehle promo code enter karein.');
+        showToast("Discount coupon applied successfully!");
     } else {
         discountAmount = 0;
         if (msgEl) {
@@ -295,8 +377,8 @@ function applyCoupon() {
             msgEl.innerText = 'Invalid Promo Code! (Try: FOODIE50)';
         }
         playCustomSound(250, 0.2, 'sawtooth');
+        showToast("Invalid Promo Code", "error");
     }
-
     updateCartUI();
 }
 
@@ -316,7 +398,7 @@ function updateCartUI() {
     if (container) {
         container.innerHTML = '';
         if (cart.length === 0) {
-            container.innerHTML = `<p style="text-align: center; color: var(--text-muted); margin-top: 20px;">Aap ka cart khali hai.</p>`;
+            container.innerHTML = `<p style="text-align: center; color: var(--text-muted); margin-top: 20px;">Your shopping bag is empty.</p>`;
         } else {
             cart.forEach(item => {
                 container.innerHTML += `
@@ -341,26 +423,14 @@ function updateCartUI() {
     const countEl = document.getElementById('cart-count');
     const floatingCountEl = document.getElementById('floating-cart-count');
     
-    if (totalEl) totalEl.innerText = formatPrice(finalTotal).replace(/[^0-9.]/g, '');
+    if (totalEl) totalEl.innerText = finalTotal;
     if (countEl) countEl.innerText = count;
     if (floatingCountEl) floatingCountEl.innerText = count;
-
-    const ordersEl = document.getElementById('total-orders-count');
-    const revenueEl = document.getElementById('total-revenue-count');
-    if (ordersEl) ordersEl.innerText = totalOrders;
-    if (revenueEl) revenueEl.innerText = formatPrice(totalRevenue);
 
     updateLoyaltyUI();
 }
 
-function removeFromCart(itemId) {
-    playCustomSound(300, 0.15, 'sawtooth');
-    cart = cart.filter(item => item.id !== itemId);
-    saveCartToStorage();
-    updateCartUI();
-}
-
-// Toggle Payment Details Box based on Payment Method Selection
+// Toggle Payment Details Box
 function togglePaymentInfo() {
     const paymentSelect = document.getElementById('payment-method');
     const detailsBox = document.getElementById('online-payment-details');
@@ -376,35 +446,24 @@ function togglePaymentInfo() {
 // Open Checkout Modal
 function checkout() {
     if (cart.length === 0) {
-        alert("Your cart is empty!");
+        showToast("Your shopping bag is empty!", "error");
         return;
     }
 
-    const sidebar = document.getElementById('cart-sidebar');
-    if (sidebar && sidebar.classList.contains('active')) {
-        toggleCart();
-    }
-
+    toggleCart();
     const checkoutModal = document.getElementById('checkout-modal');
-    if (checkoutModal) {
-        checkoutModal.classList.add('active');
-    }
+    if (checkoutModal) checkoutModal.classList.add('active');
 }
 
 function closeCheckoutModal() {
     const checkoutModal = document.getElementById('checkout-modal');
-    if (checkoutModal) {
-        checkoutModal.classList.remove('active');
-    }
+    if (checkoutModal) checkoutModal.classList.remove('active');
 }
 
 // Process Order Function
 function processOrder(e) {
     e.preventDefault();
-
     playCustomSound(523, 0.1, 'sine');
-    setTimeout(() => playCustomSound(659, 0.1, 'sine'), 100);
-    setTimeout(() => playCustomSound(783, 0.2, 'sine'), 200);
 
     const name = document.getElementById('cust-name').value;
     const phone = document.getElementById('cust-phone').value;
@@ -417,7 +476,6 @@ function processOrder(e) {
 
     totalRevenue += orderTotal;
     totalOrders++;
-
     let earnedCoins = Math.floor(orderTotal * 0.05);
     loyaltyCoins += earnedCoins;
 
@@ -439,33 +497,25 @@ function processOrder(e) {
         itemsListText += `• ${item.name} (x${item.quantity}) - ${formatPrice(item.price * item.quantity)}\n`;
     });
 
-    const waMessage = `🛍️ *Naya Order Aaya Hai! (Foodie Express)*\n\n` +
+    const waMessage = `🛍️ *New Order Received! (Foodie Express)*\n\n` +
                       `🆔 *Order ID:* ${orderId}\n` +
                       `👤 *Name:* ${name}\n` +
                       `📞 *Phone:* ${phone}\n` +
                       `📍 *Address:* ${address}\n` +
                       `💳 *Payment Method:* ${payment}\n\n` +
                       `🍔 *Order Items:*\n${itemsListText}\n` +
-                      `💰 *Total Amount:* ${formatPrice(orderTotal)}\n\n` +
-                      `Meherbani karke order confirm karein.`;
+                      `💰 *Total Amount:* ${formatPrice(orderTotal)}`;
 
-    const encodedMessage = encodeURIComponent(waMessage);
-    const whatsappUrl = `https://wa.me/${adminWhatsAppNumber}?text=${encodedMessage}`;
+    const whatsappUrl = `https://wa.me/${adminWhatsAppNumber}?text=${encodeURIComponent(waMessage)}`;
 
-    alert(`Shukriya ${name}! Aap ka order successfully place ho gaya hai (+${earnedCoins} Loyalty Coins earned!).\nAbhi aap ko WhatsApp par redirect kiya ja raha hai.`);
+    showToast(`Order placed successfully! (+${earnedCoins} Coins)`);
 
     cart = [];
     discountAmount = 0;
-    const msgEl = document.getElementById('discount-msg');
-    const couponInput = document.getElementById('coupon-code');
-    if (msgEl) msgEl.innerText = '';
-    if (couponInput) couponInput.value = '';
-
     saveCartToStorage();
     updateCartUI();
     renderOrderHistory();
     document.getElementById('checkout-form').reset();
-    togglePaymentInfo(); 
     closeCheckoutModal();
 
     window.open(whatsappUrl, '_blank');
@@ -478,7 +528,7 @@ function renderOrderHistory() {
     if (!historyContainer) return;
 
     if (orderHistory.length === 0) {
-        historyContainer.innerHTML = `<div class="no-history-msg">No orders placed yet!</div>`;
+        historyContainer.innerHTML = `<p class="no-history-msg">No luxury orders placed yet!</p>`;
         return;
     }
 
@@ -514,21 +564,27 @@ function startOrderTrackingSimulation() {
         if (el) el.classList.remove('active');
     });
     
-    const step1 = document.getElementById('step-1');
-    if (step1) step1.classList.add('active');
+    document.getElementById('step-1').classList.add('active');
 
     const interval = setInterval(() => {
         step++;
         if (step <= 4) {
-            const currentStep = document.getElementById(`step-${step}`);
-            if (currentStep) currentStep.classList.add('active');
+            document.getElementById(`step-${step}`).classList.add('active');
         } else {
             clearInterval(interval);
         }
-    }, 3500);
+    }, 3000);
 }
 
-// AI Matchmaker Chips Handling & Generator Function
+// Table Reservation Handler
+function handleTableReservation(e) {
+    e.preventDefault();
+    playCustomSound(800, 0.15, 'sine');
+    showToast("VIP Table reserved successfully! We look forward to serving you.");
+    document.getElementById('reservation-form').reset();
+}
+
+// AI Matchmaker
 function setupAIRecommender() {
     const moodChips = document.querySelectorAll('#mood-chips .ai-chip');
     const occasionChips = document.querySelectorAll('#occasion-chips .ai-chip');
@@ -551,54 +607,27 @@ function setupAIRecommender() {
     if (aiFindBtn) {
         aiFindBtn.addEventListener('click', () => {
             playCustomSound(700, 0.15, 'sine');
-            
             const activeMood = document.querySelector('#mood-chips .ai-chip.active');
-            const activeOccasion = document.querySelector('#occasion-chips .ai-chip.active');
             const resultBox = document.getElementById('ai-result-box');
             const recommendedContainer = document.getElementById('ai-recommended-items');
-            const reasonText = document.getElementById('ai-result-reason');
 
-            if (!activeMood || !activeOccasion) {
-                alert("Pehle mood aur occasion select karein!");
-                return;
-            }
+            if (!activeMood) return;
 
-            const moodVal = activeMood.getAttribute('data-value');
-            let matchedItem = menuItems[0];
-
-            if (moodVal === 'spicy') {
-                matchedItem = menuItems.find(i => i.category === 'Fast Food') || menuItems[0];
-            } else if (moodVal === 'cheesy') {
-                matchedItem = menuItems.find(i => i.category === 'Fast Food') || menuItems[1];
-            } else if (moodVal === 'healthy') {
-                matchedItem = menuItems.find(i => i.category === 'Desi') || menuItems[1];
-            } else if (moodVal === 'sweet') {
-                matchedItem = menuItems.find(i => i.category === 'Drinks') || menuItems[3];
-            }
-
-            if (reasonText) {
-                reasonText.innerText = `Matched for your selected mood & preference!`;
-            }
+            let matchedItem = menuItems[Math.floor(Math.random() * menuItems.length)];
 
             if (recommendedContainer) {
                 recommendedContainer.innerHTML = `
                     <div class="food-card" style="width: 100%; margin: 0 auto;">
-                        <div class="food-img-container">
-                            <img src="${matchedItem.img}" alt="${matchedItem.name}">
-                        </div>
+                        <div class="food-img-container"><img src="${matchedItem.img}" alt="${matchedItem.name}"></div>
                         <div class="food-details">
-                            <div>
-                                <div class="food-title-price">
-                                    <h4>${matchedItem.name}</h4>
-                                    <span>${formatPrice(matchedItem.price)}</span>
-                                </div>
-                                <p class="food-desc">${matchedItem.desc || 'AI Recommended perfection.'}</p>
+                            <div class="food-title-price">
+                                <h4>${matchedItem.name}</h4>
+                                <span>${formatPrice(matchedItem.price)}</span>
                             </div>
+                            <p class="food-desc">${matchedItem.desc}</p>
                             <div class="food-footer">
-                                <span class="food-rating">${matchedItem.rating || '4.9 ⭐'}</span>
-                                <button class="btn-add-cart" onclick="addToCart(${matchedItem.id})">
-                                    <i class="fa-solid fa-cart-plus"></i> Add To Bag
-                                </button>
+                                <span class="food-rating">${matchedItem.rating}</span>
+                                <button class="btn-add-cart" onclick="addToCart(${matchedItem.id})"><i class="fa-solid fa-cart-plus"></i> Add To Bag</button>
                             </div>
                         </div>
                     </div>
@@ -613,47 +642,62 @@ function setupAIRecommender() {
     }
 }
 
-// Admin Add Product
-function addMenuItem(e) {
-    e.preventDefault();
-    const name = document.getElementById('item-name').value;
-    const category = document.getElementById('item-category').value;
-    const price = parseInt(document.getElementById('item-price').value);
-    const img = document.getElementById('item-img').value;
-
-    menuItems.push({ id: Date.now(), name, category, price, img });
-    saveMenuItemsToStorage();
-    renderMenu(menuItems);
-    document.getElementById('add-menu-form').reset();
-    alert('Item added successfully!');
+// Live Chatbot Widget
+function toggleChatbot() {
+    const chatWindow = document.getElementById('chat-window');
+    if (chatWindow) chatWindow.classList.toggle('hidden');
 }
 
-// Admin Delete Product
-function deleteMenuItem(id) {
-    if (confirm("Kya aap waqai is item ko menu se hatana chahte hain?")) {
-        menuItems = menuItems.filter(item => item.id !== id);
-        saveMenuItemsToStorage();
-        renderMenu(menuItems);
-        alert("Item menu se delete kar diya gaya hai!");
-    }
+function sendChatMessage() {
+    const input = document.getElementById('chat-input');
+    const messages = document.getElementById('chat-messages');
+    if (!input || !input.value.trim()) return;
+
+    const userText = input.value.trim();
+    messages.innerHTML += `<div class="chat-msg user">${userText}</div>`;
+    input.value = '';
+
+    playCustomSound(600, 0.08, 'sine');
+
+    setTimeout(() => {
+        let reply = "Thank you for reaching out! Our support team will assist you shortly.";
+        if (userText.toLowerCase().includes('delivery')) {
+            reply = "All deliveries are completed within 30 minutes!";
+        } else if (userText.toLowerCase().includes('discount')) {
+            reply = "You can use promo code FOODIE50 for an instant discount!";
+        }
+        messages.innerHTML += `<div class="chat-msg bot">${reply}</div>`;
+        messages.scrollTop = messages.scrollHeight;
+    }, 1000);
 }
 
-// Auth Modal Controls
+function handleChatKeyPress(e) {
+    if (e.key === 'Enter') sendChatMessage();
+}
+
+// Language Switcher (EN / UR)
+function changeLanguage() {
+    const lang = document.getElementById('language-selector').value;
+    const root = document.getElementById('html-root');
+    root.setAttribute('dir', lang === 'ur' ? 'rtl' : 'ltr');
+    root.setAttribute('lang', lang);
+    showToast(lang === 'ur' ? 'اردو زبان منتخب کی گئی' : 'English language selected');
+}
+
+// Auth Modals & Dashboard
 function openAuthModal(mode = 'login') {
-    currentAuthMode = mode;
     const authModal = document.getElementById('auth-modal');
     const loginScreen = document.getElementById('login-screen');
     const signupScreen = document.getElementById('signup-screen');
 
     if (mode === 'signup') {
-        if (loginScreen) loginScreen.classList.add('hidden');
-        if (signupScreen) signupScreen.classList.remove('hidden');
+        loginScreen.classList.add('hidden');
+        signupScreen.classList.remove('hidden');
     } else {
-        if (signupScreen) signupScreen.classList.add('hidden');
-        if (loginScreen) loginScreen.classList.remove('hidden');
+        signupScreen.classList.add('hidden');
+        loginScreen.classList.remove('hidden');
     }
-
-    if (authModal) authModal.classList.add('active');
+    authModal.classList.add('active');
 }
 
 function switchAuthScreen(mode) {
@@ -661,18 +705,33 @@ function switchAuthScreen(mode) {
 }
 
 function closeAuthModal() {
-    const authModal = document.getElementById('auth-modal');
-    if (authModal) authModal.classList.remove('active');
+    document.getElementById('auth-modal').classList.remove('active');
 }
 
 function handleAuth(e, type) {
     e.preventDefault();
-    if (type === 'signup') {
-        alert('Account created & logged in successfully!');
-    } else {
-        alert('Logged in successfully!');
-    }
+    isLoggedIn = true;
+    localStorage.setItem('foodieLoggedIn', 'true');
+    
+    document.getElementById('dashboard-btn').classList.remove('hidden');
+    showToast(type === 'signup' ? 'Account created successfully!' : 'Logged in successfully!');
     closeAuthModal();
+}
+
+function openDashboardModal() {
+    document.getElementById('dashboard-modal').classList.add('active');
+}
+
+function closeDashboardModal() {
+    document.getElementById('dashboard-modal').classList.remove('active');
+}
+
+function handleLogout() {
+    isLoggedIn = false;
+    localStorage.removeItem('foodieLoggedIn');
+    document.getElementById('dashboard-btn').classList.add('hidden');
+    closeDashboardModal();
+    showToast("Logged out successfully");
 }
 
 // Dark / Light Mode Toggle
@@ -682,11 +741,11 @@ function toggleDarkMode() {
     
     if (htmlElement.getAttribute('data-theme') === 'dark') {
         htmlElement.removeAttribute('data-theme');
-        if (themeIcon) themeIcon.className = 'fa-solid fa-moon';
+        themeIcon.className = 'fa-solid fa-moon';
         localStorage.setItem('theme', 'light');
     } else {
         htmlElement.setAttribute('data-theme', 'dark');
-        if (themeIcon) themeIcon.className = 'fa-solid fa-sun';
+        themeIcon.className = 'fa-solid fa-sun';
         localStorage.setItem('theme', 'dark');
     }
 }
@@ -694,22 +753,23 @@ function toggleDarkMode() {
 // Window Load Setup
 window.onload = () => {
     const currencyDropdown = document.getElementById('currency-selector');
-    if (currencyDropdown) {
-        currencyDropdown.value = currentCurrency;
+    if (currencyDropdown) currencyDropdown.value = currentCurrency;
+
+    if (isLoggedIn) {
+        const dashBtn = document.getElementById('dashboard-btn');
+        if (dashBtn) dashBtn.classList.remove('hidden');
     }
 
     renderMenu(menuItems);
     updateCartUI();
     renderOrderHistory();
+    updateWishlistUI();
     setupAIRecommender();
     updateLoyaltyUI();
 
     const savedTheme = localStorage.getItem('theme');
-    const themeIcon = document.getElementById('theme-icon');
     if (savedTheme === 'dark') {
         document.documentElement.setAttribute('data-theme', 'dark');
-        if (themeIcon) themeIcon.className = 'fa-solid fa-sun';
-    } else {
-        if (themeIcon) themeIcon.className = 'fa-solid fa-moon';
+        document.getElementById('theme-icon').className = 'fa-solid fa-sun';
     }
 };
