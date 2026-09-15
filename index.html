@@ -38,13 +38,13 @@
         </nav>
         <div class="nav-actions">
             <!-- Language Switcher (EN / UR) -->
-            <select id="language-selector" onchange="changeLanguage()" class="currency-dropdown" title="Select Language">
+            <select id="language-selector" onchange="changeLanguage()" class="currency-dropdown" aria-label="Select Language">
                 <option value="en">English</option>
                 <option value="ur">اردو (Urdu)</option>
             </select>
 
             <!-- Multi-Currency Selector -->
-            <select id="currency-selector" onchange="changeCurrency()" class="currency-dropdown" title="Select Currency">
+            <select id="currency-selector" onchange="changeCurrency()" class="currency-dropdown" aria-label="Select Currency">
                 <option value="PKR">PKR (Rs)</option>
                 <option value="USD">USD ($)</option>
                 <option value="EUR">EUR (€)</option>
@@ -132,6 +132,7 @@
 
             <div class="search-container">
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <label for="search-input" class="sr-only">Search gourmet dishes</label>
                 <input type="text" id="search-input" onkeyup="searchMenu()" placeholder="Search gourmet dishes (e.g. Biryani, Burger, Kebab)...">
                 <button type="button" onclick="startVoiceSearch()" class="voice-search-btn" title="Search with Voice">
                     <i class="fa-solid fa-microphone"></i>
