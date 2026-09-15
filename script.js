@@ -89,7 +89,6 @@ let defaultCategories = {
     ]
 };
 
-// Flatten all items into a single array for default global viewing & search
 let menuItems = [
     ...defaultCategories['Fast Food'],
     ...defaultCategories['Desi'],
@@ -104,33 +103,27 @@ if (storedMenuItems && storedMenuItems.length > 10) {
     localStorage.setItem('foodieMenuItems', JSON.stringify(menuItems));
 }
 
-// Local Storage data load
 let cart = JSON.parse(localStorage.getItem('foodieCart')) || [];
 let wishlist = JSON.parse(localStorage.getItem('foodieWishlist')) || [];
 let orderHistory = JSON.parse(localStorage.getItem('foodieOrderHistory')) || [];
 let totalOrders = localStorage.getItem('totalOrders') ? parseInt(localStorage.getItem('totalOrders')) : 0;
 let totalRevenue = localStorage.getItem('totalRevenue') ? parseInt(localStorage.getItem('totalRevenue')) : 0;
 
-// Global State Variables
 let currentCurrency = localStorage.getItem('foodieCurrency') || 'PKR';
 let currencyRates = { PKR: 1, USD: 0.0036, EUR: 0.0033 };
 let currencySymbols = { PKR: 'Rs. ', USD: '$', EUR: '€' };
 let loyaltyCoins = localStorage.getItem('foodieCoins') ? parseInt(localStorage.getItem('foodieCoins')) : 150; 
 
-// Admin WhatsApp Number Configuration
 const adminWhatsAppNumber = "923312969666";
 
-// Current Auth Mode & Discount Tracker
 let currentAuthMode = 'login';
 let discountAmount = 0;
 let isLoggedIn = localStorage.getItem('foodieLoggedIn') === 'true';
 
-// Save Menu Items to Local Storage
 function saveMenuItemsToStorage() {
     localStorage.setItem('foodieMenuItems', JSON.stringify(menuItems));
 }
 
-// Convert Price based on Selected Currency
 function formatPrice(amountInPKR) {
     let rate = currencyRates[currentCurrency] || 1;
     let symbol = currencySymbols[currentCurrency] || 'Rs. ';
@@ -138,7 +131,6 @@ function formatPrice(amountInPKR) {
     return `${symbol}${converted}`;
 }
 
-// Handle Currency Change from Dropdown
 function changeCurrency() {
     const dropdown = document.getElementById('currency-selector');
     if (!dropdown) return;
@@ -151,7 +143,6 @@ function changeCurrency() {
     playCustomSound(600, 0.08, 'sine');
 }
 
-// Update Loyalty Coins UI
 function updateLoyaltyUI() {
     const coinEl = document.getElementById('coin-count');
     const dashCoins = document.getElementById('dash-user-coins');
@@ -160,7 +151,6 @@ function updateLoyaltyUI() {
     localStorage.setItem('foodieCoins', loyaltyCoins);
 }
 
-// Toast Notification System
 function showToast(message, type = 'success') {
     const container = document.getElementById('toast-container');
     if (!container) return;
@@ -181,7 +171,6 @@ function showToast(message, type = 'success') {
     }, 3000);
 }
 
-// Voice Search using Web Speech API
 function startVoiceSearch() {
     const searchInput = document.getElementById('search-input');
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -212,7 +201,6 @@ function startVoiceSearch() {
     };
 }
 
-// Fetch GPS Location
 function detectUserLocation() {
     const addressInput = document.getElementById('cust-address');
     if (!addressInput) return;
@@ -241,7 +229,6 @@ function detectUserLocation() {
     );
 }
 
-// Render Menu Items
 function renderMenu(items) {
     const container = document.getElementById('menu-container');
     if (!container) return;
@@ -282,7 +269,6 @@ function renderMenu(items) {
     });
 }
 
-// Search Menu Functionality
 function searchMenu() {
     const searchInput = document.getElementById('search-input');
     if (!searchInput) return;
@@ -296,13 +282,13 @@ function searchMenu() {
     renderMenu(filteredItems);
 }
 
-// Category Filter (Opens specific category with all 10-15 items/flavors)
-function filterMenu(categoryName) {
+function filterMenu(categoryName, eventObj) {
     const buttons = document.querySelectorAll('.filter-btn');
     buttons.forEach(btn => btn.classList.remove('active'));
     
-    if (event && event.currentTarget) {
-        event.currentTarget.classList.add('active');
+    const targetBtn = eventObj ? eventObj.currentTarget : (event && event.currentTarget);
+    if (targetBtn) {
+        targetBtn.classList.add('active');
     }
 
     playCustomSound(650, 0.1, 'sine');
@@ -317,7 +303,6 @@ function filterMenu(categoryName) {
     }
 }
 
-// Wishlist System
 function toggleWishlist(itemId) {
     const item = menuItems.find(p => p.id === itemId);
     if (!item) return;
@@ -374,18 +359,15 @@ function toggleWishlistModal() {
     }
 }
 
-// Toggle Cart Sidebar
 function toggleCart() {
     const sidebar = document.getElementById('cart-sidebar');
     if (sidebar) sidebar.classList.toggle('active');
 }
 
-// Save Cart to LocalStorage
 function saveCartToStorage() {
     localStorage.setItem('foodieCart', JSON.stringify(cart));
 }
 
-// Add To Cart
 function addToCart(itemId) {
     playCustomSound(850, 0.1, 'sine');
     const item = menuItems.find(p => p.id === itemId);
@@ -403,7 +385,6 @@ function addToCart(itemId) {
     showToast(`${item.name} added to cart!`);
 }
 
-// Quantity Adjustments (+ / -)
 function updateQuantity(itemId, change) {
     playCustomSound(400, 0.08, 'triangle');
     const cartItem = cart.find(p => p.id === itemId);
@@ -426,7 +407,6 @@ function removeFromCart(itemId) {
     showToast("Item removed from cart");
 }
 
-// Apply Promo Code Function
 function applyCoupon() {
     const codeInput = document.getElementById('coupon-code');
     const msgEl = document.getElementById('discount-msg');
@@ -454,7 +434,6 @@ function applyCoupon() {
     updateCartUI();
 }
 
-// Update Cart UI & Total Calculation
 function updateCartUI() {
     const container = document.getElementById('cart-items');
     let total = 0, count = 0;
@@ -495,14 +474,13 @@ function updateCartUI() {
     const countEl = document.getElementById('cart-count');
     const floatingCountEl = document.getElementById('floating-cart-count');
     
-    if (totalEl) totalEl.innerText = finalTotal;
+    if (totalEl) totalEl.innerText = formatPrice(finalTotal);
     if (countEl) countEl.innerText = count;
     if (floatingCountEl) floatingCountEl.innerText = count;
 
     updateLoyaltyUI();
 }
 
-// Toggle Payment Details Box
 function togglePaymentInfo() {
     const paymentSelect = document.getElementById('payment-method');
     const detailsBox = document.getElementById('online-payment-details');
@@ -515,7 +493,6 @@ function togglePaymentInfo() {
     }
 }
 
-// Open Checkout Modal
 function checkout() {
     if (cart.length === 0) {
         showToast("Your shopping bag is empty!", "error");
@@ -532,15 +509,19 @@ function closeCheckoutModal() {
     if (checkoutModal) checkoutModal.classList.remove('active');
 }
 
-// Process Order Function & WhatsApp integration
 function processOrder(e) {
     e.preventDefault();
     playCustomSound(523, 0.1, 'sine');
 
-    const name = document.getElementById('cust-name').value;
-    const phone = document.getElementById('cust-phone').value;
-    const address = document.getElementById('cust-address').value;
-    const payment = document.getElementById('payment-method').value;
+    const nameEl = document.getElementById('cust-name');
+    const phoneEl = document.getElementById('cust-phone');
+    const addressEl = document.getElementById('cust-address');
+    const paymentEl = document.getElementById('payment-method');
+
+    const name = nameEl ? nameEl.value : '';
+    const phone = phoneEl ? phoneEl.value : '';
+    const address = addressEl ? addressEl.value : '';
+    const payment = paymentEl ? paymentEl.value : 'Cash on Delivery';
 
     const rawTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const orderTotal = Math.max(0, rawTotal - discountAmount);
@@ -570,13 +551,13 @@ function processOrder(e) {
     });
 
     const waMessage = `🛍️ *New Order Received! (Foodie Express)*\n\n` +
-                      `🆔 *Order ID:* ${orderId}\n` +
-                      `👤 *Name:* ${name}\n` +
-                      `📞 *Phone:* ${phone}\n` +
-                      `📍 *Address:* ${address}\n` +
-                      `💳 *Payment Method:* ${payment}\n\n` +
-                      `🍔 *Order Items:*\n${itemsListText}\n` +
-                      `💰 *Total Amount:* ${formatPrice(orderTotal)}`;
+                    `🆔 *Order ID:* ${orderId}\n` +
+                    `👤 *Name:* ${name}\n` +
+                    `📞 *Phone:* ${phone}\n` +
+                    `📍 *Address:* ${address}\n` +
+                    `💳 *Payment Method:* ${payment}\n\n` +
+                    `🍔 *Order Items:*\n${itemsListText}\n` +
+                    `💰 *Total Amount:* ${formatPrice(orderTotal)}`;
 
     const whatsappUrl = `https://wa.me/${adminWhatsAppNumber}?text=${encodeURIComponent(waMessage)}`;
 
@@ -587,14 +568,15 @@ function processOrder(e) {
     saveCartToStorage();
     updateCartUI();
     renderOrderHistory();
-    document.getElementById('checkout-form').reset();
+    
+    const checkoutForm = document.getElementById('checkout-form');
+    if (checkoutForm) checkoutForm.reset();
     closeCheckoutModal();
 
     window.open(whatsappUrl, '_blank');
     startOrderTrackingSimulation();
 }
 
-// Render Order History UI
 function renderOrderHistory() {
     const historyContainer = document.getElementById('history-container');
     if (!historyContainer) return;
@@ -636,27 +618,28 @@ function startOrderTrackingSimulation() {
         if (el) el.classList.remove('active');
     });
     
-    document.getElementById('step-1').classList.add('active');
+    const step1El = document.getElementById('step-1');
+    if (step1El) step1El.classList.add('active');
 
     const interval = setInterval(() => {
         step++;
         if (step <= 4) {
-            document.getElementById(`step-${step}`).classList.add('active');
+            const stepEl = document.getElementById(`step-${step}`);
+            if (stepEl) stepEl.classList.add('active');
         } else {
             clearInterval(interval);
         }
     }, 3000);
 }
 
-// Table Reservation Handler
 function handleTableReservation(e) {
     e.preventDefault();
     playCustomSound(800, 0.15, 'sine');
     showToast("VIP Table reserved successfully! We look forward to serving you.");
-    document.getElementById('reservation-form').reset();
+    const resForm = document.getElementById('reservation-form');
+    if (resForm) resForm.reset();
 }
 
-// AI Matchmaker
 function setupAIRecommender() {
     const moodChips = document.querySelectorAll('#mood-chips .ai-chip');
     const occasionChips = document.querySelectorAll('#occasion-chips .ai-chip');
@@ -683,7 +666,10 @@ function setupAIRecommender() {
             const resultBox = document.getElementById('ai-result-box');
             const recommendedContainer = document.getElementById('ai-recommended-items');
 
-            if (!activeMood) return;
+            if (!activeMood) {
+                showToast("Please select a mood first!", "error");
+                return;
+            }
 
             let matchedItem = menuItems[Math.floor(Math.random() * menuItems.length)];
 
@@ -714,7 +700,6 @@ function setupAIRecommender() {
     }
 }
 
-// Live Chatbot Widget
 function toggleChatbot() {
     const chatWindow = document.getElementById('chat-window');
     if (chatWindow) chatWindow.classList.toggle('hidden');
@@ -723,7 +708,7 @@ function toggleChatbot() {
 function sendChatMessage() {
     const input = document.getElementById('chat-input');
     const messages = document.getElementById('chat-messages');
-    if (!input || !input.value.trim()) return;
+    if (!input || !input.value.trim() || !messages) return;
 
     const userText = input.value.trim();
     messages.innerHTML += `<div class="chat-msg user">${userText}</div>`;
@@ -747,27 +732,29 @@ function handleChatKeyPress(e) {
     if (e.key === 'Enter') sendChatMessage();
 }
 
-// Language Switcher (EN / UR)
 function changeLanguage() {
-    const lang = document.getElementById('language-selector').value;
-    const root = document.getElementById('html-root');
+    const langSelector = document.getElementById('language-selector');
+    if (!langSelector) return;
+    const lang = langSelector.value;
+    const root = document.getElementById('html-root') || document.documentElement;
     root.setAttribute('dir', lang === 'ur' ? 'rtl' : 'ltr');
     root.setAttribute('lang', lang);
     showToast(lang === 'ur' ? 'اردو زبان منتخب کی گئی' : 'English language selected');
 }
 
-// Auth Modals & Dashboard
 function openAuthModal(mode = 'login') {
     const authModal = document.getElementById('auth-modal');
     const loginScreen = document.getElementById('login-screen');
     const signupScreen = document.getElementById('signup-screen');
 
+    if (!authModal) return;
+
     if (mode === 'signup') {
-        loginScreen.classList.add('hidden');
-        signupScreen.classList.remove('hidden');
+        if (loginScreen) loginScreen.classList.add('hidden');
+        if (signupScreen) signupScreen.classList.remove('hidden');
     } else {
-        signupScreen.classList.add('hidden');
-        loginScreen.classList.remove('hidden');
+        if (signupScreen) signupScreen.classList.add('hidden');
+        if (loginScreen) loginScreen.classList.remove('hidden');
     }
     authModal.classList.add('active');
 }
@@ -777,7 +764,8 @@ function switchAuthScreen(mode) {
 }
 
 function closeAuthModal() {
-    document.getElementById('auth-modal').classList.remove('active');
+    const authModal = document.getElementById('auth-modal');
+    if (authModal) authModal.classList.remove('active');
 }
 
 function handleAuth(e, type) {
@@ -785,44 +773,47 @@ function handleAuth(e, type) {
     isLoggedIn = true;
     localStorage.setItem('foodieLoggedIn', 'true');
     
-    document.getElementById('dashboard-btn').classList.remove('hidden');
+    const dashBtn = document.getElementById('dashboard-btn');
+    if (dashBtn) dashBtn.classList.remove('hidden');
+
     showToast(type === 'signup' ? 'Account created successfully!' : 'Logged in successfully!');
     closeAuthModal();
 }
 
 function openDashboardModal() {
-    document.getElementById('dashboard-modal').classList.add('active');
+    const dashModal = document.getElementById('dashboard-modal');
+    if (dashModal) dashModal.classList.add('active');
 }
 
 function closeDashboardModal() {
-    document.getElementById('dashboard-modal').classList.remove('active');
+    const dashModal = document.getElementById('dashboard-modal');
+    if (dashModal) dashModal.classList.remove('active');
 }
 
 function handleLogout() {
     isLoggedIn = false;
     localStorage.removeItem('foodieLoggedIn');
-    document.getElementById('dashboard-btn').classList.add('hidden');
+    const dashBtn = document.getElementById('dashboard-btn');
+    if (dashBtn) dashBtn.classList.add('hidden');
     closeDashboardModal();
     showToast("Logged out successfully");
 }
 
-// Dark / Light Mode Toggle
 function toggleDarkMode() {
     const htmlElement = document.documentElement;
     const themeIcon = document.getElementById('theme-icon');
     
     if (htmlElement.getAttribute('data-theme') === 'dark') {
         htmlElement.removeAttribute('data-theme');
-        themeIcon.className = 'fa-solid fa-moon';
+        if (themeIcon) themeIcon.className = 'fa-solid fa-moon';
         localStorage.setItem('theme', 'light');
     } else {
         htmlElement.setAttribute('data-theme', 'dark');
-        themeIcon.className = 'fa-solid fa-sun';
+        if (themeIcon) themeIcon.className = 'fa-solid fa-sun';
         localStorage.setItem('theme', 'dark');
     }
 }
 
-// Window Load Setup
 window.onload = () => {
     const currencyDropdown = document.getElementById('currency-selector');
     if (currencyDropdown) currencyDropdown.value = currentCurrency;
@@ -842,6 +833,7 @@ window.onload = () => {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
         document.documentElement.setAttribute('data-theme', 'dark');
-        document.getElementById('theme-icon').className = 'fa-solid fa-sun';
+        const themeIcon = document.getElementById('theme-icon');
+        if (themeIcon) themeIcon.className = 'fa-solid fa-sun';
     }
 };
