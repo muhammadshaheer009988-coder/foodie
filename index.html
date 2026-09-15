@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="html-root">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foodie Express - Luxury Online Food Ordering & AI Dining Platform</title>
+    <title id="site-title">Foodie Express - Luxury Online Food Ordering & AI Dining Platform</title>
 
     <!-- Open Graph / Meta Tags -->
     <meta property="og:type" content="website">
@@ -18,6 +18,9 @@
 </head>
 <body>
 
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
+
     <!-- Header Section -->
     <header class="navbar">
         <div class="logo">
@@ -25,14 +28,21 @@
             <span>Foodie<span class="highlight">Express</span></span>
         </div>
         <nav class="nav-links">
-            <a href="#home" class="active">Home</a>
-            <a href="#features">Why Us</a>
-            <a href="#menu">Gourmet Menu</a>
-            <a href="#ai-matchmaker"><i class="fa-solid fa-robot" style="color: var(--primary);"></i> AI Recommender</a>
-            <a href="#order-history">My Orders</a>
-            <a href="#reviews">Reviews</a>
+            <a href="#home" class="active" data-lang="nav_home">Home</a>
+            <a href="#features" data-lang="nav_why">Why Us</a>
+            <a href="#menu" data-lang="nav_menu">Gourmet Menu</a>
+            <a href="#ai-matchmaker"><i class="fa-solid fa-robot" style="color: var(--primary);"></i> <span data-lang="nav_ai">AI Recommender</span></a>
+            <a href="#table-reservation" data-lang="nav_table">Book Table</a>
+            <a href="#order-history" data-lang="nav_orders">My Orders</a>
+            <a href="#reviews" data-lang="nav_reviews">Reviews</a>
         </nav>
         <div class="nav-actions">
+            <!-- Language Switcher (EN / UR) -->
+            <select id="language-selector" onchange="changeLanguage()" class="currency-dropdown" title="Select Language">
+                <option value="en">English</option>
+                <option value="ur">اردو (Urdu)</option>
+            </select>
+
             <!-- Multi-Currency Selector -->
             <select id="currency-selector" onchange="changeCurrency()" class="currency-dropdown" title="Select Currency">
                 <option value="PKR">PKR (Rs)</option>
@@ -45,15 +55,26 @@
                 <i class="fa-solid fa-coins" style="color: #f1c40f;"></i> <span id="coin-count">150</span>
             </div>
 
+            <!-- Wishlist Icon Trigger -->
+            <div class="cart-icon wishlist-nav-icon" onclick="toggleWishlistModal()" title="View Wishlist">
+                <i class="fa-solid fa-heart" style="color: #e74c3c;"></i>
+                <span id="wishlist-count">0</span>
+            </div>
+
+            <!-- User Dashboard Button (Hidden initially till login) -->
+            <button id="dashboard-btn" class="nav-btn btn-dashboard hidden" onclick="openDashboardModal()" title="User Dashboard">
+                <i class="fa-solid fa-user-gear"></i> Profile
+            </button>
+
             <button onclick="toggleDarkMode()" id="theme-btn" class="theme-btn" title="Toggle Dark/Light Mode">
                 <i class="fa-solid fa-moon" id="theme-icon"></i>
             </button>
 
             <button class="nav-btn btn-login" onclick="openAuthModal('login')">
-                <i class="fa-solid fa-right-to-bracket"></i> Login
+                <i class="fa-solid fa-right-to-bracket"></i> <span data-lang="btn_login">Login</span>
             </button>
             <button class="nav-btn btn-signup" onclick="openAuthModal('signup')">
-                <i class="fa-solid fa-user-plus"></i> Sign Up
+                <i class="fa-solid fa-user-plus"></i> <span data-lang="btn_signup">Sign Up</span>
             </button>
 
             <div class="cart-icon" onclick="toggleCart()" title="View Cart">
@@ -67,12 +88,12 @@
         <!-- Hero Section -->
         <section id="home" class="hero">
             <div class="hero-content">
-                <span class="badge"><i class="fa-solid fa-bolt"></i> VIP Super Fast Delivery</span>
-                <h1>Experience Luxury Dining, Delivered Hot & Fresh To Your Doorstep!</h1>
-                <p>Indulge in hand-crafted gourmet dishes with real-time tracking & exclusive royal discounts.</p>
+                <span class="badge"><i class="fa-solid fa-bolt"></i> <span data-lang="hero_badge">VIP Super Fast Delivery</span></span>
+                <h1 data-lang="hero_title">Experience Luxury Dining, Delivered Hot & Fresh To Your Doorstep!</h1>
+                <p data-lang="hero_desc">Indulge in hand-crafted gourmet dishes with real-time tracking & exclusive royal discounts.</p>
                 <div class="hero-btns">
-                    <a href="#menu" class="btn-primary">Explore Menu <i class="fa-solid fa-arrow-right"></i></a>
-                    <a href="#tracking-section" class="btn-secondary">Track Active Order</a>
+                    <a href="#menu" class="btn-primary"><span data-lang="hero_btn1">Explore Menu</span> <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="#tracking-section" class="btn-secondary" data-lang="hero_btn2">Track Active Order</a>
                 </div>
             </div>
         </section>
@@ -172,6 +193,48 @@
                     </div>
                     <div id="ai-recommended-items" class="menu-grid"></div>
                 </div>
+            </div>
+        </section>
+
+        <!-- Table Reservation Section -->
+        <section id="table-reservation" class="reservation-section">
+            <div class="section-header">
+                <h2>Reserve A VIP Table</h2>
+                <p>Book your dining experience in advance with our master chefs</p>
+            </div>
+            <div class="reservation-card">
+                <form id="reservation-form" onsubmit="handleTableReservation(event)">
+                    <div class="reservation-grid">
+                        <div class="input-group">
+                            <i class="fa-solid fa-user"></i>
+                            <input type="text" id="res-name" placeholder="Full Name" required>
+                        </div>
+                        <div class="input-group">
+                            <i class="fa-solid fa-phone"></i>
+                            <input type="tel" id="res-phone" placeholder="Phone Number" required>
+                        </div>
+                        <div class="input-group">
+                            <i class="fa-solid fa-users"></i>
+                            <select id="res-guests" required class="custom-select">
+                                <option value="">Select Guests</option>
+                                <option value="2 Persons">2 Persons (Couple Table)</option>
+                                <option value="4 Persons">4 Persons (Family Table)</option>
+                                <option value="6+ Persons">6+ Persons (VIP Lounge)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <i class="fa-solid fa-calendar-days"></i>
+                            <input type="date" id="res-date" required>
+                        </div>
+                        <div class="input-group">
+                            <i class="fa-solid fa-clock"></i>
+                            <input type="time" id="res-time" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary auth-submit" style="margin-top: 20px;">
+                        <i class="fa-solid fa-chair"></i> Confirm Table Reservation
+                    </button>
+                </form>
             </div>
         </section>
 
@@ -298,6 +361,48 @@
         </div>
     </div>
 
+    <!-- Wishlist Modal -->
+    <div id="wishlist-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="toggleWishlistModal()">&times;</span>
+            <div class="auth-header">
+                <i class="fa-solid fa-heart" style="color: #e74c3c;"></i>
+                <h3>My Wishlist</h3>
+                <p>Your saved favorite gourmet delicacies</p>
+            </div>
+            <div id="wishlist-items" class="wishlist-items-container">
+                <p class="no-history-msg">No favorite dishes added yet!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Profile Dashboard Modal -->
+    <div id="dashboard-modal" class="modal">
+        <div class="modal-content dashboard-content">
+            <span class="close-btn" onclick="closeDashboardModal()">&times;</span>
+            <div class="auth-header">
+                <i class="fa-solid fa-user-gear"></i>
+                <h3>User VIP Dashboard</h3>
+                <p>Manage your account settings & saved preferences</p>
+            </div>
+            <div class="dashboard-body">
+                <div class="dash-card">
+                    <h4><i class="fa-solid fa-id-card"></i> Account Information</h4>
+                    <p><strong>Name:</strong> <span id="dash-user-name">Hafiz Shaheer</span></p>
+                    <p><strong>Email:</strong> <span id="dash-user-email">shaheer@foodieexpress.com</span></p>
+                    <p><strong>Loyalty Balance:</strong> <span id="dash-user-coins">150</span> Coins</p>
+                </div>
+                <div class="dash-card">
+                    <h4><i class="fa-solid fa-location-dot"></i> Saved Delivery Addresses</h4>
+                    <p id="dash-saved-address">No custom address saved yet.</p>
+                </div>
+                <button onclick="handleLogout()" class="btn-primary auth-submit" style="background: #e74c3c; margin-top: 15px;">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout Account
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Auth Modal -->
     <div id="auth-modal" class="modal">
         <div class="modal-content">
@@ -312,11 +417,11 @@
                 <form id="login-form" onsubmit="handleAuth(event, 'login')">
                     <div class="input-group">
                         <i class="fa-solid fa-envelope"></i>
-                        <input type="email" placeholder="Email Address" required>
+                        <input type="email" id="login-email" placeholder="Email Address" required>
                     </div>
                     <div class="input-group">
                         <i class="fa-solid fa-lock"></i>
-                        <input type="password" placeholder="Password" required>
+                        <input type="password" id="login-pass" placeholder="Password" required>
                     </div>
                     <button type="submit" class="btn-primary auth-submit">Login Now</button>
                 </form>
@@ -332,19 +437,19 @@
                 <form id="signup-form" onsubmit="handleAuth(event, 'signup')">
                     <div class="input-group">
                         <i class="fa-solid fa-user"></i>
-                        <input type="text" placeholder="Full Name" required>
+                        <input type="text" id="signup-name" placeholder="Full Name" required>
                     </div>
                     <div class="input-group">
                         <i class="fa-solid fa-envelope"></i>
-                        <input type="email" placeholder="Email Address" required>
+                        <input type="email" id="signup-email" placeholder="Email Address" required>
                     </div>
                     <div class="input-group">
                         <i class="fa-solid fa-lock"></i>
-                        <input type="password" placeholder="Password" required>
+                        <input type="password" id="signup-pass" placeholder="Password" required>
                     </div>
                     <div class="input-group">
                         <i class="fa-solid fa-shield-halved"></i>
-                        <input type="password" placeholder="Confirm Password" required>
+                        <input type="password" id="signup-confirm" placeholder="Confirm Password" required>
                     </div>
                     <button type="submit" class="btn-primary auth-submit">Register Account</button>
                 </form>
@@ -388,7 +493,6 @@
                     </select>
                 </div>
 
-                <!-- Online Payment Details Box -->
                 <div id="online-payment-details" class="online-payment-box" style="display: none;">
                     <p class="payment-title"><i class="fa-solid fa-circle-info"></i> Account Details for Online Payment:</p>
                     <p><strong>JazzCash / EasyPaisa:</strong> 0331-2969666</p>
@@ -399,6 +503,26 @@
                 <button type="submit" class="btn-primary auth-submit">Confirm & Place Order</button>
             </form>
         </div>
+    </div>
+
+    <!-- Floating Live Chatbot Widget -->
+    <div class="chatbot-container">
+        <div id="chat-window" class="chat-window hidden">
+            <div class="chat-header">
+                <span><i class="fa-solid fa-headset"></i> Foodie Concierge AI</span>
+                <span onclick="toggleChatbot()" style="cursor: pointer;">&times;</span>
+            </div>
+            <div id="chat-messages" class="chat-messages">
+                <div class="chat-msg bot">Hello! Welcome to Foodie Express. How can I help you with your order today?</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Type a message..." onkeypress="handleChatKeyPress(event)">
+                <button onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+        <button class="chat-toggle-btn" onclick="toggleChatbot()" title="Open Live Support">
+            <i class="fa-solid fa-comments"></i>
+        </button>
     </div>
 
     <!-- Mobile Floating Cart Button -->
