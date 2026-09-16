@@ -29,96 +29,63 @@ function playCustomSound(freq = 600, duration = 0.12, type = 'sine') {
     }
 }
 
-// Expanded Multi-Item Menu Categorized with Flavors & Multi-Screen Detail Support
+// Expanded Multi-Item Menu Categorized with 10-15 Flavors/Items per category
 let defaultCategories = {
     'Fast Food': [
-        { 
-            id: 101, name: 'Zinger Burger Deluxe', category: 'Fast Food', price: 550, 
-            desc: 'Crispy chicken fillet with spicy mayo and fresh lettuce.', rating: '4.8 ⭐', 
-            img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500',
-            flavors: [
-                { name: 'Classic Spicy', price: 550, desc: 'Original crispy fillet with spicy mayo.' },
-                { name: 'Extra Jalapeno', price: 600, desc: 'Loaded with spicy jalapenos & cheese.' },
-                { name: 'Smoke BBQ Crunch', price: 630, desc: 'Drenched in smoky BBQ glaze.' }
-            ]
-        },
-        { 
-            id: 102, name: 'Melted Cheese Zinger', category: 'Fast Food', price: 650, 
-            desc: 'Loaded with double cheddar cheese and jalapenos.', rating: '4.9 ⭐', 
-            img: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=500',
-            flavors: [
-                { name: 'Single Cheddar', price: 650, desc: 'Rich cheddar layer.' },
-                { name: 'Triple Cheese Bomb', price: 720, desc: 'Overflowing liquid cheese blend.' }
-            ]
-        },
-        { 
-            id: 103, name: 'Jumbo Beef Burger', category: 'Fast Food', price: 700, 
-            desc: 'Juicy grilled beef patty with smoky BBQ signature sauce.', rating: '4.7 ⭐', 
-            img: 'https://images.unsplash.com/photo-1550547660-d9450f859349?w=500',
-            flavors: [
-                { name: 'Classic Grilled', price: 700, desc: 'Smoky beef patty.' },
-                { name: 'Mushroom Melt Beef', price: 780, desc: 'Sauted mushrooms & Swiss cheese.' }
-            ]
-        },
-        { 
-            id: 104, name: 'Spicy Jalapeno Burger', category: 'Fast Food', price: 600, 
-            desc: 'Fire-grilled chicken patty topped with hot spicy sauce.', rating: '4.6 ⭐', 
-            img: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=500',
-            flavors: [
-                { name: 'Medium Hot', price: 600, desc: 'Balanced spice kick.' },
-                { name: 'Ghost Pepper Extreme', price: 660, desc: 'Extremely hot sauce variant.' }
-            ]
-        },
-        { id: 105, name: 'Crispy Chicken Wings (6pcs)', category: 'Fast Food', price: 450, desc: 'Golden fried wings tossed in buffalo hot sauce.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=500', flavors: [] },
-        { id: 106, name: 'Loaded French Fries', category: 'Fast Food', price: 350, desc: 'Crispy fries drenched in liquid cheese and beef bits.', rating: '4.5 ⭐', img: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=500', flavors: [] },
-        { id: 107, name: 'Club Sandwich Supreme', category: 'Fast Food', price: 500, desc: 'Triple layer sandwich with chicken, egg, and fresh veggies.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=500', flavors: [] },
-        { id: 108, name: 'Twister Chicken Roll', category: 'Fast Food', price: 400, desc: 'Crispy strips wrapped in tortilla with garlic mayo.', rating: '4.6 ⭐', img: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=500', flavors: [] },
-        { id: 109, name: 'Stuffed Garlic Bread', category: 'Fast Food', price: 420, desc: 'Baked bread stuffed with mozzarella and herbs.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=500', flavors: [] },
-        { id: 110, name: 'Italian Pepperoni Pizza Slice', category: 'Fast Food', price: 300, desc: 'Classic crust loaded with beef pepperoni and cheese.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500', flavors: [] },
-        { id: 111, name: 'Nuggets & Fries Box', category: 'Fast Food', price: 380, desc: '8 pieces of golden nuggets with honey mustard dip.', rating: '4.4 ⭐', img: 'https://images.unsplash.com/photo-1562967914-608f82629710?w=500', flavors: [] },
-        { id: 112, name: 'Zinger Tower Burger', category: 'Fast Food', price: 750, desc: 'Double fillet zinger with hashbrown and cheese slice.', rating: '5.0 ⭐', img: 'https://images.unsplash.com/photo-1583032015865-e9ed53467970?w=500', flavors: [] }
+        { id: 101, name: 'Zinger Burger Deluxe', category: 'Fast Food', price: 550, desc: 'Crispy chicken fillet with spicy mayo and fresh lettuce.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500' },
+        { id: 102, name: 'Melted Cheese Zinger', category: 'Fast Food', price: 650, desc: 'Loaded with double cheddar cheese and jalapenos.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=500' },
+        { id: 103, name: 'Jumbo Beef Burger', category: 'Fast Food', price: 700, desc: 'Juicy grilled beef patty with smoky BBQ signature sauce.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1550547660-d9450f859349?w=500' },
+        { id: 104, name: 'Spicy Jalapeno Burger', category: 'Fast Food', price: 600, desc: 'Fire-grilled chicken patty topped with hot spicy sauce.', rating: '4.6 ⭐', img: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=500' },
+        { id: 105, name: 'Crispy Chicken Wings (6pcs)', category: 'Fast Food', price: 450, desc: 'Golden fried wings tossed in buffalo hot sauce.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=500' },
+        { id: 106, name: 'Loaded French Fries', category: 'Fast Food', price: 350, desc: 'Crispy fries drenched in liquid cheese and beef bits.', rating: '4.5 ⭐', img: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=500' },
+        { id: 107, name: 'Club Sandwich Supreme', category: 'Fast Food', price: 500, desc: 'Triple layer sandwich with chicken, egg, and fresh veggies.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=500' },
+        { id: 108, name: 'Twister Chicken Roll', category: 'Fast Food', price: 400, desc: 'Crispy strips wrapped in tortilla with garlic mayo.', rating: '4.6 ⭐', img: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=500' },
+        { id: 109, name: 'Stuffed Garlic Bread', category: 'Fast Food', price: 420, desc: 'Baked bread stuffed with mozzarella and herbs.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=500' },
+        { id: 110, name: 'Italian Pepperoni Pizza Slice', category: 'Fast Food', price: 300, desc: 'Classic crust loaded with beef pepperoni and cheese.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500' },
+        { id: 111, name: 'Nuggets & Fries Box', category: 'Fast Food', price: 380, desc: '8 pieces of golden nuggets with honey mustard dip.', rating: '4.4 ⭐', img: 'https://images.unsplash.com/photo-1562967914-608f82629710?w=500' },
+        { id: 112, name: 'Zinger Tower Burger', category: 'Fast Food', price: 750, desc: 'Double fillet zinger with hashbrown and cheese slice.', rating: '5.0 ⭐', img: 'https://images.unsplash.com/photo-1583032015865-e9ed53467970?w=500' }
     ],
     'Desi': [
-        { id: 201, name: 'Special Chicken Biryani', category: 'Desi', price: 380, desc: 'Aromatic basmati rice cooked with tender chicken pieces and spices.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500', flavors: [] },
-        { id: 202, name: 'Sindhi Mutton Biryani', category: 'Desi', price: 580, desc: 'Traditional spicy mutton biryani with potatoes and prunes.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?w=500', flavors: [] },
-        { id: 203, name: 'Chicken Pulao Royal', category: 'Desi', price: 360, desc: 'Yakhni based rich flavored rice with succulent chicken.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?w=500', flavors: [] },
-        { id: 204, name: 'Lahori Chicken Karahi (Half)', category: 'Desi', price: 950, desc: 'Prepared in pure tomato gravy with green chilies and ginger.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=500', flavors: [] },
-        { id: 205, name: 'Shinwari Mutton Karahi', category: 'Desi', price: 1450, desc: 'Authentic salt and black pepper flavored rich meat karahi.', rating: '5.0 ⭐', img: 'https://images.unsplash.com/photo-1545247389-dc3a4bc0344e?w=500', flavors: [] },
-        { id: 206, name: 'Special Chicken Haleem', category: 'Desi', price: 320, desc: 'Slow cooked wheat, lentils and shredded meat stew.', rating: '4.6 ⭐', img: 'https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=500', flavors: [] },
-        { id: 207, name: 'Desi Ghee Chicken Qorma', category: 'Desi', price: 600, desc: 'Traditional rich wedding style chicken gravy.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=500', flavors: [] },
-        { id: 208, name: 'Daal Makhani Special', category: 'Desi', price: 280, desc: 'Creamy black lentils tempered with butter and garlic.', rating: '4.5 ⭐', img: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=500', flavors: [] },
-        { id: 209, name: 'Tandoori Butter Naan', category: 'Desi', price: 60, desc: 'Freshly baked clay oven flatbread coated with butter.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=500', flavors: [] },
-        { id: 210, name: 'Chicken White Handi', category: 'Desi', price: 1050, desc: 'Boneless chicken cooked in creamy yogurt and malai gravy.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=500', flavors: [] },
-        { id: 211, name: 'Beef Nihari Special', category: 'Desi', price: 650, desc: 'Tender beef shanks slow cooked overnight in spicy gravy.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=500', flavors: [] },
-        { id: 212, name: 'Aloo Keema Masala', category: 'Desi', price: 400, desc: 'Minced meat cooked with potatoes and fresh coriander.', rating: '4.6 ⭐', img: 'https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?w=500', flavors: [] }
+        { id: 201, name: 'Special Chicken Biryani', category: 'Desi', price: 380, desc: 'Aromatic basmati rice cooked with tender chicken pieces and spices.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500' },
+        { id: 202, name: 'Sindhi Mutton Biryani', category: 'Desi', price: 580, desc: 'Traditional spicy mutton biryani with potatoes and prunes.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?w=500' },
+        { id: 203, name: 'Chicken Pulao Royal', category: 'Desi', price: 360, desc: 'Yakhni based rich flavored rice with succulent chicken.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?w=500' },
+        { id: 204, name: 'Lahori Chicken Karahi (Half)', category: 'Desi', price: 950, desc: 'Prepared in pure tomato gravy with green chilies and ginger.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=500' },
+        { id: 205, name: 'Shinwari Mutton Karahi', category: 'Desi', price: 1450, desc: 'Authentic salt and black pepper flavored rich meat karahi.', rating: '5.0 ⭐', img: 'https://images.unsplash.com/photo-1545247389-dc3a4bc0344e?w=500' },
+        { id: 206, name: 'Special Chicken Haleem', category: 'Desi', price: 320, desc: 'Slow cooked wheat, lentils and shredded meat stew.', rating: '4.6 ⭐', img: 'https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=500' },
+        { id: 207, name: 'Desi Ghee Chicken Qorma', category: 'Desi', price: 600, desc: 'Traditional rich wedding style chicken gravy.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=500' },
+        { id: 208, name: 'Daal Makhani Special', category: 'Desi', price: 280, desc: 'Creamy black lentils tempered with butter and garlic.', rating: '4.5 ⭐', img: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=500' },
+        { id: 209, name: 'Tandoori Butter Naan', category: 'Desi', price: 60, desc: 'Freshly baked clay oven flatbread coated with butter.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=500' },
+        { id: 210, name: 'Chicken White Handi', category: 'Desi', price: 1050, desc: 'Boneless chicken cooked in creamy yogurt and malai gravy.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=500' },
+        { id: 211, name: 'Beef Nihari Special', category: 'Desi', price: 650, desc: 'Tender beef shanks slow cooked overnight in spicy gravy.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=500' },
+        { id: 212, name: 'Aloo Keema Masala', category: 'Desi', price: 400, desc: 'Minced meat cooked with potatoes and fresh coriander.', rating: '4.6 ⭐', img: 'https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?w=500' }
     ],
     'BBQ': [
-        { id: 301, name: 'Smoky BBQ Seekh Kebab', category: 'BBQ', price: 750, desc: 'Juicy minced meat skewers grilled over glowing charcoal.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=500', flavors: [] },
-        { id: 302, name: 'Chicken Malai Boti (12pcs)', category: 'BBQ', price: 850, desc: 'Melt-in-mouth creamy chicken chunks marinated with yogurt & cheese.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=500', flavors: [] },
-        { id: 303, name: 'Chicken Tikka Leg / Breast', category: 'BBQ', price: 350, desc: 'Traditional red spicy charcoal grilled chicken piece.', rating: '4.6 ⭐', img: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500', flavors: [] },
-        { id: 304, name: 'Reshmi Kebab Platter', category: 'BBQ', price: 800, desc: 'Super soft chicken kebabs infused with cream and mild spices.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=500', flavors: [] },
-        { id: 305, name: 'Beef Behari Kebab', category: 'BBQ', price: 900, desc: 'Thin strips of beef marinated with raw papaya and secret spices.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=500', flavors: [] },
-        { id: 306, name: 'Mutton Chops Grill (6pcs)', category: 'BBQ', price: 1350, desc: 'Tender lamb ribs marinated and roasted on fire.', rating: '5.0 ⭐', img: 'https://images.unsplash.com/photo-1603048588665-791ca8aea617?w=500', flavors: [] },
-        { id: 307, name: 'Fish Tikka BBQ (8pcs)', category: 'BBQ', price: 1100, desc: 'Boneless river fish chunks grilled with tangy spices.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=500', flavors: [] },
-        { id: 308, name: 'Mix BBQ Platter Deluxe', category: 'BBQ', price: 2200, desc: 'Assortment of Seekh Kebab, Malai Boti, Tikka, and Beef Behari.', rating: '5.0 ⭐', img: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500', flavors: [] },
-        { id: 309, name: 'Afghani Tikka Boti', category: 'BBQ', price: 880, desc: 'Juicy white meat chunks tossed in black pepper and lemon.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=500', flavors: [] },
-        { id: 310, name: 'Grilled Prawns BBQ', category: 'BBQ', price: 1500, desc: 'Jumbo prawns seasoned with garlic butter and herbs.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1565680314944-eac5617e13ae?w=500', flavors: [] },
-        { id: 311, name: 'Garlic Mayo Chicken Boti', category: 'BBQ', price: 820, desc: 'Charcoal grilled chicken coated in signature garlic sauce.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=500', flavors: [] },
-        { id: 312, name: 'Cheese Grilled Seekh Kebab', category: 'BBQ', price: 950, desc: 'Seekh kebabs wrapped in melted mozzarella cheese.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=500', flavors: [] }
+        { id: 301, name: 'Smoky BBQ Seekh Kebab', category: 'BBQ', price: 750, desc: 'Juicy minced meat skewers grilled over glowing charcoal.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=500' },
+        { id: 302, name: 'Chicken Malai Boti (12pcs)', category: 'BBQ', price: 850, desc: 'Melt-in-mouth creamy chicken chunks marinated with yogurt & cheese.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=500' },
+        { id: 303, name: 'Chicken Tikka Leg / Breast', category: 'BBQ', price: 350, desc: 'Traditional red spicy charcoal grilled chicken piece.', rating: '4.6 ⭐', img: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500' },
+        { id: 304, name: 'Reshmi Kebab Platter', category: 'BBQ', price: 800, desc: 'Super soft chicken kebabs infused with cream and mild spices.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=500' },
+        { id: 305, name: 'Beef Behari Kebab', category: 'BBQ', price: 900, desc: 'Thin strips of beef marinated with raw papaya and secret spices.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=500' },
+        { id: 306, name: 'Mutton Chops Grill (6pcs)', category: 'BBQ', price: 1350, desc: 'Tender lamb ribs marinated and roasted on fire.', rating: '5.0 ⭐', img: 'https://images.unsplash.com/photo-1603048588665-791ca8aea617?w=500' },
+        { id: 307, name: 'Fish Tikka BBQ (8pcs)', category: 'BBQ', price: 1100, desc: 'Boneless river fish chunks grilled with tangy spices.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=500' },
+        { id: 308, name: 'Mix BBQ Platter Deluxe', category: 'BBQ', price: 2200, desc: 'Assortment of Seekh Kebab, Malai Boti, Tikka, and Beef Behari.', rating: '5.0 ⭐', img: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500' },
+        { id: 309, name: 'Afghani Tikka Boti', category: 'BBQ', price: 880, desc: 'Juicy white meat chunks tossed in black pepper and lemon.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=500' },
+        { id: 310, name: 'Grilled Prawns BBQ', category: 'BBQ', price: 1500, desc: 'Jumbo prawns seasoned with garlic butter and herbs.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1565680314944-eac5617e13ae?w=500' },
+        { id: 311, name: 'Garlic Mayo Chicken Boti', category: 'BBQ', price: 820, desc: 'Charcoal grilled chicken coated in signature garlic sauce.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=500' },
+        { id: 312, name: 'Cheese Grilled Seekh Kebab', category: 'BBQ', price: 950, desc: 'Seekh kebabs wrapped in melted mozzarella cheese.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=500' }
     ],
     'Drinks': [
-        { id: 401, name: 'Chilled Soft Drink (500ml)', category: 'Drinks', price: 120, desc: 'Refreshing ice-cold carbonated beverage.', rating: '4.5 ⭐', img: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500', flavors: [] },
-        { id: 402, name: 'Fresh Mint Margarita', category: 'Drinks', price: 300, desc: 'Blended mint leaves, lemon juice, sprite and crushed ice.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=500', flavors: [] },
-        { id: 403, name: 'Pina Colada Special', category: 'Drinks', price: 450, desc: 'Creamy pineapple and coconut mocktail drink.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1541658016709-82535e94bc69?w=500', flavors: [] },
-        { id: 404, name: 'Fresh Mango Shake', category: 'Drinks', price: 350, desc: 'Thick creamy milkshake made with ripe seasonal mangoes.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=500', flavors: [] },
-        { id: 405, name: 'Oreo Chocolate Shake', category: 'Drinks', price: 400, desc: 'Rich chocolate shake blended with crunchy oreo cookies.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=500', flavors: [] },
-        { id: 406, name: 'Strawberry Colada', category: 'Drinks', price: 380, desc: 'Sweet strawberry puree mixed with crushed ice and cream.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=500', flavors: [] },
-        { id: 407, name: 'Blue Lagoon Mocktail', category: 'Drinks', price: 320, desc: 'Refreshing citrus drink with blue curacao syrup.', rating: '4.6 ⭐', img: 'https://images.unsplash.com/photo-1536935338788-846bb9981813?w=500', flavors: [] },
-        { id: 408, name: 'Cold Coffee with Ice Cream', category: 'Drinks', price: 420, desc: 'Chilled coffee topped with a large scoop of vanilla ice cream.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=500', flavors: [] },
-        { id: 409, name: 'Fresh Lime Soda (Namkeen/Meetha)', category: 'Drinks', price: 200, desc: 'Sparkling soda mixed with fresh lemon juice and black salt.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=500', flavors: [] },
-        { id: 410, name: 'Energy Drink (Red Bull)', category: 'Drinks', price: 350, desc: 'High performance energy booster beverage.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500', flavors: [] },
-        { id: 411, name: 'Peach Iced Tea', category: 'Drinks', price: 280, desc: 'Chilled black tea infused with sweet peach flavor.', rating: '4.6 ⭐', img: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500', flavors: [] },
-        { id: 412, name: 'Mineral Water (Large)', category: 'Drinks', price: 90, desc: 'Pure filtered refreshing bottled water.', rating: '5.0 ⭐', img: 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=500', flavors: [] }
+        { id: 401, name: 'Chilled Soft Drink (500ml)', category: 'Drinks', price: 120, desc: 'Refreshing ice-cold carbonated beverage.', rating: '4.5 ⭐', img: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500' },
+        { id: 402, name: 'Fresh Mint Margarita', category: 'Drinks', price: 300, desc: 'Blended mint leaves, lemon juice, sprite and crushed ice.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=500' },
+        { id: 403, name: 'Pina Colada Special', category: 'Drinks', price: 450, desc: 'Creamy pineapple and coconut mocktail drink.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1541658016709-82535e94bc69?w=500' },
+        { id: 404, name: 'Fresh Mango Shake', category: 'Drinks', price: 350, desc: 'Thick creamy milkshake made with ripe seasonal mangoes.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=500' },
+        { id: 405, name: 'Oreo Chocolate Shake', category: 'Drinks', price: 400, desc: 'Rich chocolate shake blended with crunchy oreo cookies.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=500' },
+        { id: 406, name: 'Strawberry Colada', category: 'Drinks', price: 380, desc: 'Sweet strawberry puree mixed with crushed ice and cream.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=500' },
+        { id: 407, name: 'Blue Lagoon Mocktail', category: 'Drinks', price: 320, desc: 'Refreshing citrus drink with blue curacao syrup.', rating: '4.6 ⭐', img: 'https://images.unsplash.com/photo-1536935338788-846bb9981813?w=500' },
+        { id: 408, name: 'Cold Coffee with Ice Cream', category: 'Drinks', price: 420, desc: 'Chilled coffee topped with a large scoop of vanilla ice cream.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=500' },
+        { id: 409, name: 'Fresh Lime Soda (Namkeen/Meetha)', category: 'Drinks', price: 200, desc: 'Sparkling soda mixed with fresh lemon juice and black salt.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=500' },
+        { id: 410, name: 'Energy Drink (Red Bull)', category: 'Drinks', price: 350, desc: 'High performance energy booster beverage.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500' },
+        { id: 411, name: 'Peach Iced Tea', category: 'Drinks', price: 280, desc: 'Chilled black tea infused with sweet peach flavor.', rating: '4.6 ⭐', img: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500' },
+        { id: 412, name: 'Mineral Water (Large)', category: 'Drinks', price: 90, desc: 'Pure filtered refreshing bottled water.', rating: '5.0 ⭐', img: 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=500' }
     ]
 };
 
@@ -149,6 +116,7 @@ let loyaltyCoins = localStorage.getItem('foodieCoins') ? parseInt(localStorage.g
 
 const adminWhatsAppNumber = "923312969666";
 
+let currentAuthMode = 'login';
 let discountAmount = 0;
 let isLoggedIn = localStorage.getItem('foodieLoggedIn') === 'true';
 
@@ -261,81 +229,6 @@ function detectUserLocation() {
     );
 }
 
-// Multi-Screen Item Detail Viewer (Clicking an item opens detailed screen/modal with flavors)
-function openItemDetail(itemId) {
-    const item = menuItems.find(p => p.id === itemId);
-    if (!item) return;
-
-    playCustomSound(650, 0.1, 'sine');
-    const detailModal = document.getElementById('item-detail-modal');
-    const detailContent = document.getElementById('item-detail-content');
-    if (!detailModal || !detailContent) return;
-
-    let flavorsHtml = '';
-    if (item.flavors && item.flavors.length > 0) {
-        flavorsHtml = `
-            <div style="margin-top: 15px;">
-                <h5 style="margin-bottom: 8px; font-size: 1rem;">Available Flavors / Variants:</h5>
-                <div style="display: flex; flex-direction: column; gap: 8px;">
-                    ${item.flavors.map(f => `
-                        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-color); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);">
-                            <div>
-                                <strong style="font-size: 0.9rem;">${f.name}</strong>
-                                <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">${f.desc}</p>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <span style="color: var(--primary); font-weight: 700; font-size: 0.9rem;">${formatPrice(f.price)}</span>
-                                <button class="btn-add-cart" onclick="addFlavorToCart('${item.name} - ${f.name}', ${f.price})">Add</button>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        `;
-    } else {
-        flavorsHtml = `<p style="margin-top: 15px; font-style: italic; color: var(--text-muted); font-size: 0.9rem;">Standard luxury preparation with secret chef spices.</p>`;
-    }
-
-    detailContent.innerHTML = `
-        <div style="text-align: center; margin-bottom: 15px;">
-            <img src="${item.img}" alt="${item.name}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 12px;">
-        </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <h3 style="font-size: 1.2rem; font-weight: 700;">${item.name}</h3>
-            <span style="color: var(--primary); font-weight: 700; font-size: 1.1rem;">${formatPrice(item.price)}</span>
-        </div>
-        <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.4; margin-bottom: 15px;">${item.desc}</p>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <span class="food-rating">${item.rating}</span>
-            <button class="btn-add-cart" onclick="addToCart(${item.id}); closeItemDetailModal();" style="padding: 10px 20px;">
-                <i class="fa-solid fa-cart-plus"></i> Add Main Item to Bag
-            </button>
-        </div>
-        ${flavorsHtml}
-    `;
-
-    detailModal.classList.add('active');
-}
-
-function closeItemDetailModal() {
-    const detailModal = document.getElementById('item-detail-modal');
-    if (detailModal) detailModal.classList.remove('active');
-}
-
-function addFlavorToCart(flavorName, flavorPrice) {
-    playCustomSound(850, 0.1, 'sine');
-    const existing = cart.find(p => p.name === flavorName);
-    if (existing) {
-        existing.quantity++;
-    } else {
-        cart.push({ id: Date.now(), name: flavorName, price: flavorPrice, quantity: 1 });
-    }
-    saveCartToStorage();
-    updateCartUI();
-    showToast(`${flavorName} added to bag!`);
-    closeItemDetailModal();
-}
-
 function renderMenu(items) {
     const container = document.getElementById('menu-container');
     if (!container) return;
@@ -350,30 +243,25 @@ function renderMenu(items) {
         const isWishlisted = wishlist.some(w => w.id === item.id);
         container.innerHTML += `
             <div class="food-card">
-                <div class="food-img-container" onclick="openItemDetail(${item.id})" style="cursor: pointer;">
+                <div class="food-img-container">
                     <img src="${item.img}" alt="${item.name}">
-                    <button class="wishlist-btn ${isWishlisted ? 'active' : ''}" onclick="event.stopPropagation(); toggleWishlist(${item.id})">
+                    <button class="wishlist-btn ${isWishlisted ? 'active' : ''}" onclick="toggleWishlist(${item.id})">
                         <i class="fa-solid fa-heart"></i>
                     </button>
                 </div>
                 <div class="food-details">
                     <div>
                         <div class="food-title-price">
-                            <h4 onclick="openItemDetail(${item.id})" style="cursor: pointer;">${item.name}</h4>
+                            <h4>${item.name}</h4>
                             <span>${formatPrice(item.price)}</span>
                         </div>
                         <p class="food-desc">${item.desc || 'Delicious and freshly prepared meal.'}</p>
                     </div>
                     <div class="food-footer">
                         <span class="food-rating">${item.rating || '4.5 ⭐'}</span>
-                        <div style="display: flex; gap: 8px;">
-                            <button class="btn-add-cart" onclick="openItemDetail(${item.id})" style="background: var(--accent); padding: 6px 10px;" title="View Flavors">
-                                <i class="fa-solid fa-eye"></i>
-                            </button>
-                            <button class="btn-add-cart" onclick="addToCart(${item.id})">
-                                <i class="fa-solid fa-cart-plus"></i> Add
-                            </button>
-                        </div>
+                        <button class="btn-add-cart" onclick="addToCart(${item.id})">
+                            <i class="fa-solid fa-cart-plus"></i> Add
+                        </button>
                     </div>
                 </div>
             </div>
@@ -744,7 +632,74 @@ function startOrderTrackingSimulation() {
     }, 3000);
 }
 
-// Side AI Chatbot with Typing, Voice & Call Simulation
+function handleTableReservation(e) {
+    e.preventDefault();
+    playCustomSound(800, 0.15, 'sine');
+    showToast("VIP Table reserved successfully! We look forward to serving you.");
+    const resForm = document.getElementById('reservation-form');
+    if (resForm) resForm.reset();
+}
+
+function setupAIRecommender() {
+    const moodChips = document.querySelectorAll('#mood-chips .ai-chip');
+    const occasionChips = document.querySelectorAll('#occasion-chips .ai-chip');
+    const aiFindBtn = document.getElementById('ai-find-btn');
+
+    moodChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            moodChips.forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+        });
+    });
+
+    occasionChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            occasionChips.forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+        });
+    });
+
+    if (aiFindBtn) {
+        aiFindBtn.addEventListener('click', () => {
+            playCustomSound(700, 0.15, 'sine');
+            const activeMood = document.querySelector('#mood-chips .ai-chip.active');
+            const resultBox = document.getElementById('ai-result-box');
+            const recommendedContainer = document.getElementById('ai-recommended-items');
+
+            if (!activeMood) {
+                showToast("Please select a mood first!", "error");
+                return;
+            }
+
+            let matchedItem = menuItems[Math.floor(Math.random() * menuItems.length)];
+
+            if (recommendedContainer) {
+                recommendedContainer.innerHTML = `
+                    <div class="food-card" style="width: 100%; margin: 0 auto;">
+                        <div class="food-img-container"><img src="${matchedItem.img}" alt="${matchedItem.name}"></div>
+                        <div class="food-details">
+                            <div class="food-title-price">
+                                <h4>${matchedItem.name}</h4>
+                                <span>${formatPrice(matchedItem.price)}</span>
+                            </div>
+                            <p class="food-desc">${matchedItem.desc}</p>
+                            <div class="food-footer">
+                                <span class="food-rating">${matchedItem.rating}</span>
+                                <button class="btn-add-cart" onclick="addToCart(${matchedItem.id})"><i class="fa-solid fa-cart-plus"></i> Add To Bag</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (resultBox) {
+                resultBox.classList.remove('hidden');
+                resultBox.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    }
+}
+
 function toggleChatbot() {
     const chatWindow = document.getElementById('chat-window');
     if (chatWindow) chatWindow.classList.toggle('hidden');
@@ -762,14 +717,11 @@ function sendChatMessage() {
     playCustomSound(600, 0.08, 'sine');
 
     setTimeout(() => {
-        let reply = "I am your AI Gourmet Assistant. How may I assist your culinary experience today?";
-        const txt = userText.toLowerCase();
-        if (txt.includes('delivery')) {
-            reply = "All our elite deliveries are guaranteed within 30 minutes!";
-        } else if (txt.includes('discount') || txt.includes('promo')) {
+        let reply = "Thank you for reaching out! Our support team will assist you shortly.";
+        if (userText.toLowerCase().includes('delivery')) {
+            reply = "All deliveries are completed within 30 minutes!";
+        } else if (userText.toLowerCase().includes('discount')) {
             reply = "You can use promo code FOODIE50 for an instant discount!";
-        } else if (txt.includes('hello') || txt.includes('hi')) {
-            reply = "Hello! Welcome to Foodie Express. Looking for something specific?";
         }
         messages.innerHTML += `<div class="chat-msg bot">${reply}</div>`;
         messages.scrollTop = messages.scrollHeight;
@@ -778,37 +730,6 @@ function sendChatMessage() {
 
 function handleChatKeyPress(e) {
     if (e.key === 'Enter') sendChatMessage();
-}
-
-function startAICallSimulation() {
-    playCustomSound(800, 0.2, 'sine');
-    showToast("Connecting voice call with AI Concierge...", "success");
-    const messages = document.getElementById('chat-messages');
-    if (messages) {
-        messages.innerHTML += `<div class="chat-msg bot" style="background: rgba(46,213,115,0.2); border: 1px solid #2ed573;">📞 Voice Session Connected: "Hello! Speak your order or preference, I am listening..."</div>`;
-        messages.scrollTop = messages.scrollHeight;
-    }
-}
-
-function startAIVoiceInput() {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-        showToast("Voice chat not supported on this browser.", "error");
-        return;
-    }
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'en-US';
-    playCustomSound(700, 0.1, 'sine');
-    recognition.start();
-
-    recognition.onresult = (event) => {
-        const speechText = event.results[0][0].transcript;
-        const input = document.getElementById('chat-input');
-        if (input) {
-            input.value = speechText;
-            sendChatMessage();
-        }
-    };
 }
 
 function changeLanguage() {
@@ -906,6 +827,7 @@ window.onload = () => {
     updateCartUI();
     renderOrderHistory();
     updateWishlistUI();
+    setupAIRecommender();
     updateLoyaltyUI();
 
     const savedTheme = localStorage.getItem('theme');
