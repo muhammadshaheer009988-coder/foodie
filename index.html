@@ -1,877 +1,538 @@
 <!DOCTYPE html>
-<html lang="en" id="html-root" data-theme="light">
+<html lang="en" id="html-root">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Foodie Express | Luxury Gourmet & Fast Food</title>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* Modern Luxury CSS Variables & Styling */
-        :root {
-            --primary: #ff4757;
-            --secondary: #2f3542;
-            --accent: #2ed573;
-            --bg-color: #f1f2f6;
-            --card-bg: #ffffff;
-            --text-color: #2f3542;
-            --text-muted: #747d8c;
-            --border-color: #dfe4ea;
-            --header-bg: rgba(255, 255, 255, 0.95);
-        }
-
-        [data-theme="dark"] {
-            --bg-color: #1e1e2f;
-            --card-bg: #2b2b40;
-            --text-color: #f1f2f6;
-            --text-muted: #a4b0be;
-            --border-color: #3f3f5a;
-            --header-bg: rgba(43, 43, 64, 0.95);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-            transition: background 0.3s, color 0.3s;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            overflow-x: hidden;
-        }
-
-        /* Luxury Header */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: var(--header-bg);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 5%;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            z-index: 1000;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .nav-controls {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .control-btn, select {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .control-btn:hover {
-            border-color: var(--primary);
-        }
-
-        /* Main Container */
-        .main-container {
-            max-width: 1200px;
-            margin: 100px auto 40px auto;
-            padding: 0 20px;
-        }
-
-        /* Hero & Search */
-        .hero-section {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .hero-section h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
-        .search-bar-box {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .search-bar-box input {
-            width: 60%;
-            padding: 12px 20px;
-            border-radius: 30px;
-            border: 1px solid var(--border-color);
-            background: var(--card-bg);
-            color: var(--text-color);
-            font-size: 16px;
-        }
-
-        .search-bar-box button {
-            padding: 12px 25px;
-            border-radius: 30px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        /* Filters */
-        .filter-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: 8px 20px;
-            border-radius: 20px;
-            border: 1px solid var(--border-color);
-            background: var(--card-bg);
-            color: var(--text-color);
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .filter-btn.active, .filter-btn:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        /* Menu Grid */
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 20px;
-        }
-
-        .food-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .food-img-container {
-            position: relative;
-            height: 160px;
-        }
-
-        .food-img-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .wishlist-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.5);
-            border: none;
-            color: white;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .wishlist-btn.active {
-            color: var(--primary);
-            background: white;
-        }
-
-        .food-details {
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            justify-content: space-between;
-        }
-
-        .food-title-price {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .food-title-price h4 {
-            font-size: 1rem;
-        }
-
-        .food-title-price span {
-            color: var(--primary);
-            font-weight: 700;
-        }
-
-        .food-desc {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 15px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .food-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .food-rating {
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .btn-add-cart {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        /* Cart Sidebar */
-        .cart-sidebar {
-            position: fixed;
-            top: 0;
-            right: -400px;
-            width: 380px;
-            height: 100%;
-            background: var(--card-bg);
-            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-            z-index: 1100;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            transition: right 0.3s ease;
-        }
-
-        .cart-sidebar.active {
-            right: 0;
-        }
-
-        .cart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 15px;
-            margin-bottom: 15px;
-        }
-
-        .cart-items-container {
-            flex-grow: 1;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .cart-item-card {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--bg-color);
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-        }
-
-        .cart-item-info h5 {
-            font-size: 0.9rem;
-        }
-
-        .cart-item-info p {
-            font-size: 0.8rem;
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        .cart-item-actions {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .cart-item-actions button {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            width: 24px;
-            height: 24px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-
-        /* Modals & Popups */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.6);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1200;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-        }
-
-        .modal.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .modal-content {
-            background: var(--card-bg);
-            width: 90%;
-            max-width: 450px;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
-            color: var(--text-muted);
-        }
-
-        /* Floating Cart & Chat Triggers */
-        .floating-cart-btn {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            background: var(--primary);
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            box-shadow: 0 5px 20px rgba(255, 71, 87, 0.4);
-            cursor: pointer;
-            z-index: 999;
-        }
-
-        .chat-widget-btn {
-            position: fixed;
-            bottom: 25px;
-            left: 25px;
-            background: var(--accent);
-            color: white;
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            box-shadow: 0 5px 20px rgba(46, 213, 115, 0.4);
-            cursor: pointer;
-            z-index: 999;
-        }
-
-        /* Chat Window */
-        .chat-window {
-            position: fixed;
-            bottom: 95px;
-            left: 25px;
-            width: 330px;
-            height: 420px;
-            background: var(--card-bg);
-            border-radius: 15px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .chat-window.hidden {
-            display: none;
-        }
-
-        .chat-header-bar {
-            padding: 12px 15px;
-            background: var(--accent);
-            color: white;
-            border-top-left-radius: 15px;
-            border-top-right-radius: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-        }
-
-        .chat-messages-box {
-            flex-grow: 1;
-            padding: 12px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            font-size: 0.85rem;
-        }
-
-        .chat-msg {
-            padding: 8px 12px;
-            border-radius: 10px;
-            max-width: 80%;
-        }
-
-        .chat-msg.bot {
-            background: var(--bg-color);
-            color: var(--text-color);
-            align-self: flex-start;
-        }
-
-        .chat-msg.user {
-            background: var(--primary);
-            color: white;
-            align-self: flex-end;
-        }
-
-        .chat-input-box {
-            padding: 10px;
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            gap: 6px;
-        }
-
-        .chat-input-box input {
-            flex-grow: 1;
-            padding: 8px 12px;
-            border: 1px solid var(--border-color);
-            background: var(--bg-color);
-            color: var(--text-color);
-            border-radius: 6px;
-            font-size: 13px;
-        }
-
-        .chat-input-box button {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        /* Order Tracking Simulation */
-        .tracking-box {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            padding: 20px;
-            border-radius: 12px;
-            margin-top: 30px;
-        }
-
-        .tracking-box.hidden {
-            display: none;
-        }
-
-        .steps {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 15px;
-            position: relative;
-        }
-
-        .step-item {
-            text-align: center;
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        .step-item.active {
-            color: var(--primary);
-            font-weight: 700;
-        }
-
-        /* Luxury Footer */
-        footer {
-            background: var(--secondary);
-            color: #ffffff;
-            padding: 40px 5% 20px 5%;
-            margin-top: 60px;
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .footer-col h4 {
-            color: var(--primary);
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-        }
-
-        .footer-col p, .footer-col ul li a {
-            color: #a4b0be;
-            font-size: 0.9rem;
-            text-decoration: none;
-            line-height: 1.6;
-        }
-
-        .footer-col ul {
-            list-style: none;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 15px;
-            font-size: 0.85rem;
-            color: #747d8c;
-        }
-
-        /* Toast Container */
-        #toast-container {
-            position: fixed;
-            top: 80px;
-            right: 20px;
-            z-index: 1300;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .toast {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 12px 20px;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transform: translateX(120%);
-            transition: transform 0.3s ease;
-        }
-
-        .toast.show {
-            transform: translateX(0);
-        }
-
-        .toast.success i { color: var(--accent); }
-        .toast.error i { color: var(--primary); }
-    </style>
+    <title id="site-title">Foodie Express - Luxury Online Food Ordering & AI Dining Platform</title>
+
+    <!-- Open Graph / Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Foodie Express - Order Luxury Meals Online">
+    <meta property="og:description" content="Experience gourmet meals with lightning-fast delivery, live order tracking, and AI-powered taste matching!">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200">
+
+    <!-- External CSS & Fonts -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <!-- Toast Notification Container -->
-    <div id="toast-container"></div>
+    <div id="toast-container" class="toast-container"></div>
 
-    <!-- Luxury Header -->
-    <header>
+    <!-- Header Section -->
+    <header class="navbar">
         <div class="logo">
-            <i class="fa-solid fa-utensils"></i> Foodie Express
+            <i class="fa-solid fa-fire-flame-curved"></i>
+            <span>Foodie<span class="highlight">Express</span></span>
         </div>
-        <div class="nav-controls">
-            <button class="control-btn" onclick="toggleDarkMode()">
-                <i class="fa-solid fa-moon" id="theme-icon"></i>
-            </button>
-            <select id="currency-selector" class="control-btn" onchange="changeCurrency()">
+        <nav class="nav-links">
+            <a href="#home" class="active" data-lang="nav_home">Home</a>
+            <a href="#features" data-lang="nav_why">Why Us</a>
+            <a href="#menu" data-lang="nav_menu">Gourmet Menu</a>
+            <a href="#ai-matchmaker"><i class="fa-solid fa-robot" style="color: var(--primary);"></i> <span data-lang="nav_ai">AI Recommender</span></a>
+            <a href="#table-reservation" data-lang="nav_table">Book Table</a>
+            <a href="#order-history" data-lang="nav_orders">My Orders</a>
+            <a href="#reviews" data-lang="nav_reviews">Reviews</a>
+        </nav>
+        <div class="nav-actions">
+            <!-- Language Switcher (EN / UR) -->
+            <select id="language-selector" onchange="changeLanguage()" class="currency-dropdown" aria-label="Select Language">
+                <option value="en">English</option>
+                <option value="ur">اردو (Urdu)</option>
+            </select>
+
+            <!-- Multi-Currency Selector -->
+            <select id="currency-selector" onchange="changeCurrency()" class="currency-dropdown" aria-label="Select Currency">
                 <option value="PKR">PKR (Rs)</option>
                 <option value="USD">USD ($)</option>
                 <option value="EUR">EUR (€)</option>
             </select>
-            <select id="language-selector" class="control-btn" onchange="changeLanguage()">
-                <option value="en">English</option>
-                <option value="ur">اردو</option>
-            </select>
-            <button class="control-btn" onclick="toggleWishlistModal()">
-                <i class="fa-solid fa-heart" style="color: var(--primary);"></i> <span id="wishlist-count">0</span>
+
+            <!-- Loyalty Coins Display -->
+            <div class="loyalty-badge" title="Your Loyalty Coins">
+                <i class="fa-solid fa-coins" style="color: #f1c40f;"></i> <span id="coin-count">150</span>
+            </div>
+
+            <!-- Wishlist Icon Trigger -->
+            <div class="cart-icon wishlist-nav-icon" onclick="toggleWishlistModal()" title="View Wishlist">
+                <i class="fa-solid fa-heart" style="color: #e74c3c;"></i>
+                <span id="wishlist-count">0</span>
+            </div>
+
+            <!-- User Dashboard Button -->
+            <button id="dashboard-btn" class="nav-btn btn-dashboard hidden" onclick="openDashboardModal()" title="User Dashboard">
+                <i class="fa-solid fa-user-gear"></i> Profile
             </button>
-            <button class="control-btn hidden" id="dashboard-btn" onclick="openDashboardModal()">
-                <i class="fa-solid fa-user-gear"></i> Dashboard
+
+            <button onclick="toggleDarkMode()" id="theme-btn" class="theme-btn" title="Toggle Dark/Light Mode">
+                <i class="fa-solid fa-moon" id="theme-icon"></i>
             </button>
-            <button class="control-btn" onclick="openAuthModal('login')">
-                <i class="fa-solid fa-user"></i> Login
+
+            <button class="nav-btn btn-login" onclick="openAuthModal('login')">
+                <i class="fa-solid fa-right-to-bracket"></i> <span data-lang="btn_login">Login</span>
             </button>
+            <button class="nav-btn btn-signup" onclick="openAuthModal('signup')">
+                <i class="fa-solid fa-user-plus"></i> <span data-lang="btn_signup">Sign Up</span>
+            </button>
+
+            <div class="cart-icon" onclick="toggleCart()" title="View Cart">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span id="cart-count">0</span>
+            </div>
         </div>
     </header>
 
-    <!-- Main Container -->
-    <div class="main-container">
-        
-        <!-- Hero Search Section -->
-        <div class="hero-section">
-            <h1>Elite Flavors & Gourmet Express</h1>
-            <p>Experience the finest fast food, desi cuisine, and BBQ delivered straight to your door.</p>
-            <div class="search-bar-box">
-                <input type="text" id="search-input" placeholder="Search delicious dishes..." onkeyup="searchMenu()">
-                <button onclick="startVoiceSearch()" title="Voice Search"><i class="fa-solid fa-microphone"></i></button>
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <span class="badge"><i class="fa-solid fa-bolt"></i> <span data-lang="hero_badge">VIP Super Fast Delivery</span></span>
+                <h1 data-lang="hero_title">Experience Luxury Dining, Delivered Hot & Fresh To Your Doorstep!</h1>
+                <p data-lang="hero_desc">Indulge in hand-crafted gourmet dishes with real-time tracking & exclusive royal discounts.</p>
+                <div class="hero-btns">
+                    <a href="#menu" class="btn-primary"><span data-lang="hero_btn1">Explore Menu</span> <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="#tracking-section" class="btn-secondary" data-lang="hero_btn2">Track Active Order</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="features-section">
+            <div class="section-header">
+                <h2>Why Choose Foodie Express?</h2>
+                <p>We deliver culinary excellence & happiness with every single bite</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="icon-box"><i class="fa-solid fa-truck-fast"></i></div>
+                    <h3>30 Min Express Delivery</h3>
+                    <p>Lightning-fast transit fleet to keep your gourmet food steaming hot and fresh.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon-box"><i class="fa-solid fa-utensils"></i></div>
+                    <h3>Master Chef Ingredients</h3>
+                    <p>Prepared daily by certified world-class chefs maintaining strict 5-star hygiene standards.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon-box"><i class="fa-solid fa-headset"></i></div>
+                    <h3>24/7 Concierge Support</h3>
+                    <p>Dedicated luxury customer service available around the clock to assist you.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Menu Section -->
+        <section id="menu" class="menu-section">
+            <div class="section-header">
+                <h2>Our Exclusive Menu</h2>
+                <p>Explore top-rated luxury dishes curated specially for your palate</p>
+            </div>
+
+            <div class="search-container">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <label for="search-input" class="sr-only">Search gourmet dishes</label>
+                <input type="text" id="search-input" onkeyup="searchMenu()" placeholder="Search gourmet dishes (e.g. Biryani, Burger, Kebab)...">
+                <button type="button" onclick="startVoiceSearch()" class="voice-search-btn" title="Search with Voice">
+                    <i class="fa-solid fa-microphone"></i>
+                </button>
+            </div>
+            
+            <div class="category-filters">
+                <button class="filter-btn active" onclick="filterMenu('All')">All Delicacies</button>
+                <button class="filter-btn" onclick="filterMenu('Fast Food')">Fast Food</button>
+                <button class="filter-btn" onclick="filterMenu('Desi')">Desi Special</button>
+                <button class="filter-btn" onclick="filterMenu('BBQ')">BBQ & Grill</button>
+                <button class="filter-btn" onclick="filterMenu('Drinks')">Beverages</button>
+            </div>
+
+            <div class="menu-grid" id="menu-container"></div>
+        </section>
+
+        <!-- AI Mood & Taste Matchmaker Section -->
+        <section id="ai-matchmaker" class="ai-section">
+            <div class="section-header">
+                <span class="badge-ai"><i class="fa-solid fa-robot"></i> AI Powered Taste Engine</span>
+                <h2>Find Food By Your Exact Mood</h2>
+                <p>Select your current mood and occasion. Our intelligent AI algorithm will curate the ultimate luxury dish for you!</p>
+            </div>
+
+            <div class="ai-card-wrapper">
+                <div class="ai-options-grid">
+                    <div class="ai-group">
+                        <label><i class="fa-solid fa-face-smile"></i> What's Your Current Mood?</label>
+                        <div class="ai-chips" id="mood-chips">
+                            <button class="ai-chip active" data-value="spicy"><i class="fa-solid fa-pepper-hot"></i> Spicy & Bold</button>
+                            <button class="ai-chip" data-value="cheesy"><i class="fa-solid fa-cheese"></i> Cheesy & Comforting</button>
+                            <button class="ai-chip" data-value="healthy"><i class="fa-solid fa-leaf"></i> Light & Healthy</button>
+                            <button class="ai-chip" data-value="sweet"><i class="fa-solid fa-ice-cream"></i> Sweet Craving</button>
+                        </div>
+                    </div>
+
+                    <div class="ai-group">
+                        <label><i class="fa-solid fa-clock"></i> What's the Time & Occasion?</label>
+                        <div class="ai-chips" id="occasion-chips">
+                            <button class="ai-chip active" data-value="quick"><i class="fa-solid fa-bolt"></i> Quick Bite</button>
+                            <button class="ai-chip" data-value="dinner"><i class="fa-solid fa-utensils"></i> Luxurious Dinner</button>
+                            <button class="ai-chip" data-value="late"><i class="fa-solid fa-moon"></i> Late Night Craving</button>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="ai-find-btn" class="btn-primary ai-submit-btn">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> AI Match My Food
+                </button>
+
+                <div id="ai-result-box" class="ai-result-box hidden">
+                    <div class="ai-result-header">
+                        <i class="fa-solid fa-sparkles"></i>
+                        <div>
+                            <h3>AI Recommended Match</h3>
+                            <p id="ai-result-reason">Based on your sophisticated mood preferences</p>
+                        </div>
+                    </div>
+                    <div id="ai-recommended-items" class="menu-grid"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Table Reservation Section -->
+        <section id="table-reservation" class="reservation-section">
+            <div class="section-header">
+                <h2>Reserve A VIP Table</h2>
+                <p>Book your dining experience in advance with our master chefs</p>
+            </div>
+            <div class="reservation-card">
+                <form id="reservation-form" onsubmit="handleTableReservation(event)">
+                    <div class="reservation-grid">
+                        <div class="input-group">
+                            <i class="fa-solid fa-user"></i>
+                            <input type="text" id="res-name" placeholder="Full Name" required>
+                        </div>
+                        <div class="input-group">
+                            <i class="fa-solid fa-phone"></i>
+                            <input type="tel" id="res-phone" placeholder="Phone Number" required>
+                        </div>
+                        <div class="input-group">
+                            <i class="fa-solid fa-users"></i>
+                            <select id="res-guests" required class="custom-select">
+                                <option value="">Select Guests</option>
+                                <option value="2 Persons">2 Persons (Couple Table)</option>
+                                <option value="4 Persons">4 Persons (Family Table)</option>
+                                <option value="6+ Persons">6+ Persons (VIP Lounge)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <i class="fa-solid fa-calendar-days"></i>
+                            <input type="date" id="res-date" required>
+                        </div>
+                        <div class="input-group">
+                            <i class="fa-solid fa-clock"></i>
+                            <input type="time" id="res-time" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary auth-submit" style="margin-top: 20px;">
+                        <i class="fa-solid fa-chair"></i> Confirm Table Reservation
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Live Order Tracking Section -->
+        <section id="tracking-section" class="tracking-section hidden">
+            <div class="section-header">
+                <h2>Live Royal Order Status</h2>
+                <p>Real-time telemetry progress of your food dispatch</p>
+            </div>
+            <div class="status-stepper">
+                <div class="step active" id="step-1">
+                    <div class="step-icon"><i class="fa-solid fa-file-invoice"></i></div>
+                    <p>Order Placed</p>
+                </div>
+                <div class="step" id="step-2">
+                    <div class="step-icon"><i class="fa-solid fa-fire-burner"></i></div>
+                    <p>Master Chef Cooking</p>
+                </div>
+                <div class="step" id="step-3">
+                    <div class="step-icon"><i class="fa-solid fa-motorcycle"></i></div>
+                    <p>Out For Delivery</p>
+                </div>
+                <div class="step" id="step-4">
+                    <div class="step-icon"><i class="fa-solid fa-house-circle-check"></i></div>
+                    <p>Delivered</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Order History Section -->
+        <section id="order-history" class="features-section history-section">
+            <div class="section-header">
+                <h2>My Order History</h2>
+                <p>Review your past royal receipts and luxury transactions</p>
+            </div>
+            <div id="history-container" class="history-container">
+                <p class="no-history-msg">No luxury orders placed yet!</p>
+            </div>
+        </section>
+
+        <!-- Reviews Section -->
+        <section id="reviews" class="reviews-section">
+            <div class="section-header">
+                <h2>What Our Elite Patrons Say</h2>
+                <p>Authentic feedback from true food aficionados</p>
+            </div>
+            <div class="reviews-container">
+                <div class="review-card">
+                    <div class="user-info">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" alt="Customer Ayesha">
+                        <div>
+                            <h4>Ayesha Khan</h4>
+                            <div class="stars">⭐⭐⭐⭐⭐</div>
+                        </div>
+                    </div>
+                    <p>"The food arrived piping hot! The gourmet zinger burger was super crispy and premium. Best food platform in town."</p>
+                </div>
+                <div class="review-card">
+                    <div class="user-info">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" alt="Customer Hamza">
+                        <div>
+                            <h4>Hamza Ali</h4>
+                            <div class="stars">⭐⭐⭐⭐⭐</div>
+                        </div>
+                    </div>
+                    <p>"The biryani flavor was exceptionally authentic. The live real-time tracking feature is extremely precise and high-tech!"</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <div class="logo">
+                    <i class="fa-solid fa-fire-flame-curved"></i>
+                    <span>Foodie<span class="highlight">Express</span></span>
+                </div>
+                <p>Delivering fresh, elite gourmet dishes straight to your doorstep with absolute care & elegance.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <a href="#home">Home</a>
+                <a href="#menu">Menu</a>
+                <a href="#ai-matchmaker">AI Matchmaker</a>
+                <a href="#reviews">Reviews</a>
+            </div>
+            <div class="footer-col">
+                <h4>Contact Us</h4>
+                <p><i class="fa-solid fa-envelope"></i> support@foodieexpress.com</p>
+                <p><i class="fa-solid fa-phone"></i> +92 3312969666</p>
+            </div>
+            <div class="footer-col">
+                <h4>Follow Us</h4>
+                <div class="social-icons">
+                    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="https://www.instagram.com/hafiz_shaheer987" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+                </div>
             </div>
         </div>
-
-        <!-- Filter Categories -->
-        <div class="filter-buttons">
-            <button class="filter-btn active" onclick="filterMenu('All', event)">All Delicacies</button>
-            <button class="filter-btn" onclick="filterMenu('Fast Food', event)">Fast Food</button>
-            <button class="filter-btn" onclick="filterMenu('Desi', event)">Desi Cuisine</button>
-            <button class="filter-btn" onclick="filterMenu('BBQ', event)">BBQ & Grills</button>
-            <button class="filter-btn" onclick="filterMenu('Drinks', event)">Drinks & Shakes</button>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Foodie Express. All Rights Reserved. Crafted for Luxury Experience.</p>
         </div>
-
-        <!-- Menu Grid -->
-        <div class="menu-grid" id="menu-container">
-            <!-- Rendered Dynamically via Script.js -->
-        </div>
-
-        <!-- Order Tracking Live Simulation -->
-        <div class="tracking-box hidden" id="tracking-section">
-            <h3><i class="fa-solid fa-route"></i> Live Order Tracking</h3>
-            <p style="font-size: 0.9rem; color: var(--text-muted);">Your luxury meal is being prepared and dispatched.</p>
-            <div class="steps">
-                <div class="step-item" id="step-1"><i class="fa-solid fa-receipt fa-2x"></i><br>Order Confirmed</div>
-                <div class="step-item" id="step-2"><i class="fa-solid fa-fire-burner fa-2x"></i><br>Chef Cooking</div>
-                <div class="step-item" id="step-3"><i class="fa-solid fa-motorcycle fa-2x"></i><br>Out for Delivery</div>
-                <div class="step-item" id="step-4"><i class="fa-solid fa-house-chimney fa-2x"></i><br>Delivered</div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Floating Cart Button -->
-    <div class="floating-cart-btn" onclick="toggleCart()">
-        <i class="fa-solid fa-bag-shopping"></i>
-        <span id="floating-cart-count" style="position: absolute; top: 5px; right: 5px; background: var(--secondary); font-size: 12px; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">0</span>
-    </div>
-
-    <!-- AI Chatbot Trigger & Widget -->
-    <div class="chat-widget-btn" onclick="toggleChatbot()" title="AI Concierge">
-        <i class="fa-solid fa-robot"></i>
-    </div>
-
-    <div class="chat-window hidden" id="chat-window">
-        <div class="chat-header-bar">
-            <span><i class="fa-solid fa-headset"></i> AI Gourmet Concierge</span>
-            <div>
-                <button onclick="startAICallSimulation()" style="background:none; border:none; color:white; cursor:pointer; margin-right:8px;" title="Voice Call AI"><i class="fa-solid fa-phone"></i></button>
-                <button onclick="toggleChatbot()" style="background:none; border:none; color:white; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-        </div>
-        <div class="chat-messages-box" id="chat-messages">
-            <div class="chat-msg bot">Hello! I am your AI Food Assistant. How may I help you today?</div>
-        </div>
-        <div class="chat-input-box">
-            <input type="text" id="chat-input" placeholder="Ask about menu, offers..." onkeypress="handleChatKeyPress(event)">
-            <button onclick="startAIVoiceInput()" title="Speak"><i class="fa-solid fa-microphone"></i></button>
-            <button onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
-        </div>
-    </div>
+    </footer>
 
     <!-- Cart Sidebar -->
-    <div class="cart-sidebar" id="cart-sidebar">
+    <div id="cart-sidebar" class="cart-sidebar">
         <div class="cart-header">
-            <h3>Your Shopping Bag</h3>
-            <button onclick="toggleCart()" class="close-modal"><i class="fa-solid fa-xmark"></i></button>
+            <h3><i class="fa-solid fa-cart-shopping"></i> Your Shopping Bag</h3>
+            <span class="close-btn" onclick="toggleCart()">&times;</span>
         </div>
-        <div class="cart-items-container" id="cart-items">
-            <!-- Cart Items -->
-        </div>
-        <div style="margin-top: 15px; border-top: 1px solid var(--border-color); padding-top: 15px;">
-            <div style="display: flex; gap: 6px; margin-bottom: 10px;">
-                <input type="text" id="coupon-code" placeholder="Promo (FOODIE50)" style="flex-grow:1; padding:8px; border:1px solid var(--border-color); border-radius:6px; background:var(--bg-color); color:var(--text-color);">
-                <button onclick="applyCoupon()" class="btn-add-cart">Apply</button>
+        <div id="cart-items" class="cart-items"></div>
+        <div class="cart-footer">
+            <div class="coupon-section">
+                <input type="text" id="coupon-code" placeholder="Promo Code (Try: FOODIE50)">
+                <button onclick="applyCoupon()" class="btn-coupon">Apply</button>
             </div>
-            <p id="discount-msg" style="font-size: 11px; margin-bottom: 8px;"></p>
-            <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1rem; margin-bottom: 15px;">
-                <span>Total:</span>
-                <span id="cart-total" style="color: var(--primary);">Rs. 0</span>
-            </div>
-            <button onclick="checkout()" class="btn-add-cart" style="width: 100%; padding: 12px; font-size: 1rem;">Proceed to Checkout</button>
-        </div>
-    </div>
+            <div id="discount-msg" class="discount-msg"></div>
 
-    <!-- Multi-Screen Item Detail Modal -->
-    <div class="modal" id="item-detail-modal">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeItemDetailModal()"><i class="fa-solid fa-xmark"></i></button>
-            <div id="item-detail-content">
-                <!-- Dynamically loaded flavor choices -->
-            </div>
+            <div class="total-price">Total Amount: <strong id="currency-symbol">Rs. </strong><strong id="cart-total">0</strong></div>
+            <button class="btn-primary checkout-btn" onclick="checkout()">Proceed To Checkout</button>
         </div>
     </div>
 
     <!-- Wishlist Modal -->
-    <div class="modal" id="wishlist-modal">
+    <div id="wishlist-modal" class="modal">
         <div class="modal-content">
-            <button class="close-modal" onclick="toggleWishlistModal()"><i class="fa-solid fa-xmark"></i></button>
-            <h3 style="margin-bottom: 15px;">Your Favorite Dishes</h3>
-            <div id="wishlist-items" style="display: flex; flex-direction: column; gap: 10px; max-height: 60vh; overflow-y: auto;">
-                <!-- Wishlist items -->
+            <span class="close-btn" onclick="toggleWishlistModal()">&times;</span>
+            <div class="auth-header">
+                <i class="fa-solid fa-heart" style="color: #e74c3c;"></i>
+                <h3>My Wishlist</h3>
+                <p>Your saved favorite gourmet delicacies</p>
+            </div>
+            <div id="wishlist-items" class="wishlist-items-container">
+                <p class="no-history-msg">No favorite dishes added yet!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Profile Dashboard Modal -->
+    <div id="dashboard-modal" class="modal">
+        <div class="modal-content dashboard-content">
+            <span class="close-btn" onclick="closeDashboardModal()">&times;</span>
+            <div class="auth-header">
+                <i class="fa-solid fa-user-gear"></i>
+                <h3>User VIP Dashboard</h3>
+                <p>Manage your account settings & saved preferences</p>
+            </div>
+            <div class="dashboard-body">
+                <div class="dash-card">
+                    <h4><i class="fa-solid fa-id-card"></i> Account Information</h4>
+                    <p><strong>Name:</strong> <span id="dash-user-name">Hafiz Shaheer</span></p>
+                    <p><strong>Email:</strong> <span id="dash-user-email">shaheer@foodieexpress.com</span></p>
+                    <p><strong>Loyalty Balance:</strong> <span id="dash-user-coins">150</span> Coins</p>
+                </div>
+                <div class="dash-card">
+                    <h4><i class="fa-solid fa-location-dot"></i> Saved Delivery Addresses</h4>
+                    <p id="dash-saved-address">No custom address saved yet.</p>
+                </div>
+                <button onclick="handleLogout()" class="btn-primary auth-submit" style="background: #e74c3c; margin-top: 15px;">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout Account
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeAuthModal()">&times;</span>
+            
+            <div id="login-screen" class="auth-screen">
+                <div class="auth-header">
+                    <i class="fa-solid fa-circle-user"></i>
+                    <h3>Welcome Back</h3>
+                    <p>Sign in to your VIP account</p>
+                </div>
+                <form id="login-form" onsubmit="handleAuth(event, 'login')">
+                    <div class="input-group">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="login-email" placeholder="Email Address" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="login-pass" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="btn-primary auth-submit">Login Now</button>
+                </form>
+                <p class="auth-switch">Don't have an account? <a href="#" onclick="switchAuthScreen('signup')">Sign Up here</a></p>
+            </div>
+
+            <div id="signup-screen" class="auth-screen hidden">
+                <div class="auth-header">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <h3>Create An Account</h3>
+                    <p>Join Foodie Express luxury family today</p>
+                </div>
+                <form id="signup-form" onsubmit="handleAuth(event, 'signup')">
+                    <div class="input-group">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="signup-name" placeholder="Full Name" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="signup-email" placeholder="Email Address" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="signup-pass" placeholder="Password" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <input type="password" id="signup-confirm" placeholder="Confirm Password" required>
+                    </div>
+                    <button type="submit" class="btn-primary auth-submit">Register Account</button>
+                </form>
+                <p class="auth-switch">Already have an account? <a href="#" onclick="switchAuthScreen('login')">Login here</a></p>
             </div>
         </div>
     </div>
 
     <!-- Checkout Modal -->
-    <div class="modal" id="checkout-modal">
+    <div id="checkout-modal" class="modal">
         <div class="modal-content">
-            <button class="close-modal" onclick="closeCheckoutModal()"><i class="fa-solid fa-xmark"></i></button>
-            <h3 style="margin-bottom: 15px;">Complete Your Order</h3>
-            <form id="checkout-form" onsubmit="processOrder(event)" style="display: flex; flex-direction: column; gap: 12px;">
-                <input type="text" id="cust-name" placeholder="Full Name" required style="padding:10px; border-radius:6px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-color);">
-                <input type="tel" id="cust-phone" placeholder="Phone Number (e.g. 03312969666)" required style="padding:10px; border-radius:6px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-color);">
-                
-                <div style="display: flex; gap: 6px;">
-                    <input type="text" id="cust-address" placeholder="Delivery Address" required style="flex-grow:1; padding:10px; border-radius:6px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-color);">
-                    <button type="button" onclick="detectUserLocation()" class="btn-add-cart" title="Detect GPS"><i class="fa-solid fa-location-crosshairs"></i></button>
+            <span class="close-btn" onclick="closeCheckoutModal()">&times;</span>
+            <div class="auth-header">
+                <i class="fa-solid fa-truck-ramp-box"></i>
+                <h3>Delivery Details</h3>
+                <p>Enter your location & secure payment method</p>
+            </div>
+            <form id="checkout-form" onsubmit="processOrder(event)">
+                <div class="input-group">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="cust-name" placeholder="Full Name" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-phone"></i>
+                    <input type="tel" id="cust-phone" placeholder="Phone Number" required>
+                </div>
+                <div class="input-group address-group">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <input type="text" id="cust-address" placeholder="Complete Delivery Address" required>
+                    <button type="button" onclick="detectUserLocation()" class="gps-btn" title="Detect GPS Location">
+                        <i class="fa-solid fa-location-crosshairs"></i>
+                    </button>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-credit-card"></i>
+                    <select id="payment-method" onchange="togglePaymentInfo()" required class="custom-select">
+                        <option value="">Select Payment Method</option>
+                        <option value="Cash on Delivery">Cash on Delivery (COD)</option>
+                        <option value="JazzCash / EasyPaisa">JazzCash / EasyPaisa</option>
+                        <option value="Debit / Credit Card">Debit / Credit Card</option>
+                    </select>
                 </div>
 
-                <select id="payment-method" onchange="togglePaymentInfo()" style="padding:10px; border-radius:6px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-color);">
-                    <option value="Cash on Delivery">Cash on Delivery</option>
-                    <option value="JazzCash / EasyPaisa">JazzCash / EasyPaisa</option>
-                    <option value="Debit / Credit Card">Debit / Credit Card</option>
-                </select>
-
-                <div id="online-payment-details" style="display: none; font-size: 12px; color: var(--text-muted); background: var(--bg-color); padding: 8px; border-radius: 6px;">
-                    Transfer to Account: <strong>0331-2969666 (Foodie Express Official)</strong> and submit order. WhatsApp receipt will open automatically!
+                <div id="online-payment-details" class="online-payment-box" style="display: none;">
+                    <p class="payment-title"><i class="fa-solid fa-circle-info"></i> Account Details for Online Payment:</p>
+                    <p><strong>JazzCash / EasyPaisa:</strong> 0331-2969666</p>
+                    <p><strong>Account Title:</strong> Foodie Express / Hafiz Shaheer</p>
+                    <p class="payment-note">* Order confirm karne ke baad payment screen-shot WhatsApp par send karein.</p>
                 </div>
 
-                <button type="submit" class="btn-add-cart" style="padding: 12px; margin-top: 5px;">Place Order via WhatsApp</button>
+                <button type="submit" class="btn-primary auth-submit">Confirm & Place Order</button>
             </form>
         </div>
     </div>
 
-    <!-- Auth Modal (Login / Signup) -->
-    <div class="modal" id="auth-modal">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeAuthModal()"><i class="fa-solid fa-xmark"></i></button>
-            <div id="login-screen">
-                <h3 style="margin-bottom: 15px;">Login to Foodie Express</h3>
-                <form onsubmit="handleAuth(event, 'login')" style="display: flex; flex-direction: column; gap: 12px;">
-                    <input type="email" placeholder="Email Address" required style="padding:10px; border-radius:6px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-color);">
-                    <input type="password" placeholder="Password" required style="padding:10px; border-radius:6px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-color);">
-                    <button type="submit" class="btn-add-cart" style="padding: 10px;">Login</button>
-                    <p style="font-size: 12px; text-align: center; color: var(--text-muted);">Don't have an account? <span style="color: var(--primary); cursor: pointer;" onclick="switchAuthScreen('signup')">Sign Up</span></p>
-                </form>
+    <!-- Floating Live Chatbot Widget -->
+    <div class="chatbot-container">
+        <div id="chat-window" class="chat-window hidden">
+            <div class="chat-header">
+                <span><i class="fa-solid fa-headset"></i> Foodie Concierge AI</span>
+                <span onclick="toggleChatbot()" style="cursor: pointer;">&times;</span>
             </div>
-            <div id="signup-screen" class="hidden">
-                <h3 style="margin-bottom: 15px;">Create New Account</h3>
-                <form onsubmit="handleAuth(event, 'signup')" style="display: flex; flex-direction: column; gap: 12px;">
-                    <input type="text" placeholder="Full Name" required style="padding:10px; border-radius:6px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-color);">
-                    <input type="email" placeholder="Email Address" required style="padding:10px; border-radius:6px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-color);">
-                    <input type="password" placeholder="Password" required style="padding:10px; border-radius:6px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-color);">
-                    <button type="submit" class="btn-add-cart" style="padding: 10px;">Sign Up</button>
-                    <p style="font-size: 12px; text-align: center; color: var(--text-muted);">Already have an account? <span style="color: var(--primary); cursor: pointer;" onclick="switchAuthScreen('login')">Login</span></p>
-                </form>
+            <div id="chat-messages" class="chat-messages">
+                <div class="chat-msg bot">Hello! Welcome to Foodie Express. How can I help you with your order today?</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Type a message..." onkeypress="handleChatKeyPress(event)">
+                <button onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
             </div>
         </div>
+        <button class="chat-toggle-btn" onclick="toggleChatbot()" title="Open Live Support">
+            <i class="fa-solid fa-comments"></i>
+        </button>
     </div>
 
-    <!-- Dashboard Modal -->
-    <div class="modal" id="dashboard-modal">
-        <div class="modal-content" style="max-width: 600px;">
-            <button class="close-modal" onclick="closeDashboardModal()"><i class="fa-solid fa-xmark"></i></button>
-            <h3 style="margin-bottom: 15px;"><i class="fa-solid fa-user-gear"></i> User Dashboard & History</h3>
-            <div style="display: flex; gap: 15px; margin-bottom: 20px;">
-                <div style="background: var(--bg-color); padding: 12px; border-radius: 8px; flex: 1; border: 1px solid var(--border-color);">
-                    <span style="font-size: 12px; color: var(--text-muted);">Loyalty Coins</span>
-                    <h4 id="dash-user-coins" style="color: var(--primary); font-size: 1.2rem;">0</h4>
-                </div>
-                <div style="background: var(--bg-color); padding: 12px; border-radius: 8px; flex: 1; border: 1px solid var(--border-color);">
-                    <span style="font-size: 12px; color: var(--text-muted);">Account Status</span>
-                    <h4 style="color: var(--accent); font-size: 1.2rem;">VIP Member</h4>
-                </div>
-            </div>
-            <h4 style="margin-bottom: 10px; font-size: 1rem;">Order History</h4>
-            <div id="history-container" style="display: flex; flex-direction: column; gap: 10px; max-height: 40vh; overflow-y: auto;">
-                <!-- History rendered dynamically -->
-            </div>
-            <div style="margin-top: 20px; text-align: right;">
-                <button onclick="handleLogout()" style="background: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 13px;"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
-            </div>
-        </div>
+    <!-- Mobile Floating Cart Button -->
+    <div class="floating-cart-btn" onclick="toggleCart()" title="View Cart">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <span class="floating-cart-badge" id="floating-cart-count">0</span>
     </div>
 
-    <!-- Luxury Footer -->
-    <footer>
-        <div class="footer-grid">
-            <div class="footer-col">
-                <h4>Foodie Express</h4>
-                <p>Bringing international gourmet standards, fast food, and authentic desi flavors directly to your doorstep with love and speed.</p>
-            </div>
-            <div class="footer-col">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="#" onclick="filterMenu('All', event)">All Delicacies</a></li>
-                    <li><a href="#" onclick="toggleCart()">Shopping Bag</a></li>
-                    <li><a href="#" onclick="toggleWishlistModal()">Favorites</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Contact & Support</h4>
-                <p><i class="fa-solid fa-phone"></i> +92 331 2969666</p>
-                <p><i class="fa-solid fa-envelope"></i> support@foodieexpress.com</p>
-                <p><i class="fa-solid fa-location-dot"></i> Rahim Yar Khan, Pakistan</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 Foodie Express. All rights reserved. Designed with elite luxury UI.</p>
-        </div>
-    </footer>
-
-    <!-- Main JavaScript File Linking -->
+    <!-- Custom Script -->
     <script src="script.js"></script>
 </body>
 </html>
