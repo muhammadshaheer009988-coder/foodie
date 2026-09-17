@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="site-title">Foodie Express - Luxury Online Food Ordering & AI Dining Platform</title>
+
+    <title id="site-title">
+        Foodie Express - Luxury Online Food Ordering & AI Dining Platform
+    </title>
 
     <!-- Open Graph / Meta Tags -->
     <meta property="og:type" content="website">
@@ -11,528 +14,1999 @@
     <meta property="og:description" content="Experience gourmet meals with lightning-fast delivery, live order tracking, and AI-powered taste matching!">
     <meta property="og:image" content="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200">
 
-    <!-- External CSS & Fonts -->
+    <!-- External CSS -->
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
 </head>
+
 <body>
 
-    <!-- Toast Notification Container -->
+    <!-- ============================= -->
+    <!-- TOAST NOTIFICATION -->
+    <!-- ============================= -->
     <div id="toast-container" class="toast-container"></div>
 
-    <!-- Header Section -->
+
+    <!-- ============================= -->
+    <!-- HEADER -->
+    <!-- ============================= -->
     <header class="navbar">
+
+        <!-- Logo -->
         <div class="logo">
             <i class="fa-solid fa-fire-flame-curved"></i>
-            <span>Foodie<span class="highlight">Express</span></span>
+
+            <span>
+                Foodie<span class="highlight">Express</span>
+            </span>
         </div>
+
+
+        <!-- Navigation -->
         <nav class="nav-links">
-            <a href="#home" class="active" data-lang="nav_home">Home</a>
-            <a href="#features" data-lang="nav_why">Why Us</a>
-            <a href="#menu" data-lang="nav_menu">Gourmet Menu</a>
-            <a href="#ai-matchmaker"><i class="fa-solid fa-robot" style="color: var(--primary);"></i> <span data-lang="nav_ai">AI Recommender</span></a>
-            <a href="#table-reservation" data-lang="nav_table">Book Table</a>
-            <a href="#order-history" data-lang="nav_orders">My Orders</a>
-            <a href="#reviews" data-lang="nav_reviews">Reviews</a>
+
+            <a href="#home" class="active" data-lang="nav_home">
+                Home
+            </a>
+
+            <a href="#features" data-lang="nav_why">
+                Why Us
+            </a>
+
+            <a href="#menu" data-lang="nav_menu">
+                Gourmet Menu
+            </a>
+
+            <a href="#ai-matchmaker">
+                <i class="fa-solid fa-robot"></i>
+                <span data-lang="nav_ai">
+                    AI Recommender
+                </span>
+            </a>
+
+            <a href="#table-reservation" data-lang="nav_table">
+                Book Table
+            </a>
+
+            <a href="#order-history" data-lang="nav_orders">
+                My Orders
+            </a>
+
+            <a href="#reviews" data-lang="nav_reviews">
+                Reviews
+            </a>
+
         </nav>
+
+
+        <!-- Header Actions -->
         <div class="nav-actions">
-            <!-- Language Switcher (EN / UR) -->
-            <select id="language-selector" onchange="changeLanguage()" class="currency-dropdown" aria-label="Select Language">
+
+            <!-- Language -->
+            <select
+                id="language-selector"
+                onchange="changeLanguage()"
+                class="currency-dropdown"
+                aria-label="Select Language">
+
                 <option value="en">English</option>
                 <option value="ur">اردو (Urdu)</option>
+
             </select>
 
-            <!-- Multi-Currency Selector -->
-            <select id="currency-selector" onchange="changeCurrency()" class="currency-dropdown" aria-label="Select Currency">
+
+            <!-- Currency -->
+            <select
+                id="currency-selector"
+                onchange="changeCurrency()"
+                class="currency-dropdown"
+                aria-label="Select Currency">
+
                 <option value="PKR">PKR (Rs)</option>
                 <option value="USD">USD ($)</option>
                 <option value="EUR">EUR (€)</option>
+
             </select>
 
-            <!-- Loyalty Coins Display -->
-            <div class="loyalty-badge" title="Your Loyalty Coins">
-                <i class="fa-solid fa-coins" style="color: #f1c40f;"></i> <span id="coin-count">150</span>
+
+            <!-- Loyalty Coins -->
+            <div
+                class="loyalty-badge"
+                title="Your Loyalty Coins">
+
+                <i class="fa-solid fa-coins"></i>
+
+                <span id="coin-count">
+                    150
+                </span>
+
             </div>
 
-            <!-- Wishlist Icon Trigger -->
-            <div class="cart-icon wishlist-nav-icon" onclick="toggleWishlistModal()" title="View Wishlist">
-                <i class="fa-solid fa-heart" style="color: #e74c3c;"></i>
-                <span id="wishlist-count">0</span>
+
+            <!-- Wishlist -->
+            <div
+                class="cart-icon wishlist-nav-icon"
+                onclick="toggleWishlistModal()"
+                title="View Wishlist">
+
+                <i class="fa-solid fa-heart"></i>
+
+                <span id="wishlist-count">
+                    0
+                </span>
+
             </div>
 
-            <!-- User Dashboard Button -->
-            <button id="dashboard-btn" class="nav-btn btn-dashboard hidden" onclick="openDashboardModal()" title="User Dashboard">
-                <i class="fa-solid fa-user-gear"></i> Profile
+
+            <!-- Dashboard -->
+            <button
+                id="dashboard-btn"
+                class="nav-btn btn-dashboard hidden"
+                onclick="openDashboardModal()"
+                title="User Dashboard">
+
+                <i class="fa-solid fa-user-gear"></i>
+                Profile
+
             </button>
 
-            <button onclick="toggleDarkMode()" id="theme-btn" class="theme-btn" title="Toggle Dark/Light Mode">
-                <i class="fa-solid fa-moon" id="theme-icon"></i>
+
+            <!-- Dark Mode -->
+            <button
+                onclick="toggleDarkMode()"
+                id="theme-btn"
+                class="theme-btn"
+                title="Toggle Dark/Light Mode">
+
+                <i
+                    class="fa-solid fa-moon"
+                    id="theme-icon">
+                </i>
+
             </button>
 
-            <button class="nav-btn btn-login" onclick="openAuthModal('login')">
-                <i class="fa-solid fa-right-to-bracket"></i> <span data-lang="btn_login">Login</span>
-            </button>
-            <button class="nav-btn btn-signup" onclick="openAuthModal('signup')">
-                <i class="fa-solid fa-user-plus"></i> <span data-lang="btn_signup">Sign Up</span>
+
+            <!-- Login -->
+            <button
+                class="nav-btn btn-login"
+                onclick="openAuthModal('login')">
+
+                <i class="fa-solid fa-right-to-bracket"></i>
+
+                <span data-lang="btn_login">
+                    Login
+                </span>
+
             </button>
 
-            <div class="cart-icon" onclick="toggleCart()" title="View Cart">
+
+            <!-- Sign Up -->
+            <button
+                class="nav-btn btn-signup"
+                onclick="openAuthModal('signup')">
+
+                <i class="fa-solid fa-user-plus"></i>
+
+                <span data-lang="btn_signup">
+                    Sign Up
+                </span>
+
+            </button>
+
+
+            <!-- Cart -->
+            <div
+                class="cart-icon"
+                onclick="toggleCart()"
+                title="View Cart">
+
                 <i class="fa-solid fa-bag-shopping"></i>
-                <span id="cart-count">0</span>
+
+                <span id="cart-count">
+                    0
+                </span>
+
             </div>
+
         </div>
+
     </header>
 
+
+
+    <!-- ============================= -->
+    <!-- MAIN -->
+    <!-- ============================= -->
+
     <main>
-        <!-- Hero Section -->
-        <section id="home" class="hero">
+
+
+        <!-- ============================= -->
+        <!-- HERO SECTION -->
+        <!-- ============================= -->
+
+        <section
+            id="home"
+            class="hero">
+
+            <!-- Hero Overlay -->
+            <div class="hero-overlay"></div>
+
             <div class="hero-content">
-                <span class="badge"><i class="fa-solid fa-bolt"></i> <span data-lang="hero_badge">VIP Super Fast Delivery</span></span>
-                <h1 data-lang="hero_title">Experience Luxury Dining, Delivered Hot & Fresh To Your Doorstep!</h1>
-                <p data-lang="hero_desc">Indulge in hand-crafted gourmet dishes with real-time tracking & exclusive royal discounts.</p>
+
+                <span class="badge">
+
+                    <i class="fa-solid fa-bolt"></i>
+
+                    <span data-lang="hero_badge">
+                        VIP Super Fast Delivery
+                    </span>
+
+                </span>
+
+
+                <h1 data-lang="hero_title">
+                    Experience Luxury Dining,
+                    Delivered Hot & Fresh
+                    To Your Doorstep!
+                </h1>
+
+
+                <p data-lang="hero_desc">
+                    Indulge in hand-crafted gourmet dishes
+                    with real-time tracking & exclusive
+                    royal discounts.
+                </p>
+
+
+                <!-- Hero Buttons -->
                 <div class="hero-btns">
-                    <a href="#menu" class="btn-primary"><span data-lang="hero_btn1">Explore Menu</span> <i class="fa-solid fa-arrow-right"></i></a>
-                    <a href="#tracking-section" class="btn-secondary" data-lang="hero_btn2">Track Active Order</a>
+
+                    <a
+                        href="#menu"
+                        class="btn-primary">
+
+                        <span data-lang="hero_btn1">
+                            Explore Menu
+                        </span>
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </a>
+
+
+                    <a
+                        href="#tracking-section"
+                        class="btn-secondary"
+                        data-lang="hero_btn2">
+
+                        Track Active Order
+
+                    </a>
+
                 </div>
+
+
+                <!-- Hero Search -->
+                <div class="hero-search-wrapper">
+
+                    <div class="search-container">
+
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+
+                        <label
+                            for="search-input"
+                            class="sr-only">
+
+                            Search gourmet dishes
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="search-input"
+                            onkeyup="searchMenu()"
+                            placeholder="Search gourmet dishes (e.g. Biryani, Burger, Kebab)...">
+
+
+                        <button
+                            type="button"
+                            onclick="startVoiceSearch()"
+                            class="voice-search-btn"
+                            title="Search with Voice">
+
+                            <i class="fa-solid fa-microphone"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
             </div>
+
         </section>
 
-        <!-- Features Section -->
-        <section id="features" class="features-section">
+
+
+        <!-- ============================= -->
+        <!-- FEATURES -->
+        <!-- ============================= -->
+
+        <section
+            id="features"
+            class="features-section">
+
             <div class="section-header">
-                <h2>Why Choose Foodie Express?</h2>
-                <p>We deliver culinary excellence & happiness with every single bite</p>
+
+                <h2>
+                    Why Choose Foodie Express?
+                </h2>
+
+                <p>
+                    We deliver culinary excellence & happiness
+                    with every single bite
+                </p>
+
             </div>
+
+
             <div class="features-grid">
+
+
+                <!-- Feature 1 -->
                 <div class="feature-card">
-                    <div class="icon-box"><i class="fa-solid fa-truck-fast"></i></div>
-                    <h3>30 Min Express Delivery</h3>
-                    <p>Lightning-fast transit fleet to keep your gourmet food steaming hot and fresh.</p>
+
+                    <div class="icon-box">
+                        <i class="fa-solid fa-truck-fast"></i>
+                    </div>
+
+                    <h3>
+                        30 Min Express Delivery
+                    </h3>
+
+                    <p>
+                        Lightning-fast transit fleet to keep
+                        your gourmet food steaming hot and fresh.
+                    </p>
+
                 </div>
+
+
+                <!-- Feature 2 -->
                 <div class="feature-card">
-                    <div class="icon-box"><i class="fa-solid fa-utensils"></i></div>
-                    <h3>Master Chef Ingredients</h3>
-                    <p>Prepared daily by certified world-class chefs maintaining strict 5-star hygiene standards.</p>
+
+                    <div class="icon-box">
+                        <i class="fa-solid fa-utensils"></i>
+                    </div>
+
+                    <h3>
+                        Master Chef Ingredients
+                    </h3>
+
+                    <p>
+                        Prepared daily by certified world-class
+                        chefs maintaining strict 5-star hygiene standards.
+                    </p>
+
                 </div>
+
+
+                <!-- Feature 3 -->
                 <div class="feature-card">
-                    <div class="icon-box"><i class="fa-solid fa-headset"></i></div>
-                    <h3>24/7 Concierge Support</h3>
-                    <p>Dedicated luxury customer service available around the clock to assist you.</p>
+
+                    <div class="icon-box">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+
+                    <h3>
+                        24/7 Concierge Support
+                    </h3>
+
+                    <p>
+                        Dedicated luxury customer service available
+                        around the clock to assist you.
+                    </p>
+
                 </div>
+
             </div>
+
         </section>
 
-        <!-- Menu Section -->
-        <section id="menu" class="menu-section">
+
+
+        <!-- ============================= -->
+        <!-- MENU SECTION -->
+        <!-- ============================= -->
+
+        <section
+            id="menu"
+            class="menu-section">
+
+
             <div class="section-header">
-                <h2>Our Exclusive Menu</h2>
-                <p>Explore top-rated luxury dishes curated specially for your palate</p>
+
+                <h2>
+                    Our Exclusive Menu
+                </h2>
+
+                <p>
+                    Explore top-rated luxury dishes curated
+                    specially for your palate
+                </p>
+
             </div>
 
-            <div class="search-container">
+
+            <!-- Menu Search -->
+
+            <div class="search-container menu-search">
+
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <label for="search-input" class="sr-only">Search gourmet dishes</label>
-                <input type="text" id="search-input" onkeyup="searchMenu()" placeholder="Search gourmet dishes (e.g. Biryani, Burger, Kebab)...">
-                <button type="button" onclick="startVoiceSearch()" class="voice-search-btn" title="Search with Voice">
+
+                <label
+                    for="menu-search-input"
+                    class="sr-only">
+
+                    Search gourmet dishes
+
+                </label>
+
+
+                <input
+                    type="text"
+                    id="menu-search-input"
+                    onkeyup="syncMenuSearch()"
+                    placeholder="Search Biryani, Burger, Kebab, Pizza...">
+
+
+                <button
+                    type="button"
+                    onclick="startVoiceSearch()"
+                    class="voice-search-btn"
+                    title="Search with Voice">
+
                     <i class="fa-solid fa-microphone"></i>
+
                 </button>
-            </div>
-            
-            <div class="category-filters">
-                <button class="filter-btn active" onclick="filterMenu('All')">All Delicacies</button>
-                <button class="filter-btn" onclick="filterMenu('Fast Food')">Fast Food</button>
-                <button class="filter-btn" onclick="filterMenu('Desi')">Desi Special</button>
-                <button class="filter-btn" onclick="filterMenu('BBQ')">BBQ & Grill</button>
-                <button class="filter-btn" onclick="filterMenu('Drinks')">Beverages</button>
+
             </div>
 
-            <div class="menu-grid" id="menu-container"></div>
+
+
+            <!-- Category Filters -->
+
+            <div class="category-filters">
+
+                <button
+                    class="filter-btn active"
+                    onclick="filterMenu('All')">
+
+                    <i class="fa-solid fa-border-all"></i>
+                    All Delicacies
+
+                </button>
+
+
+                <button
+                    class="filter-btn"
+                    onclick="filterMenu('Fast Food')">
+
+                    <i class="fa-solid fa-burger"></i>
+                    Fast Food
+
+                </button>
+
+
+                <button
+                    class="filter-btn"
+                    onclick="filterMenu('Desi')">
+
+                    <i class="fa-solid fa-bowl-food"></i>
+                    Desi Special
+
+                </button>
+
+
+                <button
+                    class="filter-btn"
+                    onclick="filterMenu('BBQ')">
+
+                    <i class="fa-solid fa-fire"></i>
+                    BBQ & Grill
+
+                </button>
+
+
+                <button
+                    class="filter-btn"
+                    onclick="filterMenu('Drinks')">
+
+                    <i class="fa-solid fa-glass-water"></i>
+                    Beverages
+
+                </button>
+
+            </div>
+
+
+            <!-- Dynamic Food Cards -->
+
+            <div
+                class="menu-grid"
+                id="menu-container">
+
+            </div>
+
         </section>
 
-        <!-- AI Mood & Taste Matchmaker Section -->
-        <section id="ai-matchmaker" class="ai-section">
+
+
+        <!-- ============================= -->
+        <!-- AI MATCHMAKER -->
+        <!-- ============================= -->
+
+        <section
+            id="ai-matchmaker"
+            class="ai-section">
+
             <div class="section-header">
-                <span class="badge-ai"><i class="fa-solid fa-robot"></i> AI Powered Taste Engine</span>
-                <h2>Find Food By Your Exact Mood</h2>
-                <p>Select your current mood and occasion. Our intelligent AI algorithm will curate the ultimate luxury dish for you!</p>
+
+                <span class="badge-ai">
+
+                    <i class="fa-solid fa-robot"></i>
+
+                    AI Powered Taste Engine
+
+                </span>
+
+
+                <h2>
+                    Find Food By Your Exact Mood
+                </h2>
+
+
+                <p>
+                    Select your current mood and occasion.
+                    Our intelligent AI algorithm will curate
+                    the ultimate luxury dish for you!
+                </p>
+
             </div>
+
 
             <div class="ai-card-wrapper">
+
+
                 <div class="ai-options-grid">
-                    <div class="ai-group">
-                        <label><i class="fa-solid fa-face-smile"></i> What's Your Current Mood?</label>
-                        <div class="ai-chips" id="mood-chips">
-                            <button class="ai-chip active" data-value="spicy"><i class="fa-solid fa-pepper-hot"></i> Spicy & Bold</button>
-                            <button class="ai-chip" data-value="cheesy"><i class="fa-solid fa-cheese"></i> Cheesy & Comforting</button>
-                            <button class="ai-chip" data-value="healthy"><i class="fa-solid fa-leaf"></i> Light & Healthy</button>
-                            <button class="ai-chip" data-value="sweet"><i class="fa-solid fa-ice-cream"></i> Sweet Craving</button>
-                        </div>
-                    </div>
+
+
+                    <!-- Mood -->
 
                     <div class="ai-group">
-                        <label><i class="fa-solid fa-clock"></i> What's the Time & Occasion?</label>
-                        <div class="ai-chips" id="occasion-chips">
-                            <button class="ai-chip active" data-value="quick"><i class="fa-solid fa-bolt"></i> Quick Bite</button>
-                            <button class="ai-chip" data-value="dinner"><i class="fa-solid fa-utensils"></i> Luxurious Dinner</button>
-                            <button class="ai-chip" data-value="late"><i class="fa-solid fa-moon"></i> Late Night Craving</button>
+
+                        <label>
+
+                            <i class="fa-solid fa-face-smile"></i>
+
+                            What's Your Current Mood?
+
+                        </label>
+
+
+                        <div
+                            class="ai-chips"
+                            id="mood-chips">
+
+
+                            <button
+                                class="ai-chip active"
+                                data-value="spicy">
+
+                                <i class="fa-solid fa-pepper-hot"></i>
+                                Spicy & Bold
+
+                            </button>
+
+
+                            <button
+                                class="ai-chip"
+                                data-value="cheesy">
+
+                                <i class="fa-solid fa-cheese"></i>
+                                Cheesy & Comforting
+
+                            </button>
+
+
+                            <button
+                                class="ai-chip"
+                                data-value="healthy">
+
+                                <i class="fa-solid fa-leaf"></i>
+                                Light & Healthy
+
+                            </button>
+
+
+                            <button
+                                class="ai-chip"
+                                data-value="sweet">
+
+                                <i class="fa-solid fa-ice-cream"></i>
+                                Sweet Craving
+
+                            </button>
+
                         </div>
+
                     </div>
+
+
+
+                    <!-- Occasion -->
+
+                    <div class="ai-group">
+
+                        <label>
+
+                            <i class="fa-solid fa-clock"></i>
+
+                            What's the Time & Occasion?
+
+                        </label>
+
+
+                        <div
+                            class="ai-chips"
+                            id="occasion-chips">
+
+
+                            <button
+                                class="ai-chip active"
+                                data-value="quick">
+
+                                <i class="fa-solid fa-bolt"></i>
+                                Quick Bite
+
+                            </button>
+
+
+                            <button
+                                class="ai-chip"
+                                data-value="dinner">
+
+                                <i class="fa-solid fa-utensils"></i>
+                                Luxurious Dinner
+
+                            </button>
+
+
+                            <button
+                                class="ai-chip"
+                                data-value="late">
+
+                                <i class="fa-solid fa-moon"></i>
+                                Late Night Craving
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
-                <button id="ai-find-btn" class="btn-primary ai-submit-btn">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i> AI Match My Food
+
+
+                <!-- AI Button -->
+
+                <button
+                    id="ai-find-btn"
+                    class="btn-primary ai-submit-btn">
+
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+                    AI Match My Food
+
                 </button>
 
-                <div id="ai-result-box" class="ai-result-box hidden">
+
+
+                <!-- AI Result -->
+
+                <div
+                    id="ai-result-box"
+                    class="ai-result-box hidden">
+
                     <div class="ai-result-header">
+
                         <i class="fa-solid fa-sparkles"></i>
+
                         <div>
-                            <h3>AI Recommended Match</h3>
-                            <p id="ai-result-reason">Based on your sophisticated mood preferences</p>
+
+                            <h3>
+                                AI Recommended Match
+                            </h3>
+
+                            <p id="ai-result-reason">
+                                Based on your sophisticated
+                                mood preferences
+                            </p>
+
                         </div>
+
                     </div>
-                    <div id="ai-recommended-items" class="menu-grid"></div>
+
+
+                    <div
+                        id="ai-recommended-items"
+                        class="menu-grid">
+
+                    </div>
+
                 </div>
+
             </div>
+
         </section>
 
-        <!-- Table Reservation Section -->
-        <section id="table-reservation" class="reservation-section">
+
+
+        <!-- ============================= -->
+        <!-- TABLE RESERVATION -->
+        <!-- ============================= -->
+
+        <section
+            id="table-reservation"
+            class="reservation-section">
+
             <div class="section-header">
-                <h2>Reserve A VIP Table</h2>
-                <p>Book your dining experience in advance with our master chefs</p>
+
+                <h2>
+                    Reserve A VIP Table
+                </h2>
+
+                <p>
+                    Book your dining experience in advance
+                    with our master chefs
+                </p>
+
             </div>
+
+
             <div class="reservation-card">
-                <form id="reservation-form" onsubmit="handleTableReservation(event)">
+
+                <form
+                    id="reservation-form"
+                    onsubmit="handleTableReservation(event)">
+
+
                     <div class="reservation-grid">
+
+
                         <div class="input-group">
+
                             <i class="fa-solid fa-user"></i>
-                            <input type="text" id="res-name" placeholder="Full Name" required>
+
+                            <input
+                                type="text"
+                                id="res-name"
+                                placeholder="Full Name"
+                                required>
+
                         </div>
+
+
                         <div class="input-group">
+
                             <i class="fa-solid fa-phone"></i>
-                            <input type="tel" id="res-phone" placeholder="Phone Number" required>
+
+                            <input
+                                type="tel"
+                                id="res-phone"
+                                placeholder="Phone Number"
+                                required>
+
                         </div>
+
+
                         <div class="input-group">
+
                             <i class="fa-solid fa-users"></i>
-                            <select id="res-guests" required class="custom-select">
-                                <option value="">Select Guests</option>
-                                <option value="2 Persons">2 Persons (Couple Table)</option>
-                                <option value="4 Persons">4 Persons (Family Table)</option>
-                                <option value="6+ Persons">6+ Persons (VIP Lounge)</option>
+
+                            <select
+                                id="res-guests"
+                                required
+                                class="custom-select">
+
+                                <option value="">
+                                    Select Guests
+                                </option>
+
+                                <option value="2 Persons">
+                                    2 Persons (Couple Table)
+                                </option>
+
+                                <option value="4 Persons">
+                                    4 Persons (Family Table)
+                                </option>
+
+                                <option value="6+ Persons">
+                                    6+ Persons (VIP Lounge)
+                                </option>
+
                             </select>
+
                         </div>
+
+
                         <div class="input-group">
+
                             <i class="fa-solid fa-calendar-days"></i>
-                            <input type="date" id="res-date" required>
+
+                            <input
+                                type="date"
+                                id="res-date"
+                                required>
+
                         </div>
+
+
                         <div class="input-group">
+
                             <i class="fa-solid fa-clock"></i>
-                            <input type="time" id="res-time" required>
+
+                            <input
+                                type="time"
+                                id="res-time"
+                                required>
+
                         </div>
+
                     </div>
-                    <button type="submit" class="btn-primary auth-submit" style="margin-top: 20px;">
-                        <i class="fa-solid fa-chair"></i> Confirm Table Reservation
+
+
+                    <button
+                        type="submit"
+                        class="btn-primary auth-submit">
+
+                        <i class="fa-solid fa-chair"></i>
+
+                        Confirm Table Reservation
+
                     </button>
+
                 </form>
+
             </div>
+
         </section>
 
-        <!-- Live Order Tracking Section -->
-        <section id="tracking-section" class="tracking-section hidden">
+
+
+        <!-- ============================= -->
+        <!-- LIVE TRACKING -->
+        <!-- ============================= -->
+
+        <section
+            id="tracking-section"
+            class="tracking-section hidden">
+
             <div class="section-header">
-                <h2>Live Royal Order Status</h2>
-                <p>Real-time telemetry progress of your food dispatch</p>
+
+                <h2>
+                    Live Royal Order Status
+                </h2>
+
+                <p>
+                    Real-time telemetry progress
+                    of your food dispatch
+                </p>
+
             </div>
+
+
             <div class="status-stepper">
-                <div class="step active" id="step-1">
-                    <div class="step-icon"><i class="fa-solid fa-file-invoice"></i></div>
-                    <p>Order Placed</p>
+
+
+                <div
+                    class="step active"
+                    id="step-1">
+
+                    <div class="step-icon">
+                        <i class="fa-solid fa-file-invoice"></i>
+                    </div>
+
+                    <p>
+                        Order Placed
+                    </p>
+
                 </div>
-                <div class="step" id="step-2">
-                    <div class="step-icon"><i class="fa-solid fa-fire-burner"></i></div>
-                    <p>Master Chef Cooking</p>
+
+
+                <div
+                    class="step"
+                    id="step-2">
+
+                    <div class="step-icon">
+                        <i class="fa-solid fa-fire-burner"></i>
+                    </div>
+
+                    <p>
+                        Master Chef Cooking
+                    </p>
+
                 </div>
-                <div class="step" id="step-3">
-                    <div class="step-icon"><i class="fa-solid fa-motorcycle"></i></div>
-                    <p>Out For Delivery</p>
+
+
+                <div
+                    class="step"
+                    id="step-3">
+
+                    <div class="step-icon">
+                        <i class="fa-solid fa-motorcycle"></i>
+                    </div>
+
+                    <p>
+                        Out For Delivery
+                    </p>
+
                 </div>
-                <div class="step" id="step-4">
-                    <div class="step-icon"><i class="fa-solid fa-house-circle-check"></i></div>
-                    <p>Delivered</p>
+
+
+                <div
+                    class="step"
+                    id="step-4">
+
+                    <div class="step-icon">
+                        <i class="fa-solid fa-house-circle-check"></i>
+                    </div>
+
+                    <p>
+                        Delivered
+                    </p>
+
                 </div>
+
             </div>
+
         </section>
 
-        <!-- Order History Section -->
-        <section id="order-history" class="features-section history-section">
+
+
+        <!-- ============================= -->
+        <!-- ORDER HISTORY -->
+        <!-- ============================= -->
+
+        <section
+            id="order-history"
+            class="features-section history-section">
+
             <div class="section-header">
-                <h2>My Order History</h2>
-                <p>Review your past royal receipts and luxury transactions</p>
+
+                <h2>
+                    My Order History
+                </h2>
+
+                <p>
+                    Review your past royal receipts
+                    and luxury transactions
+                </p>
+
             </div>
-            <div id="history-container" class="history-container">
-                <p class="no-history-msg">No luxury orders placed yet!</p>
+
+
+            <div
+                id="history-container"
+                class="history-container">
+
+                <p class="no-history-msg">
+                    No luxury orders placed yet!
+                </p>
+
             </div>
+
         </section>
 
-        <!-- Reviews Section -->
-        <section id="reviews" class="reviews-section">
+
+
+        <!-- ============================= -->
+        <!-- REVIEWS -->
+        <!-- ============================= -->
+
+        <section
+            id="reviews"
+            class="reviews-section">
+
             <div class="section-header">
-                <h2>What Our Elite Patrons Say</h2>
-                <p>Authentic feedback from true food aficionados</p>
+
+                <h2>
+                    What Our Elite Patrons Say
+                </h2>
+
+                <p>
+                    Authentic feedback from true
+                    food aficionados
+                </p>
+
             </div>
+
+
             <div class="reviews-container">
+
+
+                <!-- Review 1 -->
+
                 <div class="review-card">
+
                     <div class="user-info">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" alt="Customer Ayesha">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100"
+                            alt="Customer Ayesha">
+
                         <div>
-                            <h4>Ayesha Khan</h4>
-                            <div class="stars">⭐⭐⭐⭐⭐</div>
+
+                            <h4>
+                                Ayesha Khan
+                            </h4>
+
+                            <div class="stars">
+                                ⭐⭐⭐⭐⭐
+                            </div>
+
                         </div>
+
                     </div>
-                    <p>"The food arrived piping hot! The gourmet zinger burger was super crispy and premium. Best food platform in town."</p>
+
+
+                    <p>
+                        "The food arrived piping hot!
+                        The gourmet zinger burger was super
+                        crispy and premium. Best food platform
+                        in town."
+                    </p>
+
                 </div>
+
+
+
+                <!-- Review 2 -->
+
                 <div class="review-card">
+
                     <div class="user-info">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" alt="Customer Hamza">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100"
+                            alt="Customer Hamza">
+
                         <div>
-                            <h4>Hamza Ali</h4>
-                            <div class="stars">⭐⭐⭐⭐⭐</div>
+
+                            <h4>
+                                Hamza Ali
+                            </h4>
+
+                            <div class="stars">
+                                ⭐⭐⭐⭐⭐
+                            </div>
+
                         </div>
+
                     </div>
-                    <p>"The biryani flavor was exceptionally authentic. The live real-time tracking feature is extremely precise and high-tech!"</p>
+
+
+                    <p>
+                        "The biryani flavor was exceptionally
+                        authentic. The live real-time tracking
+                        feature is extremely precise and high-tech!"
+                    </p>
+
                 </div>
+
             </div>
+
         </section>
+
     </main>
 
-    <!-- Footer -->
+
+
+    <!-- ============================= -->
+    <!-- FOOTER -->
+    <!-- ============================= -->
+
     <footer>
+
         <div class="footer-container">
+
+
+            <!-- Footer Brand -->
+
             <div class="footer-col">
+
                 <div class="logo">
+
                     <i class="fa-solid fa-fire-flame-curved"></i>
-                    <span>Foodie<span class="highlight">Express</span></span>
+
+                    <span>
+                        Foodie<span class="highlight">
+                            Express
+                        </span>
+                    </span>
+
                 </div>
-                <p>Delivering fresh, elite gourmet dishes straight to your doorstep with absolute care & elegance.</p>
+
+
+                <p>
+                    Delivering fresh, elite gourmet dishes
+                    straight to your doorstep with absolute
+                    care & elegance.
+                </p>
+
             </div>
+
+
+
+            <!-- Quick Links -->
+
             <div class="footer-col">
-                <h4>Quick Links</h4>
-                <a href="#home">Home</a>
-                <a href="#menu">Menu</a>
-                <a href="#ai-matchmaker">AI Matchmaker</a>
-                <a href="#reviews">Reviews</a>
+
+                <h4>
+                    Quick Links
+                </h4>
+
+                <a href="#home">
+                    Home
+                </a>
+
+                <a href="#menu">
+                    Menu
+                </a>
+
+                <a href="#ai-matchmaker">
+                    AI Matchmaker
+                </a>
+
+                <a href="#reviews">
+                    Reviews
+                </a>
+
             </div>
+
+
+
+            <!-- Contact -->
+
             <div class="footer-col">
-                <h4>Contact Us</h4>
-                <p><i class="fa-solid fa-envelope"></i> support@foodieexpress.com</p>
-                <p><i class="fa-solid fa-phone"></i> +92 3312969666</p>
+
+                <h4>
+                    Contact Us
+                </h4>
+
+                <p>
+                    <i class="fa-solid fa-envelope"></i>
+                    support@foodieexpress.com
+                </p>
+
+                <p>
+                    <i class="fa-solid fa-phone"></i>
+                    +92 3312969666
+                </p>
+
             </div>
+
+
+
+            <!-- Social -->
+
             <div class="footer-col">
-                <h4>Follow Us</h4>
+
+                <h4>
+                    Follow Us
+                </h4>
+
                 <div class="social-icons">
-                    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
-                    <a href="https://www.instagram.com/hafiz_shaheer987" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+
+                    <a
+                        href="#"
+                        aria-label="Facebook">
+
+                        <i class="fa-brands fa-facebook"></i>
+
+                    </a>
+
+
+                    <a
+                        href="https://www.instagram.com/hafiz_shaheer987"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Instagram">
+
+                        <i class="fa-brands fa-instagram"></i>
+
+                    </a>
+
+
+                    <a
+                        href="#"
+                        aria-label="Twitter">
+
+                        <i class="fa-brands fa-twitter"></i>
+
+                    </a>
+
                 </div>
+
             </div>
+
         </div>
+
+
         <div class="footer-bottom">
-            <p>&copy; 2026 Foodie Express. All Rights Reserved. Crafted for Luxury Experience.</p>
+
+            <p>
+                &copy; 2026 Foodie Express.
+                All Rights Reserved.
+                Crafted for Luxury Experience.
+            </p>
+
         </div>
+
     </footer>
 
-    <!-- Cart Sidebar -->
-    <div id="cart-sidebar" class="cart-sidebar">
+
+
+    <!-- ============================= -->
+    <!-- CART SIDEBAR -->
+    <!-- ============================= -->
+
+    <div
+        id="cart-sidebar"
+        class="cart-sidebar">
+
+
         <div class="cart-header">
-            <h3><i class="fa-solid fa-cart-shopping"></i> Your Shopping Bag</h3>
-            <span class="close-btn" onclick="toggleCart()">&times;</span>
+
+            <h3>
+                <i class="fa-solid fa-cart-shopping"></i>
+                Your Shopping Bag
+            </h3>
+
+            <span
+                class="close-btn"
+                onclick="toggleCart()">
+
+                &times;
+
+            </span>
+
         </div>
-        <div id="cart-items" class="cart-items"></div>
+
+
+        <div
+            id="cart-items"
+            class="cart-items">
+
+        </div>
+
+
         <div class="cart-footer">
+
             <div class="coupon-section">
-                <input type="text" id="coupon-code" placeholder="Promo Code (Try: FOODIE50)">
-                <button onclick="applyCoupon()" class="btn-coupon">Apply</button>
-            </div>
-            <div id="discount-msg" class="discount-msg"></div>
 
-            <div class="total-price">Total Amount: <strong id="currency-symbol">Rs. </strong><strong id="cart-total">0</strong></div>
-            <button class="btn-primary checkout-btn" onclick="checkout()">Proceed To Checkout</button>
-        </div>
-    </div>
+                <input
+                    type="text"
+                    id="coupon-code"
+                    placeholder="Promo Code (Try: FOODIE50)">
 
-    <!-- Wishlist Modal -->
-    <div id="wishlist-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="toggleWishlistModal()">&times;</span>
-            <div class="auth-header">
-                <i class="fa-solid fa-heart" style="color: #e74c3c;"></i>
-                <h3>My Wishlist</h3>
-                <p>Your saved favorite gourmet delicacies</p>
-            </div>
-            <div id="wishlist-items" class="wishlist-items-container">
-                <p class="no-history-msg">No favorite dishes added yet!</p>
-            </div>
-        </div>
-    </div>
+                <button
+                    onclick="applyCoupon()"
+                    class="btn-coupon">
 
-    <!-- User Profile Dashboard Modal -->
-    <div id="dashboard-modal" class="modal">
-        <div class="modal-content dashboard-content">
-            <span class="close-btn" onclick="closeDashboardModal()">&times;</span>
-            <div class="auth-header">
-                <i class="fa-solid fa-user-gear"></i>
-                <h3>User VIP Dashboard</h3>
-                <p>Manage your account settings & saved preferences</p>
-            </div>
-            <div class="dashboard-body">
-                <div class="dash-card">
-                    <h4><i class="fa-solid fa-id-card"></i> Account Information</h4>
-                    <p><strong>Name:</strong> <span id="dash-user-name">Hafiz Shaheer</span></p>
-                    <p><strong>Email:</strong> <span id="dash-user-email">shaheer@foodieexpress.com</span></p>
-                    <p><strong>Loyalty Balance:</strong> <span id="dash-user-coins">150</span> Coins</p>
-                </div>
-                <div class="dash-card">
-                    <h4><i class="fa-solid fa-location-dot"></i> Saved Delivery Addresses</h4>
-                    <p id="dash-saved-address">No custom address saved yet.</p>
-                </div>
-                <button onclick="handleLogout()" class="btn-primary auth-submit" style="background: #e74c3c; margin-top: 15px;">
-                    <i class="fa-solid fa-right-from-bracket"></i> Logout Account
+                    Apply
+
                 </button>
+
             </div>
+
+
+            <div
+                id="discount-msg"
+                class="discount-msg">
+
+            </div>
+
+
+            <div class="total-price">
+
+                Total Amount:
+
+                <strong id="currency-symbol">
+                    Rs.
+                </strong>
+
+                <strong id="cart-total">
+                    0
+                </strong>
+
+            </div>
+
+
+            <button
+                class="btn-primary checkout-btn"
+                onclick="checkout()">
+
+                Proceed To Checkout
+
+            </button>
+
         </div>
+
     </div>
 
-    <!-- Auth Modal -->
-    <div id="auth-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeAuthModal()">&times;</span>
-            
-            <div id="login-screen" class="auth-screen">
-                <div class="auth-header">
-                    <i class="fa-solid fa-circle-user"></i>
-                    <h3>Welcome Back</h3>
-                    <p>Sign in to your VIP account</p>
-                </div>
-                <form id="login-form" onsubmit="handleAuth(event, 'login')">
-                    <div class="input-group">
-                        <i class="fa-solid fa-envelope"></i>
-                        <input type="email" id="login-email" placeholder="Email Address" required>
-                    </div>
-                    <div class="input-group">
-                        <i class="fa-solid fa-lock"></i>
-                        <input type="password" id="login-pass" placeholder="Password" required>
-                    </div>
-                    <button type="submit" class="btn-primary auth-submit">Login Now</button>
-                </form>
-                <p class="auth-switch">Don't have an account? <a href="#" onclick="switchAuthScreen('signup')">Sign Up here</a></p>
-            </div>
 
-            <div id="signup-screen" class="auth-screen hidden">
-                <div class="auth-header">
-                    <i class="fa-solid fa-user-plus"></i>
-                    <h3>Create An Account</h3>
-                    <p>Join Foodie Express luxury family today</p>
-                </div>
-                <form id="signup-form" onsubmit="handleAuth(event, 'signup')">
-                    <div class="input-group">
-                        <i class="fa-solid fa-user"></i>
-                        <input type="text" id="signup-name" placeholder="Full Name" required>
-                    </div>
-                    <div class="input-group">
-                        <i class="fa-solid fa-envelope"></i>
-                        <input type="email" id="signup-email" placeholder="Email Address" required>
-                    </div>
-                    <div class="input-group">
-                        <i class="fa-solid fa-lock"></i>
-                        <input type="password" id="signup-pass" placeholder="Password" required>
-                    </div>
-                    <div class="input-group">
-                        <i class="fa-solid fa-shield-halved"></i>
-                        <input type="password" id="signup-confirm" placeholder="Confirm Password" required>
-                    </div>
-                    <button type="submit" class="btn-primary auth-submit">Register Account</button>
-                </form>
-                <p class="auth-switch">Already have an account? <a href="#" onclick="switchAuthScreen('login')">Login here</a></p>
-            </div>
-        </div>
-    </div>
 
-    <!-- Checkout Modal -->
-    <div id="checkout-modal" class="modal">
+    <!-- ============================= -->
+    <!-- WISHLIST MODAL -->
+    <!-- ============================= -->
+
+    <div
+        id="wishlist-modal"
+        class="modal">
+
         <div class="modal-content">
-            <span class="close-btn" onclick="closeCheckoutModal()">&times;</span>
+
+            <span
+                class="close-btn"
+                onclick="toggleWishlistModal()">
+
+                &times;
+
+            </span>
+
+
             <div class="auth-header">
-                <i class="fa-solid fa-truck-ramp-box"></i>
-                <h3>Delivery Details</h3>
-                <p>Enter your location & secure payment method</p>
+
+                <i class="fa-solid fa-heart"></i>
+
+                <h3>
+                    My Wishlist
+                </h3>
+
+                <p>
+                    Your saved favorite gourmet delicacies
+                </p>
+
             </div>
-            <form id="checkout-form" onsubmit="processOrder(event)">
-                <div class="input-group">
-                    <i class="fa-solid fa-user"></i>
-                    <input type="text" id="cust-name" placeholder="Full Name" required>
+
+
+            <div
+                id="wishlist-items"
+                class="wishlist-items-container">
+
+                <p class="no-history-msg">
+                    No favorite dishes added yet!
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ============================= -->
+    <!-- DASHBOARD MODAL -->
+    <!-- ============================= -->
+
+    <div
+        id="dashboard-modal"
+        class="modal">
+
+        <div
+            class="modal-content dashboard-content">
+
+            <span
+                class="close-btn"
+                onclick="closeDashboardModal()">
+
+                &times;
+
+            </span>
+
+
+            <div class="auth-header">
+
+                <i class="fa-solid fa-user-gear"></i>
+
+                <h3>
+                    User VIP Dashboard
+                </h3>
+
+                <p>
+                    Manage your account settings
+                    & saved preferences
+                </p>
+
+            </div>
+
+
+            <div class="dashboard-body">
+
+
+                <div class="dash-card">
+
+                    <h4>
+                        <i class="fa-solid fa-id-card"></i>
+                        Account Information
+                    </h4>
+
+                    <p>
+                        <strong>Name:</strong>
+                        <span id="dash-user-name">
+                            Hafiz Shaheer
+                        </span>
+                    </p>
+
+                    <p>
+                        <strong>Email:</strong>
+                        <span id="dash-user-email">
+                            shaheer@foodieexpress.com
+                        </span>
+                    </p>
+
+                    <p>
+                        <strong>Loyalty Balance:</strong>
+                        <span id="dash-user-coins">
+                            150
+                        </span>
+                        Coins
+                    </p>
+
                 </div>
-                <div class="input-group">
-                    <i class="fa-solid fa-phone"></i>
-                    <input type="tel" id="cust-phone" placeholder="Phone Number" required>
+
+
+                <div class="dash-card">
+
+                    <h4>
+                        <i class="fa-solid fa-location-dot"></i>
+                        Saved Delivery Addresses
+                    </h4>
+
+                    <p id="dash-saved-address">
+                        No custom address saved yet.
+                    </p>
+
                 </div>
-                <div class="input-group address-group">
-                    <i class="fa-solid fa-location-dot"></i>
-                    <input type="text" id="cust-address" placeholder="Complete Delivery Address" required>
-                    <button type="button" onclick="detectUserLocation()" class="gps-btn" title="Detect GPS Location">
-                        <i class="fa-solid fa-location-crosshairs"></i>
+
+
+                <button
+                    onclick="handleLogout()"
+                    class="btn-primary auth-submit logout-btn">
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                    Logout Account
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ============================= -->
+    <!-- AUTH MODAL -->
+    <!-- ============================= -->
+
+    <div
+        id="auth-modal"
+        class="modal">
+
+        <div class="modal-content">
+
+            <span
+                class="close-btn"
+                onclick="closeAuthModal()">
+
+                &times;
+
+            </span>
+
+
+            <!-- LOGIN -->
+
+            <div
+                id="login-screen"
+                class="auth-screen">
+
+                <div class="auth-header">
+
+                    <i class="fa-solid fa-circle-user"></i>
+
+                    <h3>
+                        Welcome Back
+                    </h3>
+
+                    <p>
+                        Sign in to your VIP account
+                    </p>
+
+                </div>
+
+
+                <form
+                    id="login-form"
+                    onsubmit="handleAuth(event, 'login')">
+
+
+                    <div class="input-group">
+
+                        <i class="fa-solid fa-envelope"></i>
+
+                        <input
+                            type="email"
+                            id="login-email"
+                            placeholder="Email Address"
+                            required>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <i class="fa-solid fa-lock"></i>
+
+                        <input
+                            type="password"
+                            id="login-pass"
+                            placeholder="Password"
+                            required>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="btn-primary auth-submit">
+
+                        Login Now
+
                     </button>
+
+                </form>
+
+
+                <p class="auth-switch">
+
+                    Don't have an account?
+
+                    <a
+                        href="#"
+                        onclick="switchAuthScreen('signup')">
+
+                        Sign Up here
+
+                    </a>
+
+                </p>
+
+            </div>
+
+
+
+            <!-- SIGNUP -->
+
+            <div
+                id="signup-screen"
+                class="auth-screen hidden">
+
+                <div class="auth-header">
+
+                    <i class="fa-solid fa-user-plus"></i>
+
+                    <h3>
+                        Create An Account
+                    </h3>
+
+                    <p>
+                        Join Foodie Express luxury family today
+                    </p>
+
                 </div>
+
+
+                <form
+                    id="signup-form"
+                    onsubmit="handleAuth(event, 'signup')">
+
+
+                    <div class="input-group">
+
+                        <i class="fa-solid fa-user"></i>
+
+                        <input
+                            type="text"
+                            id="signup-name"
+                            placeholder="Full Name"
+                            required>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <i class="fa-solid fa-envelope"></i>
+
+                        <input
+                            type="email"
+                            id="signup-email"
+                            placeholder="Email Address"
+                            required>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <i class="fa-solid fa-lock"></i>
+
+                        <input
+                            type="password"
+                            id="signup-pass"
+                            placeholder="Password"
+                            required>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <i class="fa-solid fa-shield-halved"></i>
+
+                        <input
+                            type="password"
+                            id="signup-confirm"
+                            placeholder="Confirm Password"
+                            required>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="btn-primary auth-submit">
+
+                        Register Account
+
+                    </button>
+
+                </form>
+
+
+                <p class="auth-switch">
+
+                    Already have an account?
+
+                    <a
+                        href="#"
+                        onclick="switchAuthScreen('login')">
+
+                        Login here
+
+                    </a>
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ============================= -->
+    <!-- CHECKOUT MODAL -->
+    <!-- ============================= -->
+
+    <div
+        id="checkout-modal"
+        class="modal">
+
+        <div class="modal-content">
+
+            <span
+                class="close-btn"
+                onclick="closeCheckoutModal()">
+
+                &times;
+
+            </span>
+
+
+            <div class="auth-header">
+
+                <i class="fa-solid fa-truck-ramp-box"></i>
+
+                <h3>
+                    Delivery Details
+                </h3>
+
+                <p>
+                    Enter your location &
+                    secure payment method
+                </p>
+
+            </div>
+
+
+            <form
+                id="checkout-form"
+                onsubmit="processOrder(event)">
+
+
                 <div class="input-group">
+
+                    <i class="fa-solid fa-user"></i>
+
+                    <input
+                        type="text"
+                        id="cust-name"
+                        placeholder="Full Name"
+                        required>
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <i class="fa-solid fa-phone"></i>
+
+                    <input
+                        type="tel"
+                        id="cust-phone"
+                        placeholder="Phone Number"
+                        required>
+
+                </div>
+
+
+                <div class="input-group address-group">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    <input
+                        type="text"
+                        id="cust-address"
+                        placeholder="Complete Delivery Address"
+                        required>
+
+
+                    <button
+                        type="button"
+                        onclick="detectUserLocation()"
+                        class="gps-btn"
+                        title="Detect GPS Location">
+
+                        <i class="fa-solid fa-location-crosshairs"></i>
+
+                    </button>
+
+                </div>
+
+
+                <div class="input-group">
+
                     <i class="fa-solid fa-credit-card"></i>
-                    <select id="payment-method" onchange="togglePaymentInfo()" required class="custom-select">
-                        <option value="">Select Payment Method</option>
-                        <option value="Cash on Delivery">Cash on Delivery (COD)</option>
-                        <option value="JazzCash / EasyPaisa">JazzCash / EasyPaisa</option>
-                        <option value="Debit / Credit Card">Debit / Credit Card</option>
+
+                    <select
+                        id="payment-method"
+                        onchange="togglePaymentInfo()"
+                        required
+                        class="custom-select">
+
+                        <option value="">
+                            Select Payment Method
+                        </option>
+
+                        <option value="Cash on Delivery">
+                            Cash on Delivery (COD)
+                        </option>
+
+                        <option value="JazzCash / EasyPaisa">
+                            JazzCash / EasyPaisa
+                        </option>
+
+                        <option value="Debit / Credit Card">
+                            Debit / Credit Card
+                        </option>
+
                     </select>
+
                 </div>
 
-                <div id="online-payment-details" class="online-payment-box" style="display: none;">
-                    <p class="payment-title"><i class="fa-solid fa-circle-info"></i> Account Details for Online Payment:</p>
-                    <p><strong>JazzCash / EasyPaisa:</strong> 0331-2969666</p>
-                    <p><strong>Account Title:</strong> Foodie Express / Hafiz Shaheer</p>
-                    <p class="payment-note">* Order confirm karne ke baad payment screen-shot WhatsApp par send karein.</p>
+
+                <!-- Online Payment -->
+
+                <div
+                    id="online-payment-details"
+                    class="online-payment-box">
+
+                    <p class="payment-title">
+
+                        <i class="fa-solid fa-circle-info"></i>
+
+                        Account Details for Online Payment:
+
+                    </p>
+
+                    <p>
+                        <strong>
+                            JazzCash / EasyPaisa:
+                        </strong>
+                        0331-2969666
+                    </p>
+
+                    <p>
+                        <strong>
+                            Account Title:
+                        </strong>
+                        Foodie Express / Hafiz Shaheer
+                    </p>
+
+                    <p class="payment-note">
+
+                        * Order confirm karne ke baad
+                        payment screen-shot WhatsApp par send karein.
+
+                    </p>
+
                 </div>
 
-                <button type="submit" class="btn-primary auth-submit">Confirm & Place Order</button>
+
+                <button
+                    type="submit"
+                    class="btn-primary auth-submit">
+
+                    Confirm & Place Order
+
+                </button>
+
             </form>
+
         </div>
+
     </div>
 
-    <!-- Floating Live Chatbot Widget -->
+
+
+    <!-- ============================= -->
+    <!-- CHATBOT -->
+    <!-- ============================= -->
+
     <div class="chatbot-container">
-        <div id="chat-window" class="chat-window hidden">
+
+
+        <div
+            id="chat-window"
+            class="chat-window hidden">
+
+
             <div class="chat-header">
-                <span><i class="fa-solid fa-headset"></i> Foodie Concierge AI</span>
-                <span onclick="toggleChatbot()" style="cursor: pointer;">&times;</span>
+
+                <span>
+
+                    <i class="fa-solid fa-headset"></i>
+
+                    Foodie Concierge AI
+
+                </span>
+
+
+                <span
+                    onclick="toggleChatbot()"
+                    class="chat-close">
+
+                    &times;
+
+                </span>
+
             </div>
-            <div id="chat-messages" class="chat-messages">
-                <div class="chat-msg bot">Hello! Welcome to Foodie Express. How can I help you with your order today?</div>
+
+
+            <div
+                id="chat-messages"
+                class="chat-messages">
+
+                <div class="chat-msg bot">
+
+                    Hello! Welcome to Foodie Express.
+                    How can I help you with your order today?
+
+                </div>
+
             </div>
+
+
             <div class="chat-input-area">
-                <input type="text" id="chat-input" placeholder="Type a message..." onkeypress="handleChatKeyPress(event)">
-                <button onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+
+                <input
+                    type="text"
+                    id="chat-input"
+                    placeholder="Type a message..."
+                    onkeypress="handleChatKeyPress(event)">
+
+
+                <button
+                    onclick="sendChatMessage()"
+                    title="Send Message">
+
+                    <i class="fa-solid fa-paper-plane"></i>
+
+                </button>
+
             </div>
+
         </div>
-        <button class="chat-toggle-btn" onclick="toggleChatbot()" title="Open Live Support">
+
+
+        <button
+            class="chat-toggle-btn"
+            onclick="toggleChatbot()"
+            title="Open Live Support">
+
             <i class="fa-solid fa-comments"></i>
+
         </button>
+
     </div>
 
-    <!-- Mobile Floating Cart Button -->
-    <div class="floating-cart-btn" onclick="toggleCart()" title="View Cart">
+
+
+    <!-- ============================= -->
+    <!-- FLOATING CART -->
+    <!-- ============================= -->
+
+    <div
+        class="floating-cart-btn"
+        onclick="toggleCart()"
+        title="View Cart">
+
         <i class="fa-solid fa-bag-shopping"></i>
-        <span class="floating-cart-badge" id="floating-cart-count">0</span>
+
+        <span
+            class="floating-cart-badge"
+            id="floating-cart-count">
+
+            0
+
+        </span>
+
     </div>
 
-    <!-- Custom Script -->
+
+
+    <!-- ============================= -->
+    <!-- JAVASCRIPT -->
+    <!-- ============================= -->
+
     <script src="script.js"></script>
+
 </body>
 </html>
