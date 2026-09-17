@@ -1,21 +1,26 @@
 <!DOCTYPE html>
-<html lang="en" id="html-root">
+<html lang="en" id="html-root" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Foodie Express | Elite Flavors & Gourmet Express</title>
+    <title>Foodie Express | Luxury Gourmet & Fast Food</title>
 
-    <meta
-        name="description"
-        content="Foodie Express - Fast food, desi cuisine, BBQ, drinks and gourmet food delivered to your door."
-    >
+    <meta name="description"
+        content="Foodie Express - Elite flavors, fast food, desi cuisine, BBQ, drinks and gourmet meals delivered to your door.">
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
     <!-- Font Awesome -->
     <link
         rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    >
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Main CSS -->
     <link rel="stylesheet" href="style.css">
@@ -23,1562 +28,752 @@
 
 <body>
 
-<!-- =========================
-     HEADER
-========================= -->
-<header class="navbar">
+    <!-- =========================================================
+         HEADER / NAVBAR
+    ========================================================== -->
+    <header class="navbar">
 
-    <a href="#home" class="logo">
-        <i class="fa-solid fa-utensils"></i>
-        <span>Foodie<span>Express</span></span>
-    </a>
-
-    <nav class="nav-links">
-
-        <a href="#home">
-            <i class="fa-solid fa-house"></i>
-            Home
-        </a>
-
-        <a href="#features">
-            Features
-        </a>
-
-        <a href="#menu">
-            Menu
-        </a>
-
-        <a href="#ai-matchmaker">
-            AI Matchmaker
-        </a>
-
-        <a href="#table-reservation">
-            Reservation
-        </a>
-
-        <a href="#order-history">
-            Orders
-        </a>
-
-        <a href="#reviews">
-            Reviews
-        </a>
-
-    </nav>
-
-    <div class="nav-actions">
-
-        <!-- Language -->
-        <select
-            id="language-selector"
-            class="currency-dropdown"
-            onchange="changeLanguage()"
-            aria-label="Language"
-        >
-            <option value="en">EN</option>
-            <option value="ur">UR</option>
-        </select>
-
-        <!-- Currency -->
-        <select
-            id="currency-selector"
-            class="currency-dropdown"
-            onchange="changeCurrency()"
-            aria-label="Currency"
-        >
-            <option value="PKR">PKR</option>
-            <option value="USD">USD</option>
-            <option value="EUR">EUR</option>
-        </select>
-
-        <!-- Loyalty -->
-        <div class="loyalty-badge" title="Loyalty Coins">
-            <i class="fa-solid fa-coins"></i>
-            <span id="coin-count">150</span>
+        <div class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+            <i class="fa-solid fa-utensils"></i>
+            <span>Foodie <b>Express</b></span>
         </div>
 
-        <!-- Wishlist -->
-        <button
-            class="cart-icon wishlist-nav-icon"
-            onclick="toggleWishlistModal()"
-            aria-label="Wishlist"
-        >
-            <i class="fa-solid fa-heart"></i>
-            <span id="wishlist-count">0</span>
-        </button>
-
-        <!-- Dashboard -->
-        <button
-            id="dashboard-btn"
-            class="nav-btn btn-dashboard hidden"
-            onclick="openDashboardModal()"
-        >
-            <i class="fa-solid fa-user"></i>
-            Dashboard
-        </button>
-
-        <!-- Dark Mode -->
-        <button
-            id="theme-btn"
-            class="theme-btn"
-            onclick="toggleDarkMode()"
-            aria-label="Toggle dark mode"
-        >
-            <i
-                id="theme-icon"
-                class="fa-solid fa-moon"
-            ></i>
-        </button>
-
-        <!-- Login -->
-        <button
-            class="nav-btn btn-login"
-            onclick="openAuthModal('login')"
-        >
-            Login
-        </button>
-
-        <!-- Signup -->
-        <button
-            class="nav-btn btn-signup"
-            onclick="openAuthModal('signup')"
-        >
-            Sign Up
-        </button>
-
-        <!-- Cart -->
-        <button
-            class="cart-icon"
-            onclick="toggleCart()"
-            aria-label="Shopping Cart"
-        >
-            <i class="fa-solid fa-cart-shopping"></i>
-            <span id="cart-count">0</span>
-        </button>
-
-    </div>
-
-</header>
-
-
-<!-- =========================
-     MAIN
-========================= -->
-<main>
-
-    <!-- =========================
-         HERO
-    ========================= -->
-    <section id="home" class="hero">
-
-        <div class="hero-overlay"></div>
-
-        <div class="hero-content">
-
-            <div class="badge">
-                <i class="fa-solid fa-crown"></i>
-                PREMIUM FOOD DELIVERY
-            </div>
-
-            <h1>
-                Elite Flavors &
-                <span>Gourmet Express</span>
-            </h1>
-
-            <p>
-                Experience the finest fast food, desi cuisine,
-                and BBQ delivered straight to your door.
-            </p>
-
-            <div class="hero-btns">
-
-                <a
-                    href="#menu"
-                    class="hero-btn primary"
-                >
-                    <i class="fa-solid fa-utensils"></i>
-                    Explore Menu
-                </a>
-
-                <a
-                    href="#tracking-section"
-                    class="hero-btn secondary"
-                >
-                    <i class="fa-solid fa-location-dot"></i>
-                    Track Active Order
-                </a>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         FEATURES
-    ========================= -->
-    <section
-        id="features"
-        class="features-section"
-    >
-
-        <div class="section-header">
-
-            <span class="section-tag">
-                WHY FOODIE EXPRESS
-            </span>
-
-            <h2>
-                Premium Food.
-                <span>Fast Delivery.</span>
-            </h2>
-
-            <p>
-                Everything you need for an amazing food experience.
-            </p>
-
-        </div>
-
-        <div class="features-grid">
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fa-solid fa-bolt"></i>
-                </div>
-
-                <h3>Fast Delivery</h3>
-
-                <p>
-                    Fresh food delivered quickly
-                    while maintaining quality.
-                </p>
-            </div>
-
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fa-solid fa-star"></i>
-                </div>
-
-                <h3>Elite Quality</h3>
-
-                <p>
-                    Carefully selected dishes
-                    prepared with premium ingredients.
-                </p>
-            </div>
-
-
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <i class="fa-solid fa-headset"></i>
-                </div>
-
-                <h3>24/7 Support</h3>
-
-                <p>
-                    Our support chatbot is available
-                    whenever you need assistance.
-                </p>
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         MENU
-    ========================= -->
-    <section
-        id="menu"
-        class="menu-section"
-    >
-
-        <div class="section-header">
-
-            <span class="section-tag">
-                OUR MENU
-            </span>
-
-            <h2>
-                Explore Our
-                <span>Elite Delicacies</span>
-            </h2>
-
-            <p>
-                Choose your favorite food and add it to your bag.
-            </p>
-
-        </div>
-
-
-        <!-- SEARCH -->
-        <div class="search-container">
-
-            <i class="fa-solid fa-magnifying-glass search-icon"></i>
-
-            <input
-                type="text"
-                id="search-input"
-                placeholder="Search burgers, biryani, BBQ, drinks..."
-                onkeyup="searchMenu()"
-                autocomplete="off"
-            >
-
-            <button
-                class="voice-search-btn"
-                onclick="startVoiceSearch()"
-                title="Voice Search"
-                aria-label="Voice Search"
-            >
-                <i class="fa-solid fa-microphone"></i>
-            </button>
-
-        </div>
-
-
-        <!-- CATEGORIES -->
-        <div class="category-filters">
-
-            <button
-                class="filter-btn active"
-                onclick="filterMenu('All', event)"
-            >
-                <i class="fa-solid fa-border-all"></i>
-                All Delicacies
-            </button>
-
-            <button
-                class="filter-btn"
-                onclick="filterMenu('Fast Food', event)"
-            >
-                <i class="fa-solid fa-burger"></i>
-                Fast Food
-            </button>
-
-            <button
-                class="filter-btn"
-                onclick="filterMenu('Desi', event)"
-            >
-                <i class="fa-solid fa-bowl-food"></i>
-                Desi Cuisine
-            </button>
-
-            <button
-                class="filter-btn"
-                onclick="filterMenu('BBQ', event)"
-            >
-                <i class="fa-solid fa-fire"></i>
-                BBQ & Grills
-            </button>
-
-            <button
-                class="filter-btn"
-                onclick="filterMenu('Drinks', event)"
-            >
-                <i class="fa-solid fa-glass-water"></i>
-                Drinks & Shakes
-            </button>
-
-        </div>
-
-
-        <!-- FOOD CARDS -->
-        <div
-            id="menu-container"
-            class="menu-grid"
-        ></div>
-
-    </section>
-
-
-    <!-- =========================
-         AI MATCHMAKER
-    ========================= -->
-    <section
-        id="ai-matchmaker"
-        class="ai-section"
-    >
-
-        <div class="section-header">
-
-            <span class="section-tag">
-                AI FOOD MATCHMAKER
-            </span>
-
-            <h2>
-                Let AI Find Your
-                <span>Perfect Dish</span>
-            </h2>
-
-            <p>
-                Tell us your mood and discover something delicious.
-            </p>
-
-        </div>
-
-
-        <div class="ai-panel">
-
-            <h3>
-                <i class="fa-solid fa-wand-magic-sparkles"></i>
-                What's your mood?
-            </h3>
-
-            <div
-                id="mood-chips"
-                class="ai-chips"
-            >
-
-                <button class="ai-chip" type="button">
-                    Hungry
-                </button>
-
-                <button class="ai-chip" type="button">
-                    Happy
-                </button>
-
-                <button class="ai-chip" type="button">
-                    Spicy
-                </button>
-
-                <button class="ai-chip" type="button">
-                    Relaxed
-                </button>
-
-                <button class="ai-chip" type="button">
-                    Adventurous
-                </button>
-
-            </div>
-
-
-            <h3>
-                <i class="fa-solid fa-calendar-star"></i>
-                What's the occasion?
-            </h3>
-
-            <div
-                id="occasion-chips"
-                class="ai-chips"
-            >
-
-                <button class="ai-chip" type="button">
-                    Normal Meal
-                </button>
-
-                <button class="ai-chip" type="button">
-                    Family
-                </button>
-
-                <button class="ai-chip" type="button">
-                    Friends
-                </button>
-
-                <button class="ai-chip" type="button">
-                    Party
-                </button>
-
-                <button class="ai-chip" type="button">
-                    Date
-                </button>
-
-            </div>
-
-
-            <button
-                id="ai-find-btn"
-                class="ai-find-btn"
-                type="button"
-            >
-                <i class="fa-solid fa-wand-magic-sparkles"></i>
-                Find My Perfect Dish
-            </button>
-
-        </div>
-
-
-        <div
-            id="ai-result-box"
-            class="ai-result-box hidden"
-        >
-
-            <h3>
-                Your AI Recommendation
-            </h3>
-
-            <div
-                id="ai-recommended-items"
-                class="ai-recommended-items"
-            ></div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         RESERVATION
-    ========================= -->
-    <section
-        id="table-reservation"
-        class="reservation-section"
-    >
-
-        <div class="section-header">
-
-            <span class="section-tag">
-                VIP EXPERIENCE
-            </span>
-
-            <h2>
-                Reserve Your
-                <span>Table</span>
-            </h2>
-
-            <p>
-                Planning a special meal? Reserve your table in advance.
-            </p>
-
-        </div>
-
-
-        <form
-            id="reservation-form"
-            class="reservation-form"
-            onsubmit="handleTableReservation(event)"
-        >
-
-            <div class="form-grid">
-
-                <div class="form-group">
-                    <label for="res-name">
-                        Full Name
-                    </label>
-
-                    <input
-                        type="text"
-                        id="res-name"
-                        required
-                        placeholder="Your name"
-                    >
-                </div>
-
-
-                <div class="form-group">
-                    <label for="res-phone">
-                        Phone Number
-                    </label>
-
-                    <input
-                        type="tel"
-                        id="res-phone"
-                        required
-                        placeholder="03XX XXXXXXX"
-                    >
-                </div>
-
-
-                <div class="form-group">
-                    <label for="res-guests">
-                        Guests
-                    </label>
-
-                    <input
-                        type="number"
-                        id="res-guests"
-                        min="1"
-                        max="30"
-                        required
-                        placeholder="2"
-                    >
-                </div>
-
-
-                <div class="form-group">
-                    <label for="res-date">
-                        Date
-                    </label>
-
-                    <input
-                        type="date"
-                        id="res-date"
-                        required
-                    >
-                </div>
-
-
-                <div class="form-group">
-                    <label for="res-time">
-                        Time
-                    </label>
-
-                    <input
-                        type="time"
-                        id="res-time"
-                        required
-                    >
-                </div>
-
-            </div>
-
-
-            <button
-                class="btn-primary reservation-btn"
-                type="submit"
-            >
-                <i class="fa-solid fa-calendar-check"></i>
-                Reserve VIP Table
-            </button>
-
-        </form>
-
-    </section>
-
-
-    <!-- =========================
-         TRACKING
-    ========================= -->
-    <section
-        id="tracking-section"
-        class="tracking-section hidden"
-    >
-
-        <div class="section-header">
-
-            <span class="section-tag">
-                LIVE TRACKING
-            </span>
-
-            <h2>
-                Track Your
-                <span>Order</span>
-            </h2>
-
-        </div>
-
-
-        <div class="tracking-box">
-
-            <div class="status-stepper">
-
-                <div
-                    class="step"
-                    id="step-1"
-                >
-                    <div class="step-icon">
-                        <i class="fa-solid fa-receipt"></i>
-                    </div>
-
-                    <span>Order Received</span>
-                </div>
-
-
-                <div
-                    class="step"
-                    id="step-2"
-                >
-                    <div class="step-icon">
-                        <i class="fa-solid fa-kitchen-set"></i>
-                    </div>
-
-                    <span>Preparing</span>
-                </div>
-
-
-                <div
-                    class="step"
-                    id="step-3"
-                >
-                    <div class="step-icon">
-                        <i class="fa-solid fa-motorcycle"></i>
-                    </div>
-
-                    <span>On The Way</span>
-                </div>
-
-
-                <div
-                    class="step"
-                    id="step-4"
-                >
-                    <div class="step-icon">
-                        <i class="fa-solid fa-house"></i>
-                    </div>
-
-                    <span>Delivered</span>
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =========================
-         ORDER HISTORY
-    ========================= -->
-    <section
-        id="order-history"
-        class="features-section history-section"
-    >
-
-        <div class="section-header">
-
-            <span class="section-tag">
-                MY ORDERS
-            </span>
-
-            <h2>
-                Order
-                <span>History</span>
-            </h2>
-
-        </div>
-
-        <div
-            id="history-container"
-            class="history-container"
-        ></div>
-
-    </section>
-
-
-    <!-- =========================
-         REVIEWS
-    ========================= -->
-    <section
-        id="reviews"
-        class="reviews-section"
-    >
-
-        <div class="section-header">
-
-            <span class="section-tag">
-                CUSTOMER LOVE
-            </span>
-
-            <h2>
-                What Our
-                <span>Customers Say</span>
-            </h2>
-
-        </div>
-
-
-        <div class="reviews-grid">
-
-            <div class="review-card">
-
-                <div class="review-stars">
-                    ★★★★★
-                </div>
-
-                <p>
-                    "The burgers were fresh, hot and
-                    absolutely delicious. Delivery was
-                    also very quick!"
-                </p>
-
-                <h4>
-                    Ahmed
-                </h4>
-
-                <span>
-                    Verified Customer
-                </span>
-
-            </div>
-
-
-            <div class="review-card">
-
-                <div class="review-stars">
-                    ★★★★★
-                </div>
-
-                <p>
-                    "Loved the biryani and BBQ platter.
-                    Foodie Express has become my favorite
-                    food website."
-                </p>
-
-                <h4>
-                    Ayesha
-                </h4>
-
-                <span>
-                    Verified Customer
-                </span>
-
-            </div>
-
-        </div>
-
-    </section>
-
-</main>
-
-
-<!-- =========================
-     FOOTER
-========================= -->
-<footer>
-
-    <div class="footer-container">
-
-        <div class="footer-col">
-
-            <a href="#home" class="logo footer-logo">
-                <i class="fa-solid fa-utensils"></i>
-                <span>
-                    Foodie<span>Express</span>
-                </span>
-            </a>
-
-            <p>
-                Elite flavors, gourmet meals and
-                fast delivery — all in one place.
-            </p>
-
-            <div class="social-links">
-
-                <a href="#" aria-label="Facebook">
-                    <i class="fa-brands fa-facebook-f"></i>
-                </a>
-
-                <a href="#" aria-label="Instagram">
-                    <i class="fa-brands fa-instagram"></i>
-                </a>
-
-                <a href="#" aria-label="TikTok">
-                    <i class="fa-brands fa-tiktok"></i>
-                </a>
-
-                <a href="#" aria-label="WhatsApp">
-                    <i class="fa-brands fa-whatsapp"></i>
-                </a>
-
-            </div>
-
-        </div>
-
-
-        <div class="footer-col">
-
-            <h3>Quick Links</h3>
-
+        <nav class="nav-links">
             <a href="#home">Home</a>
             <a href="#menu">Menu</a>
-            <a href="#ai-matchmaker">AI Matchmaker</a>
-            <a href="#table-reservation">Reservation</a>
-            <a href="#order-history">Orders</a>
+            <a href="#features">Features</a>
+            <a href="#reviews">Reviews</a>
+            <a href="#reservation">Reservation</a>
+        </nav>
 
-        </div>
+        <div class="nav-actions">
 
-
-        <div class="footer-col">
-
-            <h3>Categories</h3>
-
-            <a href="#menu">Fast Food</a>
-            <a href="#menu">Desi Cuisine</a>
-            <a href="#menu">BBQ & Grills</a>
-            <a href="#menu">Drinks & Shakes</a>
-
-        </div>
-
-
-        <div class="footer-col">
-
-            <h3>Contact</h3>
-
-            <p>
-                <i class="fa-solid fa-location-dot"></i>
-                Pakistan
-            </p>
-
-            <p>
-                <i class="fa-solid fa-phone"></i>
-                +92 331 2969666
-            </p>
-
-            <p>
-                <i class="fa-solid fa-envelope"></i>
-                support@foodieexpress.com
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <div class="footer-bottom">
-
-        <p>
-            © 2026 Foodie Express.
-            All Rights Reserved.
-        </p>
-
-        <p>
-            Made with ❤️ for food lovers.
-        </p>
-
-    </div>
-
-</footer>
-
-
-<!-- =========================
-     CART SIDEBAR
-========================= -->
-<aside
-    id="cart-sidebar"
-    class="cart-sidebar"
->
-
-    <div class="cart-header">
-
-        <div>
-            <span class="small-label">
-                YOUR BAG
-            </span>
-
-            <h3>
-                Shopping Cart
-            </h3>
-        </div>
-
-        <button
-            class="close-btn"
-            onclick="toggleCart()"
-            aria-label="Close Cart"
-        >
-            <i class="fa-solid fa-xmark"></i>
-        </button>
-
-    </div>
-
-
-    <div
-        id="cart-items"
-        class="cart-items"
-    ></div>
-
-
-    <div class="cart-footer">
-
-        <div class="coupon-box">
-
-            <input
-                type="text"
-                id="coupon-code"
-                placeholder="Promo code"
-            >
-
+            <!-- Dark Mode -->
             <button
-                onclick="applyCoupon()"
-                type="button"
-            >
-                Apply
+                class="icon-btn"
+                id="dark-mode-btn"
+                onclick="toggleDarkMode()"
+                title="Toggle Dark Mode">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+
+            <!-- Currency -->
+            <select
+                id="currency-selector"
+                class="small-select"
+                onchange="changeCurrency(this.value)"
+                title="Currency">
+                <option value="PKR">PKR</option>
+                <option value="USD">USD</option>
+                <option value="GBP">GBP</option>
+                <option value="AED">AED</option>
+            </select>
+
+            <!-- Language -->
+            <select
+                id="language-selector"
+                class="small-select"
+                onchange="changeLanguage(this.value)"
+                title="Language">
+                <option value="en">EN</option>
+                <option value="ur">UR</option>
+            </select>
+
+            <!-- Wishlist -->
+            <button
+                class="icon-btn badge-btn"
+                onclick="toggleWishlistModal()"
+                title="Wishlist">
+                <i class="fa-solid fa-heart"></i>
+                <span id="wishlist-count" class="badge">0</span>
+            </button>
+
+            <!-- Dashboard -->
+            <button
+                class="icon-btn"
+                onclick="openDashboardModal()"
+                title="Dashboard">
+                <i class="fa-solid fa-user"></i>
+            </button>
+
+            <!-- Login -->
+            <button
+                class="login-btn"
+                onclick="openAuthModal()">
+                <i class="fa-solid fa-right-to-bracket"></i>
+                Login
             </button>
 
         </div>
 
+    </header>
 
-        <p
-            id="discount-msg"
-            class="discount-msg"
-        ></p>
 
+    <!-- =========================================================
+         HOME / HERO
+    ========================================================== -->
+    <main>
 
-        <div class="cart-total-row">
+        <section id="home" class="hero">
 
-            <span>
-                Total
-            </span>
+            <div class="hero-image"></div>
 
-            <strong id="cart-total">
-                Rs. 0
-            </strong>
+            <div class="hero-overlay"></div>
 
-        </div>
+            <div class="hero-content">
 
+                <span class="hero-badge">
+                    <i class="fa-solid fa-crown"></i>
+                    Premium Food Delivery
+                </span>
 
-        <button
-            class="checkout-btn"
-            onclick="checkout()"
-            type="button"
-        >
-            <i class="fa-solid fa-lock"></i>
-            Proceed to Checkout
-        </button>
+                <h1>
+                    Elite Flavors &amp;
+                    <span>Gourmet Express</span>
+                </h1>
 
-    </div>
+                <p>
+                    Experience the finest fast food, desi cuisine,
+                    and BBQ delivered straight to your door.
+                </p>
 
-</aside>
+                <!-- Search -->
+                <div class="search-box">
 
-
-<!-- =========================
-     WISHLIST MODAL
-========================= -->
-<div
-    id="wishlist-modal"
-    class="modal"
->
-
-    <div class="modal-content">
-
-        <button
-            class="close-btn modal-close"
-            onclick="toggleWishlistModal()"
-            aria-label="Close Wishlist"
-        >
-            <i class="fa-solid fa-xmark"></i>
-        </button>
-
-        <div class="modal-heading">
-
-            <i class="fa-solid fa-heart"></i>
-
-            <h2>
-                My Wishlist
-            </h2>
-
-            <p>
-                Your favorite dishes.
-            </p>
-
-        </div>
-
-
-        <div
-            id="wishlist-items"
-            class="wishlist-items-container"
-        ></div>
-
-    </div>
-
-</div>
-
-
-<!-- =========================
-     DASHBOARD MODAL
-========================= -->
-<div
-    id="dashboard-modal"
-    class="modal"
->
-
-    <div class="modal-content dashboard-content">
-
-        <button
-            class="close-btn modal-close"
-            onclick="closeDashboardModal()"
-            aria-label="Close Dashboard"
-        >
-            <i class="fa-solid fa-xmark"></i>
-        </button>
-
-        <div class="dashboard-avatar">
-            <i class="fa-solid fa-user"></i>
-        </div>
-
-        <h2>
-            My Dashboard
-        </h2>
-
-        <div class="dashboard-info">
-
-            <div class="dashboard-row">
-                <span>Name</span>
-                <strong id="dash-user-name">
-                    Foodie User
-                </strong>
-            </div>
-
-            <div class="dashboard-row">
-                <span>Email</span>
-                <strong id="dash-user-email">
-                    Not provided
-                </strong>
-            </div>
-
-            <div class="dashboard-row">
-                <span>Loyalty Coins</span>
-                <strong>
-                    <i class="fa-solid fa-coins"></i>
-                    <span id="dash-user-coins">
-                        150
-                    </span>
-                </strong>
-            </div>
-
-            <div class="dashboard-row">
-                <span>Saved Address</span>
-                <strong id="dash-saved-address">
-                    Not saved
-                </strong>
-            </div>
-
-        </div>
-
-
-        <button
-            class="btn-danger logout-btn"
-            onclick="handleLogout()"
-            type="button"
-        >
-            <i class="fa-solid fa-right-from-bracket"></i>
-            Logout
-        </button>
-
-    </div>
-
-</div>
-
-
-<!-- =========================
-     AUTH MODAL
-========================= -->
-<div
-    id="auth-modal"
-    class="modal"
->
-
-    <div class="modal-content auth-content">
-
-        <button
-            class="close-btn modal-close"
-            onclick="closeAuthModal()"
-            aria-label="Close"
-        >
-            <i class="fa-solid fa-xmark"></i>
-        </button>
-
-
-        <!-- LOGIN -->
-        <div id="login-screen">
-
-            <div class="auth-icon">
-                <i class="fa-solid fa-right-to-bracket"></i>
-            </div>
-
-            <h2>
-                Welcome Back
-            </h2>
-
-            <p>
-                Login to your Foodie Express account.
-            </p>
-
-
-            <form
-                id="login-form"
-                onsubmit="handleAuth(event, 'login')"
-            >
-
-                <div class="form-group">
-
-                    <label for="login-email">
-                        Email
-                    </label>
-
-                    <input
-                        type="email"
-                        id="login-email"
-                        required
-                        placeholder="you@example.com"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="login-pass">
-                        Password
-                    </label>
-
-                    <input
-                        type="password"
-                        id="login-pass"
-                        required
-                        placeholder="••••••••"
-                    >
-
-                </div>
-
-
-                <button
-                    class="btn-primary full-btn"
-                    type="submit"
-                >
-                    Login
-                </button>
-
-            </form>
-
-
-            <p class="auth-switch">
-                Don't have an account?
-                <button
-                    type="button"
-                    onclick="switchAuthScreen('signup')"
-                >
-                    Create Account
-                </button>
-            </p>
-
-        </div>
-
-
-        <!-- SIGNUP -->
-        <div
-            id="signup-screen"
-            class="hidden"
-        >
-
-            <div class="auth-icon">
-                <i class="fa-solid fa-user-plus"></i>
-            </div>
-
-            <h2>
-                Create Account
-            </h2>
-
-            <p>
-                Join Foodie Express today.
-            </p>
-
-
-            <form
-                id="signup-form"
-                onsubmit="handleAuth(event, 'signup')"
-            >
-
-                <div class="form-group">
-
-                    <label for="signup-name">
-                        Full Name
-                    </label>
+                    <i class="fa-solid fa-magnifying-glass"></i>
 
                     <input
                         type="text"
-                        id="signup-name"
-                        required
-                        placeholder="Your name"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="signup-email">
-                        Email
-                    </label>
-
-                    <input
-                        type="email"
-                        id="signup-email"
-                        required
-                        placeholder="you@example.com"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="signup-pass">
-                        Password
-                    </label>
-
-                    <input
-                        type="password"
-                        id="signup-pass"
-                        required
-                        placeholder="Create password"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label for="signup-confirm">
-                        Confirm Password
-                    </label>
-
-                    <input
-                        type="password"
-                        id="signup-confirm"
-                        required
-                        placeholder="Confirm password"
-                    >
-
-                </div>
-
-
-                <button
-                    class="btn-primary full-btn"
-                    type="submit"
-                >
-                    Create Account
-                </button>
-
-            </form>
-
-
-            <p class="auth-switch">
-                Already have an account?
-                <button
-                    type="button"
-                    onclick="switchAuthScreen('login')"
-                >
-                    Login
-                </button>
-            </p>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- =========================
-     CHECKOUT MODAL
-========================= -->
-<div
-    id="checkout-modal"
-    class="modal"
->
-
-    <div class="modal-content checkout-content">
-
-        <button
-            class="close-btn modal-close"
-            onclick="closeCheckoutModal()"
-            aria-label="Close Checkout"
-        >
-            <i class="fa-solid fa-xmark"></i>
-        </button>
-
-        <div class="modal-heading">
-
-            <i class="fa-solid fa-bag-shopping"></i>
-
-            <h2>
-                Checkout
-            </h2>
-
-            <p>
-                Enter your delivery information.
-            </p>
-
-        </div>
-
-
-        <form
-            id="checkout-form"
-            onsubmit="processOrder(event)"
-        >
-
-            <div class="form-group">
-
-                <label for="cust-name">
-                    Full Name
-                </label>
-
-                <input
-                    type="text"
-                    id="cust-name"
-                    required
-                    placeholder="Your full name"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label for="cust-phone">
-                    Phone Number
-                </label>
-
-                <input
-                    type="tel"
-                    id="cust-phone"
-                    required
-                    placeholder="03XX XXXXXXX"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label for="cust-address">
-                    Delivery Address
-                </label>
-
-                <div class="location-input">
-
-                    <input
-                        type="text"
-                        id="cust-address"
-                        required
-                        placeholder="Enter your complete address"
-                    >
+                        id="search-input"
+                        placeholder="Search your favorite food..."
+                        autocomplete="off"
+                        oninput="searchMenu(this.value)">
 
                     <button
                         type="button"
-                        onclick="detectUserLocation()"
-                        title="Detect location"
-                    >
-                        <i class="fa-solid fa-location-crosshairs"></i>
+                        class="voice-search-btn"
+                        onclick="startVoiceSearch()"
+                        title="Voice Search">
+                        <i class="fa-solid fa-microphone"></i>
                     </button>
 
                 </div>
 
-            </div>
+                <div class="hero-buttons">
+                    <a href="#menu" class="primary-btn">
+                        Explore Menu
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
 
-
-            <div class="form-group">
-
-                <label for="payment-method">
-                    Payment Method
-                </label>
-
-                <select
-                    id="payment-method"
-                    onchange="togglePaymentInfo()"
-                    required
-                >
-                    <option value="Cash on Delivery">
-                        Cash on Delivery
-                    </option>
-
-                    <option value="JazzCash / EasyPaisa">
-                        JazzCash / EasyPaisa
-                    </option>
-
-                    <option value="Debit / Credit Card">
-                        Debit / Credit Card
-                    </option>
-                </select>
+                    <button
+                        class="secondary-btn"
+                        onclick="detectUserLocation()">
+                        <i class="fa-solid fa-location-dot"></i>
+                        Find Near Me
+                    </button>
+                </div>
 
             </div>
 
+        </section>
 
+
+        <!-- =====================================================
+             FEATURES
+        ====================================================== -->
+        <section id="features" class="features-section">
+
+            <div class="section-heading">
+                <span>WHY FOODIE EXPRESS?</span>
+                <h2>Made For Food Lovers</h2>
+                <p>
+                    Fresh ingredients, delicious flavors and fast delivery.
+                </p>
+            </div>
+
+            <div class="features-grid">
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <h3>Fast Delivery</h3>
+                    <p>
+                        Get your favorite meals delivered quickly and safely.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-leaf"></i>
+                    </div>
+                    <h3>Fresh Ingredients</h3>
+                    <p>
+                        Quality ingredients prepared fresh for every order.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <h3>Premium Taste</h3>
+                    <p>
+                        Enjoy restaurant-style flavor from the comfort of home.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-shield-heart"></i>
+                    </div>
+                    <h3>Secure Ordering</h3>
+                    <p>
+                        Simple checkout with secure payment options.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             MENU
+        ====================================================== -->
+        <section id="menu" class="menu-section">
+
+            <div class="section-heading">
+
+                <span>OUR MENU</span>
+
+                <h2>
+                    Discover Your
+                    <span>Favorite Flavors</span>
+                </h2>
+
+                <p>
+                    Choose from our selection of delicious meals.
+                </p>
+
+            </div>
+
+
+            <!-- Category Buttons -->
+            <div class="filter-buttons">
+
+                <button
+                    class="filter-btn active"
+                    onclick="filterMenu('All', this)">
+                    <i class="fa-solid fa-border-all"></i>
+                    All Delicacies
+                </button>
+
+                <button
+                    class="filter-btn"
+                    onclick="filterMenu('Fast Food', this)">
+                    <i class="fa-solid fa-burger"></i>
+                    Fast Food
+                </button>
+
+                <button
+                    class="filter-btn"
+                    onclick="filterMenu('Desi Cuisine', this)">
+                    <i class="fa-solid fa-bowl-food"></i>
+                    Desi Cuisine
+                </button>
+
+                <button
+                    class="filter-btn"
+                    onclick="filterMenu('BBQ & Grills', this)">
+                    <i class="fa-solid fa-fire"></i>
+                    BBQ &amp; Grills
+                </button>
+
+                <button
+                    class="filter-btn"
+                    onclick="filterMenu('Drinks & Shakes', this)">
+                    <i class="fa-solid fa-mug-hot"></i>
+                    Drinks &amp; Shakes
+                </button>
+
+            </div>
+
+
+            <!-- Food Cards -->
             <div
-                id="online-payment-details"
-                class="online-payment-details"
-            >
+                id="menu-container"
+                class="menu-grid">
+            </div>
 
-                <div class="payment-notice">
 
-                    <i class="fa-solid fa-circle-info"></i>
+            <!-- No Results -->
+            <div
+                id="no-results"
+                class="no-results hidden">
+
+                <div class="no-results-icon">
+                    <i class="fa-solid fa-face-sad-tear"></i>
+                </div>
+
+                <h3>No food found</h3>
+
+                <p>
+                    Try searching for another delicious item.
+                </p>
+
+                <button
+                    class="primary-btn"
+                    onclick="document.getElementById('search-input').value=''; searchMenu('');">
+                    Show All Food
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             AI RECOMMENDER
+        ====================================================== -->
+        <section class="ai-section">
+
+            <div class="ai-card">
+
+                <div class="ai-content">
+
+                    <span class="ai-label">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        AI FOOD ASSISTANT
+                    </span>
+
+                    <h2>
+                        Not Sure What To Eat?
+                    </h2>
 
                     <p>
-                        Payment details will be confirmed
-                        with the restaurant after placing
-                        your order.
+                        Let our smart food assistant help you discover
+                        something delicious.
                     </p>
+
+                    <div class="ai-buttons">
+
+                        <button
+                            class="primary-btn"
+                            onclick="startAICallSimulation()">
+                            <i class="fa-solid fa-robot"></i>
+                            Ask AI
+                        </button>
+
+                        <button
+                            class="secondary-btn"
+                            onclick="startAIVoiceInput()">
+                            <i class="fa-solid fa-microphone"></i>
+                            AI Voice
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div class="ai-visual">
+                    <div class="ai-circle">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             RESERVATION
+        ====================================================== -->
+        <section id="reservation" class="reservation-section">
+
+            <div class="section-heading">
+
+                <span>BOOK A TABLE</span>
+
+                <h2>
+                    Reserve Your
+                    <span>Perfect Table</span>
+                </h2>
+
+                <p>
+                    Planning a special dinner? Reserve your table with us.
+                </p>
+
+            </div>
+
+            <div class="reservation-card">
+
+                <div class="reservation-info">
+
+                    <div class="reservation-icon">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+
+                    <h3>Restaurant Reservation</h3>
+
+                    <p>
+                        Choose your preferred date, time and number of guests.
+                    </p>
+
+                    <div class="reservation-contact">
+                        <div>
+                            <i class="fa-solid fa-phone"></i>
+                            <span>Quick Booking</span>
+                        </div>
+
+                        <div>
+                            <i class="fa-solid fa-clock"></i>
+                            <span>12 PM - 11 PM</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <form
+                    class="reservation-form"
+                    onsubmit="event.preventDefault(); showToast('Reservation request submitted successfully!');">
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+                            <label for="reservation-name">
+                                Your Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="reservation-name"
+                                placeholder="Enter your name"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="reservation-phone">
+                                Phone
+                            </label>
+
+                            <input
+                                type="tel"
+                                id="reservation-phone"
+                                placeholder="03XX XXXXXXX"
+                                required>
+                        </div>
+
+                    </div>
+
+                    <div class="form-row">
+
+                        <div class="form-group">
+                            <label for="reservation-date">
+                                Date
+                            </label>
+
+                            <input
+                                type="date"
+                                id="reservation-date"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="reservation-time">
+                                Time
+                            </label>
+
+                            <input
+                                type="time"
+                                id="reservation-time"
+                                required>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="reservation-guests">
+                            Guests
+                        </label>
+
+                        <select id="reservation-guests" required>
+                            <option value="">Select guests</option>
+                            <option value="1">1 Guest</option>
+                            <option value="2">2 Guests</option>
+                            <option value="3">3 Guests</option>
+                            <option value="4">4 Guests</option>
+                            <option value="5">5 Guests</option>
+                            <option value="6">6 Guests</option>
+                            <option value="7">7 Guests</option>
+                            <option value="8">8+ Guests</option>
+                        </select>
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="primary-btn full-btn">
+                        <i class="fa-solid fa-calendar-check"></i>
+                        Reserve Table
+                    </button>
+
+                </form>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             ORDER TRACKING
+        ====================================================== -->
+        <section
+            id="tracking-section"
+            class="tracking-section hidden">
+
+            <div class="section-heading">
+
+                <span>ORDER TRACKING</span>
+
+                <h2>
+                    Track Your
+                    <span>Order</span>
+                </h2>
+
+                <p>
+                    Your order progress will appear below.
+                </p>
+
+            </div>
+
+            <div class="tracking-box">
+
+                <div class="tracking-line"></div>
+
+                <div
+                    class="tracking-step active"
+                    id="step-1">
+
+                    <div class="tracking-icon">
+                        <i class="fa-solid fa-clipboard-check"></i>
+                    </div>
+
+                    <h4>Order Placed</h4>
+                    <p>Your order has been received.</p>
+
+                </div>
+
+                <div
+                    class="tracking-step"
+                    id="step-2">
+
+                    <div class="tracking-icon">
+                        <i class="fa-solid fa-kitchen-set"></i>
+                    </div>
+
+                    <h4>Preparing</h4>
+                    <p>Your food is being prepared.</p>
+
+                </div>
+
+                <div
+                    class="tracking-step"
+                    id="step-3">
+
+                    <div class="tracking-icon">
+                        <i class="fa-solid fa-motorcycle"></i>
+                    </div>
+
+                    <h4>On The Way</h4>
+                    <p>Your rider is on the way.</p>
+
+                </div>
+
+                <div
+                    class="tracking-step"
+                    id="step-4">
+
+                    <div class="tracking-icon">
+                        <i class="fa-solid fa-house"></i>
+                    </div>
+
+                    <h4>Delivered</h4>
+                    <p>Enjoy your delicious meal!</p>
 
                 </div>
 
             </div>
 
-
-            <button
-                class="btn-primary full-btn place-order-btn"
-                type="submit"
-            >
-                <i class="fa-solid fa-circle-check"></i>
-                Place Order
-            </button>
-
-        </form>
-
-    </div>
-
-</div>
+        </section>
 
 
-<!-- =========================
-     CHATBOT
-========================= -->
-<div class="chatbot-container">
+        <!-- =====================================================
+             REVIEWS
+        ====================================================== -->
+        <section id="reviews" class="reviews-section">
 
+            <div class="section-heading">
+
+                <span>CUSTOMER REVIEWS</span>
+
+                <h2>
+                    Loved By
+                    <span>Food Lovers</span>
+                </h2>
+
+                <p>
+                    See what our customers say about their experience.
+                </p>
+
+            </div>
+
+            <div class="reviews-grid">
+
+                <article class="review-card">
+
+                    <div class="review-top">
+                        <div class="review-avatar">
+                            A
+                        </div>
+
+                        <div>
+                            <h4>Ahmed</h4>
+
+                            <div class="stars">
+                                ★★★★★
+                            </div>
+                        </div>
+                    </div>
+
+                    <p>
+                        "Amazing taste and very fast delivery.
+                        The food arrived fresh and hot."
+                    </p>
+
+                </article>
+
+
+                <article class="review-card">
+
+                    <div class="review-top">
+
+                        <div class="review-avatar">
+                            S
+                        </div>
+
+                        <div>
+                            <h4>Sarah</h4>
+
+                            <div class="stars">
+                                ★★★★★
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <p>
+                        "The BBQ was delicious and the presentation
+                        was really impressive."
+                    </p>
+
+                </article>
+
+
+                <article class="review-card">
+
+                    <div class="review-top">
+
+                        <div class="review-avatar">
+                            M
+                        </div>
+
+                        <div>
+                            <h4>Muhammad</h4>
+
+                            <div class="stars">
+                                ★★★★★
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <p>
+                        "Foodie Express has become my favorite
+                        place for quick meals."
+                    </p>
+
+                </article>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================================================
+         FLOATING CART
+    ========================================================== -->
     <button
-        class="chat-widget-btn"
-        onclick="toggleChatbot()"
-        aria-label="Open support chat"
-    >
-        <i class="fa-solid fa-comment-dots"></i>
+        class="floating-cart"
+        onclick="toggleCart()"
+        title="Open Cart">
+
+        <i class="fa-solid fa-cart-shopping"></i>
+
+        <span id="floating-cart-count">
+            0
+        </span>
+
     </button>
 
 
+    <!-- =========================================================
+         CHATBOT
+    ========================================================== -->
     <div
         id="chat-window"
-        class="chat-window hidden"
-    >
+        class="chat-window hidden">
 
         <div class="chat-header">
 
             <div>
-                <strong>
-                    Foodie Assistant
-                </strong>
-
-                <span>
-                    <i class="fa-solid fa-circle"></i>
-                    Online
-                </span>
+                <i class="fa-solid fa-robot"></i>
+                Foodie Assistant
             </div>
 
             <button
                 onclick="toggleChatbot()"
-                aria-label="Close chat"
-            >
+                class="chat-close">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
         </div>
 
-
         <div
             id="chat-messages"
-            class="chat-messages"
-        >
+            class="chat-messages">
 
             <div class="chat-msg bot">
-                Assalam-o-Alaikum! 👋
-                How can I help you today?
+                Hi! 👋 How can I help you today?
             </div>
 
         </div>
-
 
         <div class="chat-input-area">
 
             <input
                 type="text"
                 id="chat-input"
-                placeholder="Type your message..."
-                onkeypress="handleChatKeyPress(event)"
-            >
+                placeholder="Ask about food..."
+                onkeydown="handleChatKeyPress(event)">
 
             <button
                 onclick="sendChatMessage()"
-                aria-label="Send message"
-            >
+                title="Send">
                 <i class="fa-solid fa-paper-plane"></i>
             </button>
 
@@ -1586,40 +781,735 @@
 
     </div>
 
-</div>
+
+    <!-- Chatbot Button -->
+    <button
+        class="chatbot-btn"
+        onclick="toggleChatbot()"
+        title="Foodie Assistant">
+
+        <i class="fa-solid fa-comments"></i>
+
+    </button>
 
 
-<!-- =========================
-     FLOATING CART
-========================= -->
-<button
-    class="floating-cart-btn"
-    onclick="toggleCart()"
-    aria-label="Open shopping cart"
->
+    <!-- =========================================================
+         CART SIDEBAR
+    ========================================================== -->
+    <aside
+        id="cart-sidebar"
+        class="cart-sidebar">
 
-    <i class="fa-solid fa-cart-shopping"></i>
+        <div class="sidebar-header">
 
-    <span id="floating-cart-count">
-        0
-    </span>
+            <div>
+                <i class="fa-solid fa-cart-shopping"></i>
+                Your Cart
+            </div>
 
-</button>
+            <button
+                onclick="toggleCart()"
+                class="close-btn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+        </div>
+
+        <div
+            id="cart-items"
+            class="cart-items">
+
+            <div class="empty-cart">
+                <i class="fa-solid fa-basket-shopping"></i>
+                <h3>Your cart is empty</h3>
+                <p>Add something delicious!</p>
+            </div>
+
+        </div>
+
+        <div class="cart-footer">
+
+            <div class="coupon-box">
+
+                <input
+                    type="text"
+                    id="coupon-input"
+                    placeholder="Promo code">
+
+                <button
+                    onclick="applyCoupon()">
+                    Apply
+                </button>
+
+            </div>
+
+            <div class="discount-row">
+                <span>Discount</span>
+                <strong id="cart-discount">
+                    0
+                </strong>
+            </div>
+
+            <div class="total-row">
+                <span>Total</span>
+                <strong id="cart-total">
+                    PKR 0
+                </strong>
+            </div>
+
+            <button
+                class="checkout-btn"
+                onclick="checkout()">
+                <i class="fa-solid fa-credit-card"></i>
+                Proceed to Checkout
+            </button>
+
+        </div>
+
+    </aside>
 
 
-<!-- =========================
-     TOAST
-========================= -->
-<div
-    id="toast-container"
-    class="toast-container"
-></div>
+    <!-- =========================================================
+         WISHLIST MODAL
+    ========================================================== -->
+    <div
+        id="wishlist-modal"
+        class="modal hidden">
+
+        <div class="modal-overlay" onclick="toggleWishlistModal()"></div>
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h2>
+                    <i class="fa-solid fa-heart"></i>
+                    My Wishlist
+                </h2>
+
+                <button
+                    onclick="toggleWishlistModal()"
+                    class="close-btn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+            </div>
+
+            <div
+                id="wishlist-items"
+                class="wishlist-items">
+
+                <div class="empty-state">
+                    <i class="fa-regular fa-heart"></i>
+                    <h3>Your wishlist is empty</h3>
+                    <p>Add your favorite dishes here.</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 
-<!-- =========================
-     JAVASCRIPT
-========================= -->
-<script src="script.js"></script>
+    <!-- =========================================================
+         CHECKOUT MODAL
+    ========================================================== -->
+    <div
+        id="checkout-modal"
+        class="modal hidden">
+
+        <div
+            class="modal-overlay"
+            onclick="closeCheckoutModal()">
+        </div>
+
+        <div class="modal-content checkout-modal-content">
+
+            <div class="modal-header">
+
+                <h2>
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    Checkout
+                </h2>
+
+                <button
+                    onclick="closeCheckoutModal()"
+                    class="close-btn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+            </div>
+
+            <form
+                id="checkout-form"
+                onsubmit="processOrder(event)">
+
+                <div class="form-group">
+
+                    <label for="cust-name">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="cust-name"
+                        placeholder="Enter your full name"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="cust-phone">
+                        Phone Number
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="cust-phone"
+                        placeholder="03XX XXXXXXX"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="cust-address">
+                        Delivery Address
+                    </label>
+
+                    <textarea
+                        id="cust-address"
+                        rows="3"
+                        placeholder="Enter your complete address"
+                        required></textarea>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="payment-method">
+                        Payment Method
+                    </label>
+
+                    <select
+                        id="payment-method"
+                        onchange="togglePaymentInfo()"
+                        required>
+
+                        <option value="">
+                            Select payment method
+                        </option>
+
+                        <option value="Cash on Delivery">
+                            Cash on Delivery
+                        </option>
+
+                        <option value="JazzCash">
+                            JazzCash
+                        </option>
+
+                        <option value="EasyPaisa">
+                            EasyPaisa
+                        </option>
+
+                        <option value="Card">
+                            Credit / Debit Card
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div
+                    id="online-payment-details"
+                    class="payment-details hidden">
+
+                    <div class="payment-note">
+                        <i class="fa-solid fa-lock"></i>
+
+                        <span>
+                            Secure online payment details will be
+                            requested after order confirmation.
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn full-btn">
+                    <i class="fa-solid fa-check"></i>
+                    Place Order
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         AUTH MODAL
+    ========================================================== -->
+    <div
+        id="auth-modal"
+        class="modal hidden">
+
+        <div
+            class="modal-overlay"
+            onclick="closeAuthModal()">
+        </div>
+
+        <div class="modal-content auth-modal-content">
+
+            <button
+                onclick="closeAuthModal()"
+                class="close-btn modal-close-top">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+
+            <!-- LOGIN -->
+            <div
+                id="login-screen"
+                class="auth-screen">
+
+                <div class="auth-icon">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+
+                <h2>Welcome Back!</h2>
+
+                <p>
+                    Login to continue your Foodie Express journey.
+                </p>
+
+                <form onsubmit="handleAuth(event, 'login')">
+
+                    <div class="form-group">
+
+                        <label for="login-email">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            id="login-email"
+                            placeholder="Enter your email"
+                            required>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="login-password">
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="login-password"
+                            placeholder="Enter your password"
+                            required>
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="primary-btn full-btn">
+                        Login
+                    </button>
+
+                </form>
+
+                <p class="auth-switch">
+                    Don't have an account?
+
+                    <button
+                        type="button"
+                        onclick="switchAuthScreen('signup')">
+                        Create Account
+                    </button>
+                </p>
+
+            </div>
+
+
+            <!-- SIGNUP -->
+            <div
+                id="signup-screen"
+                class="auth-screen hidden">
+
+                <div class="auth-icon">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+
+                <h2>Create Account</h2>
+
+                <p>
+                    Join Foodie Express today.
+                </p>
+
+                <form onsubmit="handleAuth(event, 'signup')">
+
+                    <div class="form-group">
+
+                        <label for="signup-name">
+                            Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="signup-name"
+                            placeholder="Your name"
+                            required>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="signup-email">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            id="signup-email"
+                            placeholder="Your email"
+                            required>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="signup-password">
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="signup-password"
+                            placeholder="Create a password"
+                            required>
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="primary-btn full-btn">
+                        Create Account
+                    </button>
+
+                </form>
+
+                <p class="auth-switch">
+                    Already have an account?
+
+                    <button
+                        type="button"
+                        onclick="switchAuthScreen('login')">
+                        Login
+                    </button>
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         DASHBOARD MODAL
+    ========================================================== -->
+    <div
+        id="dashboard-modal"
+        class="modal hidden">
+
+        <div
+            class="modal-overlay"
+            onclick="closeDashboardModal()">
+        </div>
+
+        <div class="modal-content dashboard-content">
+
+            <div class="modal-header">
+
+                <h2>
+                    <i class="fa-solid fa-chart-line"></i>
+                    My Dashboard
+                </h2>
+
+                <button
+                    onclick="closeDashboardModal()"
+                    class="close-btn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+            </div>
+
+
+            <div class="dashboard-user">
+
+                <div class="dashboard-avatar">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+
+                <div>
+
+                    <h3 id="dash-user-name">
+                        Guest User
+                    </h3>
+
+                    <p id="dash-user-email">
+                        Login to unlock your account.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-stats">
+
+                <div class="dashboard-stat">
+
+                    <i class="fa-solid fa-coins"></i>
+
+                    <div>
+                        <span>Loyalty Coins</span>
+
+                        <strong id="dash-user-coins">
+                            0
+                        </strong>
+                    </div>
+
+                </div>
+
+                <div class="dashboard-stat">
+
+                    <i class="fa-solid fa-receipt"></i>
+
+                    <div>
+                        <span>Total Orders</span>
+
+                        <strong id="dash-total-orders">
+                            0
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="history-section">
+
+                <div class="history-title">
+
+                    <h3>
+                        Order History
+                    </h3>
+
+                </div>
+
+                <div
+                    id="history-container"
+                    class="history-container">
+
+                    <div class="empty-state">
+
+                        <i class="fa-solid fa-receipt"></i>
+
+                        <h3>No orders yet</h3>
+
+                        <p>
+                            Your completed orders will appear here.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="logout-btn"
+                onclick="handleLogout()">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Logout
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         ITEM DETAIL MODAL
+    ========================================================== -->
+    <div
+        id="item-detail-modal"
+        class="modal hidden">
+
+        <div
+            class="modal-overlay"
+            onclick="closeItemDetailModal()">
+        </div>
+
+        <div class="modal-content item-detail-content">
+
+            <button
+                onclick="closeItemDetailModal()"
+                class="close-btn modal-close-top">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div id="item-detail-body"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         TOAST
+    ========================================================== -->
+    <div
+        id="toast-container"
+        class="toast-container">
+    </div>
+
+
+    <!-- =========================================================
+         FOOTER
+    ========================================================== -->
+    <footer class="footer">
+
+        <div class="footer-container">
+
+            <div class="footer-brand">
+
+                <div class="logo footer-logo">
+                    <i class="fa-solid fa-utensils"></i>
+                    <span>Foodie <b>Express</b></span>
+                </div>
+
+                <p>
+                    Elite flavors, gourmet meals and delicious
+                    food delivered straight to your door.
+                </p>
+
+                <div class="social-links">
+
+                    <a href="#" aria-label="Facebook">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+
+                    <a href="#" aria-label="Instagram">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+
+                    <a href="#" aria-label="Twitter">
+                        <i class="fa-brands fa-x-twitter"></i>
+                    </a>
+
+                    <a href="#" aria-label="YouTube">
+                        <i class="fa-brands fa-youtube"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="footer-column">
+
+                <h3>Quick Links</h3>
+
+                <a href="#home">Home</a>
+                <a href="#menu">Menu</a>
+                <a href="#features">Features</a>
+                <a href="#reviews">Reviews</a>
+
+            </div>
+
+
+            <div class="footer-column">
+
+                <h3>Food Categories</h3>
+
+                <a href="#menu" onclick="filterMenu('Fast Food')">
+                    Fast Food
+                </a>
+
+                <a href="#menu" onclick="filterMenu('Desi Cuisine')">
+                    Desi Cuisine
+                </a>
+
+                <a href="#menu" onclick="filterMenu('BBQ & Grills')">
+                    BBQ &amp; Grills
+                </a>
+
+                <a href="#menu" onclick="filterMenu('Drinks & Shakes')">
+                    Drinks &amp; Shakes
+                </a>
+
+            </div>
+
+
+            <div class="footer-column">
+
+                <h3>Contact</h3>
+
+                <p>
+                    <i class="fa-solid fa-phone"></i>
+                    +92 300 1234567
+                </p>
+
+                <p>
+                    <i class="fa-solid fa-envelope"></i>
+                    hello@foodieexpress.com
+                </p>
+
+                <p>
+                    <i class="fa-solid fa-location-dot"></i>
+                    Pakistan
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            <p>
+                © 2026 Foodie Express.
+                All Rights Reserved.
+            </p>
+
+            <p>
+                Made with ❤️ for food lovers.
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <!-- Main JavaScript -->
+    <script src="script.js"></script>
 
 </body>
+
 </html>
