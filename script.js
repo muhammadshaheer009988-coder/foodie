@@ -1,1655 +1,1514 @@
-/* =========================================================
-   FOODIE EXPRESS - MAIN JAVASCRIPT
-   Fully Interactive / Responsive / Functional
-========================================================= */
-
 "use strict";
 
 /* =========================================================
-   CONFIGURATION
-========================================================= */
+   FOODIE EXPRESS — PREMIUM FRONTEND JAVASCRIPT
+   ========================================================= */
 
-const WHATSAPP_NUMBER = "923001234567";
+/* =========================
+   GLOBAL STATE
+   ========================= */
+
+let currentCategory = "All";
+let currentCurrency = "PKR";
+let currentLanguage = "en";
+
+let cart = [];
+let wishlist = [];
+let orderHistory = [];
+
+let currentDiscount = 0;
+let currentUser = null;
+let loyaltyCoins = 0;
+let totalOrders = 0;
+
+let trackingTimer = null;
+
+const adminWhatsAppNumber = "923312969666";
+
+/* =========================
+   MENU DATA
+   ========================= */
+
+const menuItems = [
+    {
+        id: 1,
+        name: "Classic Zinger Burger",
+        category: "Fast Food",
+        price: 650,
+        description: "Crispy chicken fillet with fresh lettuce, cheese and signature sauce.",
+        image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=85"
+    },
+    {
+        id: 2,
+        name: "Loaded Beef Burger",
+        category: "Fast Food",
+        price: 780,
+        description: "Juicy beef patty loaded with cheese, caramelized onions and special sauce.",
+        image: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=900&q=85"
+    },
+    {
+        id: 3,
+        name: "Cheesy Chicken Pizza",
+        category: "Fast Food",
+        price: 1250,
+        description: "Loaded chicken pizza with mozzarella, herbs and rich tomato sauce.",
+        image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=900&q=85"
+    },
+    {
+        id: 4,
+        name: "Crispy Chicken Wings",
+        category: "Fast Food",
+        price: 720,
+        description: "Golden crispy chicken wings served with creamy signature dip.",
+        image: "https://images.unsplash.com/photo-1527477396000-e27163b481c2?auto=format&fit=crop&w=900&q=85"
+    },
+    {
+        id: 5,
+        name: "Loaded Cheese Fries",
+        category: "Fast Food",
+        price: 520,
+        description: "Crispy fries topped with melted cheese and delicious sauces.",
+        image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=900&q=85"
+    },
+    {
+        id: 6,
+        name: "Chicken Shawarma",
+        category: "Fast Food",
+        price: 450,
+        description: "Tender chicken, fresh vegetables and garlic sauce wrapped perfectly.",
+        image: "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=900&q=85"
+    },
+
+    {
+        id: 7,
+        name: "Chicken Biryani",
+        category: "Desi",
+        price: 480,
+        description: "Aromatic basmati rice cooked with tender chicken and authentic spices.",
+        image: "https://images.unsplash.com/photo-1563379091339-03246963d29c?auto=format&fit=crop&w=900&q=85"
+    },
+    {
+        id: 8,
+        name: "Chicken Karahi",
+        category: "Desi",
+        price: 1100,
+        description: "Traditional chicken karahi prepared with tomatoes, ginger and green chilies.",
+        image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=900&q=85"
+    },
+    {
+        id: 9,
+        name: "Mutton Karahi",
+        category: "Desi",
+        price: 1650,
+        description: "Tender mutton cooked in a rich traditional karahi masala.",
+        image: "https://images.unsplash.com/photo-1545247181-516773cae754?auto=format&fit=crop&w=900&q=85"
+    },
+    {
+        id: 10,
+        name: "Chicken Handi",
+        category: "Desi",
+        price: 1200,
+        description: "Creamy chicken handi with aromatic spices and a rich restaurant-style gravy.",
+        image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?auto=format&fit=crop&w=900&q=85"
+    },
+    {
+        id: 11,
+        name: "Daal Makhni",
+        category: "Desi",
+        price: 550,
+        description: "Slow-cooked creamy lentils with butter and aromatic spices.",
+        image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=900&q=85"
+    },
+    {
+        id: 12,
+        name: "Butter Naan",
+        category: "Desi",
+        price: 120,
+        description: "Soft tandoori naan finished with delicious butter.",
+        image: "https://images.unsplash.com/photo-1601050690117-94f5f6fa8bd7?auto=format&fit=crop&w=900&q=85"
+    },
+
+    {
+        id: 13,
+        name: "Chicken Tikka",
+        category: "BBQ",
+        price: 700,
+        description: "Charcoal-grilled chicken tikka marinated with traditional spices.",
+        image: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=900&q=85"
+    },
+    {
+        id: 14,
+        name: "Seekh Kebab",
+        category: "BBQ",
+        price: 650,
+        description: "Juicy minced meat kebabs grilled over charcoal.",
+        image: "https://images.unsplash.com/photo-1595777216528-071e0127cc45?auto=format&fit=crop&w=900&q=85"
+    },
+    {
+        id: 15,
+        name: "Malai Boti",
+        category: "BBQ",
+        price: 850,
+        description: "Creamy tender chicken pieces grilled to perfection.",
+        image: "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=900&q=85"
+    },
+    {
+        id: 16,
+        name: "BBQ Platter",
+        category: "BBQ",
+        price: 1850,
+        description: "A premium combination of tikka, kebab, malai boti and grilled specialties.",
+        image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=85"
+    },
+    {
+        id: 17,
+        name: "Grilled Chicken",
+        category: "BBQ",
+        price: 950,
+        description: "Healthy grilled chicken with herbs and signature seasoning.",
+        image: "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=900&q=85"
+    },
+    {
+        id: 18,
+        name: "Grilled Beef Steak",
+        category: "BBQ",
+        price: 1950,
+        description: "Premium tender beef steak grilled and served with signature sauce.",
+        image: "https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=900&q=85"
+    },
+
+    {
+        id: 19,
+        name: "Mango Shake",
+        category: "Drinks",
+        price: 350,
+        description: "Creamy chilled mango shake made with fresh mangoes.",
+        image: "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?auto=format&fit=crop&w=900&q=85"
+    },
+    {
+        id: 20,
+        name: "Chocolate Shake",
+        category: "Drinks",
+        price: 380,
+        description: "Rich chocolate shake topped with creamy goodness.",
+        image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=900&q=85"
+    },
+    {
+        id: 21,
+        name: "Strawberry Shake",
+        category: "Drinks",
+        price: 370,
+        description: "Fresh strawberry shake with a smooth creamy texture.",
+        image: "https://images.unsplash.com/photo-1553787499-6f0e6e2f3c87?auto=format&fit=crop&w=900&q=85"
+    },
+    {
+        id: 22,
+        name: "Fresh Lime",
+        category: "Drinks",
+        price: 220,
+        description: "Refreshing fresh lime drink served chilled.",
+        image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=900&q=85"
+    },
+    {
+        id: 23,
+        name: "Cold Coffee",
+        category: "Drinks",
+        price: 350,
+        description: "Smooth chilled coffee blended with milk and ice.",
+        image: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=900&q=85"
+    },
+    {
+        id: 24,
+        name: "Mint Margarita",
+        category: "Drinks",
+        price: 280,
+        description: "Cool mint and lime drink for a refreshing experience.",
+        image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=900&q=85"
+    }
+];
+
+/* =========================
+   CURRENCY
+   ========================= */
 
 const currencyRates = {
     PKR: 1,
     USD: 0.00358,
-    GBP: 0.00264,
+    GBP: 0.00265,
     AED: 0.01315
 };
 
 const currencySymbols = {
-    PKR: "PKR",
+    PKR: "Rs.",
     USD: "$",
     GBP: "£",
     AED: "AED"
 };
 
-
-/* =========================================================
-   FOOD DATABASE
-========================================================= */
-
-const menuData = [
-
-    {
-        id: 1,
-        name: "Zinger Burger",
-        category: "Fast Food",
-        price: 650,
-        image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=85",
-        description: "Crispy chicken fillet, fresh lettuce, cheese and special sauce.",
-        tags: ["burger", "chicken", "fast food", "zinger"]
-    },
-
-    {
-        id: 2,
-        name: "Beef Burger",
-        category: "Fast Food",
-        price: 750,
-        image: "https://images.unsplash.com/photo-1565299507177-b0ac66763828?auto=format&fit=crop&w=900&q=85",
-        description: "Juicy grilled beef patty with cheese, lettuce and premium sauce.",
-        tags: ["burger", "beef", "fast food"]
-    },
-
-    {
-        id: 3,
-        name: "Chicken Pizza",
-        category: "Fast Food",
-        price: 1250,
-        image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=900&q=85",
-        description: "Loaded chicken pizza with mozzarella, vegetables and herbs.",
-        tags: ["pizza", "chicken", "fast food"]
-    },
-
-    {
-        id: 4,
-        name: "French Fries",
-        category: "Fast Food",
-        price: 350,
-        image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=900&q=85",
-        description: "Golden crispy fries served with our signature dip.",
-        tags: ["fries", "potato", "fast food"]
-    },
-
-    {
-        id: 5,
-        name: "Chicken Biryani",
-        category: "Desi Cuisine",
-        price: 480,
-        image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=900&q=85",
-        description: "Aromatic basmati rice cooked with tender chicken and traditional spices.",
-        tags: ["biryani", "rice", "chicken", "desi", "spicy"]
-    },
-
-    {
-        id: 6,
-        name: "Chicken Karahi",
-        category: "Desi Cuisine",
-        price: 1350,
-        image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=900&q=85",
-        description: "Traditional chicken karahi cooked with tomatoes, green chilies and spices.",
-        tags: ["karahi", "chicken", "desi", "pakistani"]
-    },
-
-    {
-        id: 7,
-        name: "Chicken Handi",
-        category: "Desi Cuisine",
-        price: 1450,
-        image: "https://images.unsplash.com/photo-1628294895950-9805252327bc?auto=format&fit=crop&w=900&q=85",
-        description: "Creamy chicken handi prepared with rich spices and fresh ingredients.",
-        tags: ["handi", "chicken", "desi"]
-    },
-
-    {
-        id: 8,
-        name: "Seekh Kabab",
-        category: "BBQ & Grills",
-        price: 700,
-        image: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=900&q=85",
-        description: "Juicy grilled seekh kababs made with premium minced meat.",
-        tags: ["kabab", "bbq", "grill", "beef"]
-    },
-
-    {
-        id: 9,
-        name: "Chicken Tikka",
-        category: "BBQ & Grills",
-        price: 850,
-        image: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=900&q=85",
-        description: "Charcoal grilled chicken tikka marinated with aromatic spices.",
-        tags: ["tikka", "chicken", "bbq", "grill"]
-    },
-
-    {
-        id: 10,
-        name: "BBQ Platter",
-        category: "BBQ & Grills",
-        price: 2200,
-        image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=85",
-        description: "A premium platter featuring assorted BBQ favorites.",
-        tags: ["bbq", "platter", "grill", "chicken", "kabab"]
-    },
-
-    {
-        id: 11,
-        name: "Mango Shake",
-        category: "Drinks & Shakes",
-        price: 450,
-        image: "https://images.unsplash.com/photo-1577805947697-89e18249d767?auto=format&fit=crop&w=900&q=85",
-        description: "Creamy chilled mango shake made with fresh mangoes.",
-        tags: ["mango", "shake", "drink"]
-    },
-
-    {
-        id: 12,
-        name: "Chocolate Shake",
-        category: "Drinks & Shakes",
-        price: 500,
-        image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=900&q=85",
-        description: "Rich chocolate milkshake topped with creamy goodness.",
-        tags: ["chocolate", "shake", "drink"]
-    },
-
-    {
-        id: 13,
-        name: "Fresh Lime",
-        category: "Drinks & Shakes",
-        price: 250,
-        image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=900&q=85",
-        description: "Refreshing chilled lime drink with a perfect sweet and sour balance.",
-        tags: ["lime", "drink", "fresh"]
-    }
-
-];
-
-
-/* =========================================================
-   GLOBAL STATE
-========================================================= */
-
-let cart = JSON.parse(localStorage.getItem("foodieCart") || "[]");
-let wishlist = JSON.parse(localStorage.getItem("foodieWishlist") || "[]");
-let orderHistory = JSON.parse(localStorage.getItem("foodieOrders") || "[]");
-
-let currentCurrency =
-    localStorage.getItem("foodieCurrency") || "PKR";
-
-let currentLanguage =
-    localStorage.getItem("foodieLanguage") || "en";
-
-let currentUser =
-    JSON.parse(localStorage.getItem("foodieUser") || "null");
-
-let currentFilter = "All";
-let searchTerm = "";
-let appliedDiscount = 0;
-let selectedDetailItem = null;
-
-
-/* =========================================================
-   INITIALIZATION
-========================================================= */
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    initializeTheme();
-    initializeSelectors();
-    renderMenu();
-    updateCart();
-    updateWishlist();
-    updateDashboard();
-
-    setupReservationDate();
-    setupKeyboardShortcuts();
-    setupScrollEffects();
-
-});
-
-
-/* =========================================================
-   THEME
-========================================================= */
-
-function initializeTheme() {
-
-    const savedTheme =
-        localStorage.getItem("foodieTheme") || "light";
-
-    document.documentElement.dataset.theme = savedTheme;
-
-    updateThemeIcon();
-}
-
-
-function toggleDarkMode() {
-
-    const html = document.documentElement;
-
-    const newTheme =
-        html.dataset.theme === "dark"
-            ? "light"
-            : "dark";
-
-    html.dataset.theme = newTheme;
-
-    localStorage.setItem("foodieTheme", newTheme);
-
-    updateThemeIcon();
-
-    playClickSound();
-
-    showToast(
-        newTheme === "dark"
-            ? "Dark mode enabled 🌙"
-            : "Light mode enabled ☀️"
-    );
-}
-
-
-function updateThemeIcon() {
-
-    const button =
-        document.getElementById("dark-mode-btn");
-
-    if (!button) return;
-
-    const icon = button.querySelector("i");
-
-    if (!icon) return;
-
-    if (document.documentElement.dataset.theme === "dark") {
-
-        icon.className = "fa-solid fa-sun";
-
-    } else {
-
-        icon.className = "fa-solid fa-moon";
-
-    }
-}
-
-
-/* =========================================================
-   SELECTORS
-========================================================= */
-
-function initializeSelectors() {
-
-    const currency =
-        document.getElementById("currency-selector");
-
-    const language =
-        document.getElementById("language-selector");
-
-    if (currency)
-        currency.value = currentCurrency;
-
-    if (language)
-        language.value = currentLanguage;
-}
-
-
-function changeCurrency(currency) {
-
-    currentCurrency = currency;
-
-    localStorage.setItem(
-        "foodieCurrency",
-        currency
-    );
-
-    renderMenu();
-    updateCart();
-
-    showToast(
-        `Currency changed to ${currencySymbols[currency]}`
-    );
-
-}
-
-
-function changeLanguage(language) {
-
-    currentLanguage = language;
-
-    localStorage.setItem(
-        "foodieLanguage",
-        language
-    );
-
-    showToast(
-        language === "ur"
-            ? "Language changed to Urdu"
-            : "Language changed to English"
-    );
-
-}
-
-
-/* =========================================================
-   CURRENCY FORMAT
-========================================================= */
-
 function formatPrice(price) {
-
-    const converted =
-        price * (currencyRates[currentCurrency] || 1);
+    const converted = price * (currencyRates[currentCurrency] || 1);
 
     if (currentCurrency === "PKR") {
-
-        return `PKR ${Math.round(converted).toLocaleString()}`;
-
+        return `${currencySymbols[currentCurrency]} ${Math.round(converted).toLocaleString()}`;
     }
 
-    return `${currencySymbols[currentCurrency]}${converted.toFixed(2)}`;
+    return `${currencySymbols[currentCurrency]} ${converted.toFixed(2)}`;
 }
 
+/* =========================
+   STORAGE
+   ========================= */
 
-/* =========================================================
-   MENU RENDERING
-========================================================= */
+function saveData() {
+    localStorage.setItem("foodie_cart", JSON.stringify(cart));
+    localStorage.setItem("foodie_wishlist", JSON.stringify(wishlist));
+    localStorage.setItem("foodie_orders", JSON.stringify(orderHistory));
+    localStorage.setItem("foodie_coins", String(loyaltyCoins));
+    localStorage.setItem("foodie_total_orders", String(totalOrders));
+    localStorage.setItem("foodie_currency", currentCurrency);
 
-function renderMenu() {
+    if (currentUser) {
+        localStorage.setItem("foodie_current_user", JSON.stringify(currentUser));
+    } else {
+        localStorage.removeItem("foodie_current_user");
+    }
+}
 
-    const container =
-        document.getElementById("menu-container");
+function loadData() {
+    try {
+        cart = JSON.parse(localStorage.getItem("foodie_cart")) || [];
+        wishlist = JSON.parse(localStorage.getItem("foodie_wishlist")) || [];
+        orderHistory = JSON.parse(localStorage.getItem("foodie_orders")) || [];
 
-    const noResults =
-        document.getElementById("no-results");
+        loyaltyCoins = Number(localStorage.getItem("foodie_coins")) || 0;
+        totalOrders = Number(localStorage.getItem("foodie_total_orders")) || 0;
+
+        currentCurrency = localStorage.getItem("foodie_currency") || "PKR";
+
+        const savedUser = localStorage.getItem("foodie_current_user");
+
+        if (savedUser) {
+            currentUser = JSON.parse(savedUser);
+        }
+    } catch (error) {
+        console.warn("Storage could not be loaded:", error);
+    }
+}
+
+/* =========================
+   TOAST
+   ========================= */
+
+function showToast(message, type = "success") {
+    const container = document.getElementById("toast-container");
 
     if (!container) return;
 
-    const filteredItems =
-        menuData.filter(item => {
+    const toast = document.createElement("div");
 
-            const categoryMatch =
-                currentFilter === "All" ||
-                item.category === currentFilter;
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `
+        <div style="display:flex;align-items:center;gap:10px;">
+            <i class="fa-solid ${
+                type === "error"
+                    ? "fa-circle-exclamation"
+                    : "fa-circle-check"
+            }"></i>
+            <span>${escapeHTML(message)}</span>
+        </div>
+    `;
 
-            if (!searchTerm.trim()) {
-                return categoryMatch;
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.opacity = "0";
+        toast.style.transform = "translateX(30px)";
+
+        setTimeout(() => toast.remove(), 300);
+    }, 2800);
+}
+
+/* =========================
+   SOUND FEEDBACK
+   ========================= */
+
+function playCustomSound(type = "click") {
+    try {
+        const AudioContext =
+            window.AudioContext || window.webkitAudioContext;
+
+        if (!AudioContext) return;
+
+        const ctx = new AudioContext();
+        const oscillator = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        oscillator.connect(gain);
+        gain.connect(ctx.destination);
+
+        const settings = {
+            click: {
+                frequency: 520,
+                duration: .06
+            },
+            success: {
+                frequency: 720,
+                duration: .12
+            },
+            error: {
+                frequency: 180,
+                duration: .15
             }
+        };
 
-            const query =
-                searchTerm.toLowerCase().trim();
+        const sound = settings[type] || settings.click;
 
-            const searchableText = [
-                item.name,
-                item.category,
-                item.description,
-                ...(item.tags || [])
-            ]
-                .join(" ")
-                .toLowerCase();
+        oscillator.frequency.value = sound.frequency;
+        oscillator.type = "sine";
 
-            return (
-                categoryMatch &&
-                searchableText.includes(query)
-            );
+        gain.gain.setValueAtTime(.04, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(
+            .001,
+            ctx.currentTime + sound.duration
+        );
 
+        oscillator.start();
+        oscillator.stop(ctx.currentTime + sound.duration);
+    } catch (error) {
+        // Audio is optional.
+    }
+}
+
+/* =========================
+   SECURITY HELPER
+   ========================= */
+
+function escapeHTML(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+/* =========================
+   MENU SEARCH
+   ========================= */
+
+function searchMenu(query) {
+    const search = String(query || "").trim().toLowerCase();
+
+    const heroInput = document.getElementById("search-input");
+    const menuInput = document.getElementById("menu-search-input");
+
+    if (document.activeElement === heroInput && menuInput) {
+        menuInput.value = query;
+    }
+
+    if (document.activeElement === menuInput && heroInput) {
+        heroInput.value = query;
+    }
+
+    renderMenu(search);
+
+    const menuSection = document.getElementById("menu");
+
+    if (
+        search &&
+        document.activeElement === heroInput &&
+        menuSection
+    ) {
+        menuSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }
+}
+
+function handleSearchSubmit(event) {
+    event.preventDefault();
+
+    const input = document.getElementById("search-input");
+
+    if (!input) return;
+
+    searchMenu(input.value);
+
+    const menuSection = document.getElementById("menu");
+
+    if (menuSection) {
+        menuSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }
+
+    playCustomSound("click");
+}
+
+function clearSearch() {
+    const heroInput = document.getElementById("search-input");
+    const menuInput = document.getElementById("menu-search-input");
+
+    if (heroInput) heroInput.value = "";
+    if (menuInput) menuInput.value = "";
+
+    currentCategory = "All";
+
+    document
+        .querySelectorAll(".category-filter button")
+        .forEach((button, index) => {
+            button.classList.toggle("active", index === 0);
         });
 
+    renderMenu("");
+}
+
+/* =========================
+   CATEGORY FILTER
+   ========================= */
+
+function filterMenu(category) {
+    currentCategory = category;
+
+    document
+        .querySelectorAll(".category-filter button")
+        .forEach(button => {
+            const text = button.textContent.trim();
+
+            button.classList.toggle(
+                "active",
+                text.toLowerCase().includes(category.toLowerCase()) ||
+                (category === "All" && text === "All")
+            );
+        });
+
+    const searchInput =
+        document.getElementById("menu-search-input");
+
+    renderMenu(searchInput ? searchInput.value : "");
+
+    playCustomSound("click");
+}
+
+/* =========================
+   MENU RENDER
+   ========================= */
+
+function getVisibleMenuItems(search = "") {
+    const normalized = String(search).trim().toLowerCase();
+
+    return menuItems.filter(item => {
+        const categoryMatch =
+            currentCategory === "All" ||
+            item.category.toLowerCase() === currentCategory.toLowerCase();
+
+        if (!categoryMatch) return false;
+
+        if (!normalized) return true;
+
+        return (
+            item.name.toLowerCase().includes(normalized) ||
+            item.category.toLowerCase().includes(normalized) ||
+            item.description.toLowerCase().includes(normalized)
+        );
+    });
+}
+
+function renderMenu(search = "") {
+    const container = document.getElementById("menu-container");
+    const noResults = document.getElementById("no-results");
+    const status = document.getElementById("search-status");
+
+    if (!container) return;
+
+    const items = getVisibleMenuItems(search);
 
     container.innerHTML = "";
 
-
-    if (filteredItems.length === 0) {
-
-        if (noResults)
-            noResults.classList.remove("hidden");
-
-        return;
-
+    if (status) {
+        if (search || currentCategory !== "All") {
+            status.textContent =
+                `${items.length} result${items.length === 1 ? "" : "s"} found`;
+        } else {
+            status.textContent =
+                `${menuItems.length} delicious choices available`;
+        }
     }
 
+    if (!items.length) {
+        if (noResults) noResults.classList.remove("hidden");
+        return;
+    }
 
-    if (noResults)
-        noResults.classList.add("hidden");
+    if (noResults) noResults.classList.add("hidden");
 
+    items.forEach(item => {
+        const isFavorite = wishlist.some(
+            favorite => Number(favorite.id) === Number(item.id)
+        );
 
-    filteredItems.forEach(item => {
+        const card = document.createElement("article");
 
-        const card =
-            document.createElement("article");
-
-        card.className = "menu-card";
-
-        const isWishlisted =
-            wishlist.includes(item.id);
+        card.className = "food-card";
 
         card.innerHTML = `
-
-            <div class="menu-image-wrap">
-
+            <div class="food-card-image">
                 <img
                     src="${item.image}"
                     alt="${escapeHTML(item.name)}"
                     loading="lazy"
-                    onerror="this.src='https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=80'">
+                >
 
-                <button
-                    class="wishlist-btn ${isWishlisted ? "active" : ""}"
-                    onclick="toggleWishlist(${item.id}, event)"
-                    aria-label="Add to wishlist">
-
-                    <i class="fa-${isWishlisted ? "solid" : "regular"} fa-heart"></i>
-
-                </button>
-
-                <span class="food-badge">
+                <span class="food-card-badge">
                     ${escapeHTML(item.category)}
                 </span>
 
-            </div>
-
-            <div class="menu-info">
-
-                <div class="menu-category">
-                    ${escapeHTML(item.category)}
-                </div>
-
-                <h3>
-                    ${escapeHTML(item.name)}
-                </h3>
-
-                <p>
-                    ${escapeHTML(item.description)}
-                </p>
-
-                <div class="menu-bottom">
-
-                    <strong class="menu-price">
-                        ${formatPrice(item.price)}
-                    </strong>
-
-                    <button
-                        class="add-cart-btn"
-                        onclick="addToCart(${item.id})">
-
-                        <i class="fa-solid fa-plus"></i>
-                        Add
-
-                    </button>
-
-                </div>
-
                 <button
-                    class="view-detail-btn"
-                    onclick="openItemDetailModal(${item.id})">
-
-                    View Details
-                    <i class="fa-solid fa-arrow-right"></i>
-
+                    class="food-card-fav ${isFavorite ? "active" : ""}"
+                    onclick="toggleWishlistItem(${item.id})"
+                    aria-label="Add to wishlist"
+                >
+                    <i class="fa-${
+                        isFavorite ? "solid" : "regular"
+                    } fa-heart"></i>
                 </button>
-
             </div>
 
-        `;
+            <div class="food-card-content">
+                <span class="food-card-category">
+                    ${escapeHTML(item.category)}
+                </span>
 
-        container.appendChild(card);
+                <h3>${escapeHTML(item.name)}</h3>
 
-    });
+                <p>${escapeHTML(item.description)}</p>
 
-}
-
-
-/* =========================================================
-   SEARCH
-========================================================= */
-
-function searchMenu(value) {
-
-    searchTerm = value || "";
-
-    currentFilter = "All";
-
-    updateFilterButtons();
-
-    renderMenu();
-
-}
-
-
-/* =========================================================
-   SEARCH ENTER KEY
-========================================================= */
-
-const searchInput =
-    document.getElementById("search-input");
-
-if (searchInput) {
-
-    searchInput.addEventListener("keydown", event => {
-
-        if (event.key === "Enter") {
-
-            event.preventDefault();
-
-            searchMenu(searchInput.value);
-
-            document
-                .getElementById("menu")
-                ?.scrollIntoView({
-                    behavior: "smooth"
-                });
-
-            playClickSound();
-
-        }
-
-    });
-
-}
-
-
-/* =========================================================
-   FILTER MENU
-========================================================= */
-
-function filterMenu(category, button = null) {
-
-    currentFilter = category;
-
-    searchTerm = "";
-
-    const search =
-        document.getElementById("search-input");
-
-    if (search)
-        search.value = "";
-
-    updateFilterButtons(button);
-
-    renderMenu();
-
-    document
-        .getElementById("menu")
-        ?.scrollIntoView({
-            behavior: "smooth"
-        });
-
-}
-
-
-function updateFilterButtons(activeButton = null) {
-
-    document
-        .querySelectorAll(".filter-btn")
-        .forEach(btn => {
-
-            btn.classList.remove("active");
-
-            if (
-                activeButton &&
-                btn === activeButton
-            ) {
-
-                btn.classList.add("active");
-
-            }
-
-        });
-
-
-    if (!activeButton) {
-
-        document
-            .querySelectorAll(".filter-btn")
-            .forEach(btn => {
-
-                const text =
-                    btn.textContent
-                        .trim()
-                        .toLowerCase();
-
-                if (
-                    (currentFilter === "All" &&
-                        text.includes("all delicacies")) ||
-                    text.includes(
-                        currentFilter.toLowerCase()
-                    )
-                ) {
-
-                    btn.classList.add("active");
-
-                }
-
-            });
-
-    }
-
-}
-
-
-/* =========================================================
-   VOICE SEARCH
-========================================================= */
-
-function startVoiceSearch() {
-
-    const SpeechRecognition =
-        window.SpeechRecognition ||
-        window.webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-
-        showToast(
-            "Voice search is not supported in this browser."
-        );
-
-        return;
-
-    }
-
-
-    const recognition =
-        new SpeechRecognition();
-
-    recognition.lang =
-        currentLanguage === "ur"
-            ? "ur-PK"
-            : "en-US";
-
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-
-
-    showToast("Listening... 🎤");
-
-    playNotificationSound();
-
-
-    recognition.start();
-
-
-    recognition.onresult = event => {
-
-        const text =
-            event.results[0][0].transcript;
-
-        const input =
-            document.getElementById("search-input");
-
-        if (input)
-            input.value = text;
-
-        searchMenu(text);
-
-        document
-            .getElementById("menu")
-            ?.scrollIntoView({
-                behavior: "smooth"
-            });
-
-        showToast(
-            `Searching for "${text}"`
-        );
-
-    };
-
-
-    recognition.onerror = () => {
-
-        showToast(
-            "Voice search could not understand that. Please try again."
-        );
-
-    };
-
-}
-
-
-/* =========================================================
-   CART
-========================================================= */
-
-function addToCart(id) {
-
-    const item =
-        menuData.find(food => food.id === id);
-
-    if (!item) return;
-
-
-    const existing =
-        cart.find(cartItem => cartItem.id === id);
-
-
-    if (existing) {
-
-        existing.quantity += 1;
-
-    } else {
-
-        cart.push({
-            id: item.id,
-            quantity: 1
-        });
-
-    }
-
-
-    saveCart();
-
-    updateCart();
-
-    showToast(
-        `${item.name} added to cart 🛒`
-    );
-
-    playSuccessSound();
-
-}
-
-
-function removeFromCart(id) {
-
-    cart =
-        cart.filter(item => item.id !== id);
-
-    saveCart();
-
-    updateCart();
-
-}
-
-
-function changeCartQuantity(id, amount) {
-
-    const item =
-        cart.find(cartItem => cartItem.id === id);
-
-    if (!item) return;
-
-
-    item.quantity += amount;
-
-
-    if (item.quantity <= 0) {
-
-        removeFromCart(id);
-
-        return;
-
-    }
-
-
-    saveCart();
-
-    updateCart();
-
-}
-
-
-function getCartItems() {
-
-    return cart
-        .map(cartItem => {
-
-            const food =
-                menuData.find(
-                    item => item.id === cartItem.id
-                );
-
-            if (!food) return null;
-
-            return {
-                ...food,
-                quantity: cartItem.quantity
-            };
-
-        })
-        .filter(Boolean);
-
-}
-
-
-function getCartSubtotal() {
-
-    return getCartItems()
-        .reduce(
-            (total, item) =>
-                total + item.price * item.quantity,
-            0
-        );
-
-}
-
-
-function getCartTotal() {
-
-    return Math.max(
-        0,
-        getCartSubtotal() - appliedDiscount
-    );
-
-}
-
-
-function updateCart() {
-
-    const cartItems =
-        document.getElementById("cart-items");
-
-    const cartTotal =
-        document.getElementById("cart-total");
-
-    const discountElement =
-        document.getElementById("cart-discount");
-
-    const floatingCount =
-        document.getElementById(
-            "floating-cart-count"
-        );
-
-
-    const items =
-        getCartItems();
-
-
-    const totalQuantity =
-        items.reduce(
-            (sum, item) =>
-                sum + item.quantity,
-            0
-        );
-
-
-    if (floatingCount)
-        floatingCount.textContent =
-            totalQuantity;
-
-
-    if (discountElement)
-        discountElement.textContent =
-            formatPrice(appliedDiscount);
-
-
-    if (cartTotal)
-        cartTotal.textContent =
-            formatPrice(getCartTotal());
-
-
-    if (!cartItems) return;
-
-
-    if (items.length === 0) {
-
-        cartItems.innerHTML = `
-
-            <div class="empty-cart">
-
-                <i class="fa-solid fa-basket-shopping"></i>
-
-                <h3>Your cart is empty</h3>
-
-                <p>Add something delicious!</p>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    cartItems.innerHTML = "";
-
-
-    items.forEach(item => {
-
-        const row =
-            document.createElement("div");
-
-        row.className = "cart-item";
-
-        row.innerHTML = `
-
-            <img
-                src="${item.image}"
-                alt="${escapeHTML(item.name)}">
-
-            <div class="cart-item-info">
-
-                <h4>
-                    ${escapeHTML(item.name)}
-                </h4>
-
-                <strong>
-                    ${formatPrice(item.price)}
-                </strong>
-
-                <div class="quantity-controls">
-
-                    <button
-                        onclick="changeCartQuantity(${item.id}, -1)">
-                        −
-                    </button>
-
-                    <span>
-                        ${item.quantity}
+                <div class="food-card-bottom">
+                    <span class="food-price">
+                        ${formatPrice(item.price)}
                     </span>
 
                     <button
-                        onclick="changeCartQuantity(${item.id}, 1)">
-                        +
+                        class="add-cart-btn"
+                        onclick="addToCart(${item.id})"
+                        aria-label="Add ${escapeHTML(item.name)} to cart"
+                    >
+                        <i class="fa-solid fa-plus"></i>
                     </button>
-
                 </div>
-
             </div>
-
-            <button
-                class="remove-cart-btn"
-                onclick="removeFromCart(${item.id})"
-                aria-label="Remove item">
-
-                <i class="fa-solid fa-trash"></i>
-
-            </button>
-
         `;
 
-        cartItems.appendChild(row);
+        card.addEventListener("click", event => {
+            if (
+                event.target.closest("button")
+            ) {
+                return;
+            }
 
+            openItemDetail(item.id);
+        });
+
+        container.appendChild(card);
     });
-
 }
 
-
-function saveCart() {
-
-    localStorage.setItem(
-        "foodieCart",
-        JSON.stringify(cart)
-    );
-
-}
-
-
-/* =========================================================
-   CART SIDEBAR
-========================================================= */
-
-function toggleCart() {
-
-    const sidebar =
-        document.getElementById("cart-sidebar");
-
-    if (!sidebar) return;
-
-    sidebar.classList.toggle("open");
-
-    document.body.classList.toggle(
-        "cart-open",
-        sidebar.classList.contains("open")
-    );
-
-}
-
-
-/* =========================================================
-   COUPON
-========================================================= */
-
-function applyCoupon() {
-
-    const input =
-        document.getElementById("coupon-input");
-
-    if (!input) return;
-
-
-    const code =
-        input.value
-            .trim()
-            .toUpperCase();
-
-
-    const subtotal =
-        getCartSubtotal();
-
-
-    if (!code) {
-
-        showToast(
-            "Please enter a promo code."
-        );
-
-        return;
-
-    }
-
-
-    if (code === "FOODIE10") {
-
-        appliedDiscount =
-            Math.round(subtotal * 0.10);
-
-        showToast(
-            "10% discount applied 🎉"
-        );
-
-    } else if (code === "WELCOME200") {
-
-        appliedDiscount =
-            Math.min(200, subtotal);
-
-        showToast(
-            "PKR 200 discount applied 🎉"
-        );
-
-    } else {
-
-        appliedDiscount = 0;
-
-        showToast(
-            "Invalid promo code."
-        );
-
-    }
-
-
-    updateCart();
-
-}
-
-
-/* =========================================================
-   WISHLIST
-========================================================= */
-
-function toggleWishlist(id, event) {
-
-    if (event)
-        event.stopPropagation();
-
-
-    if (wishlist.includes(id)) {
-
-        wishlist =
-            wishlist.filter(itemId => itemId !== id);
-
-        showToast("Removed from wishlist.");
-
-    } else {
-
-        wishlist.push(id);
-
-        showToast("Added to wishlist ❤️");
-
-        playSuccessSound();
-
-    }
-
-
-    localStorage.setItem(
-        "foodieWishlist",
-        JSON.stringify(wishlist)
-    );
-
-
-    updateWishlist();
-
-    renderMenu();
-
-}
-
-
-function updateWishlist() {
-
-    const count =
-        document.getElementById("wishlist-count");
-
-    if (count)
-        count.textContent =
-            wishlist.length;
-
-
-    renderWishlistItems();
-
-}
-
-
-function renderWishlistItems() {
-
-    const container =
-        document.getElementById("wishlist-items");
-
-    if (!container) return;
-
-
-    const items =
-        menuData.filter(item =>
-            wishlist.includes(item.id)
-        );
-
-
-    if (items.length === 0) {
-
-        container.innerHTML = `
-
-            <div class="empty-state">
-
-                <i class="fa-regular fa-heart"></i>
-
-                <h3>Your wishlist is empty</h3>
-
-                <p>Add your favorite dishes here.</p>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    container.innerHTML = items
-        .map(item => `
-
-            <div class="wishlist-item">
-
-                <img
-                    src="${item.image}"
-                    alt="${escapeHTML(item.name)}">
-
-                <div>
-
-                    <h3>
-                        ${escapeHTML(item.name)}
-                    </h3>
-
-                    <strong>
-                        ${formatPrice(item.price)}
-                    </strong>
-
-                </div>
-
-                <button
-                    onclick="addToCart(${item.id})">
-
-                    <i class="fa-solid fa-cart-plus"></i>
-
-                </button>
-
-                <button
-                    onclick="toggleWishlist(${item.id})">
-
-                    <i class="fa-solid fa-trash"></i>
-
-                </button>
-
-            </div>
-
-        `)
-        .join("");
-
-}
-
-
-function toggleWishlistModal() {
-
-    const modal =
-        document.getElementById(
-            "wishlist-modal"
-        );
-
-    if (!modal) return;
-
-    modal.classList.toggle("hidden");
-
-    renderWishlistItems();
-
-}
-
-
-/* =========================================================
+/* =========================
    ITEM DETAIL
-========================================================= */
+   ========================= */
 
-function openItemDetailModal(id) {
-
-    const item =
-        menuData.find(food => food.id === id);
+function openItemDetail(id) {
+    const item = menuItems.find(
+        product => Number(product.id) === Number(id)
+    );
 
     if (!item) return;
 
-
-    selectedDetailItem = item;
-
-
-    const modal =
-        document.getElementById(
-            "item-detail-modal"
-        );
-
-    const body =
-        document.getElementById(
-            "item-detail-body"
-        );
-
-
-    if (!modal || !body) return;
-
-
-    body.innerHTML = `
-
-        <div class="detail-layout">
-
-            <img
-                src="${item.image}"
-                alt="${escapeHTML(item.name)}">
-
-            <div class="detail-info">
-
-                <span>
-                    ${escapeHTML(item.category)}
-                </span>
-
-                <h2>
-                    ${escapeHTML(item.name)}
-                </h2>
-
-                <p>
-                    ${escapeHTML(item.description)}
-                </p>
-
-                <strong class="detail-price">
-                    ${formatPrice(item.price)}
-                </strong>
-
-                <button
-                    class="primary-btn full-btn"
-                    onclick="addToCart(${item.id}); closeItemDetailModal();">
-
-                    <i class="fa-solid fa-cart-plus"></i>
-                    Add To Cart
-
-                </button>
-
-            </div>
-
-        </div>
-
-    `;
-
-
-    modal.classList.remove("hidden");
-
-}
-
-
-function closeItemDetailModal() {
-
-    document
-        .getElementById("item-detail-modal")
-        ?.classList.add("hidden");
-
-}
-
-
-/* =========================================================
-   CHECKOUT
-========================================================= */
-
-function checkout() {
-
-    if (cart.length === 0) {
-
-        showToast(
-            "Your cart is empty. Add food first!"
-        );
-
-        return;
-
-    }
-
-
-    const modal =
-        document.getElementById(
-            "checkout-modal"
-        );
+    const modal = document.getElementById("item-detail-modal");
 
     if (!modal) return;
 
+    const image = modal.querySelector("#item-detail-image");
+    const title = modal.querySelector("#item-detail-title");
+    const description = modal.querySelector("#item-detail-description");
+    const price = modal.querySelector("#item-detail-price");
 
+    if (image) {
+        image.src = item.image;
+        image.alt = item.name;
+    }
+
+    if (title) title.textContent = item.name;
+    if (description) description.textContent = item.description;
+    if (price) price.textContent = formatPrice(item.price);
+
+    modal.dataset.itemId = item.id;
     modal.classList.remove("hidden");
 
-    toggleCartIfOpen();
-
+    document.body.classList.add("no-scroll");
 }
 
+function closeItemDetail() {
+    const modal = document.getElementById("item-detail-modal");
 
-function toggleCartIfOpen() {
+    if (modal) modal.classList.add("hidden");
 
-    const sidebar =
-        document.getElementById(
-            "cart-sidebar"
-        );
+    document.body.classList.remove("no-scroll");
+}
 
-    if (
-        sidebar &&
-        sidebar.classList.contains("open")
-    ) {
+function addFlavorToCart() {
+    const modal = document.getElementById("item-detail-modal");
 
-        sidebar.classList.remove("open");
+    if (!modal) return;
 
-        document.body.classList.remove(
-            "cart-open"
-        );
+    const id = Number(modal.dataset.itemId);
 
+    if (!id) return;
+
+    addToCart(id);
+    closeItemDetail();
+}
+
+/* =========================
+   CART
+   ========================= */
+
+function addToCart(id) {
+    const item = menuItems.find(
+        product => Number(product.id) === Number(id)
+    );
+
+    if (!item) return;
+
+    const existing = cart.find(
+        cartItem => Number(cartItem.id) === Number(id)
+    );
+
+    if (existing) {
+        existing.quantity += 1;
+    } else {
+        cart.push({
+            id: item.id,
+            name: item.name,
+            category: item.category,
+            price: item.price,
+            image: item.image,
+            quantity: 1
+        });
     }
 
+    saveData();
+    renderCart();
+    updateCartCount();
+
+    showToast(`${item.name} added to cart`);
+    playCustomSound("success");
 }
 
+function removeFromCart(id) {
+    const index = cart.findIndex(
+        item => Number(item.id) === Number(id)
+    );
+
+    if (index === -1) return;
+
+    cart.splice(index, 1);
+
+    saveData();
+    renderCart();
+    updateCartCount();
+}
+
+function changeCartQuantity(id, change) {
+    const item = cart.find(
+        product => Number(product.id) === Number(id)
+    );
+
+    if (!item) return;
+
+    item.quantity += change;
+
+    if (item.quantity <= 0) {
+        cart = cart.filter(
+            product => Number(product.id) !== Number(id)
+        );
+    }
+
+    saveData();
+    renderCart();
+    updateCartCount();
+}
+
+function updateCartCount() {
+    const count = cart.reduce(
+        (total, item) => total + Number(item.quantity || 0),
+        0
+    );
+
+    document.querySelectorAll(".cart-count").forEach(element => {
+        element.textContent = count;
+        element.classList.toggle("hidden", count === 0);
+    });
+}
+
+function getCartSubtotal() {
+    return cart.reduce(
+        (total, item) =>
+            total +
+            Number(item.price) * Number(item.quantity),
+        0
+    );
+}
+
+function getDiscountAmount() {
+    return getCartSubtotal() * (currentDiscount / 100);
+}
+
+function getDeliveryFee() {
+    if (!cart.length) return 0;
+
+    return getCartSubtotal() >= 2000 ? 0 : 150;
+}
+
+function getCartTotal() {
+    return (
+        getCartSubtotal() -
+        getDiscountAmount() +
+        getDeliveryFee()
+    );
+}
+
+function renderCart() {
+    const container = document.getElementById("cart-items");
+
+    if (!container) return;
+
+    if (!cart.length) {
+        container.innerHTML = `
+            <div style="text-align:center;padding:55px 15px;color:var(--muted);">
+                <i
+                    class="fa-solid fa-basket-shopping"
+                    style="font-size:2.5rem;margin-bottom:15px;"
+                ></i>
+
+                <h3 style="margin-bottom:7px;">
+                    Your cart is empty
+                </h3>
+
+                <p style="font-size:.75rem;">
+                    Add something delicious to get started.
+                </p>
+            </div>
+        `;
+    } else {
+        container.innerHTML = cart.map(item => `
+            <div class="cart-item">
+                <img
+                    src="${item.image}"
+                    alt="${escapeHTML(item.name)}"
+                >
+
+                <div>
+                    <h4>${escapeHTML(item.name)}</h4>
+
+                    <small>
+                        ${formatPrice(item.price)}
+                    </small>
+
+                    <div class="cart-item-controls">
+                        <button
+                            onclick="changeCartQuantity(${item.id}, -1)"
+                        >
+                            −
+                        </button>
+
+                        <strong>
+                            ${item.quantity}
+                        </strong>
+
+                        <button
+                            onclick="changeCartQuantity(${item.id}, 1)"
+                        >
+                            +
+                        </button>
+
+                        <button
+                            onclick="removeFromCart(${item.id})"
+                            title="Remove"
+                        >
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <strong>
+                    ${formatPrice(item.price * item.quantity)}
+                </strong>
+            </div>
+        `).join("");
+    }
+
+    const subtotal = document.getElementById("cart-subtotal");
+    const discount = document.getElementById("cart-discount");
+    const delivery = document.getElementById("cart-delivery");
+    const total = document.getElementById("cart-total");
+
+    if (subtotal) subtotal.textContent = formatPrice(getCartSubtotal());
+    if (discount) discount.textContent = `-${formatPrice(getDiscountAmount())}`;
+    if (delivery) {
+        delivery.textContent =
+            getDeliveryFee() === 0
+                ? "FREE"
+                : formatPrice(getDeliveryFee());
+    }
+
+    if (total) total.textContent = formatPrice(getCartTotal());
+}
+
+function toggleCart() {
+    const sidebar = document.getElementById("cart-sidebar");
+    const overlay = document.getElementById("cart-overlay");
+
+    if (!sidebar) return;
+
+    const active = sidebar.classList.toggle("active");
+
+    if (overlay) {
+        overlay.classList.toggle("active", active);
+    }
+
+    document.body.classList.toggle("no-scroll", active);
+}
+
+function closeCart() {
+    const sidebar = document.getElementById("cart-sidebar");
+    const overlay = document.getElementById("cart-overlay");
+
+    if (sidebar) sidebar.classList.remove("active");
+    if (overlay) overlay.classList.remove("active");
+
+    document.body.classList.remove("no-scroll");
+}
+
+/* =========================
+   COUPONS
+   ========================= */
+
+function applyCoupon() {
+    const input = document.getElementById("coupon-code");
+
+    if (!input) return;
+
+    const code = input.value.trim().toUpperCase();
+
+    const coupons = {
+        FOODIE50: 10,
+        WELCOME: 5
+    };
+
+    if (!code) {
+        showToast("Please enter a coupon code.", "error");
+        return;
+    }
+
+    if (!coupons[code]) {
+        currentDiscount = 0;
+        showToast("Invalid coupon code.", "error");
+        playCustomSound("error");
+        renderCart();
+        return;
+    }
+
+    if (!cart.length) {
+        showToast("Add items to cart before applying a coupon.", "error");
+        return;
+    }
+
+    currentDiscount = coupons[code];
+
+    showToast(`${currentDiscount}% discount applied!`);
+    playCustomSound("success");
+
+    renderCart();
+}
+
+/* =========================
+   WISHLIST
+   ========================= */
+
+function toggleWishlistItem(id) {
+    const item = menuItems.find(
+        product => Number(product.id) === Number(id)
+    );
+
+    if (!item) return;
+
+    const index = wishlist.findIndex(
+        favorite => Number(favorite.id) === Number(id)
+    );
+
+    if (index === -1) {
+        wishlist.push({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            image: item.image,
+            category: item.category
+        });
+
+        showToast(`${item.name} added to wishlist`);
+    } else {
+        wishlist.splice(index, 1);
+
+        showToast(`${item.name} removed from wishlist`);
+    }
+
+    saveData();
+    renderMenu(
+        document.getElementById("menu-search-input")?.value || ""
+    );
+}
+
+function toggleWishlistModal() {
+    const modal = document.getElementById("wishlist-modal");
+
+    if (!modal) return;
+
+    renderWishlist();
+
+    modal.classList.toggle("hidden");
+
+    document.body.classList.toggle(
+        "no-scroll",
+        !modal.classList.contains("hidden")
+    );
+}
+
+function renderWishlist() {
+    const container = document.getElementById("wishlist-container");
+
+    if (!container) return;
+
+    if (!wishlist.length) {
+        container.innerHTML = `
+            <div style="text-align:center;padding:35px;color:var(--muted);">
+                <i
+                    class="fa-regular fa-heart"
+                    style="font-size:2.5rem;margin-bottom:15px;"
+                ></i>
+
+                <p>Your wishlist is empty.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+    container.innerHTML = wishlist.map(item => `
+        <div class="wishlist-item">
+            <img
+                src="${item.image}"
+                alt="${escapeHTML(item.name)}"
+                style="width:100%;height:130px;object-fit:cover;border-radius:10px;margin-bottom:10px;"
+            >
+
+            <strong>
+                ${escapeHTML(item.name)}
+            </strong>
+
+            <p style="color:var(--primary);font-weight:700;">
+                ${formatPrice(item.price)}
+            </p>
+
+            <button
+                class="btn btn-primary"
+                style="width:100%;margin-top:8px;"
+                onclick="addToCart(${item.id})"
+            >
+                <i class="fa-solid fa-cart-plus"></i>
+                Add to Cart
+            </button>
+        </div>
+    `).join("");
+}
+
+/* =========================
+   CHECKOUT
+   ========================= */
+
+function checkout() {
+    if (!cart.length) {
+        showToast("Your cart is empty.", "error");
+        playCustomSound("error");
+        return;
+    }
+
+    closeCart();
+
+    const checkoutPage =
+        document.getElementById("checkout-page");
+
+    if (!checkoutPage) {
+        showToast("Checkout page could not be opened.", "error");
+        return;
+    }
+
+    renderCheckout();
+
+    checkoutPage.classList.remove("hidden");
+
+    document.body.classList.add("no-scroll");
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+function closeCheckoutPage() {
+    const checkoutPage =
+        document.getElementById("checkout-page");
+
+    if (checkoutPage) {
+        checkoutPage.classList.add("hidden");
+    }
+
+    document.body.classList.remove("no-scroll");
+}
 
 function closeCheckoutModal() {
-
-    document
-        .getElementById("checkout-modal")
-        ?.classList.add("hidden");
-
+    closeCheckoutPage();
 }
 
+function renderCheckout() {
+    const container =
+        document.getElementById("checkout-items");
 
-function togglePaymentInfo() {
+    if (!container) return;
 
-    const select =
-        document.getElementById(
-            "payment-method"
-        );
+    container.innerHTML = cart.map(item => `
+        <div class="checkout-item">
+            <img
+                src="${item.image}"
+                alt="${escapeHTML(item.name)}"
+            >
 
-    const details =
-        document.getElementById(
-            "online-payment-details"
-        );
+            <div>
+                <h4>${escapeHTML(item.name)}</h4>
 
-    if (!select || !details) return;
+                <small>
+                    ${item.quantity} × ${formatPrice(item.price)}
+                </small>
+            </div>
 
+            <strong>
+                ${formatPrice(item.price * item.quantity)}
+            </strong>
+        </div>
+    `).join("");
 
-    if (
-        select.value === "Cash on Delivery" ||
-        !select.value
-    ) {
+    const subtotal =
+        document.getElementById("checkout-subtotal");
 
-        details.classList.add("hidden");
+    const discount =
+        document.getElementById("checkout-discount");
 
-    } else {
+    const delivery =
+        document.getElementById("checkout-delivery");
 
-        details.classList.remove("hidden");
+    const total =
+        document.getElementById("checkout-total");
 
+    if (subtotal) {
+        subtotal.textContent = formatPrice(getCartSubtotal());
     }
 
+    if (discount) {
+        discount.textContent =
+            `-${formatPrice(getDiscountAmount())}`;
+    }
+
+    if (delivery) {
+        delivery.textContent =
+            getDeliveryFee() === 0
+                ? "FREE"
+                : formatPrice(getDeliveryFee());
+    }
+
+    if (total) {
+        total.textContent = formatPrice(getCartTotal());
+    }
 }
 
+/* =========================
+   PAYMENT
+   ========================= */
 
-/* =========================================================
-   PROCESS ORDER
-========================================================= */
+function setPaymentMethod(method) {
+    const select =
+        document.getElementById("payment-method");
+
+    if (select) {
+        select.value = method;
+    }
+
+    togglePaymentInfo(method);
+}
+
+function togglePaymentInfo(method) {
+    const details =
+        document.getElementById("online-payment-details");
+
+    if (!details) return;
+
+    const selected =
+        method ||
+        document.getElementById("payment-method")?.value ||
+        "cod";
+
+    if (
+        selected === "card" ||
+        selected === "jazzcash" ||
+        selected === "easypaisa"
+    ) {
+        details.classList.remove("hidden");
+    } else {
+        details.classList.add("hidden");
+    }
+}
+
+/* =========================
+   ORDER PROCESSING
+   ========================= */
 
 function processOrder(event) {
+    if (event) event.preventDefault();
 
-    event.preventDefault();
-
-
-    if (cart.length === 0) {
-
-        showToast(
-            "Your cart is empty."
-        );
-
+    if (!cart.length) {
+        showToast("Your cart is empty.", "error");
         return;
-
     }
-
 
     const name =
-        document.getElementById(
-            "cust-name"
-        )?.value.trim();
-
+        document.getElementById("cust-name")?.value.trim();
 
     const phone =
-        document.getElementById(
-            "cust-phone"
-        )?.value.trim();
-
+        document.getElementById("cust-phone")?.value.trim();
 
     const address =
-        document.getElementById(
-            "cust-address"
-        )?.value.trim();
-
+        document.getElementById("cust-address")?.value.trim();
 
     const payment =
-        document.getElementById(
-            "payment-method"
-        )?.value;
+        document.getElementById("payment-method")?.value ||
+        document.querySelector(
+            'input[name="payment"]:checked'
+        )?.value ||
+        "cod";
 
-
-    if (
-        !name ||
-        !phone ||
-        !address ||
-        !payment
-    ) {
-
-        showToast(
-            "Please complete all checkout fields."
-        );
-
+    if (!name) {
+        showToast("Please enter your full name.", "error");
+        focusElement("cust-name");
         return;
-
     }
 
+    if (!phone || !isValidPhone(phone)) {
+        showToast("Please enter a valid phone number.", "error");
+        focusElement("cust-phone");
+        return;
+    }
 
-    const orderNumber =
-        "FE" +
-        Date.now()
-            .toString()
-            .slice(-8);
+    if (!address) {
+        showToast("Please enter your delivery address.", "error");
+        focusElement("cust-address");
+        return;
+    }
 
+    const orderId =
+        "FE-" +
+        Date.now().toString().slice(-8);
 
     const order = {
-
-        id: orderNumber,
-
-        date:
-            new Date().toLocaleString(),
-
+        id: orderId,
         customer: {
             name,
             phone,
             address
         },
-
         payment,
-
-        items: getCartItems(),
-
+        items: cart.map(item => ({
+            ...item
+        })),
         subtotal: getCartSubtotal(),
-
-        discount: appliedDiscount,
-
-        total: getCartTotal()
-
+        discount: getDiscountAmount(),
+        delivery: getDeliveryFee(),
+        total: getCartTotal(),
+        currency: currentCurrency,
+        date: new Date().toISOString(),
+        status: "Order Confirmed"
     };
-
 
     orderHistory.unshift(order);
 
+    totalOrders += 1;
 
-    localStorage.setItem(
-        "foodieOrders",
-        JSON.stringify(orderHistory)
+    loyaltyCoins += Math.max(
+        1,
+        Math.floor(order.total / 100)
     );
 
+    saveData();
 
     sendOrderToWhatsApp(order);
 
-
     cart = [];
+    currentDiscount = 0;
 
-    appliedDiscount = 0;
+    saveData();
+    renderCart();
+    updateCartCount();
 
-    saveCart();
+    startOrderTracking(order);
 
-    updateCart();
-
-    updateDashboard();
-
-
-    closeCheckoutModal();
-
-
-    showTracking();
-
+    closeCheckoutPage();
 
     showToast(
-        `Order ${orderNumber} placed successfully! 🎉`
+        `Order ${orderId} placed successfully!`
     );
 
+    playCustomSound("success");
 
-    playSuccessSound();
+    setTimeout(() => {
+        const tracking =
+            document.getElementById("tracking-section");
 
+        if (tracking) {
+            tracking.classList.remove("hidden");
 
-    document
-        .getElementById("checkout-form")
-        ?.reset();
-
-
-    togglePaymentInfo();
-
+            tracking.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }
+    }, 500);
 }
 
+function focusElement(id) {
+    const element = document.getElementById(id);
 
-/* =========================================================
+    if (element) {
+        element.focus();
+        element.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    }
+}
+
+function isValidPhone(phone) {
+    const cleaned = phone.replace(/[\s\-()]/g, "");
+
+    return (
+        /^(\+92|0092|92|0)?3\d{9}$/.test(cleaned)
+    );
+}
+
+/* =========================
    WHATSAPP ORDER
-========================================================= */
+   ========================= */
 
 function sendOrderToWhatsApp(order) {
+    const lines = [];
 
-    const itemsText =
-        order.items
-            .map(item =>
-                `• ${item.name} x${item.quantity} - ${formatPrice(item.price * item.quantity)}`
-            )
-            .join("\n");
+    lines.push("🍔 *FOODIE EXPRESS — NEW ORDER*");
+    lines.push("");
+    lines.push(`🧾 Order ID: ${order.id}`);
+    lines.push(`👤 Name: ${order.customer.name}`);
+    lines.push(`📱 Phone: ${order.customer.phone}`);
+    lines.push(`📍 Address: ${order.customer.address}`);
+    lines.push(`💳 Payment: ${getPaymentLabel(order.payment)}`);
+    lines.push("");
+    lines.push("🍽️ *ORDER ITEMS*");
 
+    order.items.forEach(item => {
+        lines.push(
+            `• ${item.name} × ${item.quantity} = ${formatPrice(
+                item.price * item.quantity
+            )}`
+        );
+    });
 
-    const message = `
+    lines.push("");
+    lines.push(`Subtotal: ${formatPrice(order.subtotal)}`);
+    lines.push(`Discount: -${formatPrice(order.discount)}`);
+    lines.push(
+        `Delivery: ${
+            order.delivery === 0
+                ? "FREE"
+                : formatPrice(order.delivery)
+        }`
+    );
+    lines.push(`*TOTAL: ${formatPrice(order.total)}*`);
+    lines.push("");
+    lines.push("Thank you for ordering from Foodie Express! ❤️");
 
-🍔 *FOODIE EXPRESS ORDER*
-
-📦 Order ID: ${order.id}
-
-👤 Customer:
-${order.customer.name}
-
-📱 Phone:
-${order.customer.phone}
-
-📍 Address:
-${order.customer.address}
-
-💳 Payment:
-${order.payment}
-
-🍽️ Items:
-${itemsText}
-
-💰 Subtotal:
-${formatPrice(order.subtotal)}
-
-🎁 Discount:
-${formatPrice(order.discount)}
-
-💵 *Total:
-${formatPrice(order.total)}*
-
-Please confirm my order.
-
-`.trim();
-
+    const message = lines.join("\n");
 
     const url =
-        `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+        `https://wa.me/${adminWhatsAppNumber}?text=` +
+        encodeURIComponent(message);
 
-
-    window.open(
-        url,
-        "_blank",
-        "noopener,noreferrer"
-    );
-
+    window.open(url, "_blank", "noopener,noreferrer");
 }
 
+function getPaymentLabel(method) {
+    const labels = {
+        cod: "Cash on Delivery",
+        cash: "Cash on Delivery",
+        jazzcash: "JazzCash",
+        easypaisa: "EasyPaisa",
+        card: "Debit / Credit Card"
+    };
 
-/* =========================================================
-   TRACKING
-========================================================= */
+    return labels[method] || method;
+}
 
-function showTracking() {
+/* =========================
+   ORDER TRACKING
+   ========================= */
 
+function startOrderTracking(order) {
     const section =
-        document.getElementById(
-            "tracking-section"
-        );
+        document.getElementById("tracking-section");
 
     if (!section) return;
 
-
     section.classList.remove("hidden");
 
-
-    section.scrollIntoView({
-        behavior: "smooth"
-    });
-
-
-    animateTracking();
-
-
-}
-
-
-function animateTracking() {
-
     const steps =
-        document.querySelectorAll(
-            ".tracking-step"
-        );
-
+        section.querySelectorAll(".tracking-step");
 
     steps.forEach(step =>
         step.classList.remove("active")
     );
 
+    if (steps[0]) steps[0].classList.add("active");
 
-    steps.forEach((step, index) => {
+    clearInterval(trackingTimer);
 
-        setTimeout(() => {
+    let currentStep = 0;
 
-            step.classList.add("active");
+    trackingTimer = setInterval(() => {
+        currentStep++;
 
-        }, index * 1300);
+        if (steps[currentStep]) {
+            steps[currentStep].classList.add("active");
+        }
 
-    });
-
+        if (currentStep >= steps.length - 1) {
+            clearInterval(trackingTimer);
+        }
+    }, 5000);
 }
 
+/* =========================
+   DASHBOARD
+   ========================= */
 
-/* =========================================================
+function openDashboardModal() {
+    const modal =
+        document.getElementById("dashboard-modal");
+
+    if (!modal) return;
+
+    updateDashboard();
+
+    modal.classList.remove("hidden");
+
+    document.body.classList.add("no-scroll");
+}
+
+function closeDashboardModal() {
+    const modal =
+        document.getElementById("dashboard-modal");
+
+    if (modal) modal.classList.add("hidden");
+
+    document.body.classList.remove("no-scroll");
+}
+
+function updateDashboard() {
+    const userName =
+        document.getElementById("dashboard-user");
+
+    const coins =
+        document.getElementById("loyalty-coins");
+
+    const orders =
+        document.getElementById("total-orders");
+
+    const history =
+        document.getElementById("order-history");
+
+    if (userName) {
+        userName.textContent =
+            currentUser?.name || "Guest User";
+    }
+
+    if (coins) coins.textContent = loyaltyCoins;
+
+    if (orders) orders.textContent = totalOrders;
+
+    if (history) {
+        if (!orderHistory.length) {
+            history.innerHTML = `
+                <p style="color:var(--muted);">
+                    No orders yet.
+                </p>
+            `;
+        } else {
+            history.innerHTML = orderHistory
+                .slice(0, 10)
+                .map(order => `
+                    <div
+                        style="
+                            padding:13px;
+                            border:1px solid var(--border);
+                            border-radius:12px;
+                            margin-bottom:9px;
+                        "
+                    >
+                        <strong>${order.id}</strong>
+
+                        <div
+                            style="
+                                display:flex;
+                                justify-content:space-between;
+                                gap:10px;
+                                margin-top:5px;
+                            "
+                        >
+                            <small>
+                                ${order.status}
+                            </small>
+
+                            <strong>
+                                ${formatPrice(order.total)}
+                            </strong>
+                        </div>
+                    </div>
+                `)
+                .join("");
+        }
+    }
+}
+
+/* =========================
    AUTH
-========================================================= */
+   ========================= */
 
-function openAuthModal() {
-
+function openAuthModal(type = "login") {
     const modal =
         document.getElementById("auth-modal");
 
@@ -1657,1401 +1516,922 @@ function openAuthModal() {
 
     modal.classList.remove("hidden");
 
-    switchAuthScreen(
-        currentUser
-            ? "login"
-            : "login"
-    );
+    document.body.classList.add("no-scroll");
 
+    switchAuthForm(type);
 }
-
 
 function closeAuthModal() {
+    const modal =
+        document.getElementById("auth-modal");
+
+    if (modal) modal.classList.add("hidden");
+
+    document.body.classList.remove("no-scroll");
+}
+
+function switchAuthForm(type) {
+    document
+        .querySelectorAll(".auth-form")
+        .forEach(form => {
+            form.classList.add("hidden");
+        });
+
+    const target =
+        document.getElementById(
+            type === "signup"
+                ? "signup-form"
+                : "login-form"
+        );
+
+    if (target) target.classList.remove("hidden");
 
     document
-        .getElementById("auth-modal")
-        ?.classList.add("hidden");
-
-}
-
-
-function switchAuthScreen(screen) {
-
-    const login =
-        document.getElementById(
-            "login-screen"
-        );
-
-    const signup =
-        document.getElementById(
-            "signup-screen"
-        );
-
-
-    if (!login || !signup) return;
-
-
-    login.classList.toggle(
-        "hidden",
-        screen !== "login"
-    );
-
-
-    signup.classList.toggle(
-        "hidden",
-        screen !== "signup"
-    );
-
-}
-
-
-function handleAuth(event, type) {
-
-    event.preventDefault();
-
-
-    if (type === "signup") {
-
-        const name =
-            document.getElementById(
-                "signup-name"
-            )?.value.trim();
-
-
-        const email =
-            document.getElementById(
-                "signup-email"
-            )?.value.trim();
-
-
-        const password =
-            document.getElementById(
-                "signup-password"
-            )?.value;
-
-
-        if (!name || !email || !password) {
-
-            showToast(
-                "Please complete all signup fields."
+        .querySelectorAll(".auth-tabs button")
+        .forEach(button => {
+            button.classList.toggle(
+                "active",
+                button.dataset.auth === type
             );
+        });
+}
 
-            return;
-
-        }
-
-
-        currentUser = {
-
-            name,
-            email,
-
-            coins: 0
-
-        };
-
-
-        localStorage.setItem(
-            "foodieUser",
-            JSON.stringify(currentUser)
-        );
-
-
-        showToast(
-            "Account created successfully 🎉"
-        );
-
-
-        switchAuthScreen("login");
-
-        return;
-
-    }
-
+function loginUser(event) {
+    if (event) event.preventDefault();
 
     const email =
-        document.getElementById(
-            "login-email"
-        )?.value.trim();
-
+        document.getElementById("login-email")?.value.trim();
 
     const password =
-        document.getElementById(
-            "login-password"
-        )?.value;
-
+        document.getElementById("login-password")?.value;
 
     if (!email || !password) {
-
-        showToast(
-            "Please enter email and password."
-        );
-
+        showToast("Please fill all login fields.", "error");
         return;
-
     }
 
+    const users =
+        JSON.parse(localStorage.getItem("foodie_users")) || [];
 
-    currentUser = {
-
-        name:
-            email.split("@")[0],
-
-        email,
-
-        coins:
-            currentUser?.coins || 0
-
-    };
-
-
-    localStorage.setItem(
-        "foodieUser",
-        JSON.stringify(currentUser)
+    const user = users.find(
+        account =>
+            account.email.toLowerCase() === email.toLowerCase() &&
+            account.password === password
     );
 
+    if (!user) {
+        showToast(
+            "Incorrect email or password.",
+            "error"
+        );
+
+        playCustomSound("error");
+        return;
+    }
+
+    currentUser = {
+        name: user.name,
+        email: user.email
+    };
+
+    saveData();
 
     closeAuthModal();
 
-    updateDashboard();
+    showToast(`Welcome back, ${user.name}!`);
+    playCustomSound("success");
 
-    showToast(
-        `Welcome back, ${currentUser.name}! 👋`
-    );
-
+    updateAuthButton();
 }
 
+function signupUser(event) {
+    if (event) event.preventDefault();
 
-function handleLogout() {
+    const name =
+        document.getElementById("signup-name")?.value.trim();
 
-    currentUser = null;
+    const email =
+        document.getElementById("signup-email")?.value.trim();
 
-    localStorage.removeItem(
-        "foodieUser"
+    const password =
+        document.getElementById("signup-password")?.value;
+
+    if (!name || !email || !password) {
+        showToast("Please complete all signup fields.", "error");
+        return;
+    }
+
+    if (password.length < 6) {
+        showToast(
+            "Password must be at least 6 characters.",
+            "error"
+        );
+        return;
+    }
+
+    const users =
+        JSON.parse(localStorage.getItem("foodie_users")) || [];
+
+    const exists = users.some(
+        user =>
+            user.email.toLowerCase() === email.toLowerCase()
     );
 
-    updateDashboard();
+    if (exists) {
+        showToast(
+            "An account with this email already exists.",
+            "error"
+        );
+        return;
+    }
+
+    users.push({
+        name,
+        email,
+        password
+    });
+
+    localStorage.setItem(
+        "foodie_users",
+        JSON.stringify(users)
+    );
+
+    currentUser = {
+        name,
+        email
+    };
+
+    saveData();
+
+    closeAuthModal();
+
+    showToast(
+        "Account created successfully!"
+    );
+
+    playCustomSound("success");
+
+    updateAuthButton();
+}
+
+function logoutUser() {
+    currentUser = null;
+
+    saveData();
 
     closeDashboardModal();
 
-    showToast(
-        "You have been logged out."
-    );
+    showToast("You have been logged out.");
 
+    updateAuthButton();
 }
 
+function updateAuthButton() {
+    const button =
+        document.getElementById("login-button");
 
-/* =========================================================
-   DASHBOARD
-========================================================= */
+    if (!button) return;
 
-function openDashboardModal() {
-
-    const modal =
-        document.getElementById(
-            "dashboard-modal"
-        );
-
-    if (!modal) return;
-
-    updateDashboard();
-
-    modal.classList.remove("hidden");
-
-}
-
-
-function closeDashboardModal() {
-
-    document
-        .getElementById(
-            "dashboard-modal"
-        )
-        ?.classList.add("hidden");
-
-}
-
-
-function updateDashboard() {
-
-    const name =
-        document.getElementById(
-            "dash-user-name"
-        );
-
-    const email =
-        document.getElementById(
-            "dash-user-email"
-        );
-
-    const coins =
-        document.getElementById(
-            "dash-user-coins"
-        );
-
-    const totalOrders =
-        document.getElementById(
-            "dash-total-orders"
-        );
-
-
-    if (name) {
-
-        name.textContent =
-            currentUser?.name ||
-            "Guest User";
-
-    }
-
-
-    if (email) {
-
-        email.textContent =
-            currentUser?.email ||
-            "Login to unlock your account.";
-
-    }
-
-
-    if (coins) {
-
-        coins.textContent =
-            currentUser?.coins ||
-            0;
-
-    }
-
-
-    if (totalOrders) {
-
-        totalOrders.textContent =
-            orderHistory.length;
-
-    }
-
-
-    renderOrderHistory();
-
-}
-
-
-function renderOrderHistory() {
-
-    const container =
-        document.getElementById(
-            "history-container"
-        );
-
-    if (!container) return;
-
-
-    if (orderHistory.length === 0) {
-
-        container.innerHTML = `
-
-            <div class="empty-state">
-
-                <i class="fa-solid fa-receipt"></i>
-
-                <h3>No orders yet</h3>
-
-                <p>
-                    Your completed orders will appear here.
-                </p>
-
-            </div>
-
+    if (currentUser) {
+        button.innerHTML = `
+            <i class="fa-solid fa-user-check"></i>
+            <span>${escapeHTML(currentUser.name.split(" ")[0])}</span>
         `;
-
-        return;
-
+    } else {
+        button.innerHTML = `
+            <i class="fa-solid fa-user"></i>
+            <span>Login</span>
+        `;
     }
-
-
-    container.innerHTML =
-        orderHistory
-            .map(order => `
-
-                <div class="history-item">
-
-                    <div>
-
-                        <strong>
-                            ${escapeHTML(order.id)}
-                        </strong>
-
-                        <p>
-                            ${escapeHTML(order.date)}
-                        </p>
-
-                    </div>
-
-                    <strong>
-                        ${formatPrice(order.total)}
-                    </strong>
-
-                </div>
-
-            `)
-            .join("");
-
 }
 
+/* =========================
+   DARK MODE
+   ========================= */
 
-/* =========================================================
-   AI FOOD ASSISTANT
-========================================================= */
+function toggleDarkMode() {
+    const html = document.documentElement;
 
-function startAICallSimulation() {
+    const dark =
+        html.getAttribute("data-theme") === "dark";
 
-    const suggestions = [
-
-        "Try our Zinger Burger 🍔",
-        "Chicken Biryani is a customer favorite 🍚",
-        "Our BBQ Platter is perfect for sharing 🔥",
-        "Want something sweet? Try our Chocolate Shake 🍫",
-        "For a refreshing choice, try Fresh Lime 🍋",
-        "Chicken Pizza would be a delicious choice 🍕"
-
-    ];
-
-
-    const random =
-        suggestions[
-            Math.floor(
-                Math.random() *
-                suggestions.length
-            )
-        ];
-
-
-    showToast(
-        `AI Recommendation: ${random}`,
-        5000
+    html.setAttribute(
+        "data-theme",
+        dark ? "light" : "dark"
     );
 
+    localStorage.setItem(
+        "foodie_theme",
+        dark ? "light" : "dark"
+    );
 
-    setTimeout(() => {
-
-        const match =
-            menuData.find(item =>
-                random
-                    .toLowerCase()
-                    .includes(
-                        item.name
-                            .toLowerCase()
-                    )
-            );
-
-
-        if (match) {
-
-            openItemDetailModal(match.id);
-
-        }
-
-    }, 1000);
-
+    updateDarkModeIcon();
 }
 
+function updateDarkModeIcon() {
+    const button =
+        document.getElementById("dark-mode-btn");
 
-function startAIVoiceInput() {
+    if (!button) return;
 
+    const dark =
+        document.documentElement.getAttribute("data-theme") === "dark";
+
+    button.innerHTML = `
+        <i class="fa-solid ${
+            dark ? "fa-sun" : "fa-moon"
+        }"></i>
+    `;
+}
+
+/* =========================
+   CURRENCY
+   ========================= */
+
+function changeCurrency(value) {
+    if (typeof value !== "string") {
+        const selector =
+            document.getElementById("currency-selector");
+
+        value = selector?.value || "PKR";
+    }
+
+    if (!currencyRates[value]) {
+        value = "PKR";
+    }
+
+    currentCurrency = value;
+
+    localStorage.setItem(
+        "foodie_currency",
+        currentCurrency
+    );
+
+    renderMenu(
+        document.getElementById("menu-search-input")?.value || ""
+    );
+
+    renderCart();
+    renderCheckout();
+
+    showToast(`Currency changed to ${currentCurrency}.`);
+}
+
+/* =========================
+   LANGUAGE
+   ========================= */
+
+function changeLanguage(value) {
+    if (typeof value !== "string") {
+        const selector =
+            document.getElementById("language-selector");
+
+        value = selector?.value || "en";
+    }
+
+    currentLanguage = value;
+
+    document.documentElement.lang = value;
+
+    const messages = {
+        en: "English selected.",
+        ur: "Roman Urdu mode selected.",
+        ar: "Arabic selected."
+    };
+
+    showToast(
+        messages[value] ||
+        "Language preference updated."
+    );
+}
+
+/* =========================
+   MOBILE MENU
+   ========================= */
+
+function toggleMobileMenu() {
+    const menu =
+        document.getElementById("mobile-menu");
+
+    if (!menu) return;
+
+    menu.classList.toggle("active");
+
+    document.body.classList.toggle(
+        "no-scroll",
+        menu.classList.contains("active")
+    );
+}
+
+function closeMobileMenu() {
+    const menu =
+        document.getElementById("mobile-menu");
+
+    if (!menu) return;
+
+    menu.classList.remove("active");
+
+    if (
+        !document.querySelector(
+            ".modal:not(.hidden), #chat-window.active, #cart-sidebar.active"
+        )
+    ) {
+        document.body.classList.remove("no-scroll");
+    }
+}
+
+/* =========================
+   LOCATION
+   ========================= */
+
+function findNearMe() {
+    if (!navigator.geolocation) {
+        showToast(
+            "Location is not supported by your browser.",
+            "error"
+        );
+        return;
+    }
+
+    showToast("Requesting your location...");
+
+    navigator.geolocation.getCurrentPosition(
+        position => {
+            const { latitude, longitude } =
+                position.coords;
+
+            showToast(
+                `Location detected: ${latitude.toFixed(
+                    3
+                )}, ${longitude.toFixed(3)}`
+            );
+        },
+        () => {
+            showToast(
+                "Location permission was not granted.",
+                "error"
+            );
+        },
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 60000
+        }
+    );
+}
+
+/* =========================
+   VOICE SEARCH
+   ========================= */
+
+function startVoiceSearch() {
     const SpeechRecognition =
         window.SpeechRecognition ||
         window.webkitSpeechRecognition;
 
-
     if (!SpeechRecognition) {
-
         showToast(
-            "AI voice is not supported in this browser."
+            "Voice search is not supported in this browser.",
+            "error"
         );
-
         return;
-
     }
 
+    const recognition = new SpeechRecognition();
 
-    const recognition =
-        new SpeechRecognition();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
 
-
-    recognition.lang =
-        currentLanguage === "ur"
-            ? "ur-PK"
-            : "en-US";
-
-
-    recognition.onstart = () => {
-
-        showToast(
-            "AI is listening... 🎤"
-        );
-
-    };
-
-
-    recognition.onresult = event => {
-
-        const text =
-            event.results[0][0].transcript;
-
-
-        const lower =
-            text.toLowerCase();
-
-
-        const result =
-            menuData.find(item =>
-                (
-                    item.name +
-                    " " +
-                    item.category +
-                    " " +
-                    item.tags.join(" ")
-                )
-                .toLowerCase()
-                .includes(lower)
-            );
-
-
-        if (result) {
-
-            openItemDetailModal(result.id);
-
-        } else {
-
-            showToast(
-                `AI heard: "${text}". Try saying a food name.`
-            );
-
-        }
-
-    };
-
+    showToast("Listening... Speak your food name.");
 
     recognition.start();
 
+    recognition.onresult = event => {
+        const text =
+            event.results[0][0].transcript;
+
+        const input =
+            document.getElementById("search-input");
+
+        if (input) {
+            input.value = text;
+        }
+
+        searchMenu(text);
+
+        showToast(`Searching for "${text}"`);
+    };
+
+    recognition.onerror = () => {
+        showToast(
+            "Voice search could not understand that.",
+            "error"
+        );
+    };
 }
 
+/* =========================
+   AI ASSISTANT
+   ========================= */
 
-/* =========================================================
-   CHATBOT
-========================================================= */
-
-function toggleChatbot() {
-
-    const chat =
-        document.getElementById(
-            "chat-window"
-        );
-
-    if (!chat) return;
-
-    chat.classList.toggle("hidden");
-
-    if (!chat.classList.contains("hidden")) {
-
-        document
-            .getElementById("chat-input")
-            ?.focus();
-
-    }
-
-}
-
-
-function handleChatKeyPress(event) {
-
-    if (event.key === "Enter") {
-
-        event.preventDefault();
-
-        sendChatMessage();
-
-    }
-
-}
-
-
-function sendChatMessage() {
-
-    const input =
-        document.getElementById(
-            "chat-input"
-        );
-
-
-    const messages =
-        document.getElementById(
-            "chat-messages"
-        );
-
-
-    if (!input || !messages) return;
-
-
-    const text =
-        input.value.trim();
-
-
-    if (!text) return;
-
-
-    addChatMessage(
-        text,
-        "user"
-    );
-
-
-    input.value = "";
-
+function askAI() {
+    openChatbot();
 
     setTimeout(() => {
-
-        const reply =
-            generateChatReply(text);
-
-
-        addChatMessage(
-            reply,
-            "bot"
+        addBotMessage(
+            "Sure! Tell me what you want — Fast Food, Desi, BBQ, Drinks, budget meals, spicy food, or something else. I can help you choose."
         );
-
-    }, 500);
-
+    }, 250);
 }
 
-
-function addChatMessage(text, type) {
-
-    const messages =
-        document.getElementById(
-            "chat-messages"
+function aiVoice() {
+    if (!("speechSynthesis" in window)) {
+        showToast(
+            "Voice assistant is not supported here.",
+            "error"
         );
+        return;
+    }
 
+    const text =
+        "Welcome to Foodie Express. Tell me what you are craving and I will help you find something delicious.";
+
+    const speech = new SpeechSynthesisUtterance(text);
+
+    speech.rate = .95;
+    speech.pitch = 1;
+
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(speech);
+
+    showToast("AI voice assistant started.");
+}
+
+/* =========================
+   CHATBOT
+   ========================= */
+
+function openChatbot() {
+    const windowElement =
+        document.getElementById("chat-window");
+
+    if (!windowElement) return;
+
+    windowElement.classList.remove("hidden");
+    windowElement.classList.add("active");
+}
+
+function toggleChatbot() {
+    const windowElement =
+        document.getElementById("chat-window");
+
+    if (!windowElement) return;
+
+    const isHidden =
+        windowElement.classList.contains("hidden");
+
+    windowElement.classList.toggle(
+        "hidden",
+        !isHidden
+    );
+
+    windowElement.classList.toggle(
+        "active",
+        isHidden
+    );
+}
+
+function addBotMessage(message) {
+    const messages =
+        document.getElementById("chat-messages");
 
     if (!messages) return;
 
+    const div = document.createElement("div");
 
-    const message =
-        document.createElement("div");
+    div.className = "chat-message bot";
 
+    div.textContent = message;
 
-    message.className =
-        `chat-msg ${type}`;
+    messages.appendChild(div);
 
-
-    message.textContent =
-        text;
-
-
-    messages.appendChild(message);
-
-
-    messages.scrollTop =
-        messages.scrollHeight;
-
+    messages.scrollTop = messages.scrollHeight;
 }
 
+function addUserMessage(message) {
+    const messages =
+        document.getElementById("chat-messages");
 
-function generateChatReply(message) {
+    if (!messages) return;
 
-    const text =
-        message
-            .toLowerCase()
-            .trim();
+    const div = document.createElement("div");
 
+    div.className = "chat-message user";
 
-    /* Greeting */
+    div.textContent = message;
 
-    if (
-        /\b(hi|hello|hey|salam|assalam|aoa)\b/
-            .test(text)
-    ) {
+    messages.appendChild(div);
 
-        return "Hello! 👋 Welcome to Foodie Express. Aap menu, order, delivery, price ya recommendation ke bare mein pooch sakte hain.";
+    messages.scrollTop = messages.scrollHeight;
+}
 
-    }
+function sendChatMessage() {
+    const input =
+        document.getElementById("chat-input");
 
+    if (!input) return;
 
-    /* Menu */
+    const message = input.value.trim();
 
-    if (
-        text.includes("menu") ||
-        text.includes("food")
-    ) {
+    if (!message) return;
 
-        return "Hamare menu mein Fast Food, Desi Cuisine, BBQ & Grills aur Drinks & Shakes available hain. Aap kisi bhi food ka naam search kar sakte hain.";
+    addUserMessage(message);
 
-    }
+    input.value = "";
 
+    setTimeout(() => {
+        respondToChat(message);
+    }, 350);
+}
 
-    /* Fast Food */
+function respondToChat(message) {
+    const text = message.toLowerCase();
 
     if (
         text.includes("fast food") ||
         text.includes("burger") ||
-        text.includes("pizza")
+        text.includes("pizza") ||
+        text.includes("fries")
     ) {
-
-        return "Fast Food mein Zinger Burger, Beef Burger, Chicken Pizza aur French Fries available hain. Menu mein Fast Food filter select karein.";
-
+        addBotMessage(
+            "For Fast Food, try our Classic Zinger Burger, Loaded Beef Burger, Cheesy Chicken Pizza, or Loaded Cheese Fries 🍔🍕"
+        );
+        return;
     }
 
-
-    /* Biryani */
-
-    if (text.includes("biryani")) {
-
-        return "Chicken Biryani hamare Desi Cuisine section mein hai. Aap menu mein 'Biryani' search karke directly dekh sakte hain.";
-
+    if (
+        text.includes("desi") ||
+        text.includes("biryani") ||
+        text.includes("karahi") ||
+        text.includes("handi")
+    ) {
+        addBotMessage(
+            "For Desi food, Chicken Biryani is a popular choice. If you want something richer, try Chicken Karahi or Chicken Handi 🍛"
+        );
+        return;
     }
-
-
-    /* BBQ */
 
     if (
         text.includes("bbq") ||
-        text.includes("kabab") ||
-        text.includes("tikka")
+        text.includes("kebab") ||
+        text.includes("tikka") ||
+        text.includes("steak")
     ) {
-
-        return "BBQ section mein Seekh Kabab, Chicken Tikka aur BBQ Platter available hain.";
-
+        addBotMessage(
+            "BBQ lover? You can choose Chicken Tikka, Seekh Kebab, Malai Boti, BBQ Platter, or Grilled Beef Steak 🔥"
+        );
+        return;
     }
-
-
-    /* Drinks */
 
     if (
         text.includes("drink") ||
         text.includes("shake") ||
-        text.includes("juice")
+        text.includes("coffee") ||
+        text.includes("margarita")
     ) {
-
-        return "Drinks & Shakes mein Mango Shake, Chocolate Shake aur Fresh Lime available hain.";
-
+        addBotMessage(
+            "For drinks, Mango Shake, Chocolate Shake, Cold Coffee and Mint Margarita are available 🥤"
+        );
+        return;
     }
 
+    if (
+        text.includes("cheap") ||
+        text.includes("budget") ||
+        text.includes("500") ||
+        text.includes("low price")
+    ) {
+        const affordable = [...menuItems]
+            .sort((a, b) => a.price - b.price)
+            .slice(0, 5);
 
-    /* Price */
+        addBotMessage(
+            "Some lower-priced options are: " +
+            affordable
+                .map(item => `${item.name} (${formatPrice(item.price)})`)
+                .join(", ") +
+            "."
+        );
+
+        return;
+    }
 
     if (
-        text.includes("price") ||
-        text.includes("cost") ||
-        text.includes("kitne")
+        text.includes("cart") ||
+        text.includes("order")
     ) {
-
-        const found =
-            menuData.find(item =>
-                text.includes(
-                    item.name.toLowerCase()
-                )
+        if (!cart.length) {
+            addBotMessage(
+                "Your cart is currently empty. Pick any food from the menu and tap the + button."
             );
-
-
-        if (found) {
-
-            return `${found.name} ki price ${formatPrice(found.price)} hai.`;
-
+        } else {
+            addBotMessage(
+                `You currently have ${cart.reduce(
+                    (sum, item) => sum + item.quantity,
+                    0
+                )} item(s) in your cart, with a total of ${formatPrice(
+                    getCartTotal()
+                )}.`
+            );
         }
 
-
-        return "Aap jis food ki price poochna chahte hain uska naam likhein, example: Zinger Burger price.";
-
+        return;
     }
-
-
-    /* Delivery */
 
     if (
-        text.includes("delivery") ||
-        text.includes("deliver")
+        text.includes("hello") ||
+        text.includes("hi") ||
+        text.includes("salam")
     ) {
+        addBotMessage(
+            "Wa Alaikum Assalam! 👋 Welcome to Foodie Express. What are you craving today?"
+        );
 
-        return "Foodie Express ka focus fast aur safe food delivery par hai. Checkout mein apna complete address enter karein.";
-
+        return;
     }
 
+    const randomReplies = [
+        "I can help you find food by category, price, or craving. Try saying 'Fast Food' or 'BBQ'.",
+        "Hungry? 😋 Tell me your craving and I will suggest something from our menu.",
+        "You can ask me about burgers, biryani, BBQ, drinks, prices, your cart, or ordering.",
+        "I am ready! Tell me what kind of food you want today."
+    ];
 
-    /* Order */
-
-    if (
-        text.includes("order") ||
-        text.includes("checkout")
-    ) {
-
-        return "Food select karein → Add to Cart press karein → Cart open karein → Proceed to Checkout press karein → details fill karein → Place Order.";
-
-    }
-
-
-    /* WhatsApp */
-
-    if (
-        text.includes("whatsapp") ||
-        text.includes("contact")
-    ) {
-
-        return "Checkout complete karne ke baad order details WhatsApp par automatically open ho jayengi.";
-
-    }
-
-
-    /* Thanks */
-
-    if (
-        text.includes("thanks") ||
-        text.includes("thank you")
-    ) {
-
-        return "You're welcome! ❤️ Enjoy your meal! 🍔";
-
-    }
-
-
-    /* Help */
-
-    if (
-        text.includes("help") ||
-        text.includes("how")
-    ) {
-
-        return "Main menu search, food recommendations, prices, ordering, checkout aur delivery ke bare mein help kar sakta hoon.";
-
-    }
-
-
-    /* Food-specific dynamic search */
-
-    const foundFood =
-        menuData.find(item => {
-
-            const words = [
-                item.name,
-                ...item.tags
-            ];
-
-            return words.some(word =>
-                text.includes(
-                    word.toLowerCase()
-                )
-            );
-
-        });
-
-
-    if (foundFood) {
-
-        return `${foundFood.name} ${formatPrice(foundFood.price)} ka hai. Isay menu se Add to Cart kar sakte hain.`;
-
-    }
-
-
-    return "Main aapki help karna chahta hoon 😊 Aap food ka naam, price, menu, order, checkout, delivery ya WhatsApp ke bare mein pooch sakte hain.";
-
+    addBotMessage(
+        randomReplies[
+            Math.floor(Math.random() * randomReplies.length)
+        ]
+    );
 }
 
-
-/* =========================================================
+/* =========================
    RESERVATION
-========================================================= */
+   ========================= */
 
-function setupReservationDate() {
+function submitReservation(event) {
+    if (event) event.preventDefault();
+
+    const name =
+        document.getElementById("reservation-name")?.value.trim();
+
+    const phone =
+        document.getElementById("reservation-phone")?.value.trim();
 
     const date =
-        document.getElementById(
-            "reservation-date"
-        );
+        document.getElementById("reservation-date")?.value;
 
-    if (!date) return;
+    const time =
+        document.getElementById("reservation-time")?.value;
 
+    const guests =
+        document.getElementById("reservation-guests")?.value;
 
-    const today =
-        new Date()
-            .toISOString()
-            .split("T")[0];
-
-
-    date.min = today;
-
-}
-
-
-function submitReservation() {
-
-    showToast(
-        "Reservation request submitted successfully! 📅"
-    );
-
-}
-
-
-/* =========================================================
-   LOCATION
-========================================================= */
-
-function detectUserLocation() {
-
-    if (!navigator.geolocation) {
-
+    if (!name || !phone || !date || !time || !guests) {
         showToast(
-            "Location is not supported by this browser."
+            "Please complete all reservation fields.",
+            "error"
         );
-
         return;
-
     }
-
 
     showToast(
-        "Detecting your location... 📍"
+        `Table reserved for ${guests} guest(s) on ${date} at ${time}.`
     );
 
+    playCustomSound("success");
 
-    navigator.geolocation.getCurrentPosition(
+    const form =
+        document.getElementById("reservation-form");
 
-        position => {
-
-            const lat =
-                position.coords.latitude;
-
-            const lng =
-                position.coords.longitude;
-
-
-            const mapsUrl =
-                `https://www.google.com/maps/search/restaurants/@${lat},${lng},14z`;
-
-
-            window.open(
-                mapsUrl,
-                "_blank",
-                "noopener,noreferrer"
-            );
-
-
-            showToast(
-                "Nearby restaurants opened 📍"
-            );
-
-        },
-
-        () => {
-
-            showToast(
-                "Location permission was denied."
-            );
-
-        }
-
-    );
-
+    if (form) form.reset();
 }
 
+/* =========================
+   MOBILE NAV LINK HANDLING
+   ========================= */
 
-/* =========================================================
-   TOAST
-========================================================= */
+document.addEventListener("click", event => {
+    const link = event.target.closest(
+        '#mobile-menu a[href^="#"]'
+    );
 
-function showToast(message, duration = 3000) {
+    if (!link) return;
 
-    const container =
-        document.getElementById(
-            "toast-container"
-        );
+    closeMobileMenu();
+});
 
+/* =========================
+   KEYBOARD SUPPORT
+   ========================= */
 
-    if (!container) {
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+        closeMobileMenu();
+        closeCart();
+        closeCheckoutPage();
+        closeItemDetail();
+        closeAuthModal();
+        closeDashboardModal();
+    }
+});
 
-        alert(message);
+/* =========================
+   ENTER KEY — SEARCH
+   ========================= */
 
-        return;
+document.addEventListener("keydown", event => {
+    if (event.key !== "Enter") return;
 
+    const target = event.target;
+
+    if (
+        target.id === "menu-search-input"
+    ) {
+        event.preventDefault();
+        searchMenu(target.value);
     }
 
+    if (
+        target.id === "chat-input"
+    ) {
+        event.preventDefault();
+        sendChatMessage();
+    }
+});
 
-    const toast =
-        document.createElement("div");
+/* =========================
+   CLOSE MODAL BY BACKDROP
+   ========================= */
 
+document.addEventListener("click", event => {
+    const modal = event.target.closest(".modal");
 
-    toast.className =
-        "toast";
+    if (!modal) return;
 
+    if (event.target !== modal) return;
 
-    toast.innerHTML = `
+    modal.classList.add("hidden");
 
-        <span>
-            ${escapeHTML(message)}
-        </span>
+    document.body.classList.remove("no-scroll");
+});
 
-        <button
-            aria-label="Close notification">
+/* =========================
+   CHECKOUT EDIT CART
+   ========================= */
 
-            <i class="fa-solid fa-xmark"></i>
-
-        </button>
-
-    `;
-
-
-    toast
-        .querySelector("button")
-        ?.addEventListener(
-            "click",
-            () => toast.remove()
-        );
-
-
-    container.appendChild(toast);
-
-
-    setTimeout(() => {
-
-        toast.classList.add("hide");
-
-        setTimeout(
-            () => toast.remove(),
-            300
-        );
-
-    }, duration);
-
+function editCartFromCheckout() {
+    closeCheckoutPage();
+    toggleCart();
 }
 
+/* =========================
+   INITIALIZATION
+   ========================= */
 
-/* =========================================================
-   SOUND SYSTEM
-========================================================= */
+function initializeFoodieExpress() {
+    loadData();
 
-let audioContext = null;
+    const savedTheme =
+        localStorage.getItem("foodie_theme");
 
-
-function getAudioContext() {
-
-    if (!audioContext) {
-
-        const AudioCtx =
-            window.AudioContext ||
-            window.webkitAudioContext;
-
-        if (!AudioCtx)
-            return null;
-
-        audioContext =
-            new AudioCtx();
-
+    if (savedTheme) {
+        document.documentElement.setAttribute(
+            "data-theme",
+            savedTheme
+        );
     }
 
+    updateDarkModeIcon();
+    updateAuthButton();
 
-    return audioContext;
+    renderMenu("");
+    renderCart();
+    renderWishlist();
+    updateCartCount();
+    updateDashboard();
 
-}
+    const currencySelector =
+        document.getElementById("currency-selector");
 
-
-function playTone(
-    frequency = 600,
-    duration = 0.08,
-    type = "sine"
-) {
-
-    const ctx =
-        getAudioContext();
-
-    if (!ctx) return;
-
-
-    if (ctx.state === "suspended") {
-
-        ctx.resume();
-
+    if (currencySelector) {
+        currencySelector.value = currentCurrency;
     }
 
+    const languageSelector =
+        document.getElementById("language-selector");
 
-    const oscillator =
-        ctx.createOscillator();
+    if (languageSelector) {
+        languageSelector.value = currentLanguage;
+    }
 
-    const gain =
-        ctx.createGain();
+    togglePaymentInfo();
 
+    /* Prevent accidental checkout submission issues */
+    const checkoutForm =
+        document.getElementById("checkout-form");
 
-    oscillator.type = type;
+    if (checkoutForm) {
+        checkoutForm.addEventListener(
+            "submit",
+            processOrder
+        );
+    }
 
-    oscillator.frequency.value =
-        frequency;
+    /* Reservation fallback */
+    const reservationForm =
+        document.getElementById("reservation-form");
 
+    if (reservationForm) {
+        reservationForm.addEventListener(
+            "submit",
+            submitReservation
+        );
+    }
 
-    gain.gain.setValueAtTime(
-        0.0001,
-        ctx.currentTime
-    );
+    /* Chatbot Enter support */
+    const chatInput =
+        document.getElementById("chat-input");
 
-
-    gain.gain.exponentialRampToValueAtTime(
-        0.08,
-        ctx.currentTime + 0.01
-    );
-
-
-    gain.gain.exponentialRampToValueAtTime(
-        0.0001,
-        ctx.currentTime + duration
-    );
-
-
-    oscillator.connect(gain);
-
-    gain.connect(ctx.destination);
-
-
-    oscillator.start();
-
-    oscillator.stop(
-        ctx.currentTime + duration
-    );
-
-}
-
-
-function playClickSound() {
-
-    playTone(
-        650,
-        0.06,
-        "sine"
-    );
-
-}
-
-
-function playSuccessSound() {
-
-    playTone(
-        600,
-        0.08,
-        "sine"
-    );
-
-
-    setTimeout(
-        () =>
-            playTone(
-                850,
-                0.12,
-                "sine"
-            ),
-        90
-    );
-
-}
-
-
-function playNotificationSound() {
-
-    playTone(
-        750,
-        0.08,
-        "triangle"
-    );
-
-}
-
-
-/* =========================================================
-   KEYBOARD SHORTCUTS
-========================================================= */
-
-function setupKeyboardShortcuts() {
-
-    document.addEventListener(
-        "keydown",
-        event => {
-
-            /* ESC closes modals */
-
-            if (event.key === "Escape") {
-
-                closeAllOverlays();
-
+    if (chatInput) {
+        chatInput.addEventListener(
+            "keydown",
+            event => {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    sendChatMessage();
+                }
             }
-
-
-            /* CTRL + K focuses search */
-
-            if (
-                (event.ctrlKey ||
-                    event.metaKey) &&
-                event.key.toLowerCase() === "k"
-            ) {
-
-                event.preventDefault();
-
-                document
-                    .getElementById(
-                        "search-input"
-                    )
-                    ?.focus();
-
-            }
-
-        }
-    );
-
-}
-
-
-function closeAllOverlays() {
-
-    [
-        "wishlist-modal",
-        "checkout-modal",
-        "auth-modal",
-        "dashboard-modal",
-        "item-detail-modal"
-    ]
-        .forEach(id => {
-
-            document
-                .getElementById(id)
-                ?.classList.add("hidden");
-
-        });
-
-
-    document
-        .getElementById("chat-window")
-        ?.classList.add("hidden");
-
-
-    const sidebar =
-        document.getElementById(
-            "cart-sidebar"
         );
-
-
-    if (sidebar) {
-
-        sidebar.classList.remove("open");
-
-        document.body.classList.remove(
-            "cart-open"
-        );
-
     }
 
-}
-
-
-/* =========================================================
-   SCROLL EFFECTS
-========================================================= */
-
-function setupScrollEffects() {
-
-    const navbar =
-        document.querySelector(".navbar");
-
-
-    if (!navbar) return;
-
-
+    /* Header shadow while scrolling */
     window.addEventListener(
         "scroll",
         () => {
+            const header =
+                document.getElementById("main-header");
 
-            if (window.scrollY > 20) {
+            if (!header) return;
 
-                navbar.classList.add(
-                    "scrolled"
-                );
-
-            } else {
-
-                navbar.classList.remove(
-                    "scrolled"
-                );
-
-            }
-
+            header.style.boxShadow =
+                window.scrollY > 20
+                    ? "0 8px 30px rgba(0,0,0,.10)"
+                    : "0 5px 30px rgba(30,20,15,.05)";
         },
         { passive: true }
     );
 
-}
+    /* Lazy image fallback */
+    document.addEventListener(
+        "error",
+        event => {
+            if (
+                event.target.tagName === "IMG"
+            ) {
+                event.target.style.background =
+                    "var(--light)";
+            }
+        },
+        true
+    );
 
+    /* Remove page loader */
+    const loader =
+        document.getElementById("page-loader");
 
-/* =========================================================
-   SECURITY / HTML ESCAPE
-========================================================= */
+    if (loader) {
+        setTimeout(() => {
+            loader.style.opacity = "0";
+            loader.style.visibility = "hidden";
 
-function escapeHTML(value) {
-
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-
-}
-
-
-/* =========================================================
-   PAGE VISIBILITY
-========================================================= */
-
-document.addEventListener(
-    "visibilitychange",
-    () => {
-
-        if (
-            document.visibilityState ===
-            "visible"
-        ) {
-
-            updateCart();
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   GLOBAL CLICK SOUND
-========================================================= */
-
-document.addEventListener(
-    "click",
-    event => {
-
-        const target =
-            event.target.closest(
-                "button, .primary-btn, .secondary-btn, .filter-btn, .add-cart-btn"
+            setTimeout(
+                () => loader.remove(),
+                500
             );
-
-
-        if (target) {
-
-            try {
-
-                playClickSound();
-
-            } catch (error) {
-
-                /* Audio is optional */
-
-            }
-
-        }
-
+        }, 450);
     }
-);
+}
 
+/* =========================
+   START APP
+   ========================= */
 
-/* =========================================================
-   PREVENT BROKEN # LINKS
-========================================================= */
-
-document
-    .querySelectorAll('a[href="#"]')
-    .forEach(link => {
-
-        link.addEventListener(
-            "click",
-            event => {
-
-                event.preventDefault();
-
-            }
-        );
-
-    });
-
-
-/* =========================================================
-   EXPORT GLOBAL FUNCTIONS
-   Required because HTML onclick attributes use them.
-========================================================= */
-
-window.toggleDarkMode = toggleDarkMode;
-window.changeCurrency = changeCurrency;
-window.changeLanguage = changeLanguage;
-
-window.searchMenu = searchMenu;
-window.startVoiceSearch = startVoiceSearch;
-window.filterMenu = filterMenu;
-
-window.addToCart = addToCart;
-window.removeFromCart = removeFromCart;
-window.changeCartQuantity = changeCartQuantity;
-window.toggleCart = toggleCart;
-window.applyCoupon = applyCoupon;
-window.checkout = checkout;
-
-window.toggleWishlist = toggleWishlist;
-window.toggleWishlistModal = toggleWishlistModal;
-
-window.openItemDetailModal =
-    openItemDetailModal;
-
-window.closeItemDetailModal =
-    closeItemDetailModal;
-
-window.closeCheckoutModal =
-    closeCheckoutModal;
-
-window.togglePaymentInfo =
-    togglePaymentInfo;
-
-window.processOrder =
-    processOrder;
-
-window.openAuthModal =
-    openAuthModal;
-
-window.closeAuthModal =
-    closeAuthModal;
-
-window.switchAuthScreen =
-    switchAuthScreen;
-
-window.handleAuth =
-    handleAuth;
-
-window.handleLogout =
-    handleLogout;
-
-window.openDashboardModal =
-    openDashboardModal;
-
-window.closeDashboardModal =
-    closeDashboardModal;
-
-window.startAICallSimulation =
-    startAICallSimulation;
-
-window.startAIVoiceInput =
-    startAIVoiceInput;
-
-window.toggleChatbot =
-    toggleChatbot;
-
-window.handleChatKeyPress =
-    handleChatKeyPress;
-
-window.sendChatMessage =
-    sendChatMessage;
-
-window.detectUserLocation =
-    detectUserLocation;
-
-window.showToast =
-    showToast;
-
-
-/* =========================================================
-   END
-========================================================= */
+if (document.readyState === "loading") {
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializeFoodieExpress
+    );
+} else {
+    initializeFoodieExpress();
+}
