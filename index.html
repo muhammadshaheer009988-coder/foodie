@@ -10,9 +10,16 @@
     <meta name="description"
         content="Foodie Express - Premium fast food, desi cuisine, BBQ, drinks and gourmet meals delivered to your door.">
 
+    <meta name="keywords"
+        content="Foodie Express, food delivery, burgers, biryani, BBQ, Pakistani food, fast food, gourmet food">
+
+    <meta name="author" content="Foodie Express">
+
     <meta name="theme-color" content="#e63946">
 
-    <!-- Google Font -->
+    <!-- =========================================================
+         GOOGLE FONT
+    ========================================================== -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -20,41 +27,59 @@
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
 
-    <!-- Font Awesome -->
+    <!-- =========================================================
+         FONT AWESOME
+    ========================================================== -->
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <!-- Main CSS -->
+    <!-- =========================================================
+         MAIN CSS
+    ========================================================== -->
     <link rel="stylesheet" href="style.css">
 </head>
+
 
 <body>
 
     <!-- =========================================================
          PAGE LOADER
     ========================================================== -->
-    <div id="page-loader" class="page-loader">
+    <div id="page-loader" class="page-loader" aria-hidden="true">
+
         <div class="loader-content">
+
             <div class="loader-logo">
                 <i class="fa-solid fa-utensils"></i>
             </div>
+
             <div class="loader-spinner"></div>
+
             <p>Preparing your experience...</p>
+
         </div>
+
     </div>
 
 
     <!-- =========================================================
          TOAST CONTAINER
     ========================================================== -->
-    <div id="toast-container" class="toast-container"></div>
+    <div
+        id="toast-container"
+        class="toast-container"
+        aria-live="polite"
+        aria-atomic="true">
+    </div>
 
 
     <!-- =========================================================
          HEADER / NAVBAR
     ========================================================== -->
-    <header class="navbar" id="main-header">
+    <header
+        class="navbar"
+        id="main-header">
 
         <!-- Logo -->
         <a
@@ -75,37 +100,64 @@
 
 
         <!-- Desktop Navigation -->
-        <nav class="nav-links" id="desktop-nav">
+        <nav
+            class="nav-links"
+            id="desktop-nav"
+            aria-label="Main Navigation">
 
-            <a href="#home" class="nav-link active">
+            <a
+                href="#home"
+                class="nav-link active">
+
                 <i class="fa-solid fa-house"></i>
                 <span>Home</span>
+
             </a>
 
-            <a href="#menu" class="nav-link">
+
+            <a
+                href="#menu"
+                class="nav-link">
+
                 <i class="fa-solid fa-utensils"></i>
                 <span>Menu</span>
+
             </a>
 
-            <a href="#features" class="nav-link">
+
+            <a
+                href="#features"
+                class="nav-link">
+
                 <i class="fa-solid fa-star"></i>
                 <span>Features</span>
+
             </a>
 
-            <a href="#reviews" class="nav-link">
+
+            <a
+                href="#reviews"
+                class="nav-link">
+
                 <i class="fa-solid fa-message"></i>
                 <span>Reviews</span>
+
             </a>
 
-            <a href="#reservation" class="nav-link">
+
+            <a
+                href="#reservation"
+                class="nav-link">
+
                 <i class="fa-solid fa-calendar-check"></i>
                 <span>Reservation</span>
+
             </a>
 
         </nav>
 
 
-        <!-- Header Controls -->
+        <!-- Header Actions -->
         <div class="nav-actions">
 
             <!-- Dark Mode -->
@@ -117,7 +169,10 @@
                 title="Toggle Dark Mode"
                 aria-label="Toggle Dark Mode">
 
-                <i class="fa-solid fa-moon" id="theme-icon"></i>
+                <i
+                    class="fa-solid fa-moon"
+                    id="theme-icon">
+                </i>
 
             </button>
 
@@ -192,7 +247,10 @@
                 onclick="openAuthModal('login')">
 
                 <i class="fa-solid fa-right-to-bracket"></i>
-                <span>Login</span>
+
+                <span>
+                    Login
+                </span>
 
             </button>
 
@@ -220,50 +278,77 @@
     ========================================================== -->
     <div
         id="mobile-menu"
-        class="mobile-menu">
+        class="mobile-menu"
+        aria-hidden="true">
 
         <div class="mobile-menu-inner">
 
-            <a href="#home" onclick="closeMobileMenu()">
+            <a
+                href="#home"
+                onclick="closeMobileMenu()">
+
                 <i class="fa-solid fa-house"></i>
-                Home
+                <span>Home</span>
+
             </a>
 
-            <a href="#menu" onclick="closeMobileMenu()">
+
+            <a
+                href="#menu"
+                onclick="closeMobileMenu()">
+
                 <i class="fa-solid fa-utensils"></i>
-                Menu
+                <span>Menu</span>
+
             </a>
 
-            <a href="#features" onclick="closeMobileMenu()">
+
+            <a
+                href="#features"
+                onclick="closeMobileMenu()">
+
                 <i class="fa-solid fa-star"></i>
-                Features
+                <span>Features</span>
+
             </a>
 
-            <a href="#reviews" onclick="closeMobileMenu()">
+
+            <a
+                href="#reviews"
+                onclick="closeMobileMenu()">
+
                 <i class="fa-solid fa-message"></i>
-                Reviews
+                <span>Reviews</span>
+
             </a>
 
-            <a href="#reservation" onclick="closeMobileMenu()">
+
+            <a
+                href="#reservation"
+                onclick="closeMobileMenu()">
+
                 <i class="fa-solid fa-calendar-check"></i>
-                Reservation
+                <span>Reservation</span>
+
             </a>
+
 
             <button
                 type="button"
                 onclick="openDashboardFromMobile()">
 
                 <i class="fa-solid fa-user"></i>
-                Dashboard
+                <span>Dashboard</span>
 
             </button>
+
 
             <button
                 type="button"
                 onclick="openAuthModal('login'); closeMobileMenu();">
 
                 <i class="fa-solid fa-right-to-bracket"></i>
-                Login
+                <span>Login</span>
 
             </button>
 
@@ -279,27 +364,39 @@
 
 
         <!-- =====================================================
-             HERO
+             HERO SECTION
         ====================================================== -->
         <section
             id="home"
             class="hero">
 
-            <div class="hero-image"></div>
+            <div
+                class="hero-image"
+                aria-hidden="true">
+            </div>
 
-            <div class="hero-overlay"></div>
+            <div
+                class="hero-overlay"
+                aria-hidden="true">
+            </div>
+
 
             <div class="hero-content">
 
                 <span class="hero-badge">
+
                     <i class="fa-solid fa-crown"></i>
+
                     Premium Food Delivery
+
                 </span>
+
 
                 <h1>
                     Elite Flavors &
                     <span>Gourmet Express</span>
                 </h1>
+
 
                 <p>
                     Experience premium fast food, desi cuisine,
@@ -314,7 +411,11 @@
                     class="search-box"
                     onsubmit="handleSearchSubmit(event)">
 
-                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <i
+                        class="fa-solid fa-magnifying-glass"
+                        aria-hidden="true">
+                    </i>
+
 
                     <input
                         type="search"
@@ -324,6 +425,8 @@
                         aria-label="Search food"
                         oninput="searchMenu(this.value)">
 
+
+                    <!-- Voice Search -->
                     <button
                         type="button"
                         class="voice-search-btn"
@@ -335,6 +438,8 @@
 
                     </button>
 
+
+                    <!-- Search -->
                     <button
                         type="submit"
                         class="search-submit-btn"
@@ -348,17 +453,21 @@
                 </form>
 
 
+                <!-- Hero Buttons -->
                 <div class="hero-buttons">
 
                     <a
                         href="#menu"
                         class="primary-btn">
 
-                        <span>Explore Menu</span>
+                        <span>
+                            Explore Menu
+                        </span>
 
                         <i class="fa-solid fa-arrow-right"></i>
 
                     </a>
+
 
                     <button
                         type="button"
@@ -367,14 +476,16 @@
 
                         <i class="fa-solid fa-location-dot"></i>
 
-                        <span>Find Near Me</span>
+                        <span>
+                            Find Near Me
+                        </span>
 
                     </button>
 
                 </div>
 
 
-                <!-- Hero Trust Info -->
+                <!-- Hero Trust -->
                 <div class="hero-trust">
 
                     <div>
@@ -382,10 +493,12 @@
                         Freshly Prepared
                     </div>
 
+
                     <div>
                         <i class="fa-solid fa-bolt"></i>
                         Fast Delivery
                     </div>
+
 
                     <div>
                         <i class="fa-solid fa-shield-halved"></i>
@@ -408,7 +521,9 @@
 
             <div class="section-heading">
 
-                <span>WHY FOODIE EXPRESS?</span>
+                <span>
+                    WHY FOODIE EXPRESS?
+                </span>
 
                 <h2>
                     Made For
@@ -431,7 +546,9 @@
                         <i class="fa-solid fa-bolt"></i>
                     </div>
 
-                    <h3>Fast Delivery</h3>
+                    <h3>
+                        Fast Delivery
+                    </h3>
 
                     <p>
                         Get your favorite meals delivered quickly
@@ -447,7 +564,9 @@
                         <i class="fa-solid fa-leaf"></i>
                     </div>
 
-                    <h3>Fresh Ingredients</h3>
+                    <h3>
+                        Fresh Ingredients
+                    </h3>
 
                     <p>
                         Quality ingredients prepared fresh for
@@ -463,7 +582,9 @@
                         <i class="fa-solid fa-star"></i>
                     </div>
 
-                    <h3>Premium Taste</h3>
+                    <h3>
+                        Premium Taste
+                    </h3>
 
                     <p>
                         Restaurant-style flavors from the comfort
@@ -479,7 +600,9 @@
                         <i class="fa-solid fa-shield-heart"></i>
                     </div>
 
-                    <h3>Secure Ordering</h3>
+                    <h3>
+                        Secure Ordering
+                    </h3>
 
                     <p>
                         Simple checkout with multiple payment
@@ -494,7 +617,7 @@
 
 
         <!-- =====================================================
-             MENU
+             MENU SECTION
         ====================================================== -->
         <section
             id="menu"
@@ -502,7 +625,9 @@
 
             <div class="section-heading">
 
-                <span>OUR MENU</span>
+                <span>
+                    OUR MENU
+                </span>
 
                 <h2>
                     Discover Your
@@ -519,34 +644,71 @@
             <!-- Menu Search -->
             <div class="menu-search-wrapper">
 
-                <div class="menu-search-box">
+                <form
+                    class="menu-search-box"
+                    id="menu-search-form"
+                    onsubmit="handleMenuSearchSubmit(event)">
 
-                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <i
+                        class="fa-solid fa-magnifying-glass"
+                        aria-hidden="true">
+                    </i>
+
 
                     <input
                         type="search"
                         id="menu-search-input"
                         placeholder="Search any food..."
                         autocomplete="off"
+                        aria-label="Search menu"
                         oninput="searchMenu(this.value)">
+
+
+                    <button
+                        type="button"
+                        onclick="startVoiceSearch('menu-search-input')"
+                        class="menu-voice-btn"
+                        title="Voice Search"
+                        aria-label="Voice Search">
+
+                        <i class="fa-solid fa-microphone"></i>
+
+                    </button>
+
 
                     <button
                         type="button"
                         onclick="clearSearch()"
                         class="clear-search-btn"
-                        title="Clear Search">
+                        title="Clear Search"
+                        aria-label="Clear Search">
 
                         <i class="fa-solid fa-xmark"></i>
 
                     </button>
 
-                </div>
+
+                    <button
+                        type="submit"
+                        class="menu-search-submit"
+                        title="Search"
+                        aria-label="Search">
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </button>
+
+                </form>
 
             </div>
 
 
             <!-- Category Buttons -->
-            <div class="filter-buttons">
+            <div
+                class="filter-buttons"
+                role="tablist"
+                aria-label="Food Categories">
+
 
                 <button
                     type="button"
@@ -555,7 +717,10 @@
                     onclick="filterMenu('All', event)">
 
                     <i class="fa-solid fa-border-all"></i>
-                    All Delicacies
+
+                    <span>
+                        All Delicacies
+                    </span>
 
                 </button>
 
@@ -567,7 +732,10 @@
                     onclick="filterMenu('Fast Food', event)">
 
                     <i class="fa-solid fa-burger"></i>
-                    Fast Food
+
+                    <span>
+                        Fast Food
+                    </span>
 
                 </button>
 
@@ -579,7 +747,10 @@
                     onclick="filterMenu('Desi', event)">
 
                     <i class="fa-solid fa-bowl-food"></i>
-                    Desi Cuisine
+
+                    <span>
+                        Desi Cuisine
+                    </span>
 
                 </button>
 
@@ -591,7 +762,10 @@
                     onclick="filterMenu('BBQ', event)">
 
                     <i class="fa-solid fa-fire"></i>
-                    BBQ &amp; Grills
+
+                    <span>
+                        BBQ &amp; Grills
+                    </span>
 
                 </button>
 
@@ -603,7 +777,10 @@
                     onclick="filterMenu('Drinks', event)">
 
                     <i class="fa-solid fa-mug-hot"></i>
-                    Drinks &amp; Shakes
+
+                    <span>
+                        Drinks &amp; Shakes
+                    </span>
 
                 </button>
 
@@ -613,14 +790,16 @@
             <!-- Search Status -->
             <div
                 id="search-status"
-                class="search-status hidden">
+                class="search-status hidden"
+                aria-live="polite">
             </div>
 
 
             <!-- Food Cards -->
             <div
                 id="menu-container"
-                class="menu-grid">
+                class="menu-grid"
+                aria-live="polite">
             </div>
 
 
@@ -633,11 +812,14 @@
                     <i class="fa-solid fa-face-sad-tear"></i>
                 </div>
 
-                <h3>No food found</h3>
+                <h3>
+                    No food found
+                </h3>
 
                 <p>
                     Try another food name, category or keyword.
                 </p>
+
 
                 <button
                     type="button"
@@ -645,6 +827,7 @@
                     onclick="clearSearch()">
 
                     <i class="fa-solid fa-rotate-left"></i>
+
                     Show All Food
 
                 </button>
@@ -657,25 +840,33 @@
         <!-- =====================================================
              AI FOOD ASSISTANT
         ====================================================== -->
-        <section class="ai-section">
+        <section
+            class="ai-section"
+            aria-label="AI Food Assistant">
 
             <div class="ai-card">
 
                 <div class="ai-content">
 
                     <span class="ai-label">
+
                         <i class="fa-solid fa-wand-magic-sparkles"></i>
+
                         AI FOOD ASSISTANT
+
                     </span>
+
 
                     <h2>
                         Not Sure What To Eat?
                     </h2>
 
+
                     <p>
                         Tell our smart food assistant what you like
                         and discover something delicious.
                     </p>
+
 
                     <div class="ai-buttons">
 
@@ -685,6 +876,7 @@
                             onclick="startAICallSimulation()">
 
                             <i class="fa-solid fa-robot"></i>
+
                             Ask AI
 
                         </button>
@@ -696,6 +888,7 @@
                             onclick="startAIVoiceInput()">
 
                             <i class="fa-solid fa-microphone"></i>
+
                             AI Voice
 
                         </button>
@@ -705,13 +898,18 @@
                 </div>
 
 
-                <div class="ai-visual">
+                <div
+                    class="ai-visual"
+                    aria-hidden="true">
 
                     <div class="ai-orbit orbit-one"></div>
+
                     <div class="ai-orbit orbit-two"></div>
 
                     <div class="ai-circle">
+
                         <i class="fa-solid fa-brain"></i>
+
                     </div>
 
                 </div>
@@ -730,7 +928,9 @@
 
             <div class="section-heading">
 
-                <span>BOOK A TABLE</span>
+                <span>
+                    BOOK A TABLE
+                </span>
 
                 <h2>
                     Reserve Your
@@ -753,23 +953,33 @@
                         <i class="fa-solid fa-calendar-check"></i>
                     </div>
 
-                    <h3>Restaurant Reservation</h3>
+
+                    <h3>
+                        Restaurant Reservation
+                    </h3>
+
 
                     <p>
                         Choose your preferred date, time and number
                         of guests.
                     </p>
 
+
                     <div class="reservation-contact">
 
                         <div>
                             <i class="fa-solid fa-clock"></i>
-                            <span>12 PM - 11 PM</span>
+                            <span>
+                                12 PM - 11 PM
+                            </span>
                         </div>
+
 
                         <div>
                             <i class="fa-solid fa-bolt"></i>
-                            <span>Quick Confirmation</span>
+                            <span>
+                                Quick Confirmation
+                            </span>
                         </div>
 
                     </div>
@@ -794,6 +1004,7 @@
                                 type="text"
                                 id="reservation-name"
                                 placeholder="Enter your name"
+                                autocomplete="name"
                                 required>
 
                         </div>
@@ -809,6 +1020,8 @@
                                 type="tel"
                                 id="reservation-phone"
                                 placeholder="03XX XXXXXXX"
+                                autocomplete="tel"
+                                inputmode="tel"
                                 required>
 
                         </div>
@@ -862,14 +1075,37 @@
                                 Select guests
                             </option>
 
-                            <option value="1">1 Guest</option>
-                            <option value="2">2 Guests</option>
-                            <option value="3">3 Guests</option>
-                            <option value="4">4 Guests</option>
-                            <option value="5">5 Guests</option>
-                            <option value="6">6 Guests</option>
-                            <option value="7">7 Guests</option>
-                            <option value="8">8+ Guests</option>
+                            <option value="1">
+                                1 Guest
+                            </option>
+
+                            <option value="2">
+                                2 Guests
+                            </option>
+
+                            <option value="3">
+                                3 Guests
+                            </option>
+
+                            <option value="4">
+                                4 Guests
+                            </option>
+
+                            <option value="5">
+                                5 Guests
+                            </option>
+
+                            <option value="6">
+                                6 Guests
+                            </option>
+
+                            <option value="7">
+                                7 Guests
+                            </option>
+
+                            <option value="8">
+                                8+ Guests
+                            </option>
 
                         </select>
 
@@ -881,6 +1117,7 @@
                         class="primary-btn full-btn">
 
                         <i class="fa-solid fa-calendar-check"></i>
+
                         Reserve Table
 
                     </button>
@@ -901,7 +1138,9 @@
 
             <div class="section-heading">
 
-                <span>ORDER TRACKING</span>
+                <span>
+                    ORDER TRACKING
+                </span>
 
                 <h2>
                     Track Your
@@ -917,7 +1156,10 @@
 
             <div class="tracking-box">
 
-                <div class="tracking-line"></div>
+                <div
+                    class="tracking-line"
+                    aria-hidden="true">
+                </div>
 
 
                 <div
@@ -928,7 +1170,9 @@
                         <i class="fa-solid fa-clipboard-check"></i>
                     </div>
 
-                    <h4>Order Placed</h4>
+                    <h4>
+                        Order Placed
+                    </h4>
 
                     <p>
                         Your order has been received.
@@ -945,7 +1189,9 @@
                         <i class="fa-solid fa-kitchen-set"></i>
                     </div>
 
-                    <h4>Preparing</h4>
+                    <h4>
+                        Preparing
+                    </h4>
 
                     <p>
                         Your food is being prepared.
@@ -962,7 +1208,9 @@
                         <i class="fa-solid fa-motorcycle"></i>
                     </div>
 
-                    <h4>On The Way</h4>
+                    <h4>
+                        On The Way
+                    </h4>
 
                     <p>
                         Your rider is on the way.
@@ -979,7 +1227,9 @@
                         <i class="fa-solid fa-house"></i>
                     </div>
 
-                    <h4>Delivered</h4>
+                    <h4>
+                        Delivered
+                    </h4>
 
                     <p>
                         Enjoy your delicious meal!
@@ -1001,7 +1251,9 @@
 
             <div class="section-heading">
 
-                <span>CUSTOMER REVIEWS</span>
+                <span>
+                    CUSTOMER REVIEWS
+                </span>
 
                 <h2>
                     Loved By
@@ -1026,14 +1278,21 @@
                         </div>
 
                         <div>
-                            <h4>Ahmed</h4>
 
-                            <div class="stars">
+                            <h4>
+                                Ahmed
+                            </h4>
+
+                            <div
+                                class="stars"
+                                aria-label="5 out of 5 stars">
                                 ★★★★★
                             </div>
+
                         </div>
 
                     </div>
+
 
                     <p>
                         "Amazing taste and very fast delivery.
@@ -1052,14 +1311,21 @@
                         </div>
 
                         <div>
-                            <h4>Sarah</h4>
 
-                            <div class="stars">
+                            <h4>
+                                Sarah
+                            </h4>
+
+                            <div
+                                class="stars"
+                                aria-label="5 out of 5 stars">
                                 ★★★★★
                             </div>
+
                         </div>
 
                     </div>
+
 
                     <p>
                         "The BBQ was delicious and the presentation
@@ -1078,14 +1344,21 @@
                         </div>
 
                         <div>
-                            <h4>Muhammad</h4>
 
-                            <div class="stars">
+                            <h4>
+                                Muhammad
+                            </h4>
+
+                            <div
+                                class="stars"
+                                aria-label="5 out of 5 stars">
                                 ★★★★★
                             </div>
+
                         </div>
 
                     </div>
+
 
                     <p>
                         "Foodie Express has become my favorite
@@ -1125,19 +1398,31 @@
     ========================================================== -->
     <div
         id="chat-window"
-        class="chat-window hidden">
+        class="chat-window hidden"
+        role="dialog"
+        aria-label="Foodie Assistant">
 
         <div class="chat-header">
 
             <div class="chat-title">
+
                 <span class="chat-avatar">
                     <i class="fa-solid fa-robot"></i>
                 </span>
 
+
                 <div>
-                    <strong>Foodie Assistant</strong>
-                    <small>Online now</small>
+
+                    <strong>
+                        Foodie Assistant
+                    </strong>
+
+                    <small>
+                        Online now
+                    </small>
+
                 </div>
+
             </div>
 
 
@@ -1156,7 +1441,8 @@
 
         <div
             id="chat-messages"
-            class="chat-messages">
+            class="chat-messages"
+            aria-live="polite">
 
             <div class="chat-msg bot">
                 Hi! 👋 I am your Foodie Assistant. Ask me about
@@ -1172,19 +1458,27 @@
             <button
                 type="button"
                 onclick="quickChat('What burgers do you have?')">
+
                 Burgers
+
             </button>
+
 
             <button
                 type="button"
                 onclick="quickChat('Show me biryani')">
+
                 Biryani
+
             </button>
+
 
             <button
                 type="button"
                 onclick="quickChat('Do you have discounts?')">
+
                 Discounts
+
             </button>
 
         </div>
@@ -1197,7 +1491,9 @@
                 id="chat-input"
                 placeholder="Ask about food..."
                 autocomplete="off"
+                aria-label="Chat message"
                 onkeydown="handleChatKeyPress(event)">
+
 
             <button
                 type="button"
@@ -1224,7 +1520,10 @@
 
         <i class="fa-solid fa-comments"></i>
 
-        <span class="chat-online-dot"></span>
+        <span
+            class="chat-online-dot"
+            aria-hidden="true">
+        </span>
 
     </button>
 
@@ -1234,14 +1533,21 @@
     ========================================================== -->
     <aside
         id="cart-sidebar"
-        class="cart-sidebar">
+        class="cart-sidebar"
+        aria-label="Shopping Cart">
 
         <div class="sidebar-header">
 
             <div>
+
                 <i class="fa-solid fa-cart-shopping"></i>
-                <span>Your Cart</span>
+
+                <span>
+                    Your Cart
+                </span>
+
             </div>
+
 
             <button
                 type="button"
@@ -1264,11 +1570,14 @@
 
                 <i class="fa-solid fa-basket-shopping"></i>
 
-                <h3>Your cart is empty</h3>
+                <h3>
+                    Your cart is empty
+                </h3>
 
                 <p>
                     Add something delicious!
                 </p>
+
 
                 <button
                     type="button"
@@ -1291,7 +1600,9 @@
                 <input
                     type="text"
                     id="coupon-code"
-                    placeholder="Promo code">
+                    placeholder="Promo code"
+                    autocomplete="off">
+
 
                 <button
                     type="button"
@@ -1312,7 +1623,9 @@
 
             <div class="discount-row">
 
-                <span>Discount</span>
+                <span>
+                    Discount
+                </span>
 
                 <strong id="cart-discount">
                     Rs. 0
@@ -1323,7 +1636,9 @@
 
             <div class="total-row">
 
-                <span>Total</span>
+                <span>
+                    Total
+                </span>
 
                 <strong id="cart-total">
                     PKR 0
@@ -1339,7 +1654,9 @@
 
                 <i class="fa-solid fa-credit-card"></i>
 
-                Proceed to Checkout
+                <span>
+                    Proceed to Checkout
+                </span>
 
             </button>
 
@@ -1352,7 +1669,8 @@
     <div
         id="cart-overlay"
         class="cart-overlay"
-        onclick="toggleCart()">
+        onclick="toggleCart()"
+        aria-hidden="true">
     </div>
 
 
@@ -1361,7 +1679,10 @@
     ========================================================== -->
     <div
         id="wishlist-modal"
-        class="modal hidden">
+        class="modal hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="wishlist-title">
 
         <div
             class="modal-overlay"
@@ -1373,15 +1694,20 @@
 
             <div class="modal-header">
 
-                <h2>
+                <h2 id="wishlist-title">
+
                     <i class="fa-solid fa-heart"></i>
+
                     My Wishlist
+
                 </h2>
+
 
                 <button
                     type="button"
                     onclick="toggleWishlistModal()"
-                    class="close-btn">
+                    class="close-btn"
+                    aria-label="Close Wishlist">
 
                     <i class="fa-solid fa-xmark"></i>
 
@@ -1398,7 +1724,9 @@
 
                     <i class="fa-regular fa-heart"></i>
 
-                    <h3>Your wishlist is empty</h3>
+                    <h3>
+                        Your wishlist is empty
+                    </h3>
 
                     <p>
                         Add your favorite dishes here.
@@ -1418,7 +1746,9 @@
     ========================================================== -->
     <div
         id="auth-modal"
-        class="modal hidden">
+        class="modal hidden"
+        role="dialog"
+        aria-modal="true">
 
         <div
             class="modal-overlay"
@@ -1431,7 +1761,8 @@
             <button
                 type="button"
                 onclick="closeAuthModal()"
-                class="close-btn modal-close-top">
+                class="close-btn modal-close-top"
+                aria-label="Close Authentication">
 
                 <i class="fa-solid fa-xmark"></i>
 
@@ -1447,14 +1778,20 @@
                     <i class="fa-solid fa-user"></i>
                 </div>
 
-                <h2>Welcome Back!</h2>
+
+                <h2>
+                    Welcome Back!
+                </h2>
+
 
                 <p>
                     Login to continue your Foodie Express journey.
                 </p>
 
 
-                <form onsubmit="handleAuth(event, 'login')">
+                <form
+                    id="login-form"
+                    onsubmit="handleAuth(event, 'login')">
 
                     <div class="form-group">
 
@@ -1466,6 +1803,7 @@
                             type="email"
                             id="login-email"
                             placeholder="Enter your email"
+                            autocomplete="email"
                             required>
 
                     </div>
@@ -1481,6 +1819,7 @@
                             type="password"
                             id="login-password"
                             placeholder="Enter your password"
+                            autocomplete="current-password"
                             required>
 
                     </div>
@@ -1491,6 +1830,7 @@
                         class="primary-btn full-btn">
 
                         <i class="fa-solid fa-right-to-bracket"></i>
+
                         Login
 
                     </button>
@@ -1524,14 +1864,20 @@
                     <i class="fa-solid fa-user-plus"></i>
                 </div>
 
-                <h2>Create Account</h2>
+
+                <h2>
+                    Create Account
+                </h2>
+
 
                 <p>
                     Join Foodie Express today.
                 </p>
 
 
-                <form onsubmit="handleAuth(event, 'signup')">
+                <form
+                    id="signup-form"
+                    onsubmit="handleAuth(event, 'signup')">
 
                     <div class="form-group">
 
@@ -1543,6 +1889,7 @@
                             type="text"
                             id="signup-name"
                             placeholder="Your name"
+                            autocomplete="name"
                             required>
 
                     </div>
@@ -1558,6 +1905,7 @@
                             type="email"
                             id="signup-email"
                             placeholder="Your email"
+                            autocomplete="email"
                             required>
 
                     </div>
@@ -1573,6 +1921,8 @@
                             type="password"
                             id="signup-password"
                             placeholder="Create a password"
+                            autocomplete="new-password"
+                            minlength="6"
                             required>
 
                     </div>
@@ -1583,6 +1933,7 @@
                         class="primary-btn full-btn">
 
                         <i class="fa-solid fa-user-plus"></i>
+
                         Create Account
 
                     </button>
@@ -1616,7 +1967,10 @@
     ========================================================== -->
     <div
         id="dashboard-modal"
-        class="modal hidden">
+        class="modal hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="dashboard-title">
 
         <div
             class="modal-overlay"
@@ -1628,15 +1982,20 @@
 
             <div class="modal-header">
 
-                <h2>
+                <h2 id="dashboard-title">
+
                     <i class="fa-solid fa-chart-line"></i>
+
                     My Dashboard
+
                 </h2>
+
 
                 <button
                     type="button"
                     onclick="closeDashboardModal()"
-                    class="close-btn">
+                    class="close-btn"
+                    aria-label="Close Dashboard">
 
                     <i class="fa-solid fa-xmark"></i>
 
@@ -1650,6 +2009,7 @@
                 <div class="dashboard-avatar">
                     <i class="fa-solid fa-user"></i>
                 </div>
+
 
                 <div>
 
@@ -1674,7 +2034,9 @@
 
                     <div>
 
-                        <span>Loyalty Coins</span>
+                        <span>
+                            Loyalty Coins
+                        </span>
 
                         <strong id="dash-user-coins">
                             0
@@ -1691,7 +2053,9 @@
 
                     <div>
 
-                        <span>Total Orders</span>
+                        <span>
+                            Total Orders
+                        </span>
 
                         <strong id="dash-total-orders">
                             0
@@ -1723,7 +2087,9 @@
 
                         <i class="fa-solid fa-receipt"></i>
 
-                        <h3>No orders yet</h3>
+                        <h3>
+                            No orders yet
+                        </h3>
 
                         <p>
                             Your completed orders will appear here.
@@ -1742,6 +2108,7 @@
                 onclick="handleLogout()">
 
                 <i class="fa-solid fa-right-from-bracket"></i>
+
                 Logout
 
             </button>
@@ -1756,7 +2123,9 @@
     ========================================================== -->
     <div
         id="item-detail-modal"
-        class="modal hidden">
+        class="modal hidden"
+        role="dialog"
+        aria-modal="true">
 
         <div
             class="modal-overlay"
@@ -1769,7 +2138,8 @@
             <button
                 type="button"
                 onclick="closeItemDetailModal()"
-                class="close-btn modal-close-top">
+                class="close-btn modal-close-top"
+                aria-label="Close Item Details">
 
                 <i class="fa-solid fa-xmark"></i>
 
@@ -1784,13 +2154,14 @@
 
 
     <!-- =========================================================
-         CHECKOUT PAGE
-         JS will activate this as a dedicated full-screen page.
+         FULL SCREEN CHECKOUT PAGE
     ========================================================== -->
     <section
         id="checkout-page"
-        class="checkout-page hidden">
+        class="checkout-page hidden"
+        aria-label="Checkout">
 
+        <!-- Checkout Header -->
         <div class="checkout-page-header">
 
             <button
@@ -1799,7 +2170,10 @@
                 onclick="closeCheckoutPage()">
 
                 <i class="fa-solid fa-arrow-left"></i>
-                <span>Back to Foodie Express</span>
+
+                <span>
+                    Back to Foodie Express
+                </span>
 
             </button>
 
@@ -1818,6 +2192,7 @@
             <div class="checkout-secure-label">
 
                 <i class="fa-solid fa-shield-halved"></i>
+
                 Secure Checkout
 
             </div>
@@ -1825,11 +2200,14 @@
         </div>
 
 
+        <!-- Checkout Main -->
         <div class="checkout-page-container">
 
             <div class="checkout-page-title">
 
-                <span>FINAL STEP</span>
+                <span>
+                    FINAL STEP
+                </span>
 
                 <h1>
                     Complete Your
@@ -1846,7 +2224,9 @@
             <div class="checkout-layout">
 
 
-                <!-- Checkout Form -->
+                <!-- =================================================
+                     CHECKOUT FORM
+                ================================================== -->
                 <div class="checkout-form-card">
 
                     <div class="checkout-step-title">
@@ -1855,9 +2235,17 @@
                             01
                         </span>
 
+
                         <div>
-                            <h2>Delivery Information</h2>
-                            <p>Where should we deliver your food?</p>
+
+                            <h2>
+                                Delivery Information
+                            </h2>
+
+                            <p>
+                                Where should we deliver your food?
+                            </p>
+
                         </div>
 
                     </div>
@@ -1868,19 +2256,25 @@
                         onsubmit="processOrder(event)">
 
 
+                        <!-- Customer Details -->
                         <div class="checkout-form-grid">
 
                             <div class="form-group">
 
                                 <label for="cust-name">
+
                                     <i class="fa-solid fa-user"></i>
+
                                     Full Name
+
                                 </label>
+
 
                                 <input
                                     type="text"
                                     id="cust-name"
                                     placeholder="Enter your full name"
+                                    autocomplete="name"
                                     required>
 
                             </div>
@@ -1889,14 +2283,19 @@
                             <div class="form-group">
 
                                 <label for="cust-phone">
+
                                     <i class="fa-solid fa-phone"></i>
+
                                     Phone Number
+
                                 </label>
+
 
                                 <input
                                     type="tel"
                                     id="cust-phone"
                                     placeholder="03XX XXXXXXX"
+                                    autocomplete="tel"
                                     inputmode="tel"
                                     required>
 
@@ -1905,11 +2304,15 @@
                         </div>
 
 
+                        <!-- Delivery Address -->
                         <div class="form-group">
 
                             <label for="cust-address">
+
                                 <i class="fa-solid fa-location-dot"></i>
+
                                 Delivery Address
+
                             </label>
 
 
@@ -1919,6 +2322,7 @@
                                     id="cust-address"
                                     rows="4"
                                     placeholder="Enter your complete delivery address"
+                                    autocomplete="street-address"
                                     required></textarea>
 
 
@@ -1926,7 +2330,8 @@
                                     type="button"
                                     class="location-btn"
                                     onclick="detectUserLocation()"
-                                    title="Detect Location">
+                                    title="Detect Location"
+                                    aria-label="Detect Location">
 
                                     <i class="fa-solid fa-location-crosshairs"></i>
 
@@ -1937,18 +2342,95 @@
                         </div>
 
 
+                        <!-- Additional Delivery Details -->
+                        <div class="checkout-form-grid">
+
+                            <div class="form-group">
+
+                                <label for="cust-city">
+
+                                    <i class="fa-solid fa-city"></i>
+
+                                    City
+
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    id="cust-city"
+                                    placeholder="Your city"
+                                    autocomplete="address-level2">
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="cust-postal">
+
+                                    <i class="fa-solid fa-location-pin"></i>
+
+                                    Postal Code
+
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    id="cust-postal"
+                                    placeholder="Optional"
+                                    inputmode="numeric"
+                                    autocomplete="postal-code">
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Delivery Instructions -->
+                        <div class="form-group">
+
+                            <label for="delivery-notes">
+
+                                <i class="fa-solid fa-note-sticky"></i>
+
+                                Delivery Instructions
+
+                            </label>
+
+
+                            <textarea
+                                id="delivery-notes"
+                                rows="3"
+                                placeholder="Apartment, floor, landmark or special instructions (optional)"></textarea>
+
+                        </div>
+
+
                         <div class="checkout-divider"></div>
 
 
+                        <!-- =================================================
+                             PAYMENT
+                        ================================================== -->
                         <div class="checkout-step-title">
 
                             <span class="checkout-step-number">
                                 02
                             </span>
 
+
                             <div>
-                                <h2>Payment Method</h2>
-                                <p>Select how you want to pay.</p>
+
+                                <h2>
+                                    Payment Method
+                                </h2>
+
+                                <p>
+                                    Select how you want to pay.
+                                </p>
+
                             </div>
 
                         </div>
@@ -1956,6 +2438,8 @@
 
                         <div class="payment-method-grid">
 
+
+                            <!-- Cash -->
                             <label class="payment-option">
 
                                 <input
@@ -1965,17 +2449,29 @@
                                     onchange="setPaymentMethod(this.value)"
                                     checked>
 
+
                                 <span class="payment-option-inner">
 
                                     <i class="fa-solid fa-money-bill-wave"></i>
 
+
                                     <span>
-                                        <strong>Cash on Delivery</strong>
-                                        <small>Pay when your order arrives</small>
+
+                                        <strong>
+                                            Cash on Delivery
+                                        </strong>
+
+                                        <small>
+                                            Pay when your order arrives
+                                        </small>
+
                                     </span>
 
+
                                     <span class="payment-check">
+
                                         <i class="fa-solid fa-check"></i>
+
                                     </span>
 
                                 </span>
@@ -1983,6 +2479,7 @@
                             </label>
 
 
+                            <!-- Wallet -->
                             <label class="payment-option">
 
                                 <input
@@ -1991,17 +2488,29 @@
                                     value="JazzCash / EasyPaisa"
                                     onchange="setPaymentMethod(this.value)">
 
+
                                 <span class="payment-option-inner">
 
                                     <i class="fa-solid fa-mobile-screen-button"></i>
 
+
                                     <span>
-                                        <strong>JazzCash / EasyPaisa</strong>
-                                        <small>Mobile wallet payment</small>
+
+                                        <strong>
+                                            JazzCash / EasyPaisa
+                                        </strong>
+
+                                        <small>
+                                            Mobile wallet payment
+                                        </small>
+
                                     </span>
 
+
                                     <span class="payment-check">
+
                                         <i class="fa-solid fa-check"></i>
+
                                     </span>
 
                                 </span>
@@ -2009,6 +2518,7 @@
                             </label>
 
 
+                            <!-- Card -->
                             <label class="payment-option">
 
                                 <input
@@ -2017,17 +2527,29 @@
                                     value="Debit / Credit Card"
                                     onchange="setPaymentMethod(this.value)">
 
+
                                 <span class="payment-option-inner">
 
                                     <i class="fa-solid fa-credit-card"></i>
 
+
                                     <span>
-                                        <strong>Debit / Credit Card</strong>
-                                        <small>Secure card payment</small>
+
+                                        <strong>
+                                            Debit / Credit Card
+                                        </strong>
+
+                                        <small>
+                                            Secure card payment
+                                        </small>
+
                                     </span>
 
+
                                     <span class="payment-check">
+
                                         <i class="fa-solid fa-check"></i>
+
                                     </span>
 
                                 </span>
@@ -2037,9 +2559,11 @@
                         </div>
 
 
+                        <!-- Hidden compatibility select -->
                         <select
                             id="payment-method"
-                            class="hidden">
+                            class="hidden"
+                            aria-hidden="true">
 
                             <option value="Cash on Delivery">
                                 Cash on Delivery
@@ -2056,6 +2580,7 @@
                         </select>
 
 
+                        <!-- Online Payment -->
                         <div
                             id="online-payment-details"
                             class="payment-details hidden">
@@ -2063,6 +2588,7 @@
                             <div class="payment-note">
 
                                 <i class="fa-solid fa-circle-info"></i>
+
 
                                 <div>
 
@@ -2083,33 +2609,56 @@
                         </div>
 
 
+                        <!-- Security -->
                         <div class="checkout-security">
 
                             <div>
+
                                 <i class="fa-solid fa-lock"></i>
+
                                 Secure Checkout
+
                             </div>
 
+
                             <div>
+
                                 <i class="fa-solid fa-shield-halved"></i>
+
                                 Your details stay on this device
+
                             </div>
 
                         </div>
 
 
+                        <!-- Place Order -->
                         <button
                             type="submit"
                             class="place-order-btn">
 
                             <span>
+
                                 <i class="fa-brands fa-whatsapp"></i>
+
                                 Place Order via WhatsApp
+
                             </span>
+
 
                             <i class="fa-solid fa-arrow-right"></i>
 
                         </button>
+
+
+                        <p class="checkout-whatsapp-note">
+
+                            <i class="fa-solid fa-circle-info"></i>
+
+                            Your order details will be prepared
+                            automatically and opened in WhatsApp.
+
+                        </p>
 
 
                     </form>
@@ -2117,18 +2666,25 @@
                 </div>
 
 
-                <!-- Order Summary -->
+                <!-- =================================================
+                     ORDER SUMMARY
+                ================================================== -->
                 <aside class="checkout-summary-card">
 
                     <div class="summary-header">
 
                         <div>
 
-                            <span>YOUR ORDER</span>
+                            <span>
+                                YOUR ORDER
+                            </span>
 
-                            <h2>Order Summary</h2>
+                            <h2>
+                                Order Summary
+                            </h2>
 
                         </div>
+
 
                         <i class="fa-solid fa-bag-shopping"></i>
 
@@ -2146,7 +2702,9 @@
 
                     <div class="summary-row">
 
-                        <span>Subtotal</span>
+                        <span>
+                            Subtotal
+                        </span>
 
                         <strong id="checkout-subtotal">
                             PKR 0
@@ -2157,12 +2715,16 @@
 
                     <div class="summary-row">
 
-                        <span>Discount</span>
+                        <span>
+                            Discount
+                        </span>
 
                         <strong
                             id="checkout-discount"
                             class="discount-value">
+
                             PKR 0
+
                         </strong>
 
                     </div>
@@ -2170,7 +2732,9 @@
 
                     <div class="summary-row">
 
-                        <span>Delivery</span>
+                        <span>
+                            Delivery
+                        </span>
 
                         <strong>
                             Free
@@ -2184,7 +2748,9 @@
 
                     <div class="summary-total">
 
-                        <span>Total</span>
+                        <span>
+                            Total
+                        </span>
 
                         <strong id="checkout-total">
                             PKR 0
@@ -2211,6 +2777,7 @@
                         onclick="closeCheckoutPage(); toggleCart();">
 
                         <i class="fa-solid fa-pen"></i>
+
                         Edit Cart
 
                     </button>
@@ -2232,6 +2799,7 @@
         <div class="footer-container">
 
 
+            <!-- Brand -->
             <div class="footer-brand">
 
                 <a
@@ -2240,11 +2808,16 @@
                     onclick="scrollToTop(event)">
 
                     <span class="logo-icon">
+
                         <i class="fa-solid fa-utensils"></i>
+
                     </span>
 
+
                     <span class="logo-text">
+
                         Foodie <b>Express</b>
+
                     </span>
 
                 </a>
@@ -2267,6 +2840,7 @@
 
                     </a>
 
+
                     <a
                         href="#"
                         aria-label="Instagram"
@@ -2276,6 +2850,7 @@
 
                     </a>
 
+
                     <a
                         href="#"
                         aria-label="X"
@@ -2284,6 +2859,7 @@
                         <i class="fa-brands fa-x-twitter"></i>
 
                     </a>
+
 
                     <a
                         href="#"
@@ -2299,21 +2875,48 @@
             </div>
 
 
+            <!-- Quick Links -->
             <div class="footer-column">
 
-                <h3>Quick Links</h3>
+                <h3>
+                    Quick Links
+                </h3>
 
-                <a href="#home">Home</a>
-                <a href="#menu">Menu</a>
-                <a href="#features">Features</a>
-                <a href="#reviews">Reviews</a>
+
+                <a href="#home">
+                    Home
+                </a>
+
+
+                <a href="#menu">
+                    Menu
+                </a>
+
+
+                <a href="#features">
+                    Features
+                </a>
+
+
+                <a href="#reviews">
+                    Reviews
+                </a>
+
+
+                <a href="#reservation">
+                    Reservation
+                </a>
 
             </div>
 
 
+            <!-- Categories -->
             <div class="footer-column">
 
-                <h3>Food Categories</h3>
+                <h3>
+                    Food Categories
+                </h3>
+
 
                 <a
                     href="#menu"
@@ -2323,6 +2926,7 @@
 
                 </a>
 
+
                 <a
                     href="#menu"
                     onclick="filterMenu('Desi', event)">
@@ -2331,6 +2935,7 @@
 
                 </a>
 
+
                 <a
                     href="#menu"
                     onclick="filterMenu('BBQ', event)">
@@ -2338,6 +2943,7 @@
                     BBQ &amp; Grills
 
                 </a>
+
 
                 <a
                     href="#menu"
@@ -2350,23 +2956,44 @@
             </div>
 
 
+            <!-- Contact -->
             <div class="footer-column">
 
-                <h3>Contact</h3>
+                <h3>
+                    Contact
+                </h3>
+
 
                 <p>
+
                     <i class="fa-solid fa-phone"></i>
-                    +92 331 2969666
+
+                    <span>
+                        +92 331 2969666
+                    </span>
+
                 </p>
 
+
                 <p>
+
                     <i class="fa-solid fa-envelope"></i>
-                    support@foodieexpress.com
+
+                    <span>
+                        support@foodieexpress.com
+                    </span>
+
                 </p>
 
+
                 <p>
+
                     <i class="fa-solid fa-location-dot"></i>
-                    Pakistan
+
+                    <span>
+                        Pakistan
+                    </span>
+
                 </p>
 
             </div>
@@ -2374,12 +3001,14 @@
         </div>
 
 
+        <!-- Footer Bottom -->
         <div class="footer-bottom">
 
             <p>
                 © 2026 Foodie Express.
                 All Rights Reserved.
             </p>
+
 
             <p>
                 Made with ❤️ for food lovers.
@@ -2396,4 +3025,5 @@
     <script src="script.js"></script>
 
 </body>
+
 </html>
