@@ -1,1748 +1,2972 @@
-// Web Audio API Sound Generator (Guaranteed to work without external links/files)
-function playCustomSound(freq = 600, duration = 0.12, type = 'sine') {
-    try {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        if (!AudioContext) return;
-        
-        const audioCtx = new AudioContext();
-        if (audioCtx.state === 'suspended') {
-            audioCtx.resume();
-        }
+/* =========================================================
+   FOODIE EXPRESS
+   COMPLETE JAVASCRIPT
+========================================================= */
 
-        const oscillator = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
+"use strict";
 
-        oscillator.type = type;
-        oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        
-        gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(
-            0.001,
-            audioCtx.currentTime + duration
-        );
 
-        oscillator.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
+/* =========================================================
+   GLOBAL VARIABLES
+========================================================= */
 
-        oscillator.start();
-        oscillator.stop(audioCtx.currentTime + duration);
-    } catch (e) {
-        console.log("Audio play error:", e);
-    }
-}
+let currentCategory = "All";
+let currentCurrency = "PKR";
+let currentLanguage = "en";
 
-// Expanded Multi-Item Menu
-let defaultCategories = {
-    'Fast Food': [
-        { id: 101, name: 'Zinger Burger Deluxe', category: 'Fast Food', price: 550, desc: 'Crispy chicken fillet with spicy mayo and fresh lettuce.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500' },
-        { id: 102, name: 'Melted Cheese Zinger', category: 'Fast Food', price: 650, desc: 'Loaded with double cheddar cheese and jalapenos.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=500' },
-        { id: 103, name: 'Jumbo Beef Burger', category: 'Fast Food', price: 700, desc: 'Juicy grilled beef patty with smoky BBQ signature sauce.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1550547660-d9450f859349?w=500' },
-        { id: 104, name: 'Spicy Jalapeno Burger', category: 'Fast Food', price: 600, desc: 'Fire-grilled chicken patty topped with hot spicy sauce.', rating: '4.6 ⭐', img: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=500' },
-        { id: 105, name: 'Crispy Chicken Wings (6pcs)', category: 'Fast Food', price: 450, desc: 'Golden fried wings tossed in buffalo hot sauce.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?w=500' },
-        { id: 106, name: 'Loaded French Fries', category: 'Fast Food', price: 350, desc: 'Crispy fries drenched in liquid cheese and beef bits.', rating: '4.5 ⭐', img: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=500' },
-        { id: 107, name: 'Club Sandwich Supreme', category: 'Fast Food', price: 500, desc: 'Triple layer sandwich with chicken, egg, and fresh veggies.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=500' },
-        { id: 108, name: 'Twister Chicken Roll', category: 'Fast Food', price: 400, desc: 'Crispy strips wrapped in tortilla with garlic mayo.', rating: '4.6 ⭐', img: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=500' },
-        { id: 109, name: 'Stuffed Garlic Bread', category: 'Fast Food', price: 420, desc: 'Baked bread stuffed with mozzarella and herbs.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=500' },
-        { id: 110, name: 'Italian Pepperoni Pizza Slice', category: 'Fast Food', price: 300, desc: 'Classic crust loaded with beef pepperoni and cheese.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500' },
-        { id: 111, name: 'Nuggets & Fries Box', category: 'Fast Food', price: 380, desc: '8 pieces of golden nuggets with honey mustard dip.', rating: '4.4 ⭐', img: 'https://images.unsplash.com/photo-1562967914-608f82629710?w=500' },
-        { id: 112, name: 'Zinger Tower Burger', category: 'Fast Food', price: 750, desc: 'Double fillet zinger with hashbrown and cheese slice.', rating: '5.0 ⭐', img: 'https://images.unsplash.com/photo-1583032015865-e9ed53467970?w=500' }
-    ],
+let cart = [];
+let wishlist = [];
+let orderHistory = [];
 
-    'Desi': [
-        { id: 201, name: 'Special Chicken Biryani', category: 'Desi', price: 380, desc: 'Aromatic basmati rice cooked with tender chicken pieces and spices.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500' },
-        { id: 202, name: 'Sindhi Mutton Biryani', category: 'Desi', price: 580, desc: 'Traditional spicy mutton biryani with potatoes and prunes.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?w=500' },
-        { id: 203, name: 'Chicken Pulao Royal', category: 'Desi', price: 360, desc: 'Yakhni based rich flavored rice with succulent chicken.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1596797038530-2c107229654b?w=500' },
-        { id: 204, name: 'Lahori Chicken Karahi (Half)', category: 'Desi', price: 950, desc: 'Prepared in pure tomato gravy with green chilies and ginger.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=500' },
-        { id: 205, name: 'Shinwari Mutton Karahi', category: 'Desi', price: 1450, desc: 'Authentic salt and black pepper flavored rich meat karahi.', rating: '5.0 ⭐', img: 'https://images.unsplash.com/photo-1545247389-dc3a4bc0344e?w=500' },
-        { id: 206, name: 'Special Chicken Haleem', category: 'Desi', price: 320, desc: 'Slow cooked wheat, lentils and shredded meat stew.', rating: '4.6 ⭐', img: 'https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=500' },
-        { id: 207, name: 'Desi Ghee Chicken Qorma', category: 'Desi', price: 600, desc: 'Traditional rich wedding style chicken gravy.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=500' },
-        { id: 208, name: 'Daal Makhani Special', category: 'Desi', price: 280, desc: 'Creamy black lentils tempered with butter and garlic.', rating: '4.5 ⭐', img: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=500' },
-        { id: 209, name: 'Tandoori Butter Naan', category: 'Desi', price: 60, desc: 'Freshly baked clay oven flatbread coated with butter.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=500' },
-        { id: 210, name: 'Chicken White Handi', category: 'Desi', price: 1050, desc: 'Boneless chicken cooked in creamy yogurt and malai gravy.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=500' },
-        { id: 211, name: 'Beef Nihari Special', category: 'Desi', price: 650, desc: 'Tender beef shanks slow cooked overnight in spicy gravy.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=500' },
-        { id: 212, name: 'Aloo Keema Masala', category: 'Desi', price: 400, desc: 'Minced meat cooked with potatoes and fresh coriander.', rating: '4.6 ⭐', img: 'https://images.unsplash.com/photo-1633964913295-ceb43826e7c9?w=500' }
-    ],
+let currentDiscount = 0;
+let currentUser = null;
 
-    'BBQ': [
-        { id: 301, name: 'Smoky BBQ Seekh Kebab', category: 'BBQ', price: 750, desc: 'Juicy minced meat skewers grilled over glowing charcoal.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=500' },
-        { id: 302, name: 'Chicken Malai Boti (12pcs)', category: 'BBQ', price: 850, desc: 'Melt-in-mouth creamy chicken chunks marinated with yogurt & cheese.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=500' },
-        { id: 303, name: 'Chicken Tikka Leg / Breast', category: 'BBQ', price: 350, desc: 'Traditional red spicy charcoal grilled chicken piece.', rating: '4.6 ⭐', img: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500' },
-        { id: 304, name: 'Reshmi Kebab Platter', category: 'BBQ', price: 800, desc: 'Super soft chicken kebabs infused with cream and mild spices.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=500' },
-        { id: 305, name: 'Beef Behari Kebab', category: 'BBQ', price: 900, desc: 'Thin strips of beef marinated with raw papaya and secret spices.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=500' },
-        { id: 306, name: 'Mutton Chops Grill (6pcs)', category: 'BBQ', price: 1350, desc: 'Tender lamb ribs marinated and roasted on fire.', rating: '5.0 ⭐', img: 'https://images.unsplash.com/photo-1603048588665-791ca8aea617?w=500' },
-        { id: 307, name: 'Fish Tikka BBQ (8pcs)', category: 'BBQ', price: 1100, desc: 'Boneless river fish chunks grilled with tangy spices.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=500' },
-        { id: 308, name: 'Mix BBQ Platter Deluxe', category: 'BBQ', price: 2200, desc: 'Assortment of Seekh Kebab, Malai Boti, Tikka, and Beef Behari.', rating: '5.0 ⭐', img: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500' },
-        { id: 309, name: 'Afghani Tikka Boti', category: 'BBQ', price: 880, desc: 'Juicy white meat chunks tossed in black pepper and lemon.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=500' },
-        { id: 310, name: 'Grilled Prawns BBQ', category: 'BBQ', price: 1500, desc: 'Jumbo prawns seasoned with garlic butter and herbs.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1565680314944-eac5617e13ae?w=500' },
-        { id: 311, name: 'Garlic Mayo Chicken Boti', category: 'BBQ', price: 820, desc: 'Charcoal grilled chicken coated in signature garlic sauce.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=500' },
-        { id: 312, name: 'Cheese Grilled Seekh Kebab', category: 'BBQ', price: 950, desc: 'Seekh kebabs wrapped in melted mozzarella cheese.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=500' }
-    ],
+let loyaltyCoins = 0;
+let totalOrders = 0;
 
-    'Drinks': [
-        { id: 401, name: 'Chilled Soft Drink (500ml)', category: 'Drinks', price: 120, desc: 'Refreshing ice-cold carbonated beverage.', rating: '4.5 ⭐', img: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500' },
-        { id: 402, name: 'Fresh Mint Margarita', category: 'Drinks', price: 300, desc: 'Blended mint leaves, lemon juice, sprite and crushed ice.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=500' },
-        { id: 403, name: 'Pina Colada Special', category: 'Drinks', price: 450, desc: 'Creamy pineapple and coconut mocktail drink.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1541658016709-82535e94bc69?w=500' },
-        { id: 404, name: 'Fresh Mango Shake', category: 'Drinks', price: 350, desc: 'Thick creamy milkshake made with ripe seasonal mangoes.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=500' },
-        { id: 405, name: 'Oreo Chocolate Shake', category: 'Drinks', price: 400, desc: 'Rich chocolate shake blended with crunchy oreo cookies.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=500' },
-        { id: 406, name: 'Strawberry Colada', category: 'Drinks', price: 380, desc: 'Sweet strawberry puree mixed with crushed ice and cream.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=500' },
-        { id: 407, name: 'Blue Lagoon Mocktail', category: 'Drinks', price: 320, desc: 'Refreshing citrus drink with blue curacao syrup.', rating: '4.6 ⭐', img: 'https://images.unsplash.com/photo-1536935338788-846bb9981813?w=500' },
-        { id: 408, name: 'Cold Coffee with Ice Cream', category: 'Drinks', price: 420, desc: 'Chilled coffee topped with a large scoop of vanilla ice cream.', rating: '4.9 ⭐', img: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=500' },
-        { id: 409, name: 'Fresh Lime Soda (Namkeen/Meetha)', category: 'Drinks', price: 200, desc: 'Sparkling soda mixed with fresh lemon juice and black salt.', rating: '4.7 ⭐', img: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=500' },
-        { id: 410, name: 'Energy Drink (Red Bull)', category: 'Drinks', price: 350, desc: 'High performance energy booster beverage.', rating: '4.8 ⭐', img: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500' },
-        { id: 411, name: 'Peach Iced Tea', category: 'Drinks', price: 280, desc: 'Chilled black tea infused with sweet peach flavor.', rating: '4.6 ⭐', img: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500' },
-        { id: 412, name: 'Mineral Water (Large)', category: 'Drinks', price: 90, desc: 'Pure filtered refreshing bottled water.', rating: '5.0 ⭐', img: 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=500' }
-    ]
-};
-
-let menuItems = [
-    ...defaultCategories['Fast Food'],
-    ...defaultCategories['Desi'],
-    ...defaultCategories['BBQ'],
-    ...defaultCategories['Drinks']
-];
-
-let storedMenuItems = JSON.parse(localStorage.getItem('foodieMenuItems'));
-
-if (storedMenuItems && storedMenuItems.length > 10) {
-    menuItems = storedMenuItems;
-} else {
-    localStorage.setItem('foodieMenuItems', JSON.stringify(menuItems));
-}
-
-let cart = JSON.parse(localStorage.getItem('foodieCart')) || [];
-let wishlist = JSON.parse(localStorage.getItem('foodieWishlist')) || [];
-let orderHistory = JSON.parse(localStorage.getItem('foodieOrderHistory')) || [];
-
-let totalOrders = localStorage.getItem('totalOrders')
-    ? parseInt(localStorage.getItem('totalOrders'))
-    : 0;
-
-let totalRevenue = localStorage.getItem('totalRevenue')
-    ? parseInt(localStorage.getItem('totalRevenue'))
-    : 0;
-
-let currentCurrency = localStorage.getItem('foodieCurrency') || 'PKR';
-
-let currencyRates = {
-    PKR: 1,
-    USD: 0.0036,
-    EUR: 0.0033
-};
-
-let currencySymbols = {
-    PKR: 'Rs. ',
-    USD: '$',
-    EUR: '€'
-};
-
-let loyaltyCoins = localStorage.getItem('foodieCoins')
-    ? parseInt(localStorage.getItem('foodieCoins'))
-    : 150;
+let trackingTimer = null;
 
 const adminWhatsAppNumber = "923312969666";
 
-let currentAuthMode = 'login';
-let discountAmount = 0;
 
-let isLoggedIn = localStorage.getItem('foodieLoggedIn') === 'true';
+/* =========================================================
+   FOOD MENU
+========================================================= */
 
-function saveMenuItemsToStorage() {
-    localStorage.setItem('foodieMenuItems', JSON.stringify(menuItems));
+const menuItems = [
+
+    /* ---------------- FAST FOOD ---------------- */
+
+    {
+        id: 1,
+        name: "Classic Zinger Burger",
+        category: "Fast Food",
+        price: 650,
+        image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=85",
+        description: "Crispy chicken fillet with fresh lettuce, cheese and signature sauce.",
+        badge: "Popular"
+    },
+
+    {
+        id: 2,
+        name: "Loaded Beef Burger",
+        category: "Fast Food",
+        price: 850,
+        image: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=900&q=85",
+        description: "Juicy beef patty loaded with cheese, caramelized onions and special sauce.",
+        badge: "Chef Choice"
+    },
+
+    {
+        id: 3,
+        name: "Cheesy Chicken Pizza",
+        category: "Fast Food",
+        price: 1200,
+        image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=900&q=85",
+        description: "Freshly baked pizza topped with chicken, mozzarella and delicious herbs.",
+        badge: "Best Seller"
+    },
+
+    {
+        id: 4,
+        name: "Crispy Chicken Wings",
+        category: "Fast Food",
+        price: 750,
+        image: "https://images.unsplash.com/photo-1527477396000-e27163b481c2?auto=format&fit=crop&w=900&q=85",
+        description: "Golden crispy wings tossed in your choice of delicious sauce.",
+        badge: "Hot"
+    },
+
+    {
+        id: 5,
+        name: "Loaded Cheese Fries",
+        category: "Fast Food",
+        price: 450,
+        image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=900&q=85",
+        description: "Crispy fries covered with creamy cheese and flavorful toppings.",
+        badge: "Popular"
+    },
+
+    {
+        id: 6,
+        name: "Chicken Shawarma",
+        category: "Fast Food",
+        price: 420,
+        image: "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=900&q=85",
+        description: "Tender chicken, fresh vegetables and creamy garlic sauce wrapped together.",
+        badge: "Value"
+    },
+
+
+    /* ---------------- DESI CUISINE ---------------- */
+
+    {
+        id: 7,
+        name: "Chicken Biryani",
+        category: "Desi Cuisine",
+        price: 550,
+        image: "https://images.unsplash.com/photo-1563379091339-03246963d96c?auto=format&fit=crop&w=900&q=85",
+        description: "Aromatic basmati rice cooked with tender chicken and traditional spices.",
+        badge: "Desi Favorite"
+    },
+
+    {
+        id: 8,
+        name: "Chicken Karahi",
+        category: "Desi Cuisine",
+        price: 1100,
+        image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=900&q=85",
+        description: "Traditional chicken karahi prepared with tomatoes, green chilies and spices.",
+        badge: "Chef Special"
+    },
+
+    {
+        id: 9,
+        name: "Mutton Karahi",
+        category: "Desi Cuisine",
+        price: 1600,
+        image: "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=85",
+        description: "Tender mutton cooked slowly in a rich traditional karahi masala.",
+        badge: "Premium"
+    },
+
+    {
+        id: 10,
+        name: "Chicken Handi",
+        category: "Desi Cuisine",
+        price: 1250,
+        image: "https://images.unsplash.com/photo-1631292784640-2b24be784d5d?auto=format&fit=crop&w=900&q=85",
+        description: "Creamy chicken handi with aromatic spices and a rich traditional flavor.",
+        badge: "Popular"
+    },
+
+    {
+        id: 11,
+        name: "Daal Makhni",
+        category: "Desi Cuisine",
+        price: 650,
+        image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=900&q=85",
+        description: "Slow-cooked creamy lentils finished with butter and aromatic spices.",
+        badge: "Classic"
+    },
+
+    {
+        id: 12,
+        name: "Butter Naan",
+        category: "Desi Cuisine",
+        price: 150,
+        image: "https://images.unsplash.com/photo-1601050690117-94f5f6fa8bd7?auto=format&fit=crop&w=900&q=85",
+        description: "Soft traditional naan brushed with butter and served hot.",
+        badge: "Fresh"
+    },
+
+
+    /* ---------------- BBQ & GRILLS ---------------- */
+
+    {
+        id: 13,
+        name: "Chicken Tikka",
+        category: "BBQ & Grills",
+        price: 700,
+        image: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=900&q=85",
+        description: "Tender chicken pieces marinated in spices and grilled over charcoal.",
+        badge: "BBQ Favorite"
+    },
+
+    {
+        id: 14,
+        name: "Seekh Kebab",
+        category: "BBQ & Grills",
+        price: 750,
+        image: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=900&q=85",
+        description: "Juicy minced meat kebabs seasoned with traditional herbs and spices.",
+        badge: "Popular"
+    },
+
+    {
+        id: 15,
+        name: "Malai Boti",
+        category: "BBQ & Grills",
+        price: 950,
+        image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=85",
+        description: "Creamy marinated chicken pieces grilled to perfection.",
+        badge: "Premium"
+    },
+
+    {
+        id: 16,
+        name: "BBQ Platter",
+        category: "BBQ & Grills",
+        price: 2200,
+        image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=85",
+        description: "A generous platter featuring chicken tikka, kebabs, boti and grilled sides.",
+        badge: "Family"
+    },
+
+    {
+        id: 17,
+        name: "Grilled Chicken",
+        category: "BBQ & Grills",
+        price: 1050,
+        image: "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=900&q=85",
+        description: "Juicy grilled chicken seasoned with herbs and served with fresh sides.",
+        badge: "Healthy"
+    },
+
+    {
+        id: 18,
+        name: "Grilled Beef Steak",
+        category: "BBQ & Grills",
+        price: 1850,
+        image: "https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=900&q=85",
+        description: "Premium beef steak grilled to your preferred level with savory seasoning.",
+        badge: "Premium"
+    },
+
+
+    /* ---------------- DRINKS ---------------- */
+
+    {
+        id: 19,
+        name: "Mango Shake",
+        category: "Drinks & Shakes",
+        price: 350,
+        image: "https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?auto=format&fit=crop&w=900&q=85",
+        description: "Creamy mango shake prepared with fresh mangoes and chilled milk.",
+        badge: "Summer"
+    },
+
+    {
+        id: 20,
+        name: "Chocolate Shake",
+        category: "Drinks & Shakes",
+        price: 400,
+        image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=900&q=85",
+        description: "Rich chocolate shake topped with creamy foam and chocolate flavor.",
+        badge: "Sweet"
+    },
+
+    {
+        id: 21,
+        name: "Strawberry Shake",
+        category: "Drinks & Shakes",
+        price: 400,
+        image: "https://images.unsplash.com/photo-1553787499-6f9133860275?auto=format&fit=crop&w=900&q=85",
+        description: "Fresh strawberry shake blended into a smooth and creamy drink.",
+        badge: "Fresh"
+    },
+
+    {
+        id: 22,
+        name: "Fresh Lime",
+        category: "Drinks & Shakes",
+        price: 250,
+        image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=900&q=85",
+        description: "Refreshing chilled lime drink with a perfect sweet and sour balance.",
+        badge: "Refreshing"
+    },
+
+    {
+        id: 23,
+        name: "Cold Coffee",
+        category: "Drinks & Shakes",
+        price: 420,
+        image: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=900&q=85",
+        description: "Smooth chilled coffee blended with milk and a touch of sweetness.",
+        badge: "Favorite"
+    },
+
+    {
+        id: 24,
+        name: "Mint Margarita",
+        category: "Drinks & Shakes",
+        price: 300,
+        image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=900&q=85",
+        description: "Cool mint and citrus drink served ice cold for maximum refreshment.",
+        badge: "Cool"
+    }
+
+];
+
+
+/* =========================================================
+   CURRENCY
+========================================================= */
+
+const currencyRates = {
+    PKR: 1,
+    USD: 0.00358,
+    GBP: 0.00265,
+    AED: 0.01315
+};
+
+const currencySymbols = {
+    PKR: "PKR",
+    USD: "$",
+    GBP: "£",
+    AED: "AED"
+};
+
+
+/* =========================================================
+   FORMAT PRICE
+========================================================= */
+
+function formatPrice(price) {
+
+    const converted =
+        price * (currencyRates[currentCurrency] || 1);
+
+    if (currentCurrency === "PKR") {
+        return `PKR ${Math.round(converted).toLocaleString()}`;
+    }
+
+    if (currentCurrency === "AED") {
+        return `AED ${converted.toFixed(2)}`;
+    }
+
+    return `${currencySymbols[currentCurrency]}${converted.toFixed(2)}`;
 }
 
-function formatPrice(amountInPKR) {
-    let rate = currencyRates[currentCurrency] || 1;
-    let symbol = currencySymbols[currentCurrency] || 'Rs. ';
 
-    let converted = (
-        amountInPKR * rate
-    ).toFixed(currentCurrency === 'PKR' ? 0 : 2);
+/* =========================================================
+   LOCAL STORAGE
+========================================================= */
 
-    return `${symbol}${converted}`;
-}
-
-function changeCurrency() {
-    const dropdown = document.getElementById('currency-selector');
-
-    if (!dropdown) return;
-
-    currentCurrency = dropdown.value;
+function saveCartToStorage() {
 
     localStorage.setItem(
-        'foodieCurrency',
-        currentCurrency
+        "foodieExpressCart",
+        JSON.stringify(cart)
     );
-
-    renderMenu(menuItems);
-    updateCartUI();
-    renderOrderHistory();
-
-    playCustomSound(600, 0.08, 'sine');
 }
 
-function updateLoyaltyUI() {
-    const coinEl = document.getElementById('coin-count');
-    const dashCoins = document.getElementById('dash-user-coins');
 
-    if (coinEl) coinEl.innerText = loyaltyCoins;
-    if (dashCoins) dashCoins.innerText = loyaltyCoins;
+function saveWishlistToStorage() {
 
     localStorage.setItem(
-        'foodieCoins',
-        loyaltyCoins
+        "foodieExpressWishlist",
+        JSON.stringify(wishlist)
     );
 }
 
-function showToast(message, type = 'success') {
-    const container = document.getElementById('toast-container');
 
-    if (!container) return;
+function saveOrderHistory() {
 
-    const toast = document.createElement('div');
+    localStorage.setItem(
+        "foodieExpressOrders",
+        JSON.stringify(orderHistory)
+    );
+}
 
-    toast.className = `toast ${type}`;
 
-    toast.innerHTML = `
-        <i class="fa-solid ${
-            type === 'success'
-                ? 'fa-circle-check'
-                : 'fa-triangle-exclamation'
-        }"></i>
-        <span>${message}</span>
-    `;
+function saveUserData() {
+
+    localStorage.setItem(
+        "foodieExpressUser",
+        JSON.stringify(currentUser)
+    );
+
+    localStorage.setItem(
+        "foodieExpressCoins",
+        String(loyaltyCoins)
+    );
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(message, type = "success") {
+
+    const container =
+        document.getElementById("toast-container");
+
+    if (!container) {
+        alert(message);
+        return;
+    }
+
+    const toast =
+        document.createElement("div");
+
+    toast.className =
+        `toast ${type}`;
+
+    toast.textContent = message;
 
     container.appendChild(toast);
 
     setTimeout(() => {
-        toast.classList.add('show');
-    }, 100);
 
-    setTimeout(() => {
-        toast.classList.remove('show');
+        toast.remove();
 
-        setTimeout(() => {
-            toast.remove();
-        }, 300);
-    }, 3000);
+    }, 3100);
 }
 
-function startVoiceSearch() {
+
+/* =========================================================
+   SOUND
+========================================================= */
+
+function playCustomSound() {
+
+    try {
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+        if (!AudioContext) return;
+
+        const audioContext =
+            new AudioContext();
+
+        const oscillator =
+            audioContext.createOscillator();
+
+        const gain =
+            audioContext.createGain();
+
+        oscillator.type = "sine";
+
+        oscillator.frequency.setValueAtTime(
+            700,
+            audioContext.currentTime
+        );
+
+        gain.gain.setValueAtTime(
+            0.08,
+            audioContext.currentTime
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.001,
+            audioContext.currentTime + 0.15
+        );
+
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+
+        oscillator.start();
+
+        oscillator.stop(
+            audioContext.currentTime + 0.15
+        );
+
+    } catch (error) {
+
+        console.log("Audio unavailable.");
+
+    }
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+function searchMenu(value) {
+
+    const query =
+        String(value || "")
+            .trim()
+            .toLowerCase();
+
+    const container =
+        document.getElementById("menu-container");
+
+    const noResults =
+        document.getElementById("no-results");
+
+    if (!container) return;
+
+    const filtered =
+        menuItems.filter(item => {
+
+            const matchesSearch =
+                item.name.toLowerCase().includes(query) ||
+                item.category.toLowerCase().includes(query) ||
+                item.description.toLowerCase().includes(query);
+
+            const matchesCategory =
+                currentCategory === "All" ||
+                item.category === currentCategory;
+
+            return matchesSearch && matchesCategory;
+
+        });
+
+    renderMenu(filtered);
+
+    if (noResults) {
+
+        noResults.classList.toggle(
+            "hidden",
+            filtered.length !== 0
+        );
+
+    }
+}
+
+
+/* =========================================================
+   FILTER MENU
+========================================================= */
+
+function filterMenu(category, clickedButton = null) {
+
+    currentCategory = category;
+
+    document
+        .querySelectorAll(".filter-btn")
+        .forEach(button => {
+            button.classList.remove("active");
+        });
+
+    if (clickedButton) {
+
+        clickedButton.classList.add("active");
+
+    } else {
+
+        document
+            .querySelectorAll(".filter-btn")
+            .forEach(button => {
+
+                const text =
+                    button.textContent
+                        .trim()
+                        .toLowerCase();
+
+                if (
+                    category === "All" &&
+                    text.includes("all")
+                ) {
+                    button.classList.add("active");
+                }
+
+                if (
+                    category !== "All" &&
+                    text.toLowerCase().includes(
+                        category.split(" ")[0].toLowerCase()
+                    )
+                ) {
+                    button.classList.add("active");
+                }
+
+            });
+
+    }
+
     const searchInput =
-        document.getElementById('search-input');
+        document.getElementById("search-input");
+
+    const searchValue =
+        searchInput
+            ? searchInput.value
+            : "";
+
+    searchMenu(searchValue);
+}
+
+
+/* =========================================================
+   RENDER MENU
+========================================================= */
+
+function renderMenu(items = menuItems) {
+
+    const container =
+        document.getElementById("menu-container");
+
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    items.forEach((item, index) => {
+
+        const isLiked =
+            wishlist.includes(item.id);
+
+        const card =
+            document.createElement("article");
+
+        card.className = "menu-card";
+
+        card.style.animationDelay =
+            `${index * 0.04}s`;
+
+        card.innerHTML = `
+            <div class="menu-image">
+
+                <img
+                    src="${item.image}"
+                    alt="${escapeHTML(item.name)}"
+                    loading="lazy"
+                    onerror="this.src='https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80';">
+
+                <span class="menu-badge">
+                    ${escapeHTML(item.badge)}
+                </span>
+
+                <button
+                    class="wishlist-btn ${isLiked ? "active" : ""}"
+                    onclick="toggleWishlist(${item.id})"
+                    title="Wishlist">
+
+                    <i class="${isLiked ? "fa-solid" : "fa-regular"} fa-heart"></i>
+
+                </button>
+
+            </div>
+
+            <div class="menu-info">
+
+                <span class="menu-category">
+                    ${escapeHTML(item.category)}
+                </span>
+
+                <h3>
+                    ${escapeHTML(item.name)}
+                </h3>
+
+                <p>
+                    ${escapeHTML(item.description)}
+                </p>
+
+                <div class="menu-bottom">
+
+                    <strong class="menu-price">
+                        ${formatPrice(item.price)}
+                    </strong>
+
+                    <button
+                        class="add-cart-btn"
+                        onclick="addToCart(${item.id})">
+
+                        <i class="fa-solid fa-cart-plus"></i>
+                        Add
+
+                    </button>
+
+                </div>
+
+            </div>
+        `;
+
+        card.addEventListener(
+            "dblclick",
+            () => openItemDetail(item.id)
+        );
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* =========================================================
+   ITEM DETAIL
+========================================================= */
+
+function openItemDetail(itemId) {
+
+    const item =
+        menuItems.find(
+            product => product.id === itemId
+        );
+
+    const modal =
+        document.getElementById("item-detail-modal");
+
+    const body =
+        document.getElementById("item-detail-body");
+
+    if (!item || !modal || !body) return;
+
+    body.innerHTML = `
+        <div class="item-detail">
+
+            <div class="item-detail-image">
+
+                <img
+                    src="${item.image}"
+                    alt="${escapeHTML(item.name)}">
+
+            </div>
+
+            <div class="item-detail-info">
+
+                <span class="menu-category">
+                    ${escapeHTML(item.category)}
+                </span>
+
+                <h2>
+                    ${escapeHTML(item.name)}
+                </h2>
+
+                <p>
+                    ${escapeHTML(item.description)}
+                </p>
+
+                <div class="item-detail-price">
+                    ${formatPrice(item.price)}
+                </div>
+
+                <button
+                    class="primary-btn full-btn"
+                    onclick="addToCart(${item.id}); closeItemDetailModal();">
+
+                    <i class="fa-solid fa-cart-plus"></i>
+                    Add To Cart
+
+                </button>
+
+            </div>
+
+        </div>
+    `;
+
+    modal.classList.remove("hidden");
+}
+
+
+function closeItemDetailModal() {
+
+    const modal =
+        document.getElementById("item-detail-modal");
+
+    if (modal) {
+        modal.classList.add("hidden");
+    }
+}
+
+
+/* =========================================================
+   ADD FLAVOR TO CART
+========================================================= */
+
+function addFlavorToCart(itemId) {
+
+    addToCart(itemId);
+
+}
+
+
+/* =========================================================
+   CART
+========================================================= */
+
+function addToCart(itemId) {
+
+    const item =
+        menuItems.find(
+            product => product.id === itemId
+        );
+
+    if (!item) return;
+
+    const existing =
+        cart.find(
+            cartItem => cartItem.id === itemId
+        );
+
+    if (existing) {
+
+        existing.quantity += 1;
+
+    } else {
+
+        cart.push({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            image: item.image,
+            quantity: 1
+        });
+
+    }
+
+    saveCartToStorage();
+
+    updateCartUI();
+
+    playCustomSound();
+
+    showToast(
+        `${item.name} added to your cart!`
+    );
+}
+
+
+function updateQuantity(itemId, change) {
+
+    const item =
+        cart.find(
+            cartItem => cartItem.id === itemId
+        );
+
+    if (!item) return;
+
+    item.quantity += change;
+
+    if (item.quantity <= 0) {
+
+        cart =
+            cart.filter(
+                cartItem => cartItem.id !== itemId
+            );
+
+    }
+
+    saveCartToStorage();
+
+    updateCartUI();
+}
+
+
+function removeFromCart(itemId) {
+
+    const item =
+        cart.find(
+            cartItem => cartItem.id === itemId
+        );
+
+    cart =
+        cart.filter(
+            cartItem => cartItem.id !== itemId
+        );
+
+    saveCartToStorage();
+
+    updateCartUI();
+
+    if (item) {
+
+        showToast(
+            `${item.name} removed from cart.`,
+            "error"
+        );
+
+    }
+}
+
+
+/* =========================================================
+   UPDATE CART UI
+========================================================= */
+
+function updateCartUI() {
+
+    const cartItems =
+        document.getElementById("cart-items");
+
+    const cartTotal =
+        document.getElementById("cart-total");
+
+    const cartDiscount =
+        document.getElementById("cart-discount");
+
+    const floatingCount =
+        document.getElementById("floating-cart-count");
+
+    const totalQuantity =
+        cart.reduce(
+            (sum, item) =>
+                sum + item.quantity,
+            0
+        );
+
+    if (floatingCount) {
+
+        floatingCount.textContent =
+            totalQuantity;
+
+    }
+
+    let subtotal = 0;
+
+    cart.forEach(item => {
+
+        subtotal +=
+            item.price * item.quantity;
+
+    });
+
+    const discountAmount =
+        subtotal * (currentDiscount / 100);
+
+    const finalTotal =
+        Math.max(
+            0,
+            subtotal - discountAmount
+        );
+
+    if (cartDiscount) {
+
+        cartDiscount.textContent =
+            formatPrice(discountAmount);
+
+    }
+
+    if (cartTotal) {
+
+        cartTotal.textContent =
+            formatPrice(finalTotal);
+
+    }
+
+    if (!cartItems) return;
+
+    if (cart.length === 0) {
+
+        cartItems.innerHTML = `
+            <div class="empty-cart">
+
+                <i class="fa-solid fa-basket-shopping"></i>
+
+                <h3>Your cart is empty</h3>
+
+                <p>Add something delicious!</p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+    cartItems.innerHTML = "";
+
+    cart.forEach(item => {
+
+        const element =
+            document.createElement("div");
+
+        element.className = "cart-item";
+
+        element.innerHTML = `
+            <div class="cart-item-image">
+
+                <img
+                    src="${item.image}"
+                    alt="${escapeHTML(item.name)}">
+
+            </div>
+
+            <div class="cart-item-info">
+
+                <h4>
+                    ${escapeHTML(item.name)}
+                </h4>
+
+                <p>
+                    ${formatPrice(item.price)}
+                </p>
+
+                <div class="quantity-controls">
+
+                    <button
+                        onclick="updateQuantity(${item.id}, -1)">
+                        −
+                    </button>
+
+                    <span>
+                        ${item.quantity}
+                    </span>
+
+                    <button
+                        onclick="updateQuantity(${item.id}, 1)">
+                        +
+                    </button>
+
+                </div>
+
+            </div>
+
+            <button
+                class="remove-cart-item"
+                onclick="removeFromCart(${item.id})"
+                title="Remove">
+
+                <i class="fa-solid fa-trash"></i>
+
+            </button>
+        `;
+
+        cartItems.appendChild(element);
+
+    });
+
+}
+
+
+/* =========================================================
+   CART TOGGLE
+========================================================= */
+
+function toggleCart() {
+
+    const sidebar =
+        document.getElementById("cart-sidebar");
+
+    if (!sidebar) return;
+
+    sidebar.classList.toggle("open");
+
+}
+
+
+/* =========================================================
+   COUPON
+========================================================= */
+
+function applyCoupon() {
+
+    const input =
+        document.getElementById("coupon-input");
+
+    if (!input) return;
+
+    const code =
+        input.value
+            .trim()
+            .toUpperCase();
+
+    if (!code) {
+
+        showToast(
+            "Please enter a promo code.",
+            "error"
+        );
+
+        return;
+    }
+
+    if (code === "FOODIE50") {
+
+        currentDiscount = 10;
+
+        showToast(
+            "10% discount applied successfully!"
+        );
+
+    } else if (code === "WELCOME") {
+
+        currentDiscount = 5;
+
+        showToast(
+            "5% welcome discount applied!"
+        );
+
+    } else {
+
+        currentDiscount = 0;
+
+        showToast(
+            "Invalid promo code.",
+            "error"
+        );
+
+    }
+
+    updateCartUI();
+}
+
+
+/* =========================================================
+   WISHLIST
+========================================================= */
+
+function toggleWishlist(itemId) {
+
+    const item =
+        menuItems.find(
+            product => product.id === itemId
+        );
+
+    if (!item) return;
+
+    const index =
+        wishlist.indexOf(itemId);
+
+    if (index === -1) {
+
+        wishlist.push(itemId);
+
+        showToast(
+            `${item.name} added to wishlist!`
+        );
+
+    } else {
+
+        wishlist.splice(index, 1);
+
+        showToast(
+            `${item.name} removed from wishlist.`
+        );
+
+    }
+
+    saveWishlistToStorage();
+
+    updateWishlistUI();
+
+    renderMenu(
+        getVisibleMenuItems()
+    );
+}
+
+
+function updateWishlistUI() {
+
+    const count =
+        document.getElementById("wishlist-count");
+
+    const container =
+        document.getElementById("wishlist-items");
+
+    if (count) {
+
+        count.textContent =
+            wishlist.length;
+
+    }
+
+    if (!container) return;
+
+    if (wishlist.length === 0) {
+
+        container.innerHTML = `
+            <div class="empty-state">
+
+                <i class="fa-regular fa-heart"></i>
+
+                <h3>Your wishlist is empty</h3>
+
+                <p>
+                    Add your favorite dishes here.
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+    container.innerHTML = "";
+
+    wishlist.forEach(id => {
+
+        const item =
+            menuItems.find(
+                product => product.id === id
+            );
+
+        if (!item) return;
+
+        const element =
+            document.createElement("div");
+
+        element.className =
+            "wishlist-item";
+
+        element.innerHTML = `
+            <img
+                src="${item.image}"
+                alt="${escapeHTML(item.name)}">
+
+            <div class="wishlist-item-info">
+
+                <h4>
+                    ${escapeHTML(item.name)}
+                </h4>
+
+                <p>
+                    ${formatPrice(item.price)}
+                </p>
+
+            </div>
+
+            <div class="wishlist-item-actions">
+
+                <button
+                    onclick="addToCart(${item.id})"
+                    title="Add to Cart">
+
+                    <i class="fa-solid fa-cart-plus"></i>
+
+                </button>
+
+                <button
+                    onclick="toggleWishlist(${item.id})"
+                    title="Remove">
+
+                    <i class="fa-solid fa-trash"></i>
+
+                </button>
+
+            </div>
+        `;
+
+        container.appendChild(element);
+
+    });
+
+}
+
+
+function toggleWishlistModal() {
+
+    const modal =
+        document.getElementById("wishlist-modal");
+
+    if (!modal) return;
+
+    modal.classList.toggle("hidden");
+
+    updateWishlistUI();
+}
+
+
+/* =========================================================
+   VISIBLE MENU
+========================================================= */
+
+function getVisibleMenuItems() {
+
+    const searchInput =
+        document.getElementById("search-input");
+
+    const query =
+        searchInput
+            ? searchInput.value
+                .trim()
+                .toLowerCase()
+            : "";
+
+    return menuItems.filter(item => {
+
+        const categoryMatch =
+            currentCategory === "All" ||
+            item.category === currentCategory;
+
+        const searchMatch =
+            !query ||
+            item.name.toLowerCase().includes(query) ||
+            item.category.toLowerCase().includes(query) ||
+            item.description.toLowerCase().includes(query);
+
+        return categoryMatch && searchMatch;
+
+    });
+}
+
+
+/* =========================================================
+   CHECKOUT
+========================================================= */
+
+function checkout() {
+
+    if (cart.length === 0) {
+
+        showToast(
+            "Your cart is empty. Add some food first.",
+            "error"
+        );
+
+        return;
+    }
+
+    const modal =
+        document.getElementById("checkout-modal");
+
+    if (!modal) return;
+
+    modal.classList.remove("hidden");
+
+}
+
+
+function closeCheckoutModal() {
+
+    const modal =
+        document.getElementById("checkout-modal");
+
+    if (modal) {
+
+        modal.classList.add("hidden");
+
+    }
+}
+
+
+function togglePaymentInfo() {
+
+    const method =
+        document.getElementById("payment-method");
+
+    const details =
+        document.getElementById("online-payment-details");
+
+    if (!method || !details) return;
+
+    const onlineMethods =
+        [
+            "JazzCash",
+            "EasyPaisa",
+            "Card"
+        ];
+
+    details.classList.toggle(
+        "hidden",
+        !onlineMethods.includes(method.value)
+    );
+}
+
+
+/* =========================================================
+   PROCESS ORDER
+========================================================= */
+
+function processOrder(event) {
+
+    event.preventDefault();
+
+    if (cart.length === 0) {
+
+        showToast(
+            "Your cart is empty.",
+            "error"
+        );
+
+        return;
+    }
+
+    const name =
+        document.getElementById("cust-name")
+            ?.value.trim();
+
+    const phone =
+        document.getElementById("cust-phone")
+            ?.value.trim();
+
+    const address =
+        document.getElementById("cust-address")
+            ?.value.trim();
+
+    const payment =
+        document.getElementById("payment-method")
+            ?.value;
+
+    if (!name || !phone || !address || !payment) {
+
+        showToast(
+            "Please complete all checkout fields.",
+            "error"
+        );
+
+        return;
+    }
+
+    let subtotal = 0;
+
+    cart.forEach(item => {
+
+        subtotal +=
+            item.price * item.quantity;
+
+    });
+
+    const discount =
+        subtotal * (currentDiscount / 100);
+
+    const total =
+        Math.max(
+            0,
+            subtotal - discount
+        );
+
+    const orderId =
+        "FE-" +
+        Date.now()
+            .toString()
+            .slice(-8);
+
+    const order = {
+
+        id: orderId,
+
+        customer: {
+            name,
+            phone,
+            address
+        },
+
+        payment,
+
+        items: JSON.parse(
+            JSON.stringify(cart)
+        ),
+
+        subtotal,
+
+        discount,
+
+        total,
+
+        currency: currentCurrency,
+
+        date:
+            new Date().toLocaleString(),
+
+        status: "Order Placed"
+
+    };
+
+    orderHistory.unshift(order);
+
+    totalOrders += 1;
+
+    loyaltyCoins +=
+        Math.floor(total / 100);
+
+    saveOrderHistory();
+
+    saveUserData();
+
+    cart = [];
+
+    currentDiscount = 0;
+
+    saveCartToStorage();
+
+    updateCartUI();
+
+    renderOrderHistory();
+
+    closeCheckoutModal();
+
+    const form =
+        document.getElementById("checkout-form");
+
+    if (form) {
+
+        form.reset();
+
+    }
+
+    showToast(
+        `Order ${orderId} placed successfully!`
+    );
+
+    playCustomSound();
+
+    startOrderTrackingSimulation();
+
+    const sidebar =
+        document.getElementById("cart-sidebar");
+
+    if (sidebar) {
+
+        sidebar.classList.remove("open");
+
+    }
+
+    const tracking =
+        document.getElementById("tracking-section");
+
+    if (tracking) {
+
+        setTimeout(() => {
+
+            tracking.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        }, 500);
+
+    }
+}
+
+
+/* =========================================================
+   ORDER TRACKING
+========================================================= */
+
+function startOrderTrackingSimulation() {
+
+    const section =
+        document.getElementById("tracking-section");
+
+    if (!section) return;
+
+    section.classList.remove("hidden");
+
+    const steps =
+        [
+            "step-1",
+            "step-2",
+            "step-3",
+            "step-4"
+        ];
+
+    steps.forEach((id, index) => {
+
+        const step =
+            document.getElementById(id);
+
+        if (step) {
+
+            step.classList.toggle(
+                "active",
+                index === 0
+            );
+
+        }
+
+    });
+
+    if (trackingTimer) {
+
+        clearInterval(trackingTimer);
+
+    }
+
+    let currentStep = 1;
+
+    trackingTimer =
+        setInterval(() => {
+
+            const step =
+                document.getElementById(
+                    `step-${currentStep}`
+                );
+
+            if (step) {
+
+                step.classList.add("active");
+
+            }
+
+            currentStep++;
+
+            if (currentStep > 4) {
+
+                clearInterval(trackingTimer);
+
+                showToast(
+                    "Your order has been delivered! Enjoy your meal 🎉"
+                );
+
+            }
+
+        }, 3500);
+}
+
+
+/* =========================================================
+   ORDER HISTORY
+========================================================= */
+
+function renderOrderHistory() {
+
+    const container =
+        document.getElementById("history-container");
+
+    if (!container) return;
+
+    if (orderHistory.length === 0) {
+
+        container.innerHTML = `
+            <div class="empty-state">
+
+                <i class="fa-solid fa-receipt"></i>
+
+                <h3>No orders yet</h3>
+
+                <p>
+                    Your completed orders will appear here.
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+    container.innerHTML = "";
+
+    orderHistory.forEach(order => {
+
+        const element =
+            document.createElement("div");
+
+        element.className =
+            "history-item";
+
+        const itemNames =
+            order.items
+                .map(
+                    item =>
+                        `${item.name} × ${item.quantity}`
+                )
+                .join(", ");
+
+        element.innerHTML = `
+            <div class="history-item-top">
+
+                <strong>
+                    ${escapeHTML(order.id)}
+                </strong>
+
+                <span>
+                    ${formatPrice(
+                        order.total
+                    )}
+                </span>
+
+            </div>
+
+            <div>
+                ${escapeHTML(itemNames)}
+            </div>
+
+            <small>
+                ${escapeHTML(order.date)}
+            </small>
+
+        `;
+
+        container.appendChild(element);
+
+    });
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+function openDashboardModal() {
+
+    const modal =
+        document.getElementById("dashboard-modal");
+
+    if (!modal) return;
+
+    updateDashboard();
+
+    modal.classList.remove("hidden");
+}
+
+
+function closeDashboardModal() {
+
+    const modal =
+        document.getElementById("dashboard-modal");
+
+    if (modal) {
+
+        modal.classList.add("hidden");
+
+    }
+}
+
+
+function updateDashboard() {
+
+    const name =
+        document.getElementById("dash-user-name");
+
+    const email =
+        document.getElementById("dash-user-email");
+
+    const coins =
+        document.getElementById("dash-user-coins");
+
+    const orders =
+        document.getElementById("dash-total-orders");
+
+    if (currentUser) {
+
+        if (name) {
+
+            name.textContent =
+                currentUser.name || "User";
+
+        }
+
+        if (email) {
+
+            email.textContent =
+                currentUser.email || "";
+
+        }
+
+    } else {
+
+        if (name) {
+
+            name.textContent =
+                "Guest User";
+
+        }
+
+        if (email) {
+
+            email.textContent =
+                "Login to unlock your account.";
+
+        }
+
+    }
+
+    if (coins) {
+
+        coins.textContent =
+            loyaltyCoins;
+
+    }
+
+    if (orders) {
+
+        orders.textContent =
+            totalOrders;
+
+    }
+
+    renderOrderHistory();
+}
+
+
+/* =========================================================
+   AUTH MODAL
+========================================================= */
+
+function openAuthModal() {
+
+    const modal =
+        document.getElementById("auth-modal");
+
+    if (!modal) return;
+
+    modal.classList.remove("hidden");
+
+    switchAuthScreen("login");
+}
+
+
+function closeAuthModal() {
+
+    const modal =
+        document.getElementById("auth-modal");
+
+    if (modal) {
+
+        modal.classList.add("hidden");
+
+    }
+}
+
+
+function switchAuthScreen(screen) {
+
+    const login =
+        document.getElementById("login-screen");
+
+    const signup =
+        document.getElementById("signup-screen");
+
+    if (!login || !signup) return;
+
+    if (screen === "signup") {
+
+        login.classList.add("hidden");
+        signup.classList.remove("hidden");
+
+    } else {
+
+        signup.classList.add("hidden");
+        login.classList.remove("hidden");
+
+    }
+}
+
+
+/* =========================================================
+   AUTH HANDLER
+========================================================= */
+
+function handleAuth(event, type) {
+
+    event.preventDefault();
+
+    if (type === "signup") {
+
+        const name =
+            document.getElementById("signup-name")
+                ?.value.trim();
+
+        const email =
+            document.getElementById("signup-email")
+                ?.value.trim();
+
+        const password =
+            document.getElementById("signup-password")
+                ?.value;
+
+        if (!name || !email || !password) {
+
+            showToast(
+                "Please complete all fields.",
+                "error"
+            );
+
+            return;
+        }
+
+        const user = {
+            name,
+            email,
+            password
+        };
+
+        localStorage.setItem(
+            "foodieExpressAccount",
+            JSON.stringify(user)
+        );
+
+        currentUser = {
+            name,
+            email
+        };
+
+        saveUserData();
+
+        showToast(
+            "Account created successfully!"
+        );
+
+        closeAuthModal();
+
+        updateDashboard();
+
+        return;
+    }
+
+
+    /* ---------------- LOGIN ---------------- */
+
+    const email =
+        document.getElementById("login-email")
+            ?.value.trim();
+
+    const password =
+        document.getElementById("login-password")
+            ?.value;
+
+    const saved =
+        localStorage.getItem(
+            "foodieExpressAccount"
+        );
+
+    if (!saved) {
+
+        showToast(
+            "No account found. Please create an account first.",
+            "error"
+        );
+
+        switchAuthScreen("signup");
+
+        return;
+    }
+
+    let account;
+
+    try {
+
+        account =
+            JSON.parse(saved);
+
+    } catch {
+
+        showToast(
+            "Account data is corrupted.",
+            "error"
+        );
+
+        return;
+    }
+
+    if (
+        account.email === email &&
+        account.password === password
+    ) {
+
+        currentUser = {
+            name: account.name,
+            email: account.email
+        };
+
+        saveUserData();
+
+        showToast(
+            `Welcome back, ${account.name}!`
+        );
+
+        closeAuthModal();
+
+        updateDashboard();
+
+    } else {
+
+        showToast(
+            "Incorrect email or password.",
+            "error"
+        );
+
+    }
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+function handleLogout() {
+
+    currentUser = null;
+
+    localStorage.removeItem(
+        "foodieExpressUser"
+    );
+
+    closeDashboardModal();
+
+    showToast(
+        "You have been logged out."
+    );
+}
+
+
+/* =========================================================
+   CURRENCY
+========================================================= */
+
+function changeCurrency(currency) {
+
+    if (!currencyRates[currency]) return;
+
+    currentCurrency = currency;
+
+    localStorage.setItem(
+        "foodieExpressCurrency",
+        currency
+    );
+
+    renderMenu(
+        getVisibleMenuItems()
+    );
+
+    updateCartUI();
+
+    updateWishlistUI();
+
+    renderOrderHistory();
+
+    showToast(
+        `Currency changed to ${currency}.`
+    );
+}
+
+
+/* =========================================================
+   LANGUAGE
+========================================================= */
+
+function changeLanguage(language) {
+
+    currentLanguage = language;
+
+    localStorage.setItem(
+        "foodieExpressLanguage",
+        language
+    );
+
+    if (language === "ur") {
+
+        showToast(
+            "Urdu language selected. Food names remain in English for consistency."
+        );
+
+    } else {
+
+        showToast(
+            "English language selected."
+        );
+
+    }
+}
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+function toggleDarkMode() {
+
+    const root =
+        document.getElementById("html-root");
+
+    if (!root) return;
+
+    const current =
+        root.getAttribute("data-theme") ||
+        "light";
+
+    const next =
+        current === "dark"
+            ? "light"
+            : "dark";
+
+    root.setAttribute(
+        "data-theme",
+        next
+    );
+
+    localStorage.setItem(
+        "foodieExpressTheme",
+        next
+    );
+
+    const button =
+        document.getElementById("dark-mode-btn");
+
+    if (button) {
+
+        button.innerHTML =
+            next === "dark"
+                ? '<i class="fa-solid fa-sun"></i>'
+                : '<i class="fa-solid fa-moon"></i>';
+
+    }
+}
+
+
+/* =========================================================
+   LOCATION
+========================================================= */
+
+function detectUserLocation() {
+
+    if (!navigator.geolocation) {
+
+        showToast(
+            "Location is not supported by your browser.",
+            "error"
+        );
+
+        return;
+    }
+
+    showToast(
+        "Requesting your location..."
+    );
+
+    navigator.geolocation.getCurrentPosition(
+
+        position => {
+
+            const latitude =
+                position.coords.latitude;
+
+            const longitude =
+                position.coords.longitude;
+
+            showToast(
+                `Location detected: ${latitude.toFixed(3)}, ${longitude.toFixed(3)}`
+            );
+
+        },
+
+        () => {
+
+            showToast(
+                "Location permission was not granted.",
+                "error"
+            );
+
+        }
+
+    );
+}
+
+
+/* =========================================================
+   VOICE SEARCH
+========================================================= */
+
+function startVoiceSearch() {
 
     const SpeechRecognition =
         window.SpeechRecognition ||
         window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
+
         showToast(
-            "Your browser does not support Voice Search.",
+            "Voice search is not supported in this browser.",
             "error"
         );
+
         return;
     }
 
-    const recognition = new SpeechRecognition();
+    const recognition =
+        new SpeechRecognition();
 
-    recognition.lang = 'en-US';
+    recognition.lang = "en-US";
+
     recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
 
-    playCustomSound(500, 0.1, 'sine');
+    recognition.maxAlternatives = 1;
 
     recognition.start();
 
-    recognition.onresult = (event) => {
-        const speechToText =
-            event.results[0][0].transcript;
+    showToast(
+        "Listening... Please say a food name."
+    );
 
-        if (searchInput) {
-            searchInput.value = speechToText;
-            searchMenu();
-        }
-    };
+    recognition.onresult =
+        event => {
 
-    recognition.onerror = () => {
-        showToast(
-            "Voice recognition error occurred.",
-            "error"
-        );
-    };
-}
+            const text =
+                event.results[0][0].transcript;
 
-function detectUserLocation() {
-    const addressInput =
-        document.getElementById('cust-address');
+            const input =
+                document.getElementById(
+                    "search-input"
+                );
 
-    if (!addressInput) return;
+            if (input) {
 
-    if (!navigator.geolocation) {
-        showToast(
-            "Geolocation is not supported by your browser",
-            "error"
-        );
-        return;
-    }
+                input.value = text;
 
-    playCustomSound(700, 0.1, 'triangle');
+            }
 
-    addressInput.value =
-        "Detecting precise GPS location...";
+            searchMenu(text);
 
-    navigator.geolocation.getCurrentPosition(
-        (position) => {
-            const lat =
-                position.coords.latitude.toFixed(4);
+        };
 
-            const lng =
-                position.coords.longitude.toFixed(4);
-
-            addressInput.value =
-                `GPS Location: Lat ${lat}, Lng ${lng} (Near You)`;
-
-            playCustomSound(900, 0.15, 'sine');
-
-            showToast(
-                "Location detected successfully!"
-            );
-        },
-
+    recognition.onerror =
         () => {
-            addressInput.value = "";
 
             showToast(
-                "Location access denied. Please type manually.",
+                "Voice search could not be completed.",
                 "error"
             );
-        },
 
-        {
-            timeout: 10000
-        }
-    );
+        };
 }
 
-function renderMenu(items) {
-    const container =
-        document.getElementById('menu-container');
 
-    if (!container) return;
+/* =========================================================
+   AI ASSISTANT
+========================================================= */
 
-    container.innerHTML = '';
+function startAICallSimulation() {
 
-    if (items.length === 0) {
-        container.innerHTML = `
-            <p style="
-                grid-column: 1/-1;
-                text-align: center;
-                color: var(--text-muted);
-                font-size: 18px;
-            ">
-                No gourmet dishes found.
-            </p>
-        `;
-        return;
-    }
+    const suggestions = [
 
-    items.forEach(item => {
-        const isWishlisted =
-            wishlist.some(w => w.id === item.id);
+        "Try our Classic Zinger Burger with Loaded Cheese Fries! 🍔",
 
-        container.innerHTML += `
-            <div class="food-card">
-                <div class="food-img-container">
-                    <img
-                        src="${item.img}"
-                        alt="${item.name}"
-                    >
+        "For desi flavor, Chicken Biryani is a delicious choice! 🍛",
 
-                    <button
-                        class="wishlist-btn ${
-                            isWishlisted ? 'active' : ''
-                        }"
-                        onclick="toggleWishlist(${item.id})"
-                    >
-                        <i class="fa-solid fa-heart"></i>
-                    </button>
-                </div>
+        "If you love BBQ, our BBQ Platter is perfect for sharing! 🔥",
 
-                <div class="food-details">
-                    <div>
-                        <div class="food-title-price">
-                            <h4>${item.name}</h4>
-                            <span>
-                                ${formatPrice(item.price)}
-                            </span>
-                        </div>
+        "Feeling thirsty? Try our creamy Mango Shake! 🥭",
 
-                        <p class="food-desc">
-                            ${
-                                item.desc ||
-                                'Delicious and freshly prepared meal.'
-                            }
-                        </p>
-                    </div>
+        "For something premium, try our Grilled Beef Steak! 🥩"
 
-                    <div class="food-footer">
-                        <span class="food-rating">
-                            ${item.rating || '4.5 ⭐'}
-                        </span>
+    ];
 
-                        <button
-                            class="btn-add-cart"
-                            onclick="addToCart(${item.id})"
-                        >
-                            <i class="fa-solid fa-cart-plus"></i>
-                            Add
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `;
-    });
-}
-
-function searchMenu() {
-    const searchInput =
-        document.getElementById('search-input');
-
-    if (!searchInput) return;
-
-    const query =
-        searchInput.value.toLowerCase().trim();
-
-    const filteredItems = menuItems.filter(item =>
-        item.name.toLowerCase().includes(query) ||
-        item.category.toLowerCase().includes(query)
-    );
-
-    renderMenu(filteredItems);
-}
-
-function filterMenu(categoryName, eventObj) {
-    const buttons =
-        document.querySelectorAll('.filter-btn');
-
-    buttons.forEach(btn =>
-        btn.classList.remove('active')
-    );
-
-    const targetBtn =
-        eventObj
-            ? eventObj.currentTarget
-            : null;
-
-    if (targetBtn) {
-        targetBtn.classList.add('active');
-    }
-
-    playCustomSound(650, 0.1, 'sine');
-
-    if (categoryName === 'All') {
-        renderMenu(menuItems);
-
-        showToast(
-            "Showing All Elite Delicacies"
-        );
-    } else {
-        const categoryItems =
-            menuItems.filter(
-                item => item.category === categoryName
-            );
-
-        renderMenu(categoryItems);
-
-        showToast(
-            `Opened ${categoryName} Menu (${categoryItems.length} Flavors Available)`
-        );
-    }
-}
-
-function toggleWishlist(itemId) {
-    const item =
-        menuItems.find(p => p.id === itemId);
-
-    if (!item) return;
-
-    const index =
-        wishlist.findIndex(
-            w => w.id === itemId
-        );
-
-    if (index > -1) {
-        wishlist.splice(index, 1);
-
-        showToast(
-            "Removed from wishlist"
-        );
-    } else {
-        wishlist.push(item);
-
-        showToast(
-            "Added to wishlist ❤️"
-        );
-
-        playCustomSound(
-            750,
-            0.1,
-            'sine'
-        );
-    }
-
-    localStorage.setItem(
-        'foodieWishlist',
-        JSON.stringify(wishlist)
-    );
-
-    updateWishlistUI();
-    renderMenu(menuItems);
-}
-
-function updateWishlistUI() {
-    const countEl =
-        document.getElementById('wishlist-count');
-
-    const container =
-        document.getElementById('wishlist-items');
-
-    if (countEl) {
-        countEl.innerText = wishlist.length;
-    }
-
-    if (container) {
-        if (wishlist.length === 0) {
-            container.innerHTML = `
-                <p class="no-history-msg">
-                    No favorite dishes added yet!
-                </p>
-            `;
-        } else {
-            container.innerHTML = '';
-
-            wishlist.forEach(item => {
-                container.innerHTML += `
-                    <div class="cart-item-card">
-                        <div class="cart-item-info">
-                            <h5>${item.name}</h5>
-                            <p>
-                                ${formatPrice(item.price)}
-                            </p>
-                        </div>
-
-                        <div class="cart-item-actions">
-                            <button
-                                onclick="
-                                    addToCart(${item.id});
-                                    toggleWishlistModal();
-                                "
-                                class="btn-primary"
-                                style="
-                                    padding: 5px 10px;
-                                    font-size: 12px;
-                                "
-                            >
-                                Add to Bag
-                            </button>
-
-                            <button
-                                onclick="
-                                    toggleWishlist(${item.id})
-                                "
-                                style="
-                                    background: #e74c3c;
-                                    color: white;
-                                    border: none;
-                                    padding: 5px 10px;
-                                    border-radius: 5px;
-                                "
-                            >
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-    }
-}
-
-function toggleWishlistModal() {
-    const modal =
-        document.getElementById('wishlist-modal');
-
-    if (modal) {
-        modal.classList.toggle('active');
-        updateWishlistUI();
-    }
-}
-
-function toggleCart() {
-    const sidebar =
-        document.getElementById('cart-sidebar');
-
-    if (sidebar) {
-        sidebar.classList.toggle('active');
-    }
-}
-
-function saveCartToStorage() {
-    localStorage.setItem(
-        'foodieCart',
-        JSON.stringify(cart)
-    );
-}
-
-function addToCart(itemId) {
-    playCustomSound(
-        850,
-        0.1,
-        'sine'
-    );
-
-    const item =
-        menuItems.find(p => p.id === itemId);
-
-    if (!item) return;
-
-    const cartItem =
-        cart.find(p => p.id === itemId);
-
-    if (cartItem) {
-        cartItem.quantity++;
-    } else {
-        cart.push({
-            ...item,
-            quantity: 1
-        });
-    }
-
-    saveCartToStorage();
-    updateCartUI();
+    const suggestion =
+        suggestions[
+            Math.floor(
+                Math.random() *
+                suggestions.length
+            )
+        ];
 
     showToast(
-        `${item.name} added to cart!`
+        suggestion
     );
 }
 
-function updateQuantity(itemId, change) {
-    playCustomSound(
-        400,
-        0.08,
-        'triangle'
-    );
 
-    const cartItem =
-        cart.find(p => p.id === itemId);
+function startAIVoiceInput() {
 
-    if (!cartItem) return;
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
 
-    cartItem.quantity += change;
-
-    if (cartItem.quantity <= 0) {
-        cart =
-            cart.filter(
-                p => p.id !== itemId
-            );
-    }
-
-    saveCartToStorage();
-    updateCartUI();
-}
-
-function removeFromCart(itemId) {
-    playCustomSound(
-        300,
-        0.15,
-        'sawtooth'
-    );
-
-    cart =
-        cart.filter(
-            item => item.id !== itemId
-        );
-
-    saveCartToStorage();
-    updateCartUI();
-
-    showToast(
-        "Item removed from cart"
-    );
-}
-
-function applyCoupon() {
-    const codeInput =
-        document.getElementById('coupon-code');
-
-    const msgEl =
-        document.getElementById('discount-msg');
-
-    if (!codeInput) return;
-
-    const code =
-        codeInput.value
-            .trim()
-            .toUpperCase();
-
-    if (code === 'FOODIE50') {
-        discountAmount = 100;
-
-        if (msgEl) {
-            msgEl.style.color = '#2ed573';
-
-            msgEl.innerText =
-                'Promo code applied! Rs. 100 Discount Added 🎉';
-        }
-
-        playCustomSound(
-            950,
-            0.2,
-            'sine'
-        );
+    if (!SpeechRecognition) {
 
         showToast(
-            "Discount coupon applied successfully!"
-        );
-    } else {
-        discountAmount = 0;
-
-        if (msgEl) {
-            msgEl.style.color = '#ff4757';
-
-            msgEl.innerText =
-                'Invalid Promo Code! (Try: FOODIE50)';
-        }
-
-        playCustomSound(
-            250,
-            0.2,
-            'sawtooth'
-        );
-
-        showToast(
-            "Invalid Promo Code",
-            "error"
-        );
-    }
-
-    updateCartUI();
-}
-
-function updateCartUI() {
-    const container =
-        document.getElementById('cart-items');
-
-    let total = 0;
-    let count = 0;
-
-    cart.forEach(item => {
-        total +=
-            item.price * item.quantity;
-
-        count += item.quantity;
-    });
-
-    let finalTotal =
-        total - discountAmount;
-
-    if (finalTotal < 0) {
-        finalTotal = 0;
-    }
-
-    if (container) {
-        container.innerHTML = '';
-
-        if (cart.length === 0) {
-            container.innerHTML = `
-                <p style="
-                    text-align: center;
-                    color: var(--text-muted);
-                    margin-top: 20px;
-                ">
-                    Your shopping bag is empty.
-                </p>
-            `;
-        } else {
-            cart.forEach(item => {
-                container.innerHTML += `
-                    <div class="cart-item-card">
-                        <div class="cart-item-info">
-                            <h5>${item.name}</h5>
-
-                            <p>
-                                ${formatPrice(item.price)}
-                                x ${item.quantity}
-                            </p>
-                        </div>
-
-                        <div class="cart-item-actions">
-                            <button
-                                onclick="
-                                    updateQuantity(
-                                        ${item.id},
-                                        -1
-                                    )
-                                "
-                            >
-                                -
-                            </button>
-
-                            <span>
-                                ${item.quantity}
-                            </span>
-
-                            <button
-                                onclick="
-                                    updateQuantity(
-                                        ${item.id},
-                                        1
-                                    )
-                                "
-                            >
-                                +
-                            </button>
-
-                            <button
-                                onclick="
-                                    removeFromCart(
-                                        ${item.id}
-                                    )
-                                "
-                                style="
-                                    background: var(--primary);
-                                    color: white;
-                                    border: none;
-                                "
-                            >
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-    }
-
-    const totalEl =
-        document.getElementById('cart-total');
-
-    const countEl =
-        document.getElementById('cart-count');
-
-    const floatingCountEl =
-        document.getElementById('floating-cart-count');
-
-    if (totalEl) {
-        totalEl.innerText =
-            formatPrice(finalTotal);
-    }
-
-    if (countEl) {
-        countEl.innerText = count;
-    }
-
-    if (floatingCountEl) {
-        floatingCountEl.innerText = count;
-    }
-
-    updateLoyaltyUI();
-}
-
-function togglePaymentInfo() {
-    const paymentSelect =
-        document.getElementById('payment-method');
-
-    const detailsBox =
-        document.getElementById(
-            'online-payment-details'
-        );
-
-    if (!paymentSelect || !detailsBox) return;
-
-    if (
-        paymentSelect.value ===
-            'JazzCash / EasyPaisa' ||
-        paymentSelect.value ===
-            'Debit / Credit Card'
-    ) {
-        detailsBox.style.display = 'block';
-    } else {
-        detailsBox.style.display = 'none';
-    }
-}
-
-function checkout() {
-    if (cart.length === 0) {
-        showToast(
-            "Your shopping bag is empty!",
+            "AI voice input is not supported in this browser.",
             "error"
         );
 
         return;
     }
 
-    toggleCart();
+    const recognition =
+        new SpeechRecognition();
 
-    const checkoutModal =
-        document.getElementById(
-            'checkout-modal'
-        );
+    recognition.lang = "en-US";
 
-    if (checkoutModal) {
-        checkoutModal.classList.add('active');
-    }
-}
+    recognition.interimResults = false;
 
-function closeCheckoutModal() {
-    const checkoutModal =
-        document.getElementById(
-            'checkout-modal'
-        );
-
-    if (checkoutModal) {
-        checkoutModal.classList.remove('active');
-    }
-}
-
-function processOrder(e) {
-    e.preventDefault();
-
-    playCustomSound(
-        523,
-        0.1,
-        'sine'
-    );
-
-    const nameEl =
-        document.getElementById('cust-name');
-
-    const phoneEl =
-        document.getElementById('cust-phone');
-
-    const addressEl =
-        document.getElementById('cust-address');
-
-    const paymentEl =
-        document.getElementById('payment-method');
-
-    const name =
-        nameEl ? nameEl.value : '';
-
-    const phone =
-        phoneEl ? phoneEl.value : '';
-
-    const address =
-        addressEl ? addressEl.value : '';
-
-    const payment =
-        paymentEl
-            ? paymentEl.value
-            : 'Cash on Delivery';
-
-    const rawTotal =
-        cart.reduce(
-            (sum, item) =>
-                sum +
-                (item.price * item.quantity),
-            0
-        );
-
-    const orderTotal =
-        Math.max(
-            0,
-            rawTotal - discountAmount
-        );
-
-    const orderId =
-        'ORD-' +
-        Math.floor(
-            1000 +
-            Math.random() * 9000
-        );
-
-    totalRevenue += orderTotal;
-    totalOrders++;
-
-    let earnedCoins =
-        Math.floor(
-            orderTotal * 0.05
-        );
-
-    loyaltyCoins += earnedCoins;
-
-    const newOrder = {
-        id: orderId,
-        items: [...cart],
-        amount: orderTotal,
-        date: new Date().toLocaleDateString(),
-        status: 'Processing'
-    };
-
-    orderHistory.unshift(newOrder);
-
-    localStorage.setItem(
-        'totalOrders',
-        totalOrders
-    );
-
-    localStorage.setItem(
-        'totalRevenue',
-        totalRevenue
-    );
-
-    localStorage.setItem(
-        'foodieOrderHistory',
-        JSON.stringify(orderHistory)
-    );
-
-    let itemsListText = "";
-
-    cart.forEach(item => {
-        itemsListText +=
-            `• ${item.name} (x${item.quantity}) - ${formatPrice(
-                item.price * item.quantity
-            )}\n`;
-    });
-
-    const waMessage =
-        `🛍️ *New Order Received! (Foodie Express)*\n\n` +
-        `🆔 *Order ID:* ${orderId}\n` +
-        `👤 *Name:* ${name}\n` +
-        `📞 *Phone:* ${phone}\n` +
-        `📍 *Address:* ${address}\n` +
-        `💳 *Payment Method:* ${payment}\n\n` +
-        `🍔 *Order Items:*\n${itemsListText}\n` +
-        `💰 *Total Amount:* ${formatPrice(orderTotal)}`;
-
-    const whatsappUrl =
-        `https://wa.me/${adminWhatsAppNumber}?text=${encodeURIComponent(
-            waMessage
-        )}`;
+    recognition.start();
 
     showToast(
-        `Order placed successfully! (+${earnedCoins} Coins)`
+        "AI is listening..."
     );
 
-    cart = [];
-    discountAmount = 0;
+    recognition.onresult =
+        event => {
 
-    saveCartToStorage();
-    updateCartUI();
-    renderOrderHistory();
+            const text =
+                event.results[0][0].transcript;
 
-    const checkoutForm =
-        document.getElementById(
-            'checkout-form'
-        );
-
-    if (checkoutForm) {
-        checkoutForm.reset();
-    }
-
-    closeCheckoutModal();
-
-    window.open(
-        whatsappUrl,
-        '_blank'
-    );
-
-    startOrderTrackingSimulation();
-}
-
-function renderOrderHistory() {
-    const historyContainer =
-        document.getElementById(
-            'history-container'
-        );
-
-    if (!historyContainer) return;
-
-    if (orderHistory.length === 0) {
-        historyContainer.innerHTML = `
-            <p class="no-history-msg">
-                No luxury orders placed yet!
-            </p>
-        `;
-
-        return;
-    }
-
-    historyContainer.innerHTML = '';
-
-    orderHistory.forEach(order => {
-        let itemsSummary =
-            order.items
-                .map(
-                    i =>
-                        `${i.name} (x${i.quantity})`
-                )
-                .join(', ');
-
-        historyContainer.innerHTML += `
-            <div class="history-card">
-
-                <div style="
-                    display: flex;
-                    justify-content: space-between;
-                    font-weight: bold;
-                    margin-bottom: 8px;
-                ">
-                    <span>
-                        Order ID: ${order.id}
-                    </span>
-
-                    <span style="
-                        color: var(--primary);
-                    ">
-                        ${formatPrice(order.amount)}
-                    </span>
-                </div>
-
-                <p style="
-                    margin: 0 0 6px 0;
-                    font-size: 14px;
-                    color: var(--text-muted);
-                ">
-                    <strong>Items:</strong>
-                    ${itemsSummary}
-                </p>
-
-                <div style="
-                    display: flex;
-                    justify-content: space-between;
-                    font-size: 12px;
-                    color: var(--text-muted);
-                ">
-                    <span>
-                        Date: ${order.date}
-                    </span>
-
-                    <span>
-                        Status:
-                        <strong style="
-                            color: var(--accent);
-                        ">
-                            ${order.status}
-                        </strong>
-                    </span>
-                </div>
-
-            </div>
-        `;
-    });
-}
-
-function startOrderTrackingSimulation() {
-    const trackingSection =
-        document.getElementById(
-            'tracking-section'
-        );
-
-    if (!trackingSection) return;
-
-    trackingSection.classList.remove(
-        'hidden'
-    );
-
-    trackingSection.scrollIntoView({
-        behavior: 'smooth'
-    });
-
-    let step = 1;
-
-    [1, 2, 3, 4].forEach(s => {
-        const el =
-            document.getElementById(
-                `step-${s}`
+            showToast(
+                `AI heard: "${text}"`
             );
 
-        if (el) {
-            el.classList.remove(
-                'active'
+        };
+
+    recognition.onerror =
+        () => {
+
+            showToast(
+                "AI voice input failed.",
+                "error"
             );
-        }
-    });
 
-    const step1El =
-        document.getElementById(
-            'step-1'
-        );
-
-    if (step1El) {
-        step1El.classList.add(
-            'active'
-        );
-    }
-
-    const interval =
-        setInterval(() => {
-            step++;
-
-            if (step <= 4) {
-                const stepEl =
-                    document.getElementById(
-                        `step-${step}`
-                    );
-
-                if (stepEl) {
-                    stepEl.classList.add(
-                        'active'
-                    );
-                }
-            } else {
-                clearInterval(interval);
-            }
-        }, 3000);
+        };
 }
 
-function handleTableReservation(e) {
-    e.preventDefault();
 
-    playCustomSound(
-        800,
-        0.15,
-        'sine'
-    );
-
-    showToast(
-        "VIP Table reserved successfully! We look forward to serving you."
-    );
-
-    const resForm =
-        document.getElementById(
-            'reservation-form'
-        );
-
-    if (resForm) {
-        resForm.reset();
-    }
-}
-
-function setupAIRecommender() {
-    const moodChips =
-        document.querySelectorAll(
-            '#mood-chips .ai-chip'
-        );
-
-    const occasionChips =
-        document.querySelectorAll(
-            '#occasion-chips .ai-chip'
-        );
-
-    const aiFindBtn =
-        document.getElementById(
-            'ai-find-btn'
-        );
-
-    moodChips.forEach(chip => {
-        chip.addEventListener(
-            'click',
-            () => {
-                moodChips.forEach(c =>
-                    c.classList.remove(
-                        'active'
-                    )
-                );
-
-                chip.classList.add(
-                    'active'
-                );
-            }
-        );
-    });
-
-    occasionChips.forEach(chip => {
-        chip.addEventListener(
-            'click',
-            () => {
-                occasionChips.forEach(c =>
-                    c.classList.remove(
-                        'active'
-                    )
-                );
-
-                chip.classList.add(
-                    'active'
-                );
-            }
-        );
-    });
-
-    if (aiFindBtn) {
-        aiFindBtn.addEventListener(
-            'click',
-            () => {
-                playCustomSound(
-                    700,
-                    0.15,
-                    'sine'
-                );
-
-                const activeMood =
-                    document.querySelector(
-                        '#mood-chips .ai-chip.active'
-                    );
-
-                const resultBox =
-                    document.getElementById(
-                        'ai-result-box'
-                    );
-
-                const recommendedContainer =
-                    document.getElementById(
-                        'ai-recommended-items'
-                    );
-
-                if (!activeMood) {
-                    showToast(
-                        "Please select a mood first!",
-                        "error"
-                    );
-
-                    return;
-                }
-
-                let matchedItem =
-                    menuItems[
-                        Math.floor(
-                            Math.random() *
-                            menuItems.length
-                        )
-                    ];
-
-                if (recommendedContainer) {
-                    recommendedContainer.innerHTML = `
-                        <div
-                            class="food-card"
-                            style="
-                                width: 100%;
-                                margin: 0 auto;
-                            "
-                        >
-                            <div class="food-img-container">
-                                <img
-                                    src="${matchedItem.img}"
-                                    alt="${matchedItem.name}"
-                                >
-                            </div>
-
-                            <div class="food-details">
-                                <div class="food-title-price">
-                                    <h4>
-                                        ${matchedItem.name}
-                                    </h4>
-
-                                    <span>
-                                        ${formatPrice(
-                                            matchedItem.price
-                                        )}
-                                    </span>
-                                </div>
-
-                                <p class="food-desc">
-                                    ${matchedItem.desc}
-                                </p>
-
-                                <div class="food-footer">
-                                    <span class="food-rating">
-                                        ${matchedItem.rating}
-                                    </span>
-
-                                    <button
-                                        class="btn-add-cart"
-                                        onclick="
-                                            addToCart(
-                                                ${matchedItem.id}
-                                            )
-                                        "
-                                    >
-                                        <i class="
-                                            fa-solid
-                                            fa-cart-plus
-                                        "></i>
-                                        Add To Bag
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }
-
-                if (resultBox) {
-                    resultBox.classList.remove(
-                        'hidden'
-                    );
-
-                    resultBox.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }
-            }
-        );
-    }
-}
+/* =========================================================
+   CHATBOT
+========================================================= */
 
 function toggleChatbot() {
+
     const chatWindow =
         document.getElementById(
-            'chat-window'
+            "chat-window"
         );
 
-    if (chatWindow) {
-        chatWindow.classList.toggle(
-            'hidden'
-        );
+    if (!chatWindow) return;
+
+    chatWindow.classList.toggle(
+        "hidden"
+    );
+}
+
+
+function handleChatKeyPress(event) {
+
+    if (event.key === "Enter") {
+
+        event.preventDefault();
+
+        sendChatMessage();
+
     }
 }
 
+
 function sendChatMessage() {
+
     const input =
         document.getElementById(
-            'chat-input'
+            "chat-input"
         );
 
     const messages =
         document.getElementById(
-            'chat-messages'
+            "chat-messages"
         );
 
-    if (
-        !input ||
-        !input.value.trim() ||
-        !messages
-    ) {
-        return;
-    }
+    if (!input || !messages) return;
 
     const userText =
         input.value.trim();
 
-    messages.innerHTML += `
-        <div class="chat-msg user">
-            ${userText}
-        </div>
-    `;
+    if (!userText) return;
 
-    input.value = '';
+    const userMessage =
+        document.createElement("div");
 
-    playCustomSound(
-        600,
-        0.08,
-        'sine'
+    userMessage.className =
+        "chat-msg user";
+
+    userMessage.textContent =
+        userText;
+
+    messages.appendChild(
+        userMessage
     );
 
+    input.value = "";
+
+    messages.scrollTop =
+        messages.scrollHeight;
+
+
     setTimeout(() => {
-        let reply =
-            "Thank you for reaching out! Our support team will assist you shortly.";
 
-        if (
-            userText
-                .toLowerCase()
-                .includes('delivery')
-        ) {
-            reply =
-                "All deliveries are completed within 30 minutes!";
-        } else if (
-            userText
-                .toLowerCase()
-                .includes('discount')
-        ) {
-            reply =
-                "You can use promo code FOODIE50 for an instant discount!";
-        }
+        const reply =
+            getChatbotReply(userText);
 
-        messages.innerHTML += `
-            <div class="chat-msg bot">
-                ${reply}
-            </div>
-        `;
+        const botMessage =
+            document.createElement("div");
+
+        botMessage.className =
+            "chat-msg bot";
+
+        botMessage.textContent =
+            reply;
+
+        messages.appendChild(
+            botMessage
+        );
 
         messages.scrollTop =
             messages.scrollHeight;
-    }, 1000);
+
+    }, 500);
 }
 
-function handleChatKeyPress(e) {
-    if (e.key === 'Enter') {
-        sendChatMessage();
+
+function getChatbotReply(text) {
+
+    const message =
+        text.toLowerCase();
+
+    if (
+        message.includes("delivery") ||
+        message.includes("deliver")
+    ) {
+
+        return "Our estimated delivery time is around 30 minutes, depending on your location.";
+
+    }
+
+    if (
+        message.includes("discount") ||
+        message.includes("promo") ||
+        message.includes("coupon")
+    ) {
+
+        return "Try promo code FOODIE50 to receive a 10% discount.";
+
+    }
+
+    if (
+        message.includes("burger")
+    ) {
+
+        return "Our Classic Zinger Burger and Loaded Beef Burger are popular choices.";
+
+    }
+
+    if (
+        message.includes("biryani") ||
+        message.includes("desi")
+    ) {
+
+        return "For desi food, try our Chicken Biryani or Chicken Karahi.";
+
+    }
+
+    if (
+        message.includes("bbq") ||
+        message.includes("grill")
+    ) {
+
+        return "Our BBQ Platter, Chicken Tikka and Malai Boti are great BBQ options.";
+
+    }
+
+    if (
+        message.includes("drink") ||
+        message.includes("shake")
+    ) {
+
+        return "You can try our Mango Shake, Chocolate Shake or Fresh Lime.";
+
+    }
+
+    if (
+        message.includes("hello") ||
+        message.includes("hi") ||
+        message.includes("hey")
+    ) {
+
+        return "Hello! 👋 Welcome to Foodie Express. What delicious food are you looking for?";
+
+    }
+
+    if (
+        message.includes("price") ||
+        message.includes("cost")
+    ) {
+
+        return "You can see the current price of every item directly on its food card.";
+
+    }
+
+    if (
+        message.includes("thank")
+    ) {
+
+        return "You're very welcome! ❤️ Enjoy your meal.";
+
+    }
+
+    return "I can help you with food, prices, delivery, discounts and menu categories. What would you like to know?";
+}
+
+
+/* =========================================================
+   LOYALTY UI
+========================================================= */
+
+function updateLoyaltyUI() {
+
+    const coins =
+        document.getElementById(
+            "dash-user-coins"
+        );
+
+    if (coins) {
+
+        coins.textContent =
+            loyaltyCoins;
+
     }
 }
 
-function changeLanguage() {
-    const langSelector =
-        document.getElementById(
-            'language-selector'
-        );
 
-    if (!langSelector) return;
+/* =========================================================
+   INITIALIZATION
+========================================================= */
 
-    const lang =
-        langSelector.value;
+function loadSavedData() {
 
-    const root =
-        document.getElementById(
-            'html-root'
-        ) ||
-        document.documentElement;
+    try {
 
-    root.setAttribute(
-        'dir',
-        lang === 'ur'
-            ? 'rtl'
-            : 'ltr'
-    );
-
-    root.setAttribute(
-        'lang',
-        lang
-    );
-
-    showToast(
-        lang === 'ur'
-            ? 'اردو زبان منتخب کی گئی'
-            : 'English language selected'
-    );
-}
-
-function openAuthModal(mode = 'login') {
-    const authModal =
-        document.getElementById(
-            'auth-modal'
-        );
-
-    const loginScreen =
-        document.getElementById(
-            'login-screen'
-        );
-
-    const signupScreen =
-        document.getElementById(
-            'signup-screen'
-        );
-
-    if (!authModal) return;
-
-    if (mode === 'signup') {
-        if (loginScreen) {
-            loginScreen.classList.add(
-                'hidden'
+        const savedCart =
+            localStorage.getItem(
+                "foodieExpressCart"
             );
+
+        if (savedCart) {
+
+            cart =
+                JSON.parse(savedCart);
+
         }
 
-        if (signupScreen) {
-            signupScreen.classList.remove(
-                'hidden'
+    } catch {
+
+        cart = [];
+
+    }
+
+
+    try {
+
+        const savedWishlist =
+            localStorage.getItem(
+                "foodieExpressWishlist"
             );
+
+        if (savedWishlist) {
+
+            wishlist =
+                JSON.parse(savedWishlist);
+
         }
-    } else {
-        if (signupScreen) {
-            signupScreen.classList.add(
-                'hidden'
+
+    } catch {
+
+        wishlist = [];
+
+    }
+
+
+    try {
+
+        const savedOrders =
+            localStorage.getItem(
+                "foodieExpressOrders"
             );
+
+        if (savedOrders) {
+
+            orderHistory =
+                JSON.parse(savedOrders);
+
         }
 
-        if (loginScreen) {
-            loginScreen.classList.remove(
-                'hidden'
+    } catch {
+
+        orderHistory = [];
+
+    }
+
+
+    try {
+
+        const savedUser =
+            localStorage.getItem(
+                "foodieExpressUser"
             );
+
+        if (savedUser) {
+
+            currentUser =
+                JSON.parse(savedUser);
+
         }
+
+    } catch {
+
+        currentUser = null;
+
     }
 
-    authModal.classList.add(
-        'active'
-    );
-}
 
-function switchAuthScreen(mode) {
-    openAuthModal(mode);
-}
-
-function closeAuthModal() {
-    const authModal =
-        document.getElementById(
-            'auth-modal'
+    const savedCoins =
+        localStorage.getItem(
+            "foodieExpressCoins"
         );
 
-    if (authModal) {
-        authModal.classList.remove(
-            'active'
-        );
-    }
-}
+    if (savedCoins) {
 
-function handleAuth(e, type) {
-    e.preventDefault();
+        loyaltyCoins =
+            Number(savedCoins) || 0;
 
-    isLoggedIn = true;
-
-    localStorage.setItem(
-        'foodieLoggedIn',
-        'true'
-    );
-
-    const dashBtn =
-        document.getElementById(
-            'dashboard-btn'
-        );
-
-    if (dashBtn) {
-        dashBtn.classList.remove(
-            'hidden'
-        );
     }
 
-    showToast(
-        type === 'signup'
-            ? 'Account created successfully!'
-            : 'Logged in successfully!'
-    );
 
-    closeAuthModal();
-}
+    totalOrders =
+        orderHistory.length;
 
-function openDashboardModal() {
-    const dashModal =
-        document.getElementById(
-            'dashboard-modal'
-        );
 
-    if (dashModal) {
-        dashModal.classList.add(
-            'active'
-        );
-    }
-}
-
-function closeDashboardModal() {
-    const dashModal =
-        document.getElementById(
-            'dashboard-modal'
-        );
-
-    if (dashModal) {
-        dashModal.classList.remove(
-            'active'
-        );
-    }
-}
-
-function handleLogout() {
-    isLoggedIn = false;
-
-    localStorage.removeItem(
-        'foodieLoggedIn'
-    );
-
-    const dashBtn =
-        document.getElementById(
-            'dashboard-btn'
-        );
-
-    if (dashBtn) {
-        dashBtn.classList.add(
-            'hidden'
-        );
-    }
-
-    closeDashboardModal();
-
-    showToast(
-        "Logged out successfully"
-    );
-}
-
-function toggleDarkMode() {
-    const htmlElement =
-        document.documentElement;
-
-    const themeIcon =
-        document.getElementById(
-            'theme-icon'
+    const savedCurrency =
+        localStorage.getItem(
+            "foodieExpressCurrency"
         );
 
     if (
-        htmlElement.getAttribute(
-            'data-theme'
-        ) === 'dark'
+        savedCurrency &&
+        currencyRates[savedCurrency]
     ) {
-        htmlElement.removeAttribute(
-            'data-theme'
-        );
 
-        if (themeIcon) {
-            themeIcon.className =
-                'fa-solid fa-moon';
-        }
+        currentCurrency =
+            savedCurrency;
 
-        localStorage.setItem(
-            'theme',
-            'light'
-        );
-    } else {
-        htmlElement.setAttribute(
-            'data-theme',
-            'dark'
-        );
-
-        if (themeIcon) {
-            themeIcon.className =
-                'fa-solid fa-sun';
-        }
-
-        localStorage.setItem(
-            'theme',
-            'dark'
-        );
-    }
-}
-
-window.onload = () => {
-    const currencyDropdown =
-        document.getElementById(
-            'currency-selector'
-        );
-
-    if (currencyDropdown) {
-        currencyDropdown.value =
-            currentCurrency;
     }
 
-    if (isLoggedIn) {
-        const dashBtn =
-            document.getElementById(
-                'dashboard-btn'
-            );
 
-        if (dashBtn) {
-            dashBtn.classList.remove(
-                'hidden'
-            );
-        }
+    const savedLanguage =
+        localStorage.getItem(
+            "foodieExpressLanguage"
+        );
+
+    if (savedLanguage) {
+
+        currentLanguage =
+            savedLanguage;
+
     }
 
-    renderMenu(menuItems);
-    updateCartUI();
-    renderOrderHistory();
-    updateWishlistUI();
-    setupAIRecommender();
-    updateLoyaltyUI();
 
     const savedTheme =
-        localStorage.getItem('theme');
-
-    if (savedTheme === 'dark') {
-        document.documentElement.setAttribute(
-            'data-theme',
-            'dark'
+        localStorage.getItem(
+            "foodieExpressTheme"
         );
 
-        const themeIcon =
-            document.getElementById(
-                'theme-icon'
+    const root =
+        document.getElementById(
+            "html-root"
+        );
+
+    if (root) {
+
+        root.setAttribute(
+            "data-theme",
+            savedTheme === "dark"
+                ? "dark"
+                : "light"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   UPDATE SELECTORS
+========================================================= */
+
+function updateSavedSelectors() {
+
+    const currency =
+        document.getElementById(
+            "currency-selector"
+        );
+
+    const language =
+        document.getElementById(
+            "language-selector"
+        );
+
+    if (currency) {
+
+        currency.value =
+            currentCurrency;
+
+    }
+
+    if (language) {
+
+        language.value =
+            currentLanguage;
+
+    }
+
+}
+
+
+/* =========================================================
+   SETUP DATE
+========================================================= */
+
+function setupReservationDate() {
+
+    const dateInput =
+        document.getElementById(
+            "reservation-date"
+        );
+
+    if (!dateInput) return;
+
+    const today =
+        new Date();
+
+    const year =
+        today.getFullYear();
+
+    const month =
+        String(
+            today.getMonth() + 1
+        ).padStart(2, "0");
+
+    const day =
+        String(
+            today.getDate()
+        ).padStart(2, "0");
+
+    dateInput.min =
+        `${year}-${month}-${day}`;
+
+}
+
+
+/* =========================================================
+   NAVIGATION CLOSE ON ESC
+========================================================= */
+
+function setupEscapeKey() {
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (event.key !== "Escape") {
+                return;
+            }
+
+            const modals =
+                document.querySelectorAll(
+                    ".modal:not(.hidden)"
+                );
+
+            modals.forEach(modal => {
+
+                modal.classList.add(
+                    "hidden"
+                );
+
+            });
+
+            const sidebar =
+                document.getElementById(
+                    "cart-sidebar"
+                );
+
+            if (sidebar) {
+
+                sidebar.classList.remove(
+                    "open"
+                );
+
+            }
+
+        }
+    );
+}
+
+
+/* =========================================================
+   CLICK OUTSIDE CART
+========================================================= */
+
+function setupOutsideCartClick() {
+
+    document.addEventListener(
+        "click",
+        event => {
+
+            const sidebar =
+                document.getElementById(
+                    "cart-sidebar"
+                );
+
+            const cartButton =
+                document.querySelector(
+                    ".floating-cart"
+                );
+
+            if (!sidebar || !cartButton) {
+                return;
+            }
+
+            if (
+                !sidebar.classList.contains(
+                    "open"
+                )
+            ) {
+                return;
+            }
+
+            if (
+                sidebar.contains(event.target) ||
+                cartButton.contains(event.target)
+            ) {
+                return;
+            }
+
+            sidebar.classList.remove(
+                "open"
             );
 
-        if (themeIcon) {
-            themeIcon.className =
-                'fa-solid fa-sun';
         }
+    );
+}
+
+
+/* =========================================================
+   WINDOW LOAD
+========================================================= */
+
+window.addEventListener(
+    "load",
+    () => {
+
+        loadSavedData();
+
+        updateSavedSelectors();
+
+        renderMenu(
+            getVisibleMenuItems()
+        );
+
+        updateCartUI();
+
+        updateWishlistUI();
+
+        updateDashboard();
+
+        updateLoyaltyUI();
+
+        setupReservationDate();
+
+        setupEscapeKey();
+
+        setupOutsideCartClick();
+
     }
-};
+);
+
+
+/* =========================================================
+   GLOBAL EXPORTS
+   Helpful when HTML inline onclick is used.
+========================================================= */
+
+window.playCustomSound =
+    playCustomSound;
+
+window.formatPrice =
+    formatPrice;
+
+window.changeCurrency =
+    changeCurrency;
+
+window.updateLoyaltyUI =
+    updateLoyaltyUI;
+
+window.showToast =
+    showToast;
+
+window.startVoiceSearch =
+    startVoiceSearch;
+
+window.detectUserLocation =
+    detectUserLocation;
+
+window.openItemDetail =
+    openItemDetail;
+
+window.closeItemDetailModal =
+    closeItemDetailModal;
+
+window.addFlavorToCart =
+    addFlavorToCart;
+
+window.renderMenu =
+    renderMenu;
+
+window.searchMenu =
+    searchMenu;
+
+window.filterMenu =
+    filterMenu;
+
+window.toggleWishlist =
+    toggleWishlist;
+
+window.updateWishlistUI =
+    updateWishlistUI;
+
+window.toggleWishlistModal =
+    toggleWishlistModal;
+
+window.toggleCart =
+    toggleCart;
+
+window.saveCartToStorage =
+    saveCartToStorage;
+
+window.addToCart =
+    addToCart;
+
+window.updateQuantity =
+    updateQuantity;
+
+window.removeFromCart =
+    removeFromCart;
+
+window.applyCoupon =
+    applyCoupon;
+
+window.updateCartUI =
+    updateCartUI;
+
+window.togglePaymentInfo =
+    togglePaymentInfo;
+
+window.checkout =
+    checkout;
+
+window.closeCheckoutModal =
+    closeCheckoutModal;
+
+window.processOrder =
+    processOrder;
+
+window.startOrderTrackingSimulation =
+    startOrderTrackingSimulation;
+
+window.renderOrderHistory =
+    renderOrderHistory;
+
+window.toggleChatbot =
+    toggleChatbot;
+
+window.sendChatMessage =
+    sendChatMessage;
+
+window.handleChatKeyPress =
+    handleChatKeyPress;
+
+window.startAICallSimulation =
+    startAICallSimulation;
+
+window.startAIVoiceInput =
+    startAIVoiceInput;
+
+window.changeLanguage =
+    changeLanguage;
+
+window.openAuthModal =
+    openAuthModal;
+
+window.switchAuthScreen =
+    switchAuthScreen;
+
+window.closeAuthModal =
+    closeAuthModal;
+
+window.handleAuth =
+    handleAuth;
+
+window.openDashboardModal =
+    openDashboardModal;
+
+window.closeDashboardModal =
+    closeDashboardModal;
+
+window.handleLogout =
+    handleLogout;
+
+window.toggleDarkMode =
+    toggleDarkMode;
