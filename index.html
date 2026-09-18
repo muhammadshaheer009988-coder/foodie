@@ -284,8 +284,8 @@
                     <h3>Secure Ordering</h3>
 
                     <p>
-                        Simple checkout and multiple payment
-                        options for a smooth experience.
+                        Clear checkout details, order confirmation
+                        and convenient payment options.
                     </p>
                 </article>
 
@@ -297,82 +297,89 @@
         <!-- ==================== MENU ==================== -->
         <section class="section menu-section" id="menu">
 
-            <div class="section-heading menu-heading">
+            <div class="section-heading">
+                <span class="eyebrow">OUR SIGNATURE MENU</span>
 
-                <span class="eyebrow">OUR MENU</span>
-
-                <h2>Choose Your Favorite</h2>
+                <h2>Choose Your Flavor</h2>
 
                 <p>
-                    Delicious options prepared fresh and delivered
-                    straight to your doorstep.
+                    Browse the menu or search for exactly what
+                    you are craving.
                 </p>
-
             </div>
 
 
-            <div class="category-tabs" id="category-tabs">
+            <div class="menu-filter" id="menu-filter">
 
                 <button
-                    class="category-tab active"
+                    class="filter-btn active"
                     type="button"
-                    onclick="filterMenu('all', this)"
+                    onclick="filterMenu('All', this)"
                 >
                     All
                 </button>
 
                 <button
-                    class="category-tab"
+                    class="filter-btn"
                     type="button"
-                    onclick="filterMenu('Burgers', this)"
+                    onclick="filterMenu('Fast Food', this)"
                 >
-                    Burgers
+                    Fast Food
                 </button>
 
                 <button
-                    class="category-tab"
+                    class="filter-btn"
                     type="button"
-                    onclick="filterMenu('Pizza', this)"
+                    onclick="filterMenu('Desi Cuisine', this)"
                 >
-                    Pizza
+                    Desi Cuisine
                 </button>
 
                 <button
-                    class="category-tab"
+                    class="filter-btn"
                     type="button"
-                    onclick="filterMenu('Desi', this)"
+                    onclick="filterMenu('BBQ & Grills', this)"
                 >
-                    Desi
+                    BBQ &amp; Grills
                 </button>
 
                 <button
-                    class="category-tab"
+                    class="filter-btn"
                     type="button"
-                    onclick="filterMenu('BBQ', this)"
+                    onclick="filterMenu('Drinks & Shakes', this)"
                 >
-                    BBQ
-                </button>
-
-                <button
-                    class="category-tab"
-                    type="button"
-                    onclick="filterMenu('Drinks', this)"
-                >
-                    Drinks
-                </button>
-
-                <button
-                    class="category-tab"
-                    type="button"
-                    onclick="filterMenu('Desserts', this)"
-                >
-                    Desserts
+                    Drinks &amp; Shakes
                 </button>
 
             </div>
 
 
-            <div class="menu-grid" id="menu-grid"></div>
+            <div
+                class="menu-container"
+                id="menu-container"
+                aria-live="polite"
+            ></div>
+
+
+            <div class="no-results hidden" id="no-results">
+                <div class="no-results-icon">
+                    <i class="fa-solid fa-face-sad-tear"></i>
+                </div>
+
+                <h3>No food found</h3>
+
+                <p>
+                    Try another search or choose a different category.
+                </p>
+
+                <button
+                    class="secondary-btn"
+                    type="button"
+                    onclick="resetMenuFilters()"
+                >
+                    Show All
+                </button>
+            </div>
 
         </section>
 
@@ -396,7 +403,10 @@
                 </p>
 
                 <div class="promo-code">
-                    <span id="promo-code-text">WELCOME20</span>
+
+                    <span id="promo-code-text">
+                        WELCOME20
+                    </span>
 
                     <button
                         type="button"
@@ -405,110 +415,61 @@
                     >
                         <i class="fa-regular fa-copy"></i>
                     </button>
+
                 </div>
 
             </div>
 
-        </section>
+        </section>        <!-- ==================== AI ASSISTANT ==================== -->
+        <section class="section ai-section" id="ai-assistant">
 
+            <div class="ai-card">
 
-        <!-- ==================== REVIEWS ==================== -->
-        <section class="section reviews-section" id="reviews">
+                <div class="ai-content">
 
-            <div class="section-heading">
+                    <span class="eyebrow">
+                        AI GOURMET ASSISTANT
+                    </span>
 
-                <span class="eyebrow">CUSTOMER REVIEWS</span>
-
-                <h2>Loved By Food Lovers</h2>
-
-                <p>
-                    Real experiences from people enjoying Foodie Express.
-                </p>
-
-            </div>
-
-
-            <div class="reviews-grid">
-
-                <article class="review-card">
-
-                    <div class="review-stars">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                    </div>
+                    <h2>
+                        Not Sure What To Order?
+                    </h2>
 
                     <p>
-                        "The burger arrived hot, fresh and packed perfectly.
-                        The whole ordering experience was super smooth."
+                        Ask our AI assistant for food recommendations,
+                        delivery information or today's deals.
                     </p>
 
-                    <div class="review-author">
-                        <div class="review-avatar">A</div>
+                    <div class="ai-buttons">
 
-                        <div>
-                            <strong>Ali Raza</strong>
-                            <span>Verified Customer</span>
-                        </div>
+                        <button
+                            type="button"
+                            class="primary-btn"
+                            onclick="startAICallSimulation()"
+                        >
+                            <i class="fa-solid fa-phone"></i>
+                            Talk To AI
+                        </button>
+
+                        <button
+                            type="button"
+                            class="secondary-btn"
+                            onclick="startAIVoiceInput()"
+                        >
+                            <i class="fa-solid fa-microphone"></i>
+                            Voice Order
+                        </button>
+
                     </div>
 
-                </article>
+                </div>
 
 
-                <article class="review-card">
-
-                    <div class="review-stars">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
+                <div class="ai-visual">
+                    <div class="ai-orb">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
                     </div>
-
-                    <p>
-                        "Loved the desi food selection. Everything tasted
-                        fresh and delivery was surprisingly quick."
-                    </p>
-
-                    <div class="review-author">
-                        <div class="review-avatar">S</div>
-
-                        <div>
-                            <strong>Sarah Khan</strong>
-                            <span>Verified Customer</span>
-                        </div>
-                    </div>
-
-                </article>
-
-
-                <article class="review-card">
-
-                    <div class="review-stars">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star-half-stroke"></i>
-                    </div>
-
-                    <p>
-                        "Clean design, easy checkout and excellent food.
-                        Foodie Express has become my go-to."
-                    </p>
-
-                    <div class="review-author">
-                        <div class="review-avatar">H</div>
-
-                        <div>
-                            <strong>Hamza Ahmed</strong>
-                            <span>Verified Customer</span>
-                        </div>
-                    </div>
-
-                </article>
+                </div>
 
             </div>
 
@@ -518,177 +479,112 @@
         <!-- ==================== RESERVATION ==================== -->
         <section class="section reservation-section" id="reservation">
 
-            <div class="reservation-layout">
+            <div class="section-heading">
+                <span class="eyebrow">TABLE RESERVATION</span>
 
-                <div class="reservation-copy">
+                <h2>Reserve Your Table</h2>
 
-                    <span class="eyebrow">
-                        TABLE RESERVATION
-                    </span>
-
-                    <h2>
-                        Reserve Your Table
-                    </h2>
-
-                    <p>
-                        Planning a dinner, family gathering or special
-                        occasion? Reserve your table in advance.
-                    </p>
-
-                    <div class="reservation-points">
-
-                        <div>
-                            <i class="fa-solid fa-circle-check"></i>
-                            Flexible reservation times
-                        </div>
-
-                        <div>
-                            <i class="fa-solid fa-circle-check"></i>
-                            Family-friendly dining
-                        </div>
-
-                        <div>
-                            <i class="fa-solid fa-circle-check"></i>
-                            Special occasion support
-                        </div>
-
-                    </div>
-
-                </div>
+                <p>
+                    Planning a special meal? Reserve your table
+                    in a few simple steps.
+                </p>
+            </div>
 
 
-                <form
-                    class="reservation-form"
-                    onsubmit="submitReservation(event)"
-                >
+            <div class="reservation-card">
 
-                    <div class="form-row">
+                <form id="reservation-form" onsubmit="handleReservation(event)">
 
-                        <div class="form-field">
+                    <div class="form-field">
+                        <label for="reservation-name">
+                            Full Name
+                        </label>
 
-                            <label for="reservation-name">
-                                Full Name
-                            </label>
-
-                            <input
-                                id="reservation-name"
-                                type="text"
-                                placeholder="Your full name"
-                                required
-                            >
-
-                        </div>
-
-
-                        <div class="form-field">
-
-                            <label for="reservation-phone">
-                                Phone
-                            </label>
-
-                            <input
-                                id="reservation-phone"
-                                type="tel"
-                                placeholder="03XX XXXXXXX"
-                                required
-                            >
-
-                        </div>
-
+                        <input
+                            id="reservation-name"
+                            type="text"
+                            placeholder="Your full name"
+                            required
+                        >
                     </div>
 
 
-                    <div class="form-row">
+                    <div class="form-field">
+                        <label for="reservation-phone">
+                            Phone Number
+                        </label>
 
-                        <div class="form-field">
-
-                            <label for="reservation-date">
-                                Date
-                            </label>
-
-                            <input
-                                id="reservation-date"
-                                type="date"
-                                required
-                            >
-
-                        </div>
-
-
-                        <div class="form-field">
-
-                            <label for="reservation-time">
-                                Time
-                            </label>
-
-                            <select
-                                id="reservation-time"
-                                required
-                            >
-                                <option value="">Select time</option>
-                                <option value="12:00 PM">12:00 PM</option>
-                                <option value="1:00 PM">1:00 PM</option>
-                                <option value="2:00 PM">2:00 PM</option>
-                                <option value="5:00 PM">5:00 PM</option>
-                                <option value="6:00 PM">6:00 PM</option>
-                                <option value="7:00 PM">7:00 PM</option>
-                                <option value="8:00 PM">8:00 PM</option>
-                                <option value="9:00 PM">9:00 PM</option>
-                                <option value="10:00 PM">10:00 PM</option>
-                            </select>
-
-                        </div>
-
+                        <input
+                            id="reservation-phone"
+                            type="tel"
+                            placeholder="03XXXXXXXXX"
+                            required
+                        >
                     </div>
 
 
-                    <div class="form-row">
+                    <div class="form-field">
+                        <label for="reservation-date">
+                            Date
+                        </label>
 
-                        <div class="form-field">
-
-                            <label for="reservation-guests">
-                                Guests
-                            </label>
-
-                            <select
-                                id="reservation-guests"
-                                required
-                            >
-                                <option value="">Guests</option>
-                                <option value="1">1 Guest</option>
-                                <option value="2">2 Guests</option>
-                                <option value="3">3 Guests</option>
-                                <option value="4">4 Guests</option>
-                                <option value="5">5 Guests</option>
-                                <option value="6">6 Guests</option>
-                                <option value="7">7 Guests</option>
-                                <option value="8">8 Guests</option>
-                                <option value="9">9 Guests</option>
-                                <option value="10">10 Guests</option>
-                            </select>
-
-                        </div>
+                        <input
+                            id="reservation-date"
+                            type="date"
+                            required
+                        >
+                    </div>
 
 
-                        <div class="form-field">
+                    <div class="form-field">
+                        <label for="reservation-time">
+                            Time
+                        </label>
 
-                            <label for="reservation-note">
-                                Special Request
-                            </label>
+                        <input
+                            id="reservation-time"
+                            type="time"
+                            required
+                        >
+                    </div>
 
-                            <input
-                                id="reservation-note"
-                                type="text"
-                                placeholder="Optional"
-                            >
 
-                        </div>
+                    <div class="form-field">
+                        <label for="reservation-guests">
+                            Guests
+                        </label>
 
+                        <select id="reservation-guests" required>
+                            <option value="">Select guests</option>
+                            <option value="1">1 Guest</option>
+                            <option value="2">2 Guests</option>
+                            <option value="3">3 Guests</option>
+                            <option value="4">4 Guests</option>
+                            <option value="5">5 Guests</option>
+                            <option value="6">6 Guests</option>
+                            <option value="7">7 Guests</option>
+                            <option value="8">8 Guests</option>
+                            <option value="9">9 Guests</option>
+                            <option value="10">10 Guests</option>
+                        </select>
+                    </div>
+
+
+                    <div class="form-field">
+                        <label for="reservation-note">
+                            Special Request
+                        </label>
+
+                        <input
+                            id="reservation-note"
+                            type="text"
+                            placeholder="Optional request"
+                        >
                     </div>
 
 
                     <button
-                        class="primary-btn full-width"
+                        class="primary-btn reservation-submit"
                         type="submit"
                     >
                         Reserve Table
@@ -709,90 +605,161 @@
         >
 
             <div class="section-heading">
+                <span class="eyebrow">ORDER TRACKING</span>
 
-                <span class="eyebrow">
-                    ORDER TRACKING
-                </span>
+                <h2>Track Your Order</h2>
 
-                <h2>
-                    Your Order Is On The Way
-                </h2>
-
-                <p id="tracking-message">
-                    Your latest order status will appear here.
+                <p>
+                    Follow your order from kitchen preparation
+                    to delivery.
                 </p>
-
             </div>
 
 
             <div class="tracking-card">
 
-                <div class="tracking-order-info">
+                <div class="tracking-line"></div>
 
-                    <span>Order ID</span>
+                <div class="tracking-step" id="step-1">
+                    <div class="tracking-icon">
+                        <i class="fa-solid fa-receipt"></i>
+                    </div>
 
-                    <strong id="tracking-order-id">
-                        —
-                    </strong>
-
+                    <h3>Order Confirmed</h3>
+                    <p>Your order has been received.</p>
                 </div>
 
 
-                <div class="tracking-progress">
-
-                    <div class="tracking-step active">
-
-                        <span>
-                            <i class="fa-solid fa-receipt"></i>
-                        </span>
-
-                        <strong>Order Placed</strong>
-
+                <div class="tracking-step" id="step-2">
+                    <div class="tracking-icon">
+                        <i class="fa-solid fa-fire-burner"></i>
                     </div>
 
-
-                    <div class="tracking-line"></div>
-
-
-                    <div class="tracking-step">
-
-                        <span>
-                            <i class="fa-solid fa-fire-burner"></i>
-                        </span>
-
-                        <strong>Preparing</strong>
-
-                    </div>
-
-
-                    <div class="tracking-line"></div>
-
-
-                    <div class="tracking-step">
-
-                        <span>
-                            <i class="fa-solid fa-motorcycle"></i>
-                        </span>
-
-                        <strong>On The Way</strong>
-
-                    </div>
-
-
-                    <div class="tracking-line"></div>
-
-
-                    <div class="tracking-step">
-
-                        <span>
-                            <i class="fa-solid fa-house"></i>
-                        </span>
-
-                        <strong>Delivered</strong>
-
-                    </div>
-
+                    <h3>Preparing</h3>
+                    <p>The kitchen is preparing your food.</p>
                 </div>
+
+
+                <div class="tracking-step" id="step-3">
+                    <div class="tracking-icon">
+                        <i class="fa-solid fa-motorcycle"></i>
+                    </div>
+
+                    <h3>On The Way</h3>
+                    <p>Your rider is on the way.</p>
+                </div>
+
+
+                <div class="tracking-step" id="step-4">
+                    <div class="tracking-icon">
+                        <i class="fa-solid fa-house"></i>
+                    </div>
+
+                    <h3>Delivered</h3>
+                    <p>Your food has arrived.</p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================== REVIEWS ==================== -->
+        <section class="section reviews-section" id="reviews">
+
+            <div class="section-heading">
+                <span class="eyebrow">CUSTOMER REVIEWS</span>
+
+                <h2>Loved By Food Lovers</h2>
+
+                <p>
+                    Real experiences from customers who tried
+                    Foodie Express.
+                </p>
+            </div>
+
+
+            <div class="reviews-grid">
+
+                <article class="review-card">
+
+                    <div class="review-stars">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+
+                    <p>
+                        "The burger was fresh, juicy and arrived
+                        surprisingly fast. Loved the whole experience!"
+                    </p>
+
+                    <div class="review-user">
+                        <div class="review-avatar">A</div>
+
+                        <div>
+                            <strong>Ahmed</strong>
+                            <span>Verified Customer</span>
+                        </div>
+                    </div>
+
+                </article>
+
+
+                <article class="review-card">
+
+                    <div class="review-stars">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+
+                    <p>
+                        "Biryani was full of flavor and the portion
+                        was perfect. Definitely ordering again."
+                    </p>
+
+                    <div class="review-user">
+                        <div class="review-avatar">S</div>
+
+                        <div>
+                            <strong>Sara</strong>
+                            <span>Verified Customer</span>
+                        </div>
+                    </div>
+
+                </article>
+
+
+                <article class="review-card">
+
+                    <div class="review-stars">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+
+                    <p>
+                        "The BBQ platter was excellent and everything
+                        was packed properly. Great service!"
+                    </p>
+
+                    <div class="review-user">
+                        <div class="review-avatar">H</div>
+
+                        <div>
+                            <strong>Hamza</strong>
+                            <span>Verified Customer</span>
+                        </div>
+                    </div>
+
+                </article>
 
             </div>
 
@@ -801,12 +768,129 @@
     </main>
 
 
-    <!-- ==================== CART OVERLAY ==================== -->
-    <div
-        class="cart-overlay"
-        id="cart-overlay"
+    <!-- ==================== FLOATING CART ==================== -->
+    <button
+        class="floating-cart"
+        type="button"
         onclick="toggleCart()"
-    ></div>
+        aria-label="Open shopping bag"
+    >
+        <i class="fa-solid fa-bag-shopping"></i>
+        <span id="floating-cart-count">0</span>
+    </button>
+
+
+    <!-- ==================== CHATBOT ==================== -->
+    <button
+        class="chatbot-button"
+        type="button"
+        onclick="toggleChatbot()"
+        aria-label="Open AI assistant"
+    >
+        <i class="fa-solid fa-comments"></i>
+    </button>
+
+
+    <div class="chat-window hidden" id="chat-window">
+
+        <div class="chat-header">
+            <div>
+                <strong>Foodie AI</strong>
+                <span>Online Assistant</span>
+            </div>
+
+            <button
+                type="button"
+                onclick="toggleChatbot()"
+                aria-label="Close chatbot"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+
+        <div class="chat-messages" id="chat-messages">
+
+            <div class="chat-msg bot">
+                Hello! I am your Foodie Express AI assistant.
+                How can I help you?
+            </div>
+
+        </div>
+
+
+        <form
+            class="chat-input-area"
+            onsubmit="sendChatMessage(event)"
+        >
+
+            <input
+                type="text"
+                id="chat-input"
+                placeholder="Ask me anything..."
+                autocomplete="off"
+            >
+
+            <button
+                type="submit"
+                aria-label="Send message"
+            >
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+
+        </form>
+
+    </div>e Assistant</span>
+            </div>
+
+            <button
+                type="button"
+                onclick="toggleChatbot()"
+                aria-label="Close chatbot"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+
+        <div class="chat-messages" id="chat-messages">
+
+            <div class="chat-msg bot">
+                Hello! I am your Foodie Express AI assistant.
+                How can I help you?
+            </div>
+
+        </div>
+
+
+        <div class="chat-input-area">
+
+            <input
+                type="text"
+                id="chat-input"
+                placeholder="Type your message..."
+                onkeydown="handleChatKeyPress(event)"
+            >
+
+            <button
+                type="button"
+                onclick="startAIVoiceInput()"
+                title="Voice input"
+            >
+                <i class="fa-solid fa-microphone"></i>
+            </button>
+
+            <button
+                type="button"
+                onclick="sendChatMessage()"
+                title="Send"
+            >
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+
+        </div>
+
+    </div>
 
 
     <!-- ==================== CART SIDEBAR ==================== -->
@@ -815,17 +899,15 @@
         <div class="cart-header">
 
             <div>
-                <span class="eyebrow">YOUR ORDER</span>
-
-                <h2>
-                    Shopping Bag
-                </h2>
+                <span class="eyebrow">YOUR BAG</span>
+                <h2>Shopping Cart</h2>
             </div>
 
             <button
-                class="modal-close"
                 type="button"
+                class="close-btn"
                 onclick="toggleCart()"
+                aria-label="Close cart"
             >
                 <i class="fa-solid fa-xmark"></i>
             </button>
@@ -833,99 +915,46 @@
         </div>
 
 
-        <div
-            class="cart-items"
-            id="cart-items"
-        ></div>
-
-
-        <div class="cart-empty" id="cart-empty">
-
-            <div class="cart-empty-icon">
-                <i class="fa-solid fa-basket-shopping"></i>
-            </div>
-
-            <h3>
-                Your cart is empty
-            </h3>
-
-            <p>
-                Add something delicious from our menu.
-            </p>
-
-            <button
-                class="secondary-btn"
-                type="button"
-                onclick="toggleCart(); document.getElementById('menu').scrollIntoView({behavior:'smooth'});"
-            >
-                Browse Menu
-            </button>
-
-        </div>
+        <div class="cart-items" id="cart-items"></div>
 
 
         <div class="cart-footer">
 
-            <div class="promo-input-row">
+            <div class="coupon-row">
 
                 <input
                     type="text"
-                    id="promo-input"
+                    id="coupon-input"
                     placeholder="Promo code"
                     autocomplete="off"
                 >
 
                 <button
                     type="button"
-                    onclick="applyPromoCode()"
+                    onclick="applyCoupon()"
                 >
                     Apply
                 </button>
 
             </div>
 
+            <p class="discount-message" id="discount-msg"></p>
+
 
             <div class="cart-total-row">
-
-                <span>
-                    Subtotal
-                </span>
-
-                <strong id="cart-subtotal">
-                    Rs. 0
-                </strong>
-
+                <span>Discount</span>
+                <strong id="cart-discount">Rs. 0</strong>
             </div>
 
 
-            <div class="cart-total-row discount-row">
-
-                <span>
-                    Discount
-                </span>
-
-                <strong id="cart-discount">
-                    Rs. 0
-                </strong>
-
-            </div>
-
-
-            <div class="cart-total-row grand-total-row">
-
-                <span>
-                    Total
-                </span>
-
-                <strong id="cart-total">
-                    Rs. 0
-                </strong>
-
+            <div class="cart-total-row cart-grand-total">
+                <span>Total</span>
+                <strong id="cart-total">0</strong>
             </div>
 
 
             <button
-                class="primary-btn full-width checkout-btn"
+                class="checkout-btn"
                 type="button"
                 onclick="checkout()"
             >
@@ -938,6 +967,14 @@
     </aside>
 
 
+    <!-- ==================== CART OVERLAY ==================== -->
+    <div
+        class="cart-overlay"
+        id="cart-overlay"
+        onclick="toggleCart()"
+    ></div>
+
+
     <!-- ==================== CHECKOUT SCREEN ==================== -->
     <div
         class="checkout-screen hidden"
@@ -947,34 +984,24 @@
         <div class="checkout-topbar">
 
             <button
-                class="back-btn"
                 type="button"
+                class="checkout-back-btn"
                 onclick="closeCheckoutModal()"
             >
                 <i class="fa-solid fa-arrow-left"></i>
-                Back
+                Back To Cart
             </button>
 
 
             <div class="checkout-brand">
-
-                <span class="logo-mark">
-                    <i class="fa-solid fa-utensils"></i>
-                </span>
-
-                <span class="logo-text">
-                    Foodie <b>Express</b>
-                </span>
-
+                <i class="fa-solid fa-utensils"></i>
+                <span>Foodie Express</span>
             </div>
 
 
-            <div class="secure-label">
-
+            <div class="checkout-secure">
                 <i class="fa-solid fa-shield-halved"></i>
-
                 Secure Checkout
-
             </div>
 
         </div>
@@ -985,43 +1012,35 @@
             <div class="checkout-main">
 
                 <div class="checkout-page-heading">
+                    <span class="eyebrow">CHECKOUT</span>
 
-                    <span class="eyebrow">
-                        FINAL STEP
-                    </span>
-
-                    <h1>
+                    <h2>
                         Complete Your Order
-                    </h1>
+                    </h2>
 
                     <p>
-                        Enter your delivery details and select your
-                        preferred payment method.
+                        Enter your delivery details and choose
+                        your preferred payment method.
                     </p>
-
                 </div>
 
 
                 <form
-                    class="checkout-form"
                     id="checkout-form"
                     onsubmit="processOrder(event)"
                 >
 
-                    <!-- CUSTOMER DETAILS -->
-                    <div class="checkout-card">
+                    <!-- DELIVERY DETAILS -->
+                    <section class="checkout-box">
 
-                        <div class="checkout-card-title">
+                        <div class="checkout-box-heading">
 
-                            <span class="step-number">
-                                01
-                            </span>
+                            <div class="checkout-step-number">
+                                1
+                            </div>
 
                             <div>
-                                <h2>
-                                    Delivery Details
-                                </h2>
-
+                                <h3>Delivery Details</h3>
                                 <p>
                                     Where should we deliver your order?
                                 </p>
@@ -1030,7 +1049,7 @@
                         </div>
 
 
-                        <div class="form-row">
+                        <div class="checkout-form-grid">
 
                             <div class="form-field">
 
@@ -1039,8 +1058,8 @@
                                 </label>
 
                                 <input
-                                    id="cust-name"
                                     type="text"
+                                    id="cust-name"
                                     placeholder="Enter your full name"
                                     required
                                 >
@@ -1055,63 +1074,54 @@
                                 </label>
 
                                 <input
-                                    id="cust-phone"
                                     type="tel"
-                                    placeholder="03XX XXXXXXX"
+                                    id="cust-phone"
+                                    placeholder="03XXXXXXXXX"
                                     required
                                 >
 
                             </div>
 
-                        </div>
 
+                            <div class="form-field">
 
-                        <div class="form-field">
-
-                            <label for="cust-email">
-                                Email Address
-                            </label>
-
-                            <input
-                                id="cust-email"
-                                type="email"
-                                placeholder="you@example.com"
-                                required
-                            >
-
-                        </div>
-
-
-                        <div class="form-field">
-
-                            <label for="cust-address">
-                                Delivery Address
-                            </label>
-
-                            <div class="input-with-action">
+                                <label for="cust-email">
+                                    Email Address
+                                </label>
 
                                 <input
-                                    id="cust-address"
-                                    type="text"
-                                    placeholder="House no, street, area"
-                                    required
+                                    type="email"
+                                    id="cust-email"
+                                    placeholder="you@example.com"
                                 >
 
+                            </div>
+
+
+                            <div class="form-field full-span">
+
+                                <label for="cust-address">
+                                    Delivery Address
+                                </label>
+
+                                <textarea
+                                    id="cust-address"
+                                    rows="3"
+                                    placeholder="House number, street, area..."
+                                    required
+                                ></textarea>
+
                                 <button
-                                    class="field-action-btn"
                                     type="button"
+                                    class="location-btn"
                                     onclick="detectUserLocation('checkout')"
-                                    title="Use current location"
                                 >
                                     <i class="fa-solid fa-location-crosshairs"></i>
+                                    Use My Location
                                 </button>
 
                             </div>
 
-                        </div>
-
-
-                        <div class="form-row">
 
                             <div class="form-field">
 
@@ -1120,9 +1130,9 @@
                                 </label>
 
                                 <input
-                                    id="cust-city"
                                     type="text"
-                                    placeholder="Your city"
+                                    id="cust-city"
+                                    placeholder="Enter your city"
                                     required
                                 >
 
@@ -1136,8 +1146,8 @@
                                 </label>
 
                                 <input
-                                    id="delivery-note"
                                     type="text"
+                                    id="delivery-note"
                                     placeholder="Optional instructions"
                                 >
 
@@ -1145,62 +1155,52 @@
 
                         </div>
 
-                    </div>
+                    </section>
 
 
-                    <!-- PAYMENT -->
-                    <div class="checkout-card">
+                    <!-- PAYMENT METHOD -->
+                    <section class="checkout-box">
 
-                        <div class="checkout-card-title">
+                        <div class="checkout-box-heading">
 
-                            <span class="step-number">
-                                02
-                            </span>
+                            <div class="checkout-step-number">
+                                2
+                            </div>
 
                             <div>
-                                <h2>
-                                    Payment Method
-                                </h2>
-
+                                <h3>Payment Method</h3>
                                 <p>
-                                    Choose how you would like to pay.
+                                    Choose how you want to pay.
                                 </p>
                             </div>
 
                         </div>
 
 
-                        <div class="payment-options">
+                        <div class="payment-methods">
 
                             <label class="payment-option">
 
                                 <input
                                     type="radio"
                                     name="payment-method"
-                                    value="Cash on Delivery"
                                     id="payment-cod"
+                                    value="Cash on Delivery"
                                     checked
                                     onchange="togglePaymentInfo()"
                                 >
+
+                                <span class="payment-radio"></span>
 
                                 <span class="payment-icon">
                                     <i class="fa-solid fa-money-bill-wave"></i>
                                 </span>
 
-                                <span class="payment-option-content">
-
-                                    <strong>
-                                        Cash on Delivery
-                                    </strong>
-
+                                <span class="payment-details">
+                                    <strong>Cash on Delivery</strong>
                                     <small>
                                         Pay when your order arrives
                                     </small>
-
-                                </span>
-
-                                <span class="payment-check">
-                                    <i class="fa-solid fa-check"></i>
                                 </span>
 
                             </label>
@@ -1211,29 +1211,22 @@
                                 <input
                                     type="radio"
                                     name="payment-method"
-                                    value="JazzCash"
                                     id="payment-jazzcash"
+                                    value="JazzCash"
                                     onchange="togglePaymentInfo()"
                                 >
+
+                                <span class="payment-radio"></span>
 
                                 <span class="payment-icon">
                                     <i class="fa-solid fa-mobile-screen-button"></i>
                                 </span>
 
-                                <span class="payment-option-content">
-
-                                    <strong>
-                                        JazzCash
-                                    </strong>
-
+                                <span class="payment-details">
+                                    <strong>JazzCash</strong>
                                     <small>
-                                        Pay securely with JazzCash
+                                        Pay securely through JazzCash
                                     </small>
-
-                                </span>
-
-                                <span class="payment-check">
-                                    <i class="fa-solid fa-check"></i>
                                 </span>
 
                             </label>
@@ -1244,29 +1237,22 @@
                                 <input
                                     type="radio"
                                     name="payment-method"
-                                    value="EasyPaisa"
                                     id="payment-easypaisa"
+                                    value="EasyPaisa"
                                     onchange="togglePaymentInfo()"
                                 >
+
+                                <span class="payment-radio"></span>
 
                                 <span class="payment-icon">
                                     <i class="fa-solid fa-wallet"></i>
                                 </span>
 
-                                <span class="payment-option-content">
-
-                                    <strong>
-                                        EasyPaisa
-                                    </strong>
-
+                                <span class="payment-details">
+                                    <strong>EasyPaisa</strong>
                                     <small>
-                                        Pay securely with EasyPaisa
+                                        Pay securely through EasyPaisa
                                     </small>
-
-                                </span>
-
-                                <span class="payment-check">
-                                    <i class="fa-solid fa-check"></i>
                                 </span>
 
                             </label>
@@ -1277,29 +1263,22 @@
                                 <input
                                     type="radio"
                                     name="payment-method"
-                                    value="Card"
                                     id="payment-card"
+                                    value="Card"
                                     onchange="togglePaymentInfo()"
                                 >
+
+                                <span class="payment-radio"></span>
 
                                 <span class="payment-icon">
                                     <i class="fa-solid fa-credit-card"></i>
                                 </span>
 
-                                <span class="payment-option-content">
-
-                                    <strong>
-                                        Debit / Credit Card
-                                    </strong>
-
+                                <span class="payment-details">
+                                    <strong>Debit / Credit Card</strong>
                                     <small>
-                                        Secure card payment
+                                        Visa, Mastercard and more
                                     </small>
-
-                                </span>
-
-                                <span class="payment-check">
-                                    <i class="fa-solid fa-check"></i>
                                 </span>
 
                             </label>
@@ -1308,24 +1287,19 @@
 
 
                         <div
-                            class="payment-extra hidden"
+                            class="payment-extra"
                             id="payment-extra"
-                        >
+                        ></div>
 
-                            <div id="payment-extra-content"></div>
-
-                        </div>
-
-                    </div>
+                    </section>
 
 
-                    <!-- PLACE ORDER -->
                     <button
-                        class="primary-btn full-width place-order-btn"
-                        id="place-order-btn"
                         type="submit"
+                        class="primary-btn place-order-btn"
+                        id="place-order-btn"
                     >
-                        Place Order
+                        <span>Place Order</span>
                         <i class="fa-solid fa-check"></i>
                     </button>
 
@@ -1334,29 +1308,175 @@
             </div>
 
 
-            <!-- CHECKOUT SUMMARY -->
+            <!-- ORDER SUMMARY -->
             <aside class="checkout-summary">
 
-                <div class="checkout-summary-card">
+                <div class="checkout-summary-header">
 
-                    <div class="checkout-summary-heading">
+                    <span class="eyebrow">
+                        YOUR ORDER
+                    </span>
 
-                        <div>
-                            <span class="eyebrow">
-                                ORDER SUMMARY
+                    <h3>
+                        Order Summary
+                    </h3>
+
+                </div>
+
+
+                <div
+                    class="checkout-summary-count"
+                    id="checkout-summary-count"
+                >
+                    0 Items
+                </div>
+
+
+                <div
+                    class="checkout-summary-items"
+                    id="checkout-summary-items"
+                ></div>
+
+
+                <div class="checkout-summary-divider"></div>
+
+
+                <div class="summary-row">
+
+                    <span>Subtotal</span>
+
+                    <strong id="checkout-subtotal">
+                        Rs. 0
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-row">
+
+                    <span>Discount</span>
+
+                    <strong id="checkout-discount">
+                        Rs. 0
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-row summary-final">
+
+                    <span>Total</span>
+
+                    <strong id="checkout-final-total">
+                        Rs. 0
+                    </strong>
+
+                </div>
+
+
+                <div class="checkout-summary-note">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    <span>
+                        Your information is secure and your
+                        order will be processed immediately.
+                    </span>
+
+                </div>
+
+            </aside>
+
+        </div>
+
+    </div>                            </span>
+
+                        </label>
+
+
+                        <label class="payment-option">
+
+                            <input
+                                type="radio"
+                                name="payment-method"
+                                id="payment-easypaisa"
+                                value="EasyPaisa"
+                                onchange="togglePaymentInfo()"
+                            >
+
+                            <span class="payment-option-content">
+
+                                <span class="payment-icon">
+                                    <i class="fa-solid fa-wallet"></i>
+                                </span>
+
+                                <span>
+                                    <strong>EasyPaisa</strong>
+                                    <small>Pay through EasyPaisa</small>
+                                </span>
+
                             </span>
 
-                            <h2>
-                                Your Items
-                            </h2>
-                        </div>
+                        </label>
 
-                        <span
-                            class="checkout-summary-count"
-                            id="checkout-summary-count"
-                        >
-                            0
-                        </span>
+
+                        <label class="payment-option">
+
+                            <input
+                                type="radio"
+                                name="payment-method"
+                                id="payment-card"
+                                value="Card"
+                                onchange="togglePaymentInfo()"
+                            >
+
+                            <span class="payment-option-content">
+
+                                <span class="payment-icon">
+                                    <i class="fa-solid fa-credit-card"></i>
+                                </span>
+
+                                <span>
+                                    <strong>Debit / Credit Card</strong>
+                                    <small>Secure card payment</small>
+                                </span>
+
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <div
+                        class="payment-extra hidden"
+                        id="payment-extra"
+                    >
+
+                        <div
+                            class="payment-extra-content"
+                            id="payment-extra-content"
+                        ></div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- ORDER SUMMARY -->
+                <section class="checkout-card">
+
+                    <div class="checkout-card-title">
+
+                        <span class="step-number">3</span>
+
+                        <div>
+                            <h2>Order Summary</h2>
+
+                            <p>
+                                Check your items before placing the order.
+                            </p>
+                        </div>
 
                     </div>
 
@@ -1367,603 +1487,766 @@
                     ></div>
 
 
-                    <div class="checkout-summary-totals">
+                    <div class="checkout-summary-total">
 
-                        <div>
-                            <span>
-                                Subtotal
-                            </span>
-
-                            <strong id="checkout-subtotal">
-                                Rs. 0
-                            </strong>
-                        </div>
-
-
-                        <div>
-                            <span>
-                                Discount
-                            </span>
-
-                            <strong id="checkout-discount">
-                                Rs. 0
-                            </strong>
-                        </div>
-
-
-                        <div class="summary-total">
-
-                            <span>
-                                Total
-                            </span>
-
-                            <strong id="checkout-final-total">
-                                Rs. 0
-                            </strong>
-
-                        </div>
+                        <span>Subtotal</span>
+                        <strong id="checkout-subtotal">Rs. 0</strong>
 
                     </div>
 
 
-                    <div class="checkout-summary-note">
+                    <div class="checkout-summary-total">
 
-                        <i class="fa-solid fa-shield-halved"></i>
-
-                        <span>
-                            Your order details are handled securely.
-                        </span>
+                        <span>Discount</span>
+                        <strong id="checkout-discount">Rs. 0</strong>
 
                     </div>
 
-                </div>
 
-            </aside>
+                    <div class="checkout-summary-total checkout-final-total">
+
+                        <span>Total</span>
+                        <strong id="checkout-final-total">Rs. 0</strong>
+
+                    </div>
+
+                </section>
+
+
+                <button
+                    class="place-order-btn"
+                    type="submit"
+                >
+                    <i class="fa-brands fa-whatsapp"></i>
+
+                    Place Order &amp; Continue to WhatsApp
+
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+
+
+                <p class="checkout-note">
+                    <i class="fa-solid fa-lock"></i>
+                    Your order details will be prepared for WhatsApp.
+                </p>
+
+            </form>
 
         </div>
 
     </div>
 
+</div>
 
-    <!-- ==================== AUTH MODAL ==================== -->
-    <div class="modal" id="auth-modal">
 
-        <div class="modal-card auth-card">
+<!-- ==================== AUTH MODAL ==================== -->
+<div class="modal" id="auth-modal">
 
-            <button
-                class="modal-close"
-                type="button"
-                onclick="closeAuthModal()"
-            >
-                <i class="fa-solid fa-xmark"></i>
-            </button>
+    <div class="modal-card auth-card">
 
+        <button
+            class="modal-close"
+            type="button"
+            onclick="closeAuthModal()"
+        >
+            <i class="fa-solid fa-xmark"></i>
+        </button>
 
-            <div
-                class="auth-screen"
-                id="login-screen"
-            >
 
-                <div class="modal-heading">
-
-                    <span class="modal-icon">
-                        <i class="fa-solid fa-right-to-bracket"></i>
-                    </span>
-
-                    <h2>
-                        Welcome Back
-                    </h2>
-
-                    <p>
-                        Login to your Foodie Express account.
-                    </p>
-
-                </div>
-
-
-                <form onsubmit="handleAuth(event, 'login')">
-
-                    <div class="form-field">
-
-                        <label for="login-email">
-                            Email
-                        </label>
-
-                        <input
-                            id="login-email"
-                            type="email"
-                            placeholder="you@example.com"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="form-field">
-
-                        <label for="login-password">
-                            Password
-                        </label>
-
-                        <input
-                            id="login-password"
-                            type="password"
-                            placeholder="Enter password"
-                            required
-                        >
-
-                    </div>
-
-
-                    <button
-                        class="primary-btn full-width"
-                        type="submit"
-                    >
-                        Login
-                    </button>
-
-                </form>
-
-
-                <p class="auth-switch">
-
-                    Don't have an account?
-
-                    <button
-                        type="button"
-                        onclick="switchAuthScreen('signup')"
-                    >
-                        Create Account
-                    </button>
-
-                </p>
-
-            </div>
-
-
-            <div
-                class="auth-screen hidden"
-                id="signup-screen"
-            >
-
-                <div class="modal-heading">
-
-                    <span class="modal-icon">
-                        <i class="fa-solid fa-user-plus"></i>
-                    </span>
-
-                    <h2>
-                        Create Account
-                    </h2>
-
-                    <p>
-                        Join Foodie Express today.
-                    </p>
-
-                </div>
-
-
-                <form onsubmit="handleAuth(event, 'signup')">
-
-                    <div class="form-field">
-
-                        <label for="signup-name">
-                            Full Name
-                        </label>
-
-                        <input
-                            id="signup-name"
-                            type="text"
-                            placeholder="Your full name"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="form-field">
-
-                        <label for="signup-email">
-                            Email
-                        </label>
-
-                        <input
-                            id="signup-email"
-                            type="email"
-                            placeholder="you@example.com"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="form-field">
-
-                        <label for="signup-password">
-                            Password
-                        </label>
-
-                        <input
-                            id="signup-password"
-                            type="password"
-                            placeholder="Create password"
-                            required
-                        >
-
-                    </div>
-
-
-                    <button
-                        class="primary-btn full-width"
-                        type="submit"
-                    >
-                        Create Account
-                    </button>
-
-                </form>
-
-
-                <p class="auth-switch">
-
-                    Already have an account?
-
-                    <button
-                        type="button"
-                        onclick="switchAuthScreen('login')"
-                    >
-                        Login
-                    </button>
-
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- ==================== DASHBOARD MODAL ==================== -->
-    <div class="modal" id="dashboard-modal">
-
-        <div class="modal-card dashboard-card">
-
-            <button
-                class="modal-close"
-                type="button"
-                onclick="closeDashboardModal()"
-            >
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
+        <div id="login-screen">
 
             <div class="modal-heading">
 
                 <span class="modal-icon">
-                    <i class="fa-solid fa-chart-line"></i>
+                    <i class="fa-solid fa-user"></i>
                 </span>
 
-                <h2>
-                    Your Dashboard
-                </h2>
+                <h2>Welcome Back</h2>
 
                 <p>
-                    Your Foodie Express activity.
+                    Login to your Foodie Express account.
                 </p>
 
             </div>
 
 
-            <div class="dashboard-stats">
+            <form onsubmit="handleAuth(event, 'login')">
 
-                <div class="dashboard-stat">
+                <div class="form-field">
 
-                    <span>
-                        <i class="fa-solid fa-bag-shopping"></i>
-                    </span>
+                    <label for="login-email">
+                        Email
+                    </label>
 
-                    <strong id="total-orders-count">
-                        0
-                    </strong>
-
-                    <small>
-                        Total Orders
-                    </small>
-
-                </div>
-
-
-                <div class="dashboard-stat">
-
-                    <span>
-                        <i class="fa-solid fa-coins"></i>
-                    </span>
-
-                    <strong id="loyalty-coins-count">
-                        0
-                    </strong>
-
-                    <small>
-                        Loyalty Coins
-                    </small>
+                    <input
+                        id="login-email"
+                        type="email"
+                        placeholder="you@example.com"
+                        required
+                    >
 
                 </div>
 
 
-                <div class="dashboard-stat">
+                <div class="form-field">
 
-                    <span>
-                        <i class="fa-solid fa-heart"></i>
-                    </span>
+                    <label for="login-password">
+                        Password
+                    </label>
 
-                    <strong id="wishlist-count">
-                        0
-                    </strong>
-
-                    <small>
-                        Favorites
-                    </small>
+                    <input
+                        id="login-password"
+                        type="password"
+                        placeholder="Enter password"
+                        required
+                    >
 
                 </div>
+
+
+                <button
+                    class="primary-btn full-width"
+                    type="submit"
+                >
+                    Login
+                </button>
+
+            </form>
+
+
+            <p class="auth-switch">
+
+                Don't have an account?
+
+                <button
+                    type="button"
+                    onclick="switchAuthScreen('signup')"
+                >
+                    Create Account
+                </button>
+
+            </p>
+
+        </div>
+
+
+        <div id="signup-screen" class="hidden">
+
+            <div class="modal-heading">
+
+                <span class="modal-icon">
+                    <i class="fa-solid fa-user-plus"></i>
+                </span>
+
+                <h2>Create Account</h2>
+
+                <p>
+                    Join Foodie Express today.
+                </p>
 
             </div>
 
 
-            <div class="dashboard-history">
+            <form onsubmit="handleAuth(event, 'signup')">
 
-                <h3>
-                    Order History
-                </h3>
+                <div class="form-field">
 
-                <div id="history-container"></div>
+                    <label for="signup-name">
+                        Full Name
+                    </label>
+
+                    <input
+                        id="signup-name"
+                        type="text"
+                        placeholder="Your full name"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-field">
+
+                    <label for="signup-email">
+                        Email
+                    </label>
+
+                    <input
+                        id="signup-email"
+                        type="email"
+                        placeholder="you@example.com"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-field">
+
+                    <label for="signup-password">
+                        Password
+                    </label>
+
+                    <input
+                        id="signup-password"
+                        type="password"
+                        placeholder="Create password"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    class="primary-btn full-width"
+                    type="submit"
+                >
+                    Create Account
+                </button>
+
+            </form>
+
+
+            <p class="auth-switch">
+
+                Already have an account?
+
+                <button
+                    type="button"
+                    onclick="switchAuthScreen('login')"
+                >
+                    Login
+                </button>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==================== DASHBOARD MODAL ==================== -->
+<div class="modal" id="dashboard-modal">
+
+    <div class="modal-card dashboard-card">
+
+        <button
+            class="modal-close"
+            type="button"
+            onclick="closeDashboardModal()"
+        >
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+
+        <div class="modal-heading">
+
+            <span class="modal-icon">
+                <i class="fa-solid fa-chart-line"></i>
+            </span>
+
+            <h2>Your Dashboard</h2>
+
+            <p>
+                Your Foodie Express activity.
+            </p>
+
+        </div>
+
+
+        <div class="dashboard-stats">
+
+            <div class="dashboard-stat">
+
+                <span>
+                    <i class="fa-solid fa-bag-shopping"></i>
+                </span>
+
+                <strong id="total-orders-count">0</strong>
+
+                <small>Total Orders</small>
 
             </div>
+
+
+            <div class="dashboard-stat">
+
+                <span>
+                    <i class="fa-solid fa-coins"></i>
+                </span>
+
+                <strong id="loyalty-coins-count">0</strong>
+
+                <small>Loyalty Coins</small>
+
+            </div>
+
+
+            <div class="dashboard-stat">
+
+                <span>
+                    <i class="fa-solid fa-heart"></i>
+                </span>
+
+                <strong id="wishlist-count">0</strong>
+
+                <small>Favorites</small>
+
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-history">
+
+            <h3>Order History</h3>
+
+            <div id="history-container"></div>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="secondary-btn"
+            onclick="handleLogout()"
+        >
+            Logout
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ==================== WISHLIST MODAL ==================== -->
+<div class="modal" id="wishlist-modal">
+
+    <div class="modal-card wishlist-card">
+
+        <button
+            class="modal-close"
+            type="button"
+            onclick="closeWishlistModal()"
+        >
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+
+        <div class="modal-heading">
+
+            <span class="modal-icon">
+                <i class="fa-solid fa-heart"></i>
+            </span>
+
+            <h2>Your Favorites</h2>
+
+            <p>
+                Foods you saved for later.
+            </p>
+
+        </div>
+
+
+        <div id="wishlist-container"></div>
+
+    </div>
+
+</div>
+
+
+<!-- ==================== ITEM DETAIL MODAL ==================== -->
+<div
+    class="modal"
+    id="item-modal"
+>
+
+    <div class="modal-card item-detail-card">
+
+        <button
+            class="modal-close"
+            type="button"
+            onclick="closeItemModal()"
+        >
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+
+        <div
+            class="item-detail-content"
+            id="item-detail-content"
+        ></div>
+
+    </div>
+
+</div><!-- ==================== ORDER SUCCESS MODAL ==================== -->
+<div
+    class="modal"
+    id="order-success-modal"
+>
+
+    <div class="modal-card order-success-card">
+
+        <button
+            class="modal-close"
+            type="button"
+            onclick="closeOrderSuccessModal()"
+        >
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+
+        <div class="success-animation">
+
+            <div class="success-circle">
+                <i class="fa-solid fa-check"></i>
+            </div>
+
+        </div>
+
+
+        <div class="modal-heading">
+
+            <span class="eyebrow">
+                ORDER CONFIRMED
+            </span>
+
+            <h2>
+                Thank You!
+            </h2>
+
+            <p id="order-success-message">
+                Your order has been placed successfully.
+            </p>
+
+        </div>
+
+
+        <div class="order-success-details">
+
+            <div class="success-detail">
+
+                <span>Order ID</span>
+
+                <strong id="success-order-id">
+                    FE-000000
+                </strong>
+
+            </div>
+
+
+            <div class="success-detail">
+
+                <span>Total Amount</span>
+
+                <strong id="success-order-total">
+                    Rs. 0
+                </strong>
+
+            </div>
+
+
+            <div class="success-detail">
+
+                <span>Payment</span>
+
+                <strong id="success-payment-method">
+                    Cash on Delivery
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="success-actions">
+
+            <button
+                type="button"
+                class="primary-btn"
+                onclick="trackLatestOrder()"
+            >
+                <i class="fa-solid fa-location-dot"></i>
+                Track Order
+            </button>
 
 
             <button
                 type="button"
                 class="secondary-btn"
-                onclick="handleLogout()"
+                onclick="closeOrderSuccessModal()"
             >
-                Logout
+                Continue Shopping
             </button>
 
         </div>
 
     </div>
 
+</div>
 
-    <!-- ==================== WISHLIST MODAL ==================== -->
-    <div class="modal" id="wishlist-modal">
 
-        <div class="modal-card wishlist-card">
+<!-- ==================== FOOTER ==================== -->
+<footer class="site-footer">
 
-            <button
-                class="modal-close"
-                type="button"
-                onclick="closeWishlistModal()"
+    <div class="footer-main">
+
+        <div class="footer-brand">
+
+            <a
+                href="#home"
+                class="footer-logo"
+                onclick="scrollToSection('home')"
             >
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
-
-            <div class="modal-heading">
-
-                <span class="modal-icon">
-                    <i class="fa-solid fa-heart"></i>
+                <span class="logo-icon">
+                    <i class="fa-solid fa-utensils"></i>
                 </span>
 
-                <h2>
-                    Your Favorites
-                </h2>
-
-                <p>
-                    Foods you saved for later.
-                </p>
-
-            </div>
+                <span>
+                    Foodie
+                    <strong>Express</strong>
+                </span>
+            </a>
 
 
-            <div id="wishlist-container"></div>
-
-        </div>
-
-    </div>
-
-
-    <!-- ==================== ITEM DETAIL MODAL ==================== -->
-    <div class="modal" id="item-detail-modal">
-
-        <div class="modal-card item-detail-card">
-
-            <button
-                class="modal-close"
-                type="button"
-                onclick="closeItemDetailModal()"
-            >
-                <i class="fa-solid fa-xmark"></i>
-            </button>
+            <p>
+                Delicious food, delivered with care.
+                Discover your next favorite meal with
+                Foodie Express.
+            </p>
 
 
-            <div id="item-detail-body"></div>
+            <div class="social-links">
 
-        </div>
-
-    </div>
-
-
-    <!-- ==================== FOOTER ==================== -->
-    <footer class="luxury-footer">
-
-        <div class="footer-glow" aria-hidden="true"></div>
-
-
-        <div class="footer-grid">
-
-            <div class="footer-brand">
-
-                <a class="logo footer-logo" href="#home">
-
-                    <span class="logo-mark">
-                        <i class="fa-solid fa-utensils"></i>
-                    </span>
-
-                    <span class="logo-text">
-                        Foodie <b>Express</b>
-                    </span>
-
+                <a
+                    href="#"
+                    aria-label="Facebook"
+                    onclick="return false;"
+                >
+                    <i class="fa-brands fa-facebook-f"></i>
                 </a>
-
-
-                <p>
-                    Bringing premium gourmet flavors, authentic
-                    desi cuisine and fast delivery together in one
-                    elegant food experience.
-                </p>
 
 
                 <a
-                    class="whatsapp-footer-btn"
-                    href="https://wa.me/923312969666"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href="#"
+                    aria-label="Instagram"
+                    onclick="return false;"
                 >
-                    <i class="fa-brands fa-whatsapp"></i>
-                    Chat on WhatsApp
+                    <i class="fa-brands fa-instagram"></i>
                 </a>
 
-            </div>
 
-
-            <div class="footer-col">
-
-                <h3>
-                    Explore
-                </h3>
-
-                <a href="#home">Home</a>
-                <a href="#menu">Menu</a>
-                <a href="#features">Features</a>
-                <a href="#reviews">Reviews</a>
-                <a href="#reservation">Reservation</a>
-
-            </div>
-
-
-            <div class="footer-col">
-
-                <h3>
-                    Customer
-                </h3>
-
-                <button
-                    type="button"
-                    onclick="toggleCart()"
+                <a
+                    href="#"
+                    aria-label="Twitter"
+                    onclick="return false;"
                 >
-                    Shopping Bag
-                </button>
-
-                <button
-                    type="button"
-                    onclick="toggleWishlistModal()"
-                >
-                    Favorites
-                </button>
-
-                <button
-                    type="button"
-                    onclick="openDashboardModal()"
-                >
-                    Order History
-                </button>
-
-                <button
-                    type="button"
-                    onclick="openAuthModal('login')"
-                >
-                    Login / Signup
-                </button>
-
-            </div>
-
-
-            <div class="footer-col contact-col">
-
-                <h3>
-                    Contact
-                </h3>
-
-                <a href="tel:+923312969666">
-                    <i class="fa-solid fa-phone"></i>
-                    +92 331 2969666
+                    <i class="fa-brands fa-x-twitter"></i>
                 </a>
 
-                <a href="mailto:support@foodieexpress.com">
-                    <i class="fa-solid fa-envelope"></i>
-                    support@foodieexpress.com
+
+                <a
+                    href="#"
+                    aria-label="YouTube"
+                    onclick="return false;"
+                >
+                    <i class="fa-brands fa-youtube"></i>
                 </a>
-
-                <span>
-                    <i class="fa-solid fa-location-dot"></i>
-                    Rahim Yar Khan, Pakistan
-                </span>
-
-
-                <div class="footer-socials">
-
-                    <a href="#" aria-label="Facebook">
-                        <i class="fa-brands fa-facebook-f"></i>
-                    </a>
-
-                    <a href="#" aria-label="X">
-                        <i class="fa-brands fa-x-twitter"></i>
-                    </a>
-
-                    <a href="#" aria-label="Instagram">
-                        <i class="fa-brands fa-instagram"></i>
-                    </a>
-
-                    <a
-                        href="https://wa.me/923312969666"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="WhatsApp"
-                    >
-                        <i class="fa-brands fa-whatsapp"></i>
-                    </a>
-
-                </div>
 
             </div>
 
         </div>
 
 
-        <div class="footer-bottom">
+        <div class="footer-column">
 
-            <p>
-                &copy; 2026 Foodie Express. All rights reserved.
-            </p>
+            <h3>Quick Links</h3>
+
+            <a
+                href="#home"
+                onclick="scrollToSection('home')"
+            >
+                Home
+            </a>
+
+            <a
+                href="#menu"
+                onclick="scrollToSection('menu')"
+            >
+                Menu
+            </a>
+
+            <a
+                href="#reservation"
+                onclick="scrollToSection('reservation')"
+            >
+                Reservation
+            </a>
+
+            <a
+                href="#reviews"
+                onclick="scrollToSection('reviews')"
+            >
+                Reviews
+            </a>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h3>Customer Care</h3>
+
+            <a
+                href="#"
+                onclick="return false;"
+            >
+                Help Center
+            </a>
+
+            <a
+                href="#"
+                onclick="return false;"
+            >
+                Delivery Information
+            </a>
+
+            <a
+                href="#"
+                onclick="return false;"
+            >
+                Refund Policy
+            </a>
+
+            <a
+                href="#"
+                onclick="return false;"
+            >
+                Privacy Policy
+            </a>
+
+        </div>
+
+
+        <div class="footer-column">
+
+            <h3>Contact Us</h3>
+
+            <a
+                href="tel:+923001234567"
+            >
+                <i class="fa-solid fa-phone"></i>
+                +92 300 1234567
+            </a>
+
+            <a
+                href="mailto:hello@foodieexpress.com"
+            >
+                <i class="fa-solid fa-envelope"></i>
+                hello@foodieexpress.com
+            </a>
 
             <span>
-                Premium frontend experience
+                <i class="fa-solid fa-location-dot"></i>
+                Pakistan
             </span>
 
         </div>
 
-    </footer>
+    </div>
 
 
-    <!-- ==================== TOAST ==================== -->
-    <div
-        class="toast-container"
-        id="toast-container"
-        aria-live="polite"
-        aria-atomic="true"
-    ></div>
+    <div class="footer-bottom">
+
+        <p>
+            © 2026 Foodie Express.
+            All rights reserved.
+        </p>
 
 
-    <script src="script.js"></script>
+        <div class="footer-bottom-links">
+
+            <a
+                href="#"
+                onclick="return false;"
+            >
+                Terms
+            </a>
+
+            <a
+                href="#"
+                onclick="return false;"
+            >
+                Privacy
+            </a>
+
+            <a
+                href="#"
+                onclick="return false;"
+            >
+                Cookies
+            </a>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<!-- ==================== TOAST ==================== -->
+<div
+    class="toast"
+    id="toast"
+    role="status"
+    aria-live="polite"
+>
+
+    <div class="toast-icon">
+        <i class="fa-solid fa-check"></i>
+    </div>
+
+    <div class="toast-content">
+
+        <strong id="toast-title">
+            Success
+        </strong>
+
+        <span id="toast-message">
+            Action completed successfully.
+        </span>
+
+    </div>
+
+
+    <button
+        type="button"
+        onclick="hideToast()"
+        aria-label="Close notification"
+    >
+        <i class="fa-solid fa-xmark"></i>
+    </button>
+
+</div>
+
+
+<!-- ==================== BACK TO TOP ==================== -->
+<button
+    class="back-to-top"
+    id="back-to-top"
+    type="button"
+    onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+    aria-label="Back to top"
+>
+    <i class="fa-solid fa-arrow-up"></i>
+</button>
+
+
+<!-- ==================== JAVASCRIPT ==================== -->
+<script src="script.js"></script>
 
 </body>
+
 </html>
