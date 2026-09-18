@@ -398,10 +398,10 @@ function showToast(message, type = "success") {
 
     container.appendChild(toast);
 
-    setTimeout(() => {
+    etTimeout(() => {
 
         toast.remove();
-
+s
     }, 3100);
 }
 
@@ -2546,10 +2546,23 @@ function sendChatMessage() {
         messages.scrollHeight;
 
 
-    setTimeout(() => {
+    fetch("/api/ai", {
 
-        const reply =
-            getChatbotReply(userText);
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            message: userText
+        })
+
+    })
+
+    .then(response => response.json())
+
+    .then(data => {
 
         const botMessage =
             document.createElement("div");
@@ -2558,7 +2571,8 @@ function sendChatMessage() {
             "chat-msg bot";
 
         botMessage.textContent =
-            reply;
+            data.reply ||
+            "Sorry, I could not get a response from AI.";
 
         messages.appendChild(
             botMessage
@@ -2567,7 +2581,32 @@ function sendChatMessage() {
         messages.scrollTop =
             messages.scrollHeight;
 
-    }, 500);
+    })
+
+    .catch(error => {
+
+        console.error(
+            "AI Chat Error:",
+            error
+        );
+
+        const botMessage =
+            document.createElement("div");
+
+        botMessage.className =
+            "chat-msg bot";
+
+        botMessage.textContent =
+            "Sorry, AI service is currently unavailable.";
+
+        messages.appendChild(
+            botMessage
+        );
+
+        messages.scrollTop =
+            messages.scrollHeight;
+
+    });
 }
 
 
