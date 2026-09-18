@@ -859,18 +859,12 @@ function addToCart(itemId) {
     const normalizedItemId =
         Number(itemId);
 
-    if (!Number.isFinite(normalizedItemId)) {
-        return;
-    }
-
     const item =
         menuItems.find(
             product => product.id === normalizedItemId
         );
 
-    if (!item) {
-        return;
-    }
+    if (!item) return;
 
     const existing =
         cart.find(
@@ -897,7 +891,7 @@ function addToCart(itemId) {
 
             name: item.name,
 
-            price: Number(item.price) || 0,
+            price: item.price,
 
             image: item.image,
 
@@ -918,10 +912,7 @@ function addToCart(itemId) {
     showToast(
         `${item.name} added to your cart!`
     );
-}
-
-
-function updateQuantity(itemId, change) {
+}function updateQuantity(itemId, change) {
 
     const normalizedItemId =
         Number(itemId);
@@ -942,18 +933,13 @@ function updateQuantity(itemId, change) {
                 Number(cartItem.id) === normalizedItemId
         );
 
-    if (!item) {
-        return;
-    }
+    if (!item) return;
 
     item.id =
         normalizedItemId;
 
     item.quantity =
-        Math.max(
-            1,
-            Number(item.quantity) || 1
-        );
+        Number(item.quantity) || 1;
 
     item.quantity += normalizedChange;
 
@@ -979,10 +965,6 @@ function removeFromCart(itemId) {
 
     const normalizedItemId =
         Number(itemId);
-
-    if (!Number.isFinite(normalizedItemId)) {
-        return;
-    }
 
     const item =
         cart.find(
@@ -1149,10 +1131,7 @@ function updateCartUI() {
     cart.forEach(item => {
 
         const quantity =
-            Math.max(
-                1,
-                Number(item.quantity) || 1
-            );
+            Number(item.quantity) || 1;
 
         const element =
             document.createElement("div");
@@ -1219,63 +1198,2017 @@ function updateCartUI() {
 
     });
 
-}/* =========================================================
-   END OF FOODIE EXPRESS JAVASCRIPT
-========================================================= */
-
-/*
-   IMPORTANT:
-   Is file ke tamam functions aur global exports
-   upar wale parts mein complete hain.
-
-   Current cart system:
-   - Add to Cart
-   - Cart Counter
-   - Plus / Minus Quantity
-   - Remove Item
-   - Cart Total
-   - Discount
-   - LocalStorage
-   - Checkout
-   - Wishlist
-   - Order History
-   - Dashboard
-   - Authentication
-   - Currency
-   - Language
-   - Dark Mode
-   - Voice Search
-   - AI Assistant
-   - Chatbot
-   - Loyalty Coins
-   - Order Tracking
-
-   Sab functionality existing HTML ke saath connected hai.
-*/
+}
 
 
 /* =========================================================
-   FINAL SAFETY EXPORTS
+   CART TOGGLE
 ========================================================= */
 
-window.getVisibleMenuItems =
-    getVisibleMenuItems;
+function toggleCart() {
 
-window.normalizeCartData =
-    normalizeCartData;
+    const sidebar =
+        document.getElementById("cart-sidebar");
 
-window.loadSavedData =
-    loadSavedData;
+    if (!sidebar) return;
 
-window.updateSavedSelectors =
-    updateSavedSelectors;
+    sidebar.classList.toggle("open");
 
-window.setupReservationDate =
-    setupReservationDate;
+}
 
-window.setupEscapeKey =
-    setupEscapeKey;
 
-window.setupOutsideCartClick =
-    setupOutsideCartClick;window.toggleDarkMode =
+/* =========================================================
+   COUPON
+========================================================= */
+
+function applyCoupon() {
+
+    const input =
+        document.getElementById("coupon-input");
+
+    if (!input) return;
+
+    const code =
+        input.value
+            .trim()
+            .toUpperCase();
+
+    if (!code) {
+
+        showToast(
+            "Please enter a promo code.",
+            "error"
+        );
+
+        return;
+    }
+
+    if (code === "FOODIE50") {
+
+        currentDiscount = 10;
+
+        showToast(
+            "10% discount applied successfully!"
+        );
+
+    } else if (code === "WELCOME") {
+
+        currentDiscount = 5;
+
+        showToast(
+            "5% welcome discount applied!"
+        );
+
+    } else {
+
+        currentDiscount = 0;
+
+        showToast(
+            "Invalid promo code.",
+            "error"
+        );
+
+    }
+
+    updateCartUI();
+}
+
+
+/* =========================================================
+   WISHLIST
+========================================================= */
+
+function toggleWishlist(itemId) {
+
+    const normalizedItemId =
+        Number(itemId);
+
+    const item =
+        menuItems.find(
+            product => product.id === normalizedItemId
+        );
+
+    if (!item) return;
+
+    const index =
+        wishlist.indexOf(normalizedItemId);
+
+    if (index === -1) {
+
+        wishlist.push(normalizedItemId);
+
+        showToast(
+            `${item.name} added to wishlist!`
+        );
+
+    } else {
+
+        wishlist.splice(index, 1);
+
+        showToast(
+            `${item.name} removed from wishlist.`
+        );
+
+    }
+
+    saveWishlistToStorage();
+
+    updateWishlistUI();
+
+    renderMenu(
+        getVisibleMenuItems()
+    );
+}
+
+
+function updateWishlistUI() {
+
+    const count =
+        document.getElementById("wishlist-count");
+
+    const container =
+        document.getElementById("wishlist-items");
+
+    if (count) {
+
+        count.textContent =
+            wishlist.length;
+
+    }
+
+    if (!container) return;
+
+    if (wishlist.length === 0) {
+
+        container.innerHTML = `
+            <div class="empty-state">
+
+                <i class="fa-regular fa-heart"></i>
+
+                <h3>Your wishlist is empty</h3>
+
+                <p>
+                    Add your favorite dishes here.
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+    container.innerHTML = "";
+
+    wishlist.forEach(id => {
+
+        const normalizedId =
+            Number(id);
+
+        const item =
+            menuItems.find(
+                product =>
+                    product.id === normalizedId
+            );
+
+        if (!item) return;
+
+        const element =
+            document.createElement("div");
+
+        element.className =
+            "wishlist-item";
+
+        element.innerHTML = `
+            <img
+                src="${item.image}"
+                alt="${escapeHTML(item.name)}">
+
+            <div class="wishlist-item-info">
+
+                <h4>
+                    ${escapeHTML(item.name)}
+                </h4>
+
+                <p>
+                    ${formatPrice(item.price)}
+                </p>
+
+            </div>
+
+            <div class="wishlist-item-actions">
+
+                <button
+                    type="button"
+                    onclick="addToCart(${item.id})"
+                    title="Add to Cart">
+
+                    <i class="fa-solid fa-cart-plus"></i>
+
+                </button>
+
+                <button
+                    type="button"
+                    onclick="toggleWishlist(${item.id})"
+                    title="Remove">
+
+                    <i class="fa-solid fa-trash"></i>
+
+                </button>
+
+            </div>
+        `;
+
+        container.appendChild(element);
+
+    });
+
+}
+
+
+function toggleWishlistModal() {
+
+    const modal =
+        document.getElementById("wishlist-modal");
+
+    if (!modal) return;
+
+    modal.classList.toggle("hidden");
+
+    updateWishlistUI();
+}
+
+
+/* =========================================================
+   VISIBLE MENU
+========================================================= */
+
+function getVisibleMenuItems() {
+
+    const searchInput =
+        document.getElementById("search-input");
+
+    const query =
+        searchInput
+            ? searchInput.value
+                .trim()
+                .toLowerCase()
+            : "";
+
+    return menuItems.filter(item => {
+
+        const categoryMatch =
+            currentCategory === "All" ||
+            item.category === currentCategory;
+
+        const searchMatch =
+            !query ||
+            item.name.toLowerCase().includes(query) ||
+            item.category.toLowerCase().includes(query) ||
+            item.description.toLowerCase().includes(query);
+
+        return categoryMatch && searchMatch;
+
+    });
+
+}
+
+
+/* =========================================================
+   CHECKOUT
+========================================================= */
+
+function checkout() {
+
+    if (cart.length === 0) {
+
+        showToast(
+            "Your cart is empty. Add some food first.",
+            "error"
+        );
+
+        return;
+    }
+
+    const modal =
+        document.getElementById("checkout-modal");
+
+    if (!modal) return;
+
+    modal.classList.remove("hidden");
+
+}
+
+
+function closeCheckoutModal() {
+
+    const modal =
+        document.getElementById("checkout-modal");
+
+    if (modal) {
+
+        modal.classList.add("hidden");
+
+    }
+}
+
+
+function togglePaymentInfo() {
+
+    const method =
+        document.getElementById("payment-method");
+
+    const details =
+        document.getElementById("online-payment-details");
+
+    if (!method || !details) return;
+
+    const onlineMethods =
+        [
+            "JazzCash",
+            "EasyPaisa",
+            "Card"
+        ];
+
+    details.classList.toggle(
+        "hidden",
+        !onlineMethods.includes(method.value)
+    );
+}
+
+
+/* =========================================================
+   PROCESS ORDER
+========================================================= */
+
+function processOrder(event) {
+
+    event.preventDefault();
+
+    if (cart.length === 0) {
+
+        showToast(
+            "Your cart is empty.",
+            "error"
+        );
+
+        return;
+    }
+
+    const name =
+        document.getElementById("cust-name")
+            ?.value.trim();
+
+    const phone =
+        document.getElementById("cust-phone")
+            ?.value.trim();
+
+    const address =
+        document.getElementById("cust-address")
+            ?.value.trim();
+
+    const payment =
+        document.getElementById("payment-method")
+            ?.value;
+
+    if (!name || !phone || !address || !payment) {
+
+        showToast(
+            "Please complete all checkout fields.",
+            "error"
+        );
+
+        return;
+    }
+
+    let subtotal = 0;
+
+    cart.forEach(item => {
+
+        subtotal +=
+            item.price * item.quantity;
+
+    });
+
+    const discount =
+        subtotal * (currentDiscount / 100);
+
+    const total =
+        Math.max(
+            0,
+            subtotal - discount
+        );
+
+    const orderId =
+        "FE-" +
+        Date.now()
+            .toString()
+            .slice(-8);
+
+    const order = {
+
+        id: orderId,
+
+        customer: {
+            name,
+            phone,
+            address
+        },
+
+        payment,
+
+        items: JSON.parse(
+            JSON.stringify(cart)
+        ),
+
+        subtotal,
+
+        discount,
+
+        total,
+
+        currency: currentCurrency,
+
+        date:
+            new Date().toLocaleString(),
+
+        status: "Order Placed"
+
+    };
+
+    orderHistory.unshift(order);
+
+    totalOrders += 1;
+
+    loyaltyCoins +=
+        Math.floor(total / 100);
+
+    saveOrderHistory();
+
+    saveUserData();
+
+
+    /* ---------------- CLEAR CART ---------------- */
+
+    cart = [];
+
+    currentDiscount = 0;
+
+    saveCartToStorage();
+
+    updateCartUI();
+
+    renderOrderHistory();
+
+
+    /* ---------------- CLOSE CHECKOUT ---------------- */
+
+    closeCheckoutModal();
+
+    const form =
+        document.getElementById("checkout-form");
+
+    if (form) {
+
+        form.reset();
+
+    }
+
+
+    showToast(
+        `Order ${orderId} placed successfully!`
+    );
+
+    playCustomSound();
+
+    startOrderTrackingSimulation();
+
+
+    const sidebar =
+        document.getElementById("cart-sidebar");
+
+    if (sidebar) {
+
+        sidebar.classList.remove("open");
+
+    }
+
+
+    const tracking =
+        document.getElementById("tracking-section");
+
+    if (tracking) {
+
+        setTimeout(() => {
+
+            tracking.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        }, 500);
+
+    }
+}/* =========================================================
+   ORDER TRACKING
+========================================================= */
+
+function startOrderTrackingSimulation() {
+
+    const section =
+        document.getElementById("tracking-section");
+
+    if (!section) return;
+
+    section.classList.remove("hidden");
+
+    const steps =
+        [
+            "step-1",
+            "step-2",
+            "step-3",
+            "step-4"
+        ];
+
+    steps.forEach((id, index) => {
+
+        const step =
+            document.getElementById(id);
+
+        if (step) {
+
+            step.classList.toggle(
+                "active",
+                index === 0
+            );
+
+        }
+
+    });
+
+    if (trackingTimer) {
+
+        clearInterval(trackingTimer);
+
+    }
+
+    let currentStep = 1;
+
+    trackingTimer =
+        setInterval(() => {
+
+            const step =
+                document.getElementById(
+                    `step-${currentStep}`
+                );
+
+            if (step) {
+
+                step.classList.add("active");
+
+            }
+
+            currentStep++;
+
+            if (currentStep > 4) {
+
+                clearInterval(trackingTimer);
+
+                showToast(
+                    "Your order has been delivered! Enjoy your meal 🎉"
+                );
+
+            }
+
+        }, 3500);
+}
+
+
+/* =========================================================
+   ORDER HISTORY
+========================================================= */
+
+function renderOrderHistory() {
+
+    const container =
+        document.getElementById("history-container");
+
+    if (!container) return;
+
+    if (orderHistory.length === 0) {
+
+        container.innerHTML = `
+            <div class="empty-state">
+
+                <i class="fa-solid fa-receipt"></i>
+
+                <h3>No orders yet</h3>
+
+                <p>
+                    Your completed orders will appear here.
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+    container.innerHTML = "";
+
+    orderHistory.forEach(order => {
+
+        const element =
+            document.createElement("div");
+
+        element.className =
+            "history-item";
+
+        const itemNames =
+            order.items
+                .map(
+                    item =>
+                        `${item.name} × ${item.quantity}`
+                )
+                .join(", ");
+
+        element.innerHTML = `
+            <div class="history-item-top">
+
+                <strong>
+                    ${escapeHTML(order.id)}
+                </strong>
+
+                <span>
+                    ${formatPrice(
+                        order.total
+                    )}
+                </span>
+
+            </div>
+
+            <div>
+                ${escapeHTML(itemNames)}
+            </div>
+
+            <small>
+                ${escapeHTML(order.date)}
+            </small>
+
+        `;
+
+        container.appendChild(element);
+
+    });
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+function openDashboardModal() {
+
+    const modal =
+        document.getElementById("dashboard-modal");
+
+    if (!modal) return;
+
+    updateDashboard();
+
+    modal.classList.remove("hidden");
+}
+
+
+function closeDashboardModal() {
+
+    const modal =
+        document.getElementById("dashboard-modal");
+
+    if (modal) {
+
+        modal.classList.add("hidden");
+
+    }
+}
+
+
+function updateDashboard() {
+
+    const name =
+        document.getElementById("dash-user-name");
+
+    const email =
+        document.getElementById("dash-user-email");
+
+    const coins =
+        document.getElementById("dash-user-coins");
+
+    const orders =
+        document.getElementById("dash-total-orders");
+
+    if (currentUser) {
+
+        if (name) {
+
+            name.textContent =
+                currentUser.name || "User";
+
+        }
+
+        if (email) {
+
+            email.textContent =
+                currentUser.email || "";
+
+        }
+
+    } else {
+
+        if (name) {
+
+            name.textContent =
+                "Guest User";
+
+        }
+
+        if (email) {
+
+            email.textContent =
+                "Login to unlock your account.";
+
+        }
+
+    }
+
+    if (coins) {
+
+        coins.textContent =
+            loyaltyCoins;
+
+    }
+
+    if (orders) {
+
+        orders.textContent =
+            totalOrders;
+
+    }
+
+    renderOrderHistory();
+}
+
+
+/* =========================================================
+   AUTH MODAL
+========================================================= */
+
+function openAuthModal() {
+
+    const modal =
+        document.getElementById("auth-modal");
+
+    if (!modal) return;
+
+    modal.classList.remove("hidden");
+
+    switchAuthScreen("login");
+}
+
+
+function closeAuthModal() {
+
+    const modal =
+        document.getElementById("auth-modal");
+
+    if (modal) {
+
+        modal.classList.add("hidden");
+
+    }
+}
+
+
+function switchAuthScreen(screen) {
+
+    const login =
+        document.getElementById("login-screen");
+
+    const signup =
+        document.getElementById("signup-screen");
+
+    if (!login || !signup) return;
+
+    if (screen === "signup") {
+
+        login.classList.add("hidden");
+        signup.classList.remove("hidden");
+
+    } else {
+
+        signup.classList.add("hidden");
+        login.classList.remove("hidden");
+
+    }
+}
+
+
+/* =========================================================
+   AUTH HANDLER
+========================================================= */
+
+function handleAuth(event, type) {
+
+    event.preventDefault();
+
+    if (type === "signup") {
+
+        const name =
+            document.getElementById("signup-name")
+                ?.value.trim();
+
+        const email =
+            document.getElementById("signup-email")
+                ?.value.trim();
+
+        const password =
+            document.getElementById("signup-password")
+                ?.value;
+
+        if (!name || !email || !password) {
+
+            showToast(
+                "Please complete all fields.",
+                "error"
+            );
+
+            return;
+        }
+
+        const user = {
+            name,
+            email,
+            password
+        };
+
+        localStorage.setItem(
+            "foodieExpressAccount",
+            JSON.stringify(user)
+        );
+
+        currentUser = {
+            name,
+            email
+        };
+
+        saveUserData();
+
+        showToast(
+            "Account created successfully!"
+        );
+
+        closeAuthModal();
+
+        updateDashboard();
+
+        return;
+    }
+
+
+    /* ---------------- LOGIN ---------------- */
+
+    const email =
+        document.getElementById("login-email")
+            ?.value.trim();
+
+    const password =
+        document.getElementById("login-password")
+            ?.value;
+
+    const saved =
+        localStorage.getItem(
+            "foodieExpressAccount"
+        );
+
+    if (!saved) {
+
+        showToast(
+            "No account found. Please create an account first.",
+            "error"
+        );
+
+        switchAuthScreen("signup");
+
+        return;
+    }
+
+    let account;
+
+    try {
+
+        account =
+            JSON.parse(saved);
+
+    } catch {
+
+        showToast(
+            "Account data is corrupted.",
+            "error"
+        );
+
+        return;
+    }
+
+    if (
+        account.email === email &&
+        account.password === password
+    ) {
+
+        currentUser = {
+            name: account.name,
+            email: account.email
+        };
+
+        saveUserData();
+
+        showToast(
+            `Welcome back, ${account.name}!`
+        );
+
+        closeAuthModal();
+
+        updateDashboard();
+
+    } else {
+
+        showToast(
+            "Incorrect email or password.",
+            "error"
+        );
+
+    }
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+function handleLogout() {
+
+    currentUser = null;
+
+    localStorage.removeItem(
+        "foodieExpressUser"
+    );
+
+    closeDashboardModal();
+
+    showToast(
+        "You have been logged out."
+    );
+}
+
+
+/* =========================================================
+   CURRENCY
+========================================================= */
+
+function changeCurrency(currency) {
+
+    if (!currencyRates[currency]) return;
+
+    currentCurrency = currency;
+
+    localStorage.setItem(
+        "foodieExpressCurrency",
+        currency
+    );
+
+    renderMenu(
+        getVisibleMenuItems()
+    );
+
+    updateCartUI();
+
+    updateWishlistUI();
+
+    renderOrderHistory();
+
+    showToast(
+        `Currency changed to ${currency}.`
+    );
+}
+
+
+/* =========================================================
+   LANGUAGE
+========================================================= */
+
+function changeLanguage(language) {
+
+    currentLanguage = language;
+
+    localStorage.setItem(
+        "foodieExpressLanguage",
+        language
+    );
+
+    if (language === "ur") {
+
+        showToast(
+            "Urdu language selected. Food names remain in English for consistency."
+        );
+
+    } else {
+
+        showToast(
+            "English language selected."
+        );
+
+    }
+}
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+function toggleDarkMode() {
+
+    const root =
+        document.getElementById("html-root");
+
+    if (!root) return;
+
+    const current =
+        root.getAttribute("data-theme") ||
+        "light";
+
+    const next =
+        current === "dark"
+            ? "light"
+            : "dark";
+
+    root.setAttribute(
+        "data-theme",
+        next
+    );
+
+    localStorage.setItem(
+        "foodieExpressTheme",
+        next
+    );
+
+    const button =
+        document.getElementById("dark-mode-btn");
+
+    if (button) {
+
+        button.innerHTML =
+            next === "dark"
+                ? '<i class="fa-solid fa-sun"></i>'
+                : '<i class="fa-solid fa-moon"></i>';
+
+    }
+}
+
+
+/* =========================================================
+   LOCATION
+========================================================= */
+
+function detectUserLocation() {
+
+    if (!navigator.geolocation) {
+
+        showToast(
+            "Location is not supported by your browser.",
+            "error"
+        );
+
+        return;
+    }
+
+    showToast(
+        "Requesting your location..."
+    );
+
+    navigator.geolocation.getCurrentPosition(
+
+        position => {
+
+            const latitude =
+                position.coords.latitude;
+
+            const longitude =
+                position.coords.longitude;
+
+            showToast(
+                `Location detected: ${latitude.toFixed(3)}, ${longitude.toFixed(3)}`
+            );
+
+        },
+
+        () => {
+
+            showToast(
+                "Location permission was not granted.",
+                "error"
+            );
+
+        }
+
+    );
+}
+
+
+/* =========================================================
+   VOICE SEARCH
+========================================================= */
+
+function startVoiceSearch() {
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+
+        showToast(
+            "Voice search is not supported in this browser.",
+            "error"
+        );
+
+        return;
+    }
+
+    const recognition =
+        new SpeechRecognition();
+
+    recognition.lang = "en-US";
+
+    recognition.interimResults = false;
+
+    recognition.maxAlternatives = 1;
+
+    recognition.start();
+
+    showToast(
+        "Listening... Please say a food name."
+    );
+
+    recognition.onresult =
+        event => {
+
+            const text =
+                event.results[0][0].transcript;
+
+            const input =
+                document.getElementById(
+                    "search-input"
+                );
+
+            if (input) {
+
+                input.value = text;
+
+            }
+
+            searchMenu(text);
+
+        };
+
+    recognition.onerror =
+        () => {
+
+            showToast(
+                "Voice search could not be completed.",
+                "error"
+            );
+
+        };
+}
+
+
+/* =========================================================
+   AI ASSISTANT
+========================================================= */
+
+function startAICallSimulation() {
+
+    const suggestions = [
+
+        "Try our Classic Zinger Burger with Loaded Cheese Fries! 🍔",
+
+        "For desi flavor, Chicken Biryani is a delicious choice! 🍛",
+
+        "If you love BBQ, our BBQ Platter is perfect for sharing! 🔥",
+
+        "Feeling thirsty? Try our creamy Mango Shake! 🥭",
+
+        "For something premium, try our Grilled Beef Steak! 🥩"
+
+    ];
+
+    const suggestion =
+        suggestions[
+            Math.floor(
+                Math.random() *
+                suggestions.length
+            )
+        ];
+
+    showToast(
+        suggestion
+    );
+}
+
+
+function startAIVoiceInput() {
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+
+        showToast(
+            "AI voice input is not supported in this browser.",
+            "error"
+        );
+
+        return;
+    }
+
+    const recognition =
+        new SpeechRecognition();
+
+    recognition.lang = "en-US";
+
+    recognition.interimResults = false;
+
+    recognition.start();
+
+    showToast(
+        "AI is listening..."
+    );
+
+    recognition.onresult =
+        event => {
+
+            const text =
+                event.results[0][0].transcript;
+
+            showToast(
+                `AI heard: "${text}"`
+            );
+
+        };
+
+    recognition.onerror =
+        () => {
+
+            showToast(
+                "AI voice input failed.",
+                "error"
+            );
+
+        };
+}
+
+
+/* =========================================================
+   CHATBOT
+========================================================= */
+
+function toggleChatbot() {
+
+    const chatWindow =
+        document.getElementById(
+            "chat-window"
+        );
+
+    if (!chatWindow) return;
+
+    chatWindow.classList.toggle(
+        "hidden"
+    );
+}
+
+
+function handleChatKeyPress(event) {
+
+    if (event.key === "Enter") {
+
+        event.preventDefault();
+
+        sendChatMessage();
+
+    }
+}
+
+
+function sendChatMessage() {
+
+    const input =
+        document.getElementById(
+            "chat-input"
+        );
+
+    const messages =
+        document.getElementById(
+            "chat-messages"
+        );
+
+    if (!input || !messages) return;
+
+    const userText =
+        input.value.trim();
+
+    if (!userText) return;
+
+    const userMessage =
+        document.createElement("div");
+
+    userMessage.className =
+        "chat-msg user";
+
+    userMessage.textContent =
+        userText;
+
+    messages.appendChild(
+        userMessage
+    );
+
+    input.value = "";
+
+    messages.scrollTop =
+        messages.scrollHeight;
+
+
+    setTimeout(() => {
+
+        const reply =
+            getChatbotReply(userText);
+
+        const botMessage =
+            document.createElement("div");
+
+        botMessage.className =
+            "chat-msg bot";
+
+        botMessage.textContent =
+            reply;
+
+        messages.appendChild(
+            botMessage
+        );
+
+        messages.scrollTop =
+            messages.scrollHeight;
+
+    }, 500);
+}
+
+
+function getChatbotReply(text) {
+
+    const message =
+        text.toLowerCase();
+
+    if (
+        message.includes("delivery") ||
+        message.includes("deliver")
+    ) {
+
+        return "Our estimated delivery time is around 30 minutes, depending on your location.";
+
+    }
+
+    if (
+        message.includes("discount") ||
+        message.includes("promo") ||
+        message.includes("coupon")
+    ) {
+
+        return "Try promo code FOODIE50 to receive a 10% discount.";
+
+    }
+
+    if (
+        message.includes("burger")
+    ) {
+
+        return "Our Classic Zinger Burger and Loaded Beef Burger are popular choices.";
+
+    }
+
+    if (
+        message.includes("biryani") ||
+        message.includes("desi")
+    ) {
+
+        return "For desi food, try our Chicken Biryani or Chicken Karahi.";
+
+    }
+
+    if (
+        message.includes("bbq") ||
+        message.includes("grill")
+    ) {
+
+        return "Our BBQ Platter, Chicken Tikka and Malai Boti are great BBQ options.";
+
+    }
+
+    if (
+        message.includes("drink") ||
+        message.includes("shake")
+    ) {
+
+        return "You can try our Mango Shake, Chocolate Shake or Fresh Lime.";
+
+    }
+
+    if (
+        message.includes("hello") ||
+        message.includes("hi") ||
+        message.includes("hey")
+    ) {
+
+        return "Hello! 👋 Welcome to Foodie Express. What delicious food are you looking for?";
+
+    }
+
+    if (
+        message.includes("price") ||
+        message.includes("cost")
+    ) {
+
+        return "You can see the current price of every item directly on its food card.";
+
+    }
+
+    if (
+        message.includes("thank")
+    ) {
+
+        return "You're very welcome! ❤️ Enjoy your meal.";
+
+    }
+
+    return "I can help you with food, prices, delivery, discounts and menu categories. What would you like to know?";
+}
+
+
+/* =========================================================
+   LOYALTY UI
+========================================================= */
+
+function updateLoyaltyUI() {
+
+    const coins =
+        document.getElementById(
+            "dash-user-coins"
+        );
+
+    if (coins) {
+
+        coins.textContent =
+            loyaltyCoins;
+
+    }
+}
+
+
+/* =========================================================
+   INITIALIZATION
+========================================================= */
+
+function loadSavedData() {
+
+    try {
+
+        const savedCart =
+            localStorage.getItem(
+                "foodieExpressCart"
+            );
+
+        if (savedCart) {
+
+            cart =
+                JSON.parse(savedCart);
+
+        }
+
+    } catch {
+
+        cart = [];
+
+    }
+
+
+    /*
+       IMPORTANT:
+       Purani LocalStorage cart values ko clean aur
+       numeric IDs / quantities mein convert karte hain.
+    */
+
+    normalizeCartData();
+
+    saveCartToStorage();
+
+
+    try {
+
+        const savedWishlist =
+            localStorage.getItem(
+                "foodieExpressWishlist"
+            );
+
+        if (savedWishlist) {
+
+            wishlist =
+                JSON.parse(savedWishlist);
+
+        }
+
+    } catch {
+
+        wishlist = [];
+
+    }
+
+
+    /*
+       Wishlist IDs ko bhi numbers mein normalize karna.
+    */
+
+    if (Array.isArray(wishlist)) {
+
+        wishlist =
+            wishlist
+                .map(id => Number(id))
+                .filter(
+                    id =>
+                        menuItems.some(
+                            item => item.id === id
+                        )
+                );
+
+    } else {
+
+        wishlist = [];
+
+    }
+
+    saveWishlistToStorage();
+
+
+    try {
+
+        const savedOrders =
+            localStorage.getItem(
+                "foodieExpressOrders"
+            );
+
+        if (savedOrders) {
+
+            orderHistory =
+                JSON.parse(savedOrders);
+
+        }
+
+    } catch {
+
+        orderHistory = [];
+
+    }
+
+
+    if (!Array.isArray(orderHistory)) {
+
+        orderHistory = [];
+
+    }
+
+
+    try {
+
+        const savedUser =
+            localStorage.getItem(
+                "foodieExpressUser"
+            );
+
+        if (savedUser) {
+
+            currentUser =
+                JSON.parse(savedUser);
+
+        }
+
+    } catch {
+
+        currentUser = null;
+
+    }
+
+
+    const savedCoins =
+        localStorage.getItem(
+            "foodieExpressCoins"
+        );
+
+    if (savedCoins) {
+
+        loyaltyCoins =
+            Number(savedCoins) || 0;
+
+    }
+
+
+    totalOrders =
+        orderHistory.length;
+
+
+    const savedCurrency =
+        localStorage.getItem(
+            "foodieExpressCurrency"
+        );
+
+    if (
+        savedCurrency &&
+        currencyRates[savedCurrency]
+    ) {
+
+        currentCurrency =
+            savedCurrency;
+
+    }
+
+
+    const savedLanguage =
+        localStorage.getItem(
+            "foodieExpressLanguage"
+        );
+
+    if (savedLanguage) {
+
+        currentLanguage =
+            savedLanguage;
+
+    }
+
+
+    const savedTheme =
+        localStorage.getItem(
+            "foodieExpressTheme"
+        );
+
+    const root =
+        document.getElementById(
+            "html-root"
+        );
+
+    if (root) {
+
+        root.setAttribute(
+            "data-theme",
+            savedTheme === "dark"
+                ? "dark"
+                : "light"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   UPDATE SELECTORS
+========================================================= */
+
+function updateSavedSelectors() {
+
+    const currency =
+        document.getElementById(
+            "currency-selector"
+        );
+
+    const language =
+        document.getElementById(
+            "language-selector"
+        );
+
+    if (currency) {
+
+        currency.value =
+            currentCurrency;
+
+    }
+
+    if (language) {
+
+        language.value =
+            currentLanguage;
+
+    }
+
+}
+
+
+/* =========================================================
+   SETUP DATE
+========================================================= */
+
+function setupReservationDate() {
+
+    const dateInput =
+        document.getElementById(
+            "reservation-date"
+        );
+
+    if (!dateInput) return;
+
+    const today =
+        new Date();
+
+    const year =
+        today.getFullYear();
+
+    const month =
+        String(
+            today.getMonth() + 1
+        ).padStart(2, "0");
+
+    const day =
+        String(
+            today.getDate()
+        ).padStart(2, "0");
+
+    dateInput.min =
+        `${year}-${month}-${day}`;
+
+}
+
+
+/* =========================================================
+   NAVIGATION CLOSE ON ESC
+========================================================= */
+
+function setupEscapeKey() {
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (event.key !== "Escape") {
+                return;
+            }
+
+            const modals =
+                document.querySelectorAll(
+                    ".modal:not(.hidden)"
+                );
+
+            modals.forEach(modal => {
+
+                modal.classList.add(
+                    "hidden"
+                );
+
+            });
+
+            const sidebar =
+                document.getElementById(
+                    "cart-sidebar"
+                );
+
+            if (sidebar) {
+
+                sidebar.classList.remove(
+                    "open"
+                );
+
+            }
+
+        }
+    );
+}
+
+
+/* =========================================================
+   CLICK OUTSIDE CART
+========================================================= */
+
+function setupOutsideCartClick() {
+
+    document.addEventListener(
+        "click",
+        event => {
+
+            const sidebar =
+                document.getElementById(
+                    "cart-sidebar"
+                );
+
+            const cartButton =
+                document.querySelector(
+                    ".floating-cart"
+                );
+
+            if (!sidebar || !cartButton) {
+                return;
+            }
+
+            if (
+                !sidebar.classList.contains(
+                    "open"
+                )
+            ) {
+                return;
+            }
+
+            if (
+                sidebar.contains(event.target) ||
+                cartButton.contains(event.target)
+            ) {
+                return;
+            }
+
+            sidebar.classList.remove(
+                "open"
+            );
+
+        }
+    );
+}
+
+
+/* =========================================================
+   WINDOW LOAD
+========================================================= */
+
+window.addEventListener(
+    "load",
+    () => {
+
+        loadSavedData();
+
+        updateSavedSelectors();
+
+        renderMenu(
+            getVisibleMenuItems()
+        );
+
+        updateCartUI();
+
+        updateWishlistUI();
+
+        updateDashboard();
+
+        updateLoyaltyUI();
+
+        setupReservationDate();
+
+        setupEscapeKey();
+
+        setupOutsideCartClick();
+
+    }
+);
+
+
+/* =========================================================
+   GLOBAL EXPORTS
+   Helpful when HTML inline onclick is used.
+========================================================= */
+
+window.playCustomSound =
+    playCustomSound;
+
+window.formatPrice =
+    formatPrice;
+
+window.changeCurrency =
+    changeCurrency;
+
+window.updateLoyaltyUI =
+    updateLoyaltyUI;
+
+window.showToast =
+    showToast;
+
+window.startVoiceSearch =
+    startVoiceSearch;
+
+window.detectUserLocation =
+    detectUserLocation;
+
+window.openItemDetail =
+    openItemDetail;
+
+window.closeItemDetailModal =
+    closeItemDetailModal;
+
+window.addFlavorToCart =
+    addFlavorToCart;
+
+window.renderMenu =
+    renderMenu;
+
+window.searchMenu =
+    searchMenu;
+
+window.filterMenu =
+    filterMenu;
+
+window.toggleWishlist =
+    toggleWishlist;
+
+window.updateWishlistUI =
+    updateWishlistUI;
+
+window.toggleWishlistModal =
+    toggleWishlistModal;
+
+window.toggleCart =
+    toggleCart;
+
+window.saveCartToStorage =
+    saveCartToStorage;
+
+window.addToCart =
+    addToCart;
+
+window.updateQuantity =
+    updateQuantity;
+
+window.removeFromCart =
+    removeFromCart;
+
+window.applyCoupon =
+    applyCoupon;
+
+window.updateCartUI =
+    updateCartUI;
+
+window.togglePaymentInfo =
+    togglePaymentInfo;
+
+window.checkout =
+    checkout;
+
+window.closeCheckoutModal =
+    closeCheckoutModal;
+
+window.processOrder =
+    processOrder;
+
+window.startOrderTrackingSimulation =
+    startOrderTrackingSimulation;
+
+window.renderOrderHistory =
+    renderOrderHistory;
+
+window.toggleChatbot =
+    toggleChatbot;
+
+window.sendChatMessage =
+    sendChatMessage;
+
+window.handleChatKeyPress =
+    handleChatKeyPress;
+
+window.startAICallSimulation =
+    startAICallSimulation;
+
+window.startAIVoiceInput =
+    startAIVoiceInput;
+
+window.changeLanguage =
+    changeLanguage;
+
+window.openAuthModal =
+    openAuthModal;
+
+window.switchAuthScreen =
+    switchAuthScreen;
+
+window.closeAuthModal =
+    closeAuthModal;
+
+window.handleAuth =
+    handleAuth;
+
+window.openDashboardModal =
+    openDashboardModal;
+
+window.closeDashboardModal =
+    closeDashboardModal;
+
+window.handleLogout =
+    handleLogout;
+
+window.toggleDarkMode =
     toggleDarkMode;
