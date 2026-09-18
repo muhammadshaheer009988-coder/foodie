@@ -689,9 +689,12 @@ function escapeHTML(value) {
 
 function openItemDetail(itemId) {
 
+    const normalizedItemId =
+        Number(itemId);
+
     const item =
         menuItems.find(
-            product => product.id === itemId
+            product => product.id === normalizedItemId
         );
 
     const modal =
@@ -772,38 +775,133 @@ function addFlavorToCart(itemId) {
 
 
 /* =========================================================
+   CART HELPERS
+========================================================= */
+
+/*
+   Cart IDs ko hamesha number mein convert karta hai.
+   Is se LocalStorage mein string ID save hone ki wajah se
+   add / plus / minus / remove ka issue nahi hota.
+*/
+
+function normalizeCartData() {
+
+    if (!Array.isArray(cart)) {
+
+        cart = [];
+
+        return;
+
+    }
+
+    const normalizedCart = [];
+
+    cart.forEach(savedItem => {
+
+        if (!savedItem) return;
+
+        const itemId =
+            Number(savedItem.id);
+
+        const menuItem =
+            menuItems.find(
+                product => product.id === itemId
+            );
+
+        if (!menuItem) return;
+
+        const quantity =
+            Math.max(
+                1,
+                Number(savedItem.quantity) || 1
+            );
+
+        const existing =
+            normalizedCart.find(
+                cartItem => cartItem.id === itemId
+            );
+
+        if (existing) {
+
+            existing.quantity += quantity;
+
+        } else {
+
+            normalizedCart.push({
+
+                id: menuItem.id,
+
+                name: menuItem.name,
+
+                price: menuItem.price,
+
+                image: menuItem.image,
+
+                quantity
+
+            });
+
+        }
+
+    });
+
+    cart = normalizedCart;
+
+}
+
+
+/* =========================================================
    CART
 ========================================================= */
 
 function addToCart(itemId) {
 
+    const normalizedItemId =
+        Number(itemId);
+
     const item =
         menuItems.find(
-            product => product.id === itemId
+            product => product.id === normalizedItemId
         );
 
     if (!item) return;
 
     const existing =
         cart.find(
-            cartItem => cartItem.id === itemId
+            cartItem =>
+                Number(cartItem.id) === normalizedItemId
         );
 
     if (existing) {
 
-        existing.quantity += 1;
+        existing.id =
+            normalizedItemId;
+
+        existing.quantity =
+            Math.max(
+                1,
+                Number(existing.quantity) || 1
+            ) + 1;
 
     } else {
 
         cart.push({
+
             id: item.id,
+
             name: item.name,
+
             price: item.price,
+
             image: item.image,
+
             quantity: 1
+
         });
 
     }
+
+    normalizeCartData();
 
     saveCartToStorage();
 
@@ -819,23 +917,46 @@ function addToCart(itemId) {
 
 function updateQuantity(itemId, change) {
 
+    const normalizedItemId =
+        Number(itemId);
+
+    const normalizedChange =
+        Number(change);
+
+    if (
+        !Number.isFinite(normalizedItemId) ||
+        !Number.isFinite(normalizedChange)
+    ) {
+        return;
+    }
+
     const item =
         cart.find(
-            cartItem => cartItem.id === itemId
+            cartItem =>
+                Number(cartItem.id) === normalizedItemId
         );
 
     if (!item) return;
 
-    item.quantity += change;
+    item.id =
+        normalizedItemId;
+
+    item.quantity =
+        Number(item.quantity) || 1;
+
+    item.quantity += normalizedChange;
 
     if (item.quantity <= 0) {
 
         cart =
             cart.filter(
-                cartItem => cartItem.id !== itemId
+                cartItem =>
+                    Number(cartItem.id) !== normalizedItemId
             );
 
     }
+
+    normalizeCartData();
 
     saveCartToStorage();
 
@@ -845,15 +966,22 @@ function updateQuantity(itemId, change) {
 
 function removeFromCart(itemId) {
 
+    const normalizedItemId =
+        Number(itemId);
+
     const item =
         cart.find(
-            cartItem => cartItem.id === itemId
+            cartItem =>
+                Number(cartItem.id) === normalizedItemId
         );
 
     cart =
         cart.filter(
-            cartItem => cartItem.id !== itemId
+            cartItem =>
+                Number(cartItem.id) !== normalizedItemId
         );
+
+    normalizeCartData();
 
     saveCartToStorage();
 
@@ -876,6 +1004,8 @@ function removeFromCart(itemId) {
 
 function updateCartUI() {
 
+    normalizeCartData();
+
     const cartItems =
         document.getElementById("cart-items");
 
@@ -888,37 +1018,77 @@ function updateCartUI() {
     const floatingCount =
         document.getElementById("floating-cart-count");
 
+
+    /*
+       Total items quantity:
+       Burger x2 + Pizza x1 = Counter 3
+    */
+
     const totalQuantity =
         cart.reduce(
-            (sum, item) =>
-                sum + item.quantity,
+            (sum, item) => {
+
+                const quantity =
+                    Number(item.quantity) || 0;
+
+                return sum + quantity;
+
+            },
             0
         );
+
+
+    /* ---------------- COUNTER ---------------- */
 
     if (floatingCount) {
 
         floatingCount.textContent =
-            totalQuantity;
+            String(totalQuantity);
+
+        floatingCount.setAttribute(
+            "aria-label",
+            `${totalQuantity} items in cart`
+        );
 
     }
+
+
+    /* ---------------- SUBTOTAL ---------------- */
 
     let subtotal = 0;
 
     cart.forEach(item => {
 
+        const quantity =
+            Number(item.quantity) || 0;
+
+        const price =
+            Number(item.price) || 0;
+
         subtotal +=
-            item.price * item.quantity;
+            price * quantity;
 
     });
 
+
+    /* ---------------- DISCOUNT ---------------- */
+
     const discountAmount =
-        subtotal * (currentDiscount / 100);
+        subtotal *
+        (
+            Number(currentDiscount) || 0
+        ) /
+        100;
+
+
+    /* ---------------- FINAL TOTAL ---------------- */
 
     const finalTotal =
         Math.max(
             0,
             subtotal - discountAmount
         );
+
 
     if (cartDiscount) {
 
@@ -934,7 +1104,11 @@ function updateCartUI() {
 
     }
 
+
+    /* ---------------- CART ITEMS ---------------- */
+
     if (!cartItems) return;
+
 
     if (cart.length === 0) {
 
@@ -953,14 +1127,20 @@ function updateCartUI() {
         return;
     }
 
+
     cartItems.innerHTML = "";
 
+
     cart.forEach(item => {
+
+        const quantity =
+            Number(item.quantity) || 1;
 
         const element =
             document.createElement("div");
 
-        element.className = "cart-item";
+        element.className =
+            "cart-item";
 
         element.innerHTML = `
             <div class="cart-item-image">
@@ -984,16 +1164,20 @@ function updateCartUI() {
                 <div class="quantity-controls">
 
                     <button
-                        onclick="updateQuantity(${item.id}, -1)">
+                        type="button"
+                        onclick="updateQuantity(${item.id}, -1)"
+                        aria-label="Decrease quantity">
                         −
                     </button>
 
                     <span>
-                        ${item.quantity}
+                        ${quantity}
                     </span>
 
                     <button
-                        onclick="updateQuantity(${item.id}, 1)">
+                        type="button"
+                        onclick="updateQuantity(${item.id}, 1)"
+                        aria-label="Increase quantity">
                         +
                     </button>
 
@@ -1002,9 +1186,11 @@ function updateCartUI() {
             </div>
 
             <button
+                type="button"
                 class="remove-cart-item"
                 onclick="removeFromCart(${item.id})"
-                title="Remove">
+                title="Remove"
+                aria-label="Remove ${escapeHTML(item.name)}">
 
                 <i class="fa-solid fa-trash"></i>
 
@@ -1097,19 +1283,22 @@ function applyCoupon() {
 
 function toggleWishlist(itemId) {
 
+    const normalizedItemId =
+        Number(itemId);
+
     const item =
         menuItems.find(
-            product => product.id === itemId
+            product => product.id === normalizedItemId
         );
 
     if (!item) return;
 
     const index =
-        wishlist.indexOf(itemId);
+        wishlist.indexOf(normalizedItemId);
 
     if (index === -1) {
 
-        wishlist.push(itemId);
+        wishlist.push(normalizedItemId);
 
         showToast(
             `${item.name} added to wishlist!`
@@ -1175,9 +1364,13 @@ function updateWishlistUI() {
 
     wishlist.forEach(id => {
 
+        const normalizedId =
+            Number(id);
+
         const item =
             menuItems.find(
-                product => product.id === id
+                product =>
+                    product.id === normalizedId
             );
 
         if (!item) return;
@@ -1208,6 +1401,7 @@ function updateWishlistUI() {
             <div class="wishlist-item-actions">
 
                 <button
+                    type="button"
                     onclick="addToCart(${item.id})"
                     title="Add to Cart">
 
@@ -1216,6 +1410,7 @@ function updateWishlistUI() {
                 </button>
 
                 <button
+                    type="button"
                     onclick="toggleWishlist(${item.id})"
                     title="Remove">
 
@@ -1453,6 +1648,9 @@ function processOrder(event) {
 
     saveUserData();
 
+
+    /* ---------------- CLEAR CART ---------------- */
+
     cart = [];
 
     currentDiscount = 0;
@@ -1462,6 +1660,9 @@ function processOrder(event) {
     updateCartUI();
 
     renderOrderHistory();
+
+
+    /* ---------------- CLOSE CHECKOUT ---------------- */
 
     closeCheckoutModal();
 
@@ -1474,6 +1675,7 @@ function processOrder(event) {
 
     }
 
+
     showToast(
         `Order ${orderId} placed successfully!`
     );
@@ -1481,6 +1683,7 @@ function processOrder(event) {
     playCustomSound();
 
     startOrderTrackingSimulation();
+
 
     const sidebar =
         document.getElementById("cart-sidebar");
@@ -1490,6 +1693,7 @@ function processOrder(event) {
         sidebar.classList.remove("open");
 
     }
+
 
     const tracking =
         document.getElementById("tracking-section");
@@ -2509,6 +2713,17 @@ function loadSavedData() {
     }
 
 
+    /*
+       IMPORTANT:
+       Purani LocalStorage cart values ko clean aur
+       numeric IDs / quantities mein convert karte hain.
+    */
+
+    normalizeCartData();
+
+    saveCartToStorage();
+
+
     try {
 
         const savedWishlist =
@@ -2530,6 +2745,31 @@ function loadSavedData() {
     }
 
 
+    /*
+       Wishlist IDs ko bhi numbers mein normalize karna.
+    */
+
+    if (Array.isArray(wishlist)) {
+
+        wishlist =
+            wishlist
+                .map(id => Number(id))
+                .filter(
+                    id =>
+                        menuItems.some(
+                            item => item.id === id
+                        )
+                );
+
+    } else {
+
+        wishlist = [];
+
+    }
+
+    saveWishlistToStorage();
+
+
     try {
 
         const savedOrders =
@@ -2545,6 +2785,13 @@ function loadSavedData() {
         }
 
     } catch {
+
+        orderHistory = [];
+
+    }
+
+
+    if (!Array.isArray(orderHistory)) {
 
         orderHistory = [];
 
