@@ -1,440 +1,1877 @@
 /* =========================================================
-   FOODIE EXPRESS - SCRIPT.JS
-   ========================================================= */
+   FOODIE EXPRESS
+   COMPLETE JAVASCRIPT
+========================================================= */
 
-/* ==================== DATA ==================== */
-
-const menuItems = [
-    {
-        id: 1,
-        name: "Classic Beef Burger",
-        category: "Burgers",
-        price: 699,
-        rating: 4.9,
-        image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80",
-        description: "Juicy beef patty, fresh lettuce, cheese and our signature sauce."
-    },
-    {
-        id: 2,
-        name: "Zinger Burger",
-        category: "Burgers",
-        price: 599,
-        rating: 4.8,
-        image: "https://images.unsplash.com/photo-1606755962773-d324e0a13086?auto=format&fit=crop&w=900&q=80",
-        description: "Crispy chicken fillet with lettuce, mayo and a spicy kick."
-    },
-    {
-        id: 3,
-        name: "Double Cheese Burger",
-        category: "Burgers",
-        price: 849,
-        rating: 4.9,
-        image: "https://images.unsplash.com/photo-1553979459-d2229ba7433b?auto=format&fit=crop&w=900&q=80",
-        description: "Two juicy beef patties layered with melted cheese and special sauce."
-    },
-    {
-        id: 4,
-        name: "Pepperoni Pizza",
-        category: "Pizza",
-        price: 1299,
-        rating: 4.9,
-        image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=900&q=80",
-        description: "Classic pizza topped with pepperoni, mozzarella and rich tomato sauce."
-    },
-    {
-        id: 5,
-        name: "Chicken Tikka Pizza",
-        category: "Pizza",
-        price: 1399,
-        rating: 4.8,
-        image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=900&q=80",
-        description: "Loaded with spicy chicken tikka, mozzarella and fresh vegetables."
-    },
-    {
-        id: 6,
-        name: "Chicken Biryani",
-        category: "Desi",
-        price: 449,
-        rating: 4.9,
-        image: "https://images.unsplash.com/photo-1563379091339-03246963d29c?auto=format&fit=crop&w=900&q=80",
-        description: "Aromatic basmati rice cooked with tender chicken and traditional spices."
-    },
-    {
-        id: 7,
-        name: "Chicken Karahi",
-        category: "Desi",
-        price: 1199,
-        rating: 4.8,
-        image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=900&q=80",
-        description: "Traditional chicken karahi cooked with tomatoes, green chilies and spices."
-    },
-    {
-        id: 8,
-        name: "Chicken Seekh Kebab",
-        category: "BBQ",
-        price: 799,
-        rating: 4.8,
-        image: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=900&q=80",
-        description: "Smoky minced chicken kebabs grilled to perfection."
-    },
-    {
-        id: 9,
-        name: "Chicken Tikka",
-        category: "BBQ",
-        price: 749,
-        rating: 4.9,
-        image: "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=900&q=80",
-        description: "Tender marinated chicken grilled with aromatic spices."
-    },
-    {
-        id: 10,
-        name: "Mango Shake",
-        category: "Drinks",
-        price: 349,
-        rating: 4.7,
-        image: "https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?auto=format&fit=crop&w=900&q=80",
-        description: "Creamy mango shake made with fresh mangoes and chilled milk."
-    },
-    {
-        id: 11,
-        name: "Chocolate Shake",
-        category: "Drinks",
-        price: 399,
-        rating: 4.8,
-        image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=900&q=80",
-        description: "Rich chocolate shake topped with creamy foam."
-    },
-    {
-        id: 12,
-        name: "Chocolate Lava Cake",
-        category: "Desserts",
-        price: 499,
-        rating: 4.9,
-        image: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=900&q=80",
-        description: "Warm chocolate cake with a delicious molten center."
-    }
-];
+"use strict";
 
 
-/* ==================== GLOBAL STATE ==================== */
+/* =========================================================
+   GLOBAL VARIABLES
+========================================================= */
 
-let cart = JSON.parse(localStorage.getItem("foodieCart")) || [];
-let wishlist = JSON.parse(localStorage.getItem("foodieWishlist")) || [];
-let orderHistory = JSON.parse(localStorage.getItem("foodieOrderHistory")) || [];
-let currentDiscount = Number(localStorage.getItem("foodieDiscount")) || 0;
-let currentCurrency = localStorage.getItem("foodieCurrency") || "PKR";
-let currentTheme = localStorage.getItem("foodieTheme") || "light";
-let currentLanguage = localStorage.getItem("foodieLanguage") || "en";
+let currentCategory = "All";
+let currentCurrency = "PKR";
+let currentLanguage = "en";
 
-const currencyRates = {
-    PKR: 1,
-    USD: 0.00358,
-    GBP: 0.00266,
-    AED: 0.01315
-};
+let cart = [];
+let wishlist = [];
+let orderHistory = [];
 
-const currencySymbols = {
-    PKR: "Rs.",
-    USD: "$",
-    GBP: "£",
-    AED: "AED "
-};
+let currentDiscount = 0;
+let currentUser = null;
+
+let loyaltyCoins = 0;
+let totalOrders = 0;
+
+let trackingTimer = null;
 
 const adminWhatsAppNumber = "923312969666";
 
 
-/* ==================== INITIALIZATION ==================== */
+/* =========================================================
+   FOOD MENU
+========================================================= */
 
-document.addEventListener("DOMContentLoaded", () => {
-    applyTheme();
-    initializeSelectors();
-    renderMenu(menuItems);
-    renderCart();
-    renderWishlist();
-    renderDashboard();
-    updateTrackingFromHistory();
-    setReservationMinDate();
+const menuItems = [
 
-    document.addEventListener("keydown", handleGlobalKeydown);
-});
+    /* ---------------- FAST FOOD ---------------- */
+
+    {
+        id: 1,
+        name: "Classic Zinger Burger",
+        category: "Fast Food",
+        price: 650,
+        image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=85",
+        description: "Crispy chicken fillet with fresh lettuce, cheese and signature sauce.",
+        badge: "Popular"
+    },
+
+    {
+        id: 2,
+        name: "Loaded Beef Burger",
+        category: "Fast Food",
+        price: 850,
+        image: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=900&q=85",
+        description: "Juicy beef patty loaded with cheese, caramelized onions and special sauce.",
+        badge: "Chef Choice"
+    },
+
+    {
+        id: 3,
+        name: "Cheesy Chicken Pizza",
+        category: "Fast Food",
+        price: 1200,
+        image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=900&q=85",
+        description: "Freshly baked pizza topped with chicken, mozzarella and delicious herbs.",
+        badge: "Best Seller"
+    },
+
+    {
+        id: 4,
+        name: "Crispy Chicken Wings",
+        category: "Fast Food",
+        price: 750,
+        image: "https://images.unsplash.com/photo-1527477396000-e27163b481c2?auto=format&fit=crop&w=900&q=85",
+        description: "Golden crispy wings tossed in your choice of delicious sauce.",
+        badge: "Hot"
+    },
+
+    {
+        id: 5,
+        name: "Loaded Cheese Fries",
+        category: "Fast Food",
+        price: 450,
+        image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=900&q=85",
+        description: "Crispy fries covered with creamy cheese and flavorful toppings.",
+        badge: "Popular"
+    },
+
+    {
+        id: 6,
+        name: "Chicken Shawarma",
+        category: "Fast Food",
+        price: 420,
+        image: "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=900&q=85",
+        description: "Tender chicken, fresh vegetables and creamy garlic sauce wrapped together.",
+        badge: "Value"
+    },
 
 
-/* ==================== THEME ==================== */
+    /* ---------------- DESI CUISINE ---------------- */
 
-function applyTheme() {
-    const html = document.documentElement;
+    {
+        id: 7,
+        name: "Chicken Biryani",
+        category: "Desi Cuisine",
+        price: 550,
+        image: "https://images.unsplash.com/photo-1563379091339-03246963d96c?auto=format&fit=crop&w=900&q=85",
+        description: "Aromatic basmati rice cooked with tender chicken and traditional spices.",
+        badge: "Desi Favorite"
+    },
 
-    html.setAttribute("data-theme", currentTheme);
+    {
+        id: 8,
+        name: "Chicken Karahi",
+        category: "Desi Cuisine",
+        price: 1100,
+        image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=900&q=85",
+        description: "Traditional chicken karahi prepared with tomatoes, green chilies and spices.",
+        badge: "Chef Special"
+    },
 
-    const themeButton = document.querySelector(
-        '.nav-icon-btn[onclick="toggleTheme()"] i'
-    );
+    {
+        id: 9,
+        name: "Mutton Karahi",
+        category: "Desi Cuisine",
+        price: 1600,
+        image: "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=85",
+        description: "Tender mutton cooked slowly in a rich traditional karahi masala.",
+        badge: "Premium"
+    },
 
-    if (themeButton) {
-        themeButton.className =
-            currentTheme === "dark"
-                ? "fa-solid fa-sun"
-                : "fa-solid fa-moon";
+    {
+        id: 10,
+        name: "Chicken Handi",
+        category: "Desi Cuisine",
+        price: 1250,
+        image: "https://images.unsplash.com/photo-1631292784640-2b24be784d5d?auto=format&fit=crop&w=900&q=85",
+        description: "Creamy chicken handi with aromatic spices and a rich traditional flavor.",
+        badge: "Popular"
+    },
+
+    {
+        id: 11,
+        name: "Daal Makhni",
+        category: "Desi Cuisine",
+        price: 650,
+        image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=900&q=85",
+        description: "Slow-cooked creamy lentils finished with butter and aromatic spices.",
+        badge: "Classic"
+    },
+
+    {
+        id: 12,
+        name: "Butter Naan",
+        category: "Desi Cuisine",
+        price: 150,
+        image: "https://images.unsplash.com/photo-1601050690117-94f5f6fa8bd7?auto=format&fit=crop&w=900&q=85",
+        description: "Soft traditional naan brushed with butter and served hot.",
+        badge: "Fresh"
+    },
+
+
+    /* ---------------- BBQ & GRILLS ---------------- */
+
+    {
+        id: 13,
+        name: "Chicken Tikka",
+        category: "BBQ & Grills",
+        price: 700,
+        image: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=900&q=85",
+        description: "Tender chicken pieces marinated in spices and grilled over charcoal.",
+        badge: "BBQ Favorite"
+    },
+
+    {
+        id: 14,
+        name: "Seekh Kebab",
+        category: "BBQ & Grills",
+        price: 750,
+        image: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=900&q=85",
+        description: "Juicy minced meat kebabs seasoned with traditional herbs and spices.",
+        badge: "Popular"
+    },
+
+    {
+        id: 15,
+        name: "Malai Boti",
+        category: "BBQ & Grills",
+        price: 950,
+        image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=85",
+        description: "Creamy marinated chicken pieces grilled to perfection.",
+        badge: "Premium"
+    },
+
+    {
+        id: 16,
+        name: "BBQ Platter",
+        category: "BBQ & Grills",
+        price: 2200,
+        image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=85",
+        description: "A generous platter featuring chicken tikka, kebabs, boti and grilled sides.",
+        badge: "Family"
+    },
+
+    {
+        id: 17,
+        name: "Grilled Chicken",
+        category: "BBQ & Grills",
+        price: 1050,
+        image: "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=900&q=85",
+        description: "Juicy grilled chicken seasoned with herbs and served with fresh sides.",
+        badge: "Healthy"
+    },
+
+    {
+        id: 18,
+        name: "Grilled Beef Steak",
+        category: "BBQ & Grills",
+        price: 1850,
+        image: "https://images.unsplash.com/photo-1546964124-0cce460f38ef?auto=format&fit=crop&w=900&q=85",
+        description: "Premium beef steak grilled to your preferred level with savory seasoning.",
+        badge: "Premium"
+    },
+
+
+    /* ---------------- DRINKS ---------------- */
+
+    {
+        id: 19,
+        name: "Mango Shake",
+        category: "Drinks & Shakes",
+        price: 350,
+        image: "https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?auto=format&fit=crop&w=900&q=85",
+        description: "Creamy mango shake prepared with fresh mangoes and chilled milk.",
+        badge: "Summer"
+    },
+
+    {
+        id: 20,
+        name: "Chocolate Shake",
+        category: "Drinks & Shakes",
+        price: 400,
+        image: "https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=900&q=85",
+        description: "Rich chocolate shake topped with creamy foam and chocolate flavor.",
+        badge: "Sweet"
+    },
+
+    {
+        id: 21,
+        name: "Strawberry Shake",
+        category: "Drinks & Shakes",
+        price: 400,
+        image: "https://images.unsplash.com/photo-1553787499-6f9133860275?auto=format&fit=crop&w=900&q=85",
+        description: "Fresh strawberry shake blended into a smooth and creamy drink.",
+        badge: "Fresh"
+    },
+
+    {
+        id: 22,
+        name: "Fresh Lime",
+        category: "Drinks & Shakes",
+        price: 250,
+        image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=900&q=85",
+        description: "Refreshing chilled lime drink with a perfect sweet and sour balance.",
+        badge: "Refreshing"
+    },
+
+    {
+        id: 23,
+        name: "Cold Coffee",
+        category: "Drinks & Shakes",
+        price: 420,
+        image: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=900&q=85",
+        description: "Smooth chilled coffee blended with milk and a touch of sweetness.",
+        badge: "Favorite"
+    },
+
+    {
+        id: 24,
+        name: "Mint Margarita",
+        category: "Drinks & Shakes",
+        price: 300,
+        image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=900&q=85",
+        description: "Cool mint and citrus drink served ice cold for maximum refreshment.",
+        badge: "Cool"
     }
-}
 
-function toggleTheme() {
-    currentTheme = currentTheme === "dark" ? "light" : "dark";
-
-    localStorage.setItem("foodieTheme", currentTheme);
-
-    applyTheme();
-}
+];
 
 
-/* ==================== SELECTORS ==================== */
+/* =========================================================
+   CURRENCY
+========================================================= */
 
-function initializeSelectors() {
-    const currencySelector =
-        document.getElementById("currency-selector");
+const currencyRates = {
+    PKR: 1,
+    USD: 0.00358,
+    GBP: 0.00265,
+    AED: 0.01315
+};
 
-    const languageSelector =
-        document.getElementById("language-selector");
-
-    if (currencySelector) {
-        currencySelector.value = currentCurrency;
-    }
-
-    if (languageSelector) {
-        languageSelector.value = currentLanguage;
-    }
-}
-
-function changeCurrency() {
-    const selector = document.getElementById("currency-selector");
-
-    if (!selector) return;
-
-    currentCurrency = selector.value;
-
-    localStorage.setItem(
-        "foodieCurrency",
-        currentCurrency
-    );
-
-    renderMenu(menuItems);
-    renderCart();
-    renderWishlist();
-    renderDashboard();
-
-    const checkoutScreen =
-        document.getElementById("checkout-screen");
-
-    if (
-        checkoutScreen &&
-        !checkoutScreen.classList.contains("hidden")
-    ) {
-        renderCheckoutSummary();
-    }
-}
-
-function changeLanguage() {
-    const selector = document.getElementById("language-selector");
-
-    if (!selector) return;
-
-    currentLanguage = selector.value;
-
-    localStorage.setItem(
-        "foodieLanguage",
-        currentLanguage
-    );
-
-    showToast(
-        currentLanguage === "ur"
-            ? "Language updated."
-            : "Language updated.",
-        "success"
-    );
-}
+const currencySymbols = {
+    PKR: "PKR",
+    USD: "$",
+    GBP: "£",
+    AED: "AED"
+};
 
 
-/* ==================== CURRENCY ==================== */
+/* =========================================================
+   FORMAT PRICE
+========================================================= */
 
 function formatPrice(price) {
+
     const converted =
-        Number(price || 0) *
-        (currencyRates[currentCurrency] || 1);
+        price * (currencyRates[currentCurrency] || 1);
 
     if (currentCurrency === "PKR") {
-        return `${currencySymbols[currentCurrency]} ${Math.round(converted).toLocaleString()}`;
+        return `PKR ${Math.round(converted).toLocaleString()}`;
+    }
+
+    if (currentCurrency === "AED") {
+        return `AED ${converted.toFixed(2)}`;
     }
 
     return `${currencySymbols[currentCurrency]}${converted.toFixed(2)}`;
 }
 
 
-/* ==================== MENU ==================== */
+/* =========================================================
+   LOCAL STORAGE
+========================================================= */
+
+function saveCartToStorage() {
+
+    localStorage.setItem(
+        "foodieExpressCart",
+        JSON.stringify(cart)
+    );
+}
+
+
+function saveWishlistToStorage() {
+
+    localStorage.setItem(
+        "foodieExpressWishlist",
+        JSON.stringify(wishlist)
+    );
+}
+
+
+function saveOrderHistory() {
+
+    localStorage.setItem(
+        "foodieExpressOrders",
+        JSON.stringify(orderHistory)
+    );
+}
+
+
+function saveUserData() {
+
+    localStorage.setItem(
+        "foodieExpressUser",
+        JSON.stringify(currentUser)
+    );
+
+    localStorage.setItem(
+        "foodieExpressCoins",
+        String(loyaltyCoins)
+    );
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(message, type = "success") {
+
+    const container =
+        document.getElementById("toast-container");
+
+    if (!container) {
+        alert(message);
+        return;
+    }
+
+    const toast =
+        document.createElement("div");
+
+    toast.className =
+        `toast ${type}`;
+
+    toast.textContent = message;
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+
+        toast.remove();
+
+    }, 3100);
+}
+
+
+/* =========================================================
+   SOUND
+========================================================= */
+
+function playCustomSound() {
+
+    try {
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+        if (!AudioContext) return;
+
+        const audioContext =
+            new AudioContext();
+
+        const oscillator =
+            audioContext.createOscillator();
+
+        const gain =
+            audioContext.createGain();
+
+        oscillator.type = "sine";
+
+        oscillator.frequency.setValueAtTime(
+            700,
+            audioContext.currentTime
+        );
+
+        gain.gain.setValueAtTime(
+            0.08,
+            audioContext.currentTime
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.001,
+            audioContext.currentTime + 0.15
+        );
+
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+
+        oscillator.start();
+
+        oscillator.stop(
+            audioContext.currentTime + 0.15
+        );
+
+    } catch (error) {
+
+        console.log("Audio unavailable.");
+
+    }
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+function searchMenu(value) {
+
+    const query =
+        String(value || "")
+            .trim()
+            .toLowerCase();
+
+    const container =
+        document.getElementById("menu-container");
+
+    const noResults =
+        document.getElementById("no-results");
+
+    if (!container) return;
+
+    const filtered =
+        menuItems.filter(item => {
+
+            const matchesSearch =
+                item.name.toLowerCase().includes(query) ||
+                item.category.toLowerCase().includes(query) ||
+                item.description.toLowerCase().includes(query);
+
+            const matchesCategory =
+                currentCategory === "All" ||
+                item.category === currentCategory;
+
+            return matchesSearch && matchesCategory;
+
+        });
+
+    renderMenu(filtered);
+
+    if (noResults) {
+
+        noResults.classList.toggle(
+            "hidden",
+            filtered.length !== 0
+        );
+
+    }
+}
+
+
+/* =========================================================
+   FILTER MENU
+========================================================= */
+
+function filterMenu(category, clickedButton = null) {
+
+    currentCategory = category;
+
+    document
+        .querySelectorAll(".filter-btn")
+        .forEach(button => {
+            button.classList.remove("active");
+        });
+
+    if (clickedButton) {
+
+        clickedButton.classList.add("active");
+
+    } else {
+
+        document
+            .querySelectorAll(".filter-btn")
+            .forEach(button => {
+
+                const text =
+                    button.textContent
+                        .trim()
+                        .toLowerCase();
+
+                if (
+                    category === "All" &&
+                    text.includes("all")
+                ) {
+                    button.classList.add("active");
+                }
+
+                if (
+                    category !== "All" &&
+                    text.toLowerCase().includes(
+                        category.split(" ")[0].toLowerCase()
+                    )
+                ) {
+                    button.classList.add("active");
+                }
+
+            });
+
+    }
+
+    const searchInput =
+        document.getElementById("search-input");
+
+    const searchValue =
+        searchInput
+            ? searchInput.value
+            : "";
+
+    searchMenu(searchValue);
+}
+
+
+/* =========================================================
+   RENDER MENU
+========================================================= */
 
 function renderMenu(items = menuItems) {
-    const menuGrid = document.getElementById("menu-grid");
 
-    if (!menuGrid) return;
+    const container =
+        document.getElementById("menu-container");
+
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    items.forEach((item, index) => {
+
+        const isLiked =
+            wishlist.includes(item.id);
+
+        const card =
+            document.createElement("article");
+
+        card.className = "menu-card";
+
+        card.style.animationDelay =
+            `${index * 0.04}s`;
+
+        card.innerHTML = `
+            <div class="menu-image">
+
+                <img
+                    src="${item.image}"
+                    alt="${escapeHTML(item.name)}"
+                    loading="lazy"
+                    onerror="this.src='https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80';">
+
+                <span class="menu-badge">
+                    ${escapeHTML(item.badge)}
+                </span>
+
+                <button
+                    class="wishlist-btn ${isLiked ? "active" : ""}"
+                    onclick="toggleWishlist(${item.id})"
+                    title="Wishlist">
+
+                    <i class="${isLiked ? "fa-solid" : "fa-regular"} fa-heart"></i>
+
+                </button>
+
+            </div>
+
+            <div class="menu-info">
+
+                <span class="menu-category">
+                    ${escapeHTML(item.category)}
+                </span>
+
+                <h3>
+                    ${escapeHTML(item.name)}
+                </h3>
+
+                <p>
+                    ${escapeHTML(item.description)}
+                </p>
+
+                <div class="menu-bottom">
+
+                    <strong class="menu-price">
+                        ${formatPrice(item.price)}
+                    </strong>
+
+                    <button
+                        class="add-cart-btn"
+                        onclick="addToCart(${item.id})">
+
+                        <i class="fa-solid fa-cart-plus"></i>
+                        Add
+
+                    </button>
+
+                </div>
+
+            </div>
+        `;
+
+        card.addEventListener(
+            "dblclick",
+            () => openItemDetail(item.id)
+        );
+
+        container.appendChild(card);
+
+    });
+
+}/* =========================================================
+   HTML ESCAPE
+========================================================= */
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* =========================================================
+   ITEM DETAIL
+========================================================= */
+
+function openItemDetail(itemId) {
+
+    const item =
+        menuItems.find(
+            product => product.id === itemId
+        );
+
+    if (!item) return;
+
+    const modal =
+        document.getElementById("item-detail-modal");
+
+    if (!modal) return;
+
+    const image =
+        document.getElementById("detail-image");
+
+    const name =
+        document.getElementById("detail-name");
+
+    const category =
+        document.getElementById("detail-category");
+
+    const description =
+        document.getElementById("detail-description");
+
+    const price =
+        document.getElementById("detail-price");
+
+    const rating =
+        document.getElementById("detail-rating");
+
+    const quantityInput =
+        document.getElementById("detail-quantity");
+
+    const addButton =
+        document.getElementById("detail-add-btn");
+
+    if (image) {
+        image.src = item.image;
+        image.alt = item.name;
+    }
+
+    if (name) {
+        name.textContent = item.name;
+    }
+
+    if (category) {
+        category.textContent = item.category;
+    }
+
+    if (description) {
+        description.textContent =
+            item.description || "Delicious food made with fresh ingredients.";
+    }
+
+    if (price) {
+        price.textContent =
+            formatPrice(item.price);
+    }
+
+    if (rating) {
+        rating.innerHTML =
+            `
+            <span class="stars">
+                ${generateStars(item.rating || 5)}
+            </span>
+            <span>
+                ${item.rating || 5}
+            </span>
+            `;
+    }
+
+    if (quantityInput) {
+        quantityInput.value = 1;
+    }
+
+    if (addButton) {
+
+        addButton.onclick = () => {
+
+            const quantity =
+                parseInt(
+                    quantityInput?.value || 1,
+                    10
+                );
+
+            addToCart(
+                item.id,
+                quantity
+            );
+
+            closeItemDetail();
+
+        };
+    }
+
+    modal.classList.remove("hidden");
+
+    document.body.classList.add("no-scroll");
+}
+
+
+/* =========================================================
+   CLOSE ITEM DETAIL
+========================================================= */
+
+function closeItemDetail() {
+
+    const modal =
+        document.getElementById("item-detail-modal");
+
+    if (modal) {
+        modal.classList.add("hidden");
+    }
+
+    document.body.classList.remove("no-scroll");
+}
+
+
+/* =========================================================
+   DETAIL QUANTITY
+========================================================= */
+
+function increaseDetailQuantity() {
+
+    const input =
+        document.getElementById("detail-quantity");
+
+    if (!input) return;
+
+    let value =
+        parseInt(input.value || 1, 10);
+
+    value++;
+
+    input.value = value;
+}
+
+
+function decreaseDetailQuantity() {
+
+    const input =
+        document.getElementById("detail-quantity");
+
+    if (!input) return;
+
+    let value =
+        parseInt(input.value || 1, 10);
+
+    if (value > 1) {
+        value--;
+    }
+
+    input.value = value;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+function searchMenu() {
+
+    const searchInput =
+        document.getElementById("search-input");
+
+    if (!searchInput) return;
+
+    const searchTerm =
+        searchInput.value
+            .trim()
+            .toLowerCase();
+
+    if (!searchTerm) {
+
+        renderMenu(
+            currentCategory,
+            currentSort
+        );
+
+        return;
+    }
+
+    const results =
+        menuItems.filter(item => {
+
+            const name =
+                String(item.name || "")
+                    .toLowerCase();
+
+            const category =
+                String(item.category || "")
+                    .toLowerCase();
+
+            const description =
+                String(item.description || "")
+                    .toLowerCase();
+
+            return (
+                name.includes(searchTerm) ||
+                category.includes(searchTerm) ||
+                description.includes(searchTerm)
+            );
+        });
+
+    renderFilteredMenu(results);
+}
+
+
+/* =========================================================
+   FILTERED MENU
+========================================================= */
+
+function renderFilteredMenu(items) {
+
+    const container =
+        document.getElementById("menu-grid");
+
+    if (!container) return;
+
+    container.innerHTML = "";
 
     if (items.length === 0) {
-        menuGrid.innerHTML = `
-            <div class="menu-no-results">
+
+        container.innerHTML = `
+            <div class="no-results">
+                <i class="fa-solid fa-magnifying-glass"></i>
                 <h3>No food found</h3>
-                <p>Try another search or category.</p>
+                <p>Try searching for another dish.</p>
             </div>
         `;
 
         return;
     }
 
-    menuGrid.innerHTML = items.map(item => {
+    items.forEach(item => {
 
-        const isWishlisted =
-            wishlist.some(food => food.id === item.id);
+        const card =
+            createFoodCard(item);
 
-        return `
-            <article class="food-card">
+        container.insertAdjacentHTML(
+            "beforeend",
+            card
+        );
 
-                <div class="food-card-image">
-
-                    <img
-                        src="${item.image}"
-                        alt="${escapeHTML(item.name)}"
-                        loading="lazy"
-                        onerror="this.src='https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80';"
-                    >
-
-                    <button
-                        class="wishlist-btn ${isWishlisted ? "active" : ""}"
-                        type="button"
-                        onclick="toggleWishlist(${item.id})"
-                        title="Add to favorites"
-                    >
-                        <i class="${isWishlisted ? "fa-solid" : "fa-regular"} fa-heart"></i>
-                    </button>
-
-                </div>
-
-
-                <div class="food-card-body">
-
-                    <span class="food-card-category">
-                        ${escapeHTML(item.category)}
-                    </span>
-
-                    <h3>
-                        ${escapeHTML(item.name)}
-                    </h3>
-
-                    <p>
-                        ${escapeHTML(item.description)}
-                    </p>
-
-
-                    <div class="food-card-footer">
-
-                        <div>
-
-                            <div class="food-price">
-                                ${formatPrice(item.price)}
-                            </div>
-
-                            <div class="food-rating">
-                                <i class="fa-solid fa-star"></i>
-                                ${item.rating}
-                            </div>
-
-                        </div>
-
-
-                        <div style="display:flex;gap:7px;">
-
-                            <button
-                                class="add-cart-btn"
-                                type="button"
-                                onclick="openItemDetailModal(${item.id})"
-                                title="View details"
-                            >
-                                <i class="fa-solid fa-eye"></i>
-                            </button>
-
-                            <button
-                                class="add-cart-btn"
-                                type="button"
-                                onclick="addToCart(${item.id})"
-                                title="Add to cart"
-                            >
-                                <i class="fa-solid fa-plus"></i>
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </article>
-        `;
-    }).join("");
-}
-
-
-function filterMenu(category, button) {
-    document
-        .querySelectorAll(".category-tab")
-        .forEach(tab => tab.classList.remove("active"));
-
-    if (button) {
-        button.classList.add("active");
-    }
-
-    if (category === "all") {
-        renderMenu(menuItems);
-        return;
-    }
-
-    const filtered = menuItems.filter(
-        item => item.category === category
-    );
-
-    renderMenu(filtered);
-}
-
-
-function searchMenu(value) {
-    const query = String(value || "").trim().toLowerCase();
-
-    if (!query) {
-        renderMenu(menuItems);
-        return;
-    }
-
-    const results = menuItems.filter(item =>
-        item.name.toLowerCase().includes(query) ||
-        item.category.toLowerCase().includes(query) ||
-        item.description.toLowerCase().includes(query)
-    );
-
-    renderMenu(results);
-}
-
-
-function submitSearch(event) {
-    event.preventDefault();
-
-    const input = document.getElementById("search-input");
-
-    if (!input) return;
-
-    searchMenu(input.value);
-
-    document.getElementById("menu")?.scrollIntoView({
-        behavior: "smooth"
     });
 }
 
 
+/* =========================================================
+   SORT MENU
+========================================================= */
+
+function sortMenu(sortType) {
+
+    currentSort = sortType;
+
+    renderMenu(
+        currentCategory,
+        currentSort
+    );
+}
+
+
+/* =========================================================
+   CATEGORY FILTER
+========================================================= */
+
+function filterByCategory(category) {
+
+    currentCategory = category;
+
+    document
+        .querySelectorAll(".category-btn")
+        .forEach(button => {
+
+            button.classList.remove("active");
+
+            if (
+                button.dataset.category === category
+            ) {
+                button.classList.add("active");
+            }
+
+        });
+
+    renderMenu(
+        currentCategory,
+        currentSort
+    );
+}
+
+
+/* =========================================================
+   CART
+========================================================= */
+
+function addToCart(itemId, quantity = 1) {
+
+    const item =
+        menuItems.find(
+            product => product.id === itemId
+        );
+
+    if (!item) return;
+
+    const existingItem =
+        cart.find(
+            product => product.id === itemId
+        );
+
+    if (existingItem) {
+
+        existingItem.quantity += quantity;
+
+    } else {
+
+        cart.push({
+            ...item,
+            quantity
+        });
+
+    }
+
+    saveCartToStorage();
+
+    updateCartUI();
+
+    showToast(
+        `${item.name} added to cart!`
+    );
+
+    playCustomSound();
+}
+
+
+/* =========================================================
+   REMOVE FROM CART
+========================================================= */
+
+function removeFromCart(itemId) {
+
+    const index =
+        cart.findIndex(
+            item => item.id === itemId
+        );
+
+    if (index === -1) return;
+
+    const item =
+        cart[index];
+
+    cart.splice(index, 1);
+
+    saveCartToStorage();
+
+    updateCartUI();
+
+    showToast(
+        `${item.name} removed from cart.`,
+        "error"
+    );
+}
+
+
+/* =========================================================
+   CHANGE CART QUANTITY
+========================================================= */
+
+function changeCartQuantity(itemId, change) {
+
+    const item =
+        cart.find(
+            product => product.id === itemId
+        );
+
+    if (!item) return;
+
+    item.quantity += change;
+
+    if (item.quantity <= 0) {
+
+        removeFromCart(itemId);
+
+        return;
+    }
+
+    saveCartToStorage();
+
+    updateCartUI();
+}
+
+
+/* =========================================================
+   UPDATE CART UI
+========================================================= */
+
+function updateCartUI() {
+
+    const cartCount =
+        document.getElementById("cart-count");
+
+    const cartItems =
+        document.getElementById("cart-items");
+
+    const cartSubtotal =
+        document.getElementById("cart-subtotal");
+
+    const cartDiscount =
+        document.getElementById("cart-discount");
+
+    const cartTotal =
+        document.getElementById("cart-total");
+
+    let totalQuantity = 0;
+
+    let subtotal = 0;
+
+    cart.forEach(item => {
+
+        totalQuantity += item.quantity;
+
+        subtotal +=
+            item.price * item.quantity;
+
+    });
+
+    const discount =
+        subtotal *
+        (currentDiscount / 100);
+
+    const total =
+        Math.max(
+            0,
+            subtotal - discount
+        );
+
+    if (cartCount) {
+
+        cartCount.textContent =
+            totalQuantity;
+
+    }
+
+    if (cartSubtotal) {
+
+        cartSubtotal.textContent =
+            formatPrice(subtotal);
+
+    }
+
+    if (cartDiscount) {
+
+        cartDiscount.textContent =
+            currentDiscount > 0
+                ? `-${formatPrice(discount)}`
+                : formatPrice(0);
+
+    }
+
+    if (cartTotal) {
+
+        cartTotal.textContent =
+            formatPrice(total);
+
+    }
+
+    if (!cartItems) return;
+
+    cartItems.innerHTML = "";
+
+    if (cart.length === 0) {
+
+        cartItems.innerHTML = `
+            <div class="empty-cart">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <h3>Your cart is empty</h3>
+                <p>Add some delicious food to get started.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+    cart.forEach(item => {
+
+        const cartItem =
+            document.createElement("div");
+
+        cartItem.className =
+            "cart-item";
+
+        cartItem.innerHTML = `
+            <div class="cart-item-image">
+                <img
+                    src="${item.image}"
+                    alt="${escapeHTML(item.name)}"
+                    onerror="this.src='https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=300&q=80';">
+            </div>
+
+            <div class="cart-item-info">
+
+                <h4>
+                    ${escapeHTML(item.name)}
+                </h4>
+
+                <span class="cart-item-price">
+                    ${formatPrice(item.price)}
+                </span>
+
+                <div class="cart-item-controls">
+
+                    <button
+                        type="button"
+                        onclick="changeCartQuantity(${item.id}, -1)">
+                        -
+                    </button>
+
+                    <span>
+                        ${item.quantity}
+                    </span>
+
+                    <button
+                        type="button"
+                        onclick="changeCartQuantity(${item.id}, 1)">
+                        +
+                    </button>
+
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                class="remove-cart-item"
+                onclick="removeFromCart(${item.id})"
+                aria-label="Remove item">
+
+                <i class="fa-solid fa-trash"></i>
+
+            </button>
+        `;
+
+        cartItems.appendChild(cartItem);
+
+    });
+}
+
+
+/* =========================================================
+   OPEN CART
+========================================================= */
+
+function openCart() {
+
+    const sidebar =
+        document.getElementById("cart-sidebar");
+
+    const overlay =
+        document.getElementById("cart-overlay");
+
+    if (sidebar) {
+        sidebar.classList.add("open");
+    }
+
+    if (overlay) {
+        overlay.classList.add("open");
+    }
+
+    updateCartUI();
+}
+
+
+/* =========================================================
+   CLOSE CART
+========================================================= */
+
+function closeCart() {
+
+    const sidebar =
+        document.getElementById("cart-sidebar");
+
+    const overlay =
+        document.getElementById("cart-overlay");
+
+    if (sidebar) {
+        sidebar.classList.remove("open");
+    }
+
+    if (overlay) {
+        overlay.classList.remove("open");
+    }
+}/* =========================================================
+   HTML ESCAPE
+========================================================= */
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* =========================================================
+   ITEM DETAIL
+========================================================= */
+
+function openItemDetail(itemId) {
+
+    const item =
+        menuItems.find(
+            product => product.id === itemId
+        );
+
+    if (!item) return;
+
+    const modal =
+        document.getElementById("item-detail-modal");
+
+    if (!modal) return;
+
+    const image =
+        document.getElementById("detail-image");
+
+    const name =
+        document.getElementById("detail-name");
+
+    const category =
+        document.getElementById("detail-category");
+
+    const description =
+        document.getElementById("detail-description");
+
+    const price =
+        document.getElementById("detail-price");
+
+    const rating =
+        document.getElementById("detail-rating");
+
+    const quantityInput =
+        document.getElementById("detail-quantity");
+
+    const addButton =
+        document.getElementById("detail-add-btn");
+
+    if (image) {
+        image.src = item.image;
+        image.alt = item.name;
+    }
+
+    if (name) {
+        name.textContent = item.name;
+    }
+
+    if (category) {
+        category.textContent = item.category;
+    }
+
+    if (description) {
+        description.textContent =
+            item.description;
+    }
+
+    if (price) {
+        price.textContent =
+            formatPrice(item.price);
+    }
+
+    if (rating) {
+
+        rating.innerHTML = `
+            ${generateStars(item.rating)}
+            <span>${item.rating}</span>
+        `;
+
+    }
+
+    if (quantityInput) {
+        quantityInput.value = 1;
+    }
+
+    if (addButton) {
+
+        addButton.onclick = () => {
+
+            const quantity =
+                parseInt(
+                    quantityInput?.value || 1,
+                    10
+                );
+
+            addToCart(
+                item.id,
+                quantity
+            );
+
+            closeItemDetail();
+
+        };
+    }
+
+    modal.classList.remove("hidden");
+}
+
+
+/* =========================================================
+   CLOSE ITEM DETAIL
+========================================================= */
+
+function closeItemDetail() {
+
+    const modal =
+        document.getElementById("item-detail-modal");
+
+    if (!modal) return;
+
+    modal.classList.add("hidden");
+}
+
+
+/* =========================================================
+   DETAIL QUANTITY
+========================================================= */
+
+function increaseDetailQuantity() {
+
+    const input =
+        document.getElementById("detail-quantity");
+
+    if (!input) return;
+
+    let value =
+        parseInt(
+            input.value || 1,
+            10
+        );
+
+    value++;
+
+    input.value = value;
+}
+
+
+function decreaseDetailQuantity() {
+
+    const input =
+        document.getElementById("detail-quantity");
+
+    if (!input) return;
+
+    let value =
+        parseInt(
+            input.value || 1,
+            10
+        );
+
+    if (value > 1) {
+        value--;
+    }
+
+    input.value = value;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+function searchMenu() {
+
+    const input =
+        document.getElementById("search-input");
+
+    if (!input) return;
+
+    const searchTerm =
+        input.value
+            .trim()
+            .toLowerCase();
+
+    if (!searchTerm) {
+
+        renderMenu(
+            currentCategory,
+            currentSort
+        );
+
+        return;
+    }
+
+    const filteredItems =
+        menuItems.filter(item => {
+
+            return (
+                item.name
+                    .toLowerCase()
+                    .includes(searchTerm) ||
+
+                item.category
+                    .toLowerCase()
+                    .includes(searchTerm) ||
+
+                item.description
+                    .toLowerCase()
+                    .includes(searchTerm)
+            );
+
+        });
+
+    renderFilteredMenu(filteredItems);
+}
+
+
+/* =========================================================
+   FILTERED MENU
+========================================================= */
+
+function renderFilteredMenu(items) {
+
+    const container =
+        document.getElementById("menu-grid");
+
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    if (items.length === 0) {
+
+        container.innerHTML = `
+            <div class="no-results">
+                <i class="fa-solid fa-face-sad-tear"></i>
+                <h3>No items found</h3>
+                <p>Try searching for something else.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+    items.forEach(item => {
+
+        container.insertAdjacentHTML(
+            "beforeend",
+            createFoodCard(item)
+        );
+
+    });
+}
+
+
+/* =========================================================
+   SORT MENU
+========================================================= */
+
+function sortMenu(sortType) {
+
+    currentSort = sortType;
+
+    renderMenu(
+        currentCategory,
+        currentSort
+    );
+}
+
+
+/* =========================================================
+   CATEGORY FILTER
+========================================================= */
+
+function filterByCategory(category) {
+
+    currentCategory = category;
+
+    document
+        .querySelectorAll(".category-btn")
+        .forEach(button => {
+
+            button.classList.remove("active");
+
+            if (
+                button.dataset.category === category
+            ) {
+
+                button.classList.add("active");
+
+            }
+
+        });
+
+    renderMenu(
+        currentCategory,
+        currentSort
+    );
+}
+
+
+/* =========================================================
+   CART FUNCTIONS
+========================================================= */
+
+function addToCart(itemId, quantity = 1) {
+
+    const item =
+        menuItems.find(
+            product => product.id === itemId
+        );
+
+    if (!item) return;
+
+    const existingItem =
+        cart.find(
+            product => product.id === itemId
+        );
+
+    if (existingItem) {
+
+        existingItem.quantity += quantity;
+
+    } else {
+
+        cart.push({
+            ...item,
+            quantity
+        });
+
+    }
+
+    saveCartToStorage();
+
+    updateCartUI();
+
+    showToast(
+        `${item.name} added to cart!`
+    );
+}
+
+
+function removeFromCart(itemId) {
+
+    const index =
+        cart.findIndex(
+            item => item.id === itemId
+        );
+
+    if (index === -1) return;
+
+    cart.splice(index, 1);
+
+    saveCartToStorage();
+
+    updateCartUI();
+}
+
+
+function changeCartQuantity(
+    itemId,
+    change
+) {
+
+    const item =
+        cart.find(
+            product => product.id === itemId
+        );
+
+    if (!item) return;
+
+    item.quantity += change;
+
+    if (item.quantity <= 0) {
+
+        removeFromCart(itemId);
+
+        return;
+    }
+
+    saveCartToStorage();
+
+    updateCartUI();
+}
+/* =========================================================
+   FOODIE EXPRESS
+   CURRENT HTML COMPATIBILITY + REMAINING FUNCTIONS
+========================================================= */
+
+let currentSort = "default";
+let detailQuantity = 1;
+let activeDetailItem = null;
+
+/* =========================================================
+   FOOD CARD
+========================================================= */
+
+function createFoodCard(item) {
+    const isWishlisted = wishlist.some(id => Number(id) === Number(item.id));
+
+    return `
+        <article class="menu-card"
+            ondblclick="openItemDetail(${item.id})">
+
+            <div class="menu-image">
+                <img src="${escapeHTML(item.image)}"
+                     alt="${escapeHTML(item.name)}"
+                     loading="lazy">
+
+                ${item.badge ? `
+                    <span class="menu-badge">${escapeHTML(item.badge)}</span>
+                ` : ""}
+
+                <button class="wishlist-btn ${isWishlisted ? "active" : ""}"
+                    onclick="event.stopPropagation(); toggleWishlist(${item.id})"
+                    aria-label="Add to wishlist">
+                    <i class="${isWishlisted ? "fas" : "far"} fa-heart"></i>
+                </button>
+            </div>
+
+            <div class="menu-info">
+                <span class="menu-category">
+                    ${escapeHTML(item.category)}
+                </span>
+
+                <h3>${escapeHTML(item.name)}</h3>
+
+                <p>${escapeHTML(item.description)}</p>
+
+                <div class="menu-bottom">
+                    <span class="menu-price">
+                        ${formatPrice(item.price)}
+                    </span>
+
+                    <button class="add-cart-btn"
+                        onclick="event.stopPropagation(); addToCart(${item.id})">
+                        <i class="fas fa-cart-plus"></i>
+                        Add
+                    </button>
+                </div>
+            </div>
+        </article>
+    `;
+}
+
+
+/* =========================================================
+   MENU RENDER
+========================================================= */
+
+function getCategoryMatch(item, category) {
+    if (!category || category === "All") {
+        return true;
+    }
+
+    const name = item.name.toLowerCase();
+
+    switch (category.toLowerCase()) {
+        case "burgers":
+            return name.includes("burger");
+
+        case "pizza":
+            return name.includes("pizza");
+
+        case "desi":
+        case "desi cuisine":
+            return item.category === "Desi Cuisine";
+
+        case "bbq":
+        case "bbq & grills":
+            return item.category === "BBQ & Grills";
+
+        case "drinks":
+        case "drinks & shakes":
+            return item.category === "Drinks & Shakes";
+
+        case "desserts":
+            return (
+                item.category.toLowerCase().includes("dessert") ||
+                name.includes("dessert") ||
+                name.includes("cake") ||
+                name.includes("ice cream")
+            );
+
+        case "fast food":
+            return item.category === "Fast Food";
+
+        default:
+            return (
+                item.category.toLowerCase() === category.toLowerCase()
+            );
+    }
+}
+
+
+function renderMenu(items = menuItems) {
+    const menuGrid = document.getElementById("menu-grid");
+
+    if (!menuGrid) return;
+
+    if (!Array.isArray(items) || items.length === 0) {
+        menuGrid.innerHTML = `
+            <div class="no-results-card">
+                <i class="fas fa-utensils"></i>
+                <h3>No food found</h3>
+                <p>Try another search or category.</p>
+            </div>
+        `;
+        return;
+    }
+
+    menuGrid.innerHTML = items
+        .map(item => createFoodCard(item))
+        .join("");
+}
+
+
+function renderFilteredMenu(items) {
+    renderMenu(items);
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+function searchMenu(value = null) {
+    const input = document.getElementById("search-input");
+
+    if (value === null && input) {
+        value = input.value;
+    }
+
+    value = String(value || "").trim().toLowerCase();
+
+    const filtered = menuItems.filter(item => {
+        const categoryMatch = getCategoryMatch(item, currentCategory);
+
+        const searchMatch =
+            !value ||
+            item.name.toLowerCase().includes(value) ||
+            item.category.toLowerCase().includes(value) ||
+            item.description.toLowerCase().includes(value);
+
+        return categoryMatch && searchMatch;
+    });
+
+    renderMenu(filtered);
+
+    const noResults = document.getElementById("no-results");
+
+    if (noResults) {
+        noResults.classList.toggle(
+            "hidden",
+            filtered.length !== 0
+        );
+    }
+
+    return filtered;
+}
+
+
+function submitSearch(event) {
+    if (event) {
+        event.preventDefault();
+    }
+
+    searchMenu();
+
+    const menuSection = document.getElementById("menu");
+
+    if (menuSection) {
+        menuSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }
+}
+
+
 function handleSearchKeydown(event) {
+    if (!event) return;
+
+    if (event.key === "Enter") {
+        event.preventDefault();
+        submitSearch(event);
+    }
+
     if (event.key === "Escape") {
         const input = document.getElementById("search-input");
 
@@ -446,256 +1883,429 @@ function handleSearchKeydown(event) {
 }
 
 
-/* ==================== VOICE SEARCH ==================== */
+function filterMenu(category, clickedButton = null) {
+    const normalized =
+        String(category || "All").toLowerCase();
 
-function startVoiceSearch() {
-    const SpeechRecognition =
-        window.SpeechRecognition ||
-        window.webkitSpeechRecognition;
+    const categoryMap = {
+        all: "All",
+        burgers: "Burgers",
+        pizza: "Pizza",
+        desi: "Desi",
+        bbq: "BBQ",
+        drinks: "Drinks",
+        desserts: "Desserts"
+    };
 
-    if (!SpeechRecognition) {
-        showToast(
-            "Voice search is not supported in this browser.",
-            "error"
-        );
+    currentCategory =
+        categoryMap[normalized] || category;
 
-        return;
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+    if (clickedButton) {
+        clickedButton.classList.add("active");
     }
 
-    const recognition = new SpeechRecognition();
-
-    recognition.lang = "en-US";
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-
-    recognition.onstart = () => {
-        showToast("Listening...", "success");
-    };
-
-    recognition.onresult = event => {
-        const transcript =
-            event.results[0][0].transcript;
-
-        const input =
-            document.getElementById("search-input");
-
-        if (input) {
-            input.value = transcript;
-            searchMenu(transcript);
-
-            document.getElementById("menu")?.scrollIntoView({
-                behavior: "smooth"
-            });
-        }
-    };
-
-    recognition.onerror = () => {
-        showToast(
-            "Voice search could not be completed.",
-            "error"
-        );
-    };
-
-    recognition.start();
+    searchMenu();
 }
 
 
-/* ==================== CART ==================== */
+function filterByCategory(category) {
+    filterMenu(category);
+}
 
-function addToCart(itemId) {
+
+function sortMenu(sortType = "default") {
+    currentSort = sortType;
+
+    let items = searchMenu();
+
+    if (!Array.isArray(items)) {
+        items = [...menuItems];
+    }
+
+    if (sortType === "price-low") {
+        items.sort((a, b) => a.price - b.price);
+    }
+
+    if (sortType === "price-high") {
+        items.sort((a, b) => b.price - a.price);
+    }
+
+    if (sortType === "name") {
+        items.sort((a, b) =>
+            a.name.localeCompare(b.name)
+        );
+    }
+
+    renderMenu(items);
+}
+
+
+/* =========================================================
+   ITEM DETAIL MODAL
+========================================================= */
+
+function generateStars(rating = 5) {
+    const safeRating = Math.max(
+        0,
+        Math.min(5, Number(rating) || 5)
+    );
+
+    let stars = "";
+
+    for (let i = 1; i <= 5; i++) {
+        stars += `
+            <i class="${
+                i <= Math.round(safeRating)
+                    ? "fas"
+                    : "far"
+            } fa-star"></i>
+        `;
+    }
+
+    return stars;
+}
+
+
+function openItemDetail(itemId) {
     const item = menuItems.find(
-        food => food.id === itemId
+        food => Number(food.id) === Number(itemId)
+    );
+
+    const modal = document.getElementById("item-detail-modal");
+    const body = document.getElementById("item-detail-body");
+
+    if (!item || !modal || !body) return;
+
+    activeDetailItem = item;
+    detailQuantity = 1;
+
+    body.innerHTML = `
+        <div class="item-detail-content">
+
+            <div class="item-detail-image">
+                <img src="${escapeHTML(item.image)}"
+                     alt="${escapeHTML(item.name)}">
+            </div>
+
+            <div class="item-detail-info">
+
+                <span class="menu-category">
+                    ${escapeHTML(item.category)}
+                </span>
+
+                <h2>${escapeHTML(item.name)}</h2>
+
+                <div class="item-detail-rating">
+                    ${generateStars(item.rating || 5)}
+                    <span>5.0</span>
+                </div>
+
+                <p>
+                    ${escapeHTML(item.description)}
+                </p>
+
+                <div class="item-detail-price">
+                    ${formatPrice(item.price)}
+                </div>
+
+                <div class="detail-quantity">
+                    <button
+                        type="button"
+                        onclick="decreaseDetailQuantity()">
+                        -
+                    </button>
+
+                    <span id="detail-quantity">
+                        1
+                    </span>
+
+                    <button
+                        type="button"
+                        onclick="increaseDetailQuantity()">
+                        +
+                    </button>
+                </div>
+
+                <button
+                    type="button"
+                    class="add-cart-btn detail-add-btn"
+                    onclick="addDetailToCart()">
+                    <i class="fas fa-cart-plus"></i>
+                    Add To Cart
+                </button>
+
+            </div>
+        </div>
+    `;
+
+    modal.classList.remove("hidden");
+    document.body.classList.add("modal-open");
+}
+
+
+function closeItemDetailModal() {
+    const modal =
+        document.getElementById("item-detail-modal");
+
+    if (modal) {
+        modal.classList.add("hidden");
+    }
+
+    document.body.classList.remove("modal-open");
+    activeDetailItem = null;
+}
+
+
+function closeItemDetail() {
+    closeItemDetailModal();
+}
+
+
+function increaseDetailQuantity() {
+    detailQuantity++;
+
+    const quantity =
+        document.getElementById("detail-quantity");
+
+    if (quantity) {
+        quantity.textContent = detailQuantity;
+    }
+}
+
+
+function decreaseDetailQuantity() {
+    if (detailQuantity <= 1) return;
+
+    detailQuantity--;
+
+    const quantity =
+        document.getElementById("detail-quantity");
+
+    if (quantity) {
+        quantity.textContent = detailQuantity;
+    }
+}
+
+
+function addDetailToCart() {
+    if (!activeDetailItem) return;
+
+    addToCart(
+        activeDetailItem.id,
+        detailQuantity
+    );
+
+    closeItemDetailModal();
+}
+
+
+/* =========================================================
+   CART
+========================================================= */
+
+function addToCart(itemId, quantity = 1) {
+    const item = menuItems.find(
+        food => Number(food.id) === Number(itemId)
     );
 
     if (!item) return;
 
+    quantity = Math.max(1, Number(quantity) || 1);
+
     const existing = cart.find(
-        food => food.id === itemId
+        cartItem => Number(cartItem.id) === Number(itemId)
     );
 
     if (existing) {
-        existing.quantity += 1;
+        existing.quantity += quantity;
     } else {
         cart.push({
-            ...item,
-            quantity: 1
+            id: item.id,
+            quantity
         });
     }
 
-    saveCart();
-    renderCart();
+    saveCartToStorage();
+    updateCartUI();
 
     showToast(
-        `${item.name} added to your cart.`,
+        `${item.name} cart mein add ho gaya!`,
         "success"
     );
+
+    playCustomSound();
 }
 
 
 function removeFromCart(itemId) {
     cart = cart.filter(
-        item => item.id !== itemId
+        item => Number(item.id) !== Number(itemId)
     );
 
-    saveCart();
-    renderCart();
+    saveCartToStorage();
+    updateCartUI();
 }
 
 
 function changeCartQuantity(itemId, change) {
     const item = cart.find(
-        food => food.id === itemId
+        cartItem => Number(cartItem.id) === Number(itemId)
     );
 
     if (!item) return;
 
-    item.quantity += change;
+    item.quantity += Number(change);
 
     if (item.quantity <= 0) {
         removeFromCart(itemId);
         return;
     }
 
-    saveCart();
-    renderCart();
+    saveCartToStorage();
+    updateCartUI();
 }
 
 
-function renderCart() {
+function updateCartUI() {
     const cartItemsContainer =
         document.getElementById("cart-items");
 
     const cartEmpty =
         document.getElementById("cart-empty");
 
-    if (!cartItemsContainer || !cartEmpty) return;
+    let subtotal = 0;
+    let totalQuantity = 0;
 
-    if (cart.length === 0) {
-        cartItemsContainer.innerHTML = "";
-        cartEmpty.classList.add("visible");
-    } else {
-        cartEmpty.classList.remove("visible");
+    cart.forEach(cartItem => {
+        const product = menuItems.find(
+            item => Number(item.id) === Number(cartItem.id)
+        );
 
-        cartItemsContainer.innerHTML =
-            cart.map(item => `
-                <div class="cart-item">
+        if (product) {
+            subtotal +=
+                product.price * cartItem.quantity;
 
-                    <div class="cart-item-image">
-                        <img
-                            src="${item.image}"
-                            alt="${escapeHTML(item.name)}"
-                            onerror="this.src='https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=300&q=80';"
-                        >
-                    </div>
-
-
-                    <div class="cart-item-info">
-
-                        <h4>
-                            ${escapeHTML(item.name)}
-                        </h4>
-
-                        <span>
-                            ${formatPrice(item.price)}
-                        </span>
-
-
-                        <div class="cart-item-actions">
-
-                            <button
-                                class="cart-qty-btn"
-                                type="button"
-                                onclick="changeCartQuantity(${item.id}, -1)"
-                            >
-                                -
-                            </button>
-
-                            <span class="cart-qty-value">
-                                ${item.quantity}
-                            </span>
-
-                            <button
-                                class="cart-qty-btn"
-                                type="button"
-                                onclick="changeCartQuantity(${item.id}, 1)"
-                            >
-                                +
-                            </button>
-
-                        </div>
-
-                    </div>
-
-
-                    <div>
-
-                        <strong>
-                            ${formatPrice(item.price * item.quantity)}
-                        </strong>
-
-                        <button
-                            class="cart-remove-btn"
-                            type="button"
-                            onclick="removeFromCart(${item.id})"
-                            title="Remove"
-                        >
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-
-                    </div>
-
-                </div>
-            `).join("");
-    }
-
-    updateCartTotals();
-}
-
-
-function updateCartTotals() {
-    const subtotal =
-        calculateSubtotal();
+            totalQuantity += cartItem.quantity;
+        }
+    });
 
     const discount =
         subtotal * (currentDiscount / 100);
 
-    const total =
-        Math.max(0, subtotal - discount);
+    const total = Math.max(
+        0,
+        subtotal - discount
+    );
 
-    const subtotalElement =
+    const subtotalEl =
         document.getElementById("cart-subtotal");
 
-    const discountElement =
+    const discountEl =
         document.getElementById("cart-discount");
 
-    const totalElement =
+    const totalEl =
         document.getElementById("cart-total");
 
-    if (subtotalElement) {
-        subtotalElement.textContent =
-            formatPrice(subtotal);
+    if (subtotalEl) {
+        subtotalEl.textContent = formatPrice(subtotal);
     }
 
-    if (discountElement) {
-        discountElement.textContent =
+    if (discountEl) {
+        discountEl.textContent =
             currentDiscount > 0
                 ? `-${formatPrice(discount)}`
                 : formatPrice(0);
     }
 
-    if (totalElement) {
-        totalElement.textContent =
-            formatPrice(total);
+    if (totalEl) {
+        totalEl.textContent = formatPrice(total);
     }
-}
 
+    const badges =
+        document.querySelectorAll(".cart-count");
 
-function calculateSubtotal() {
-    return cart.reduce(
-        (sum, item) =>
-            sum + (item.price * item.quantity),
-        0
-    );
+    badges.forEach(badge => {
+        badge.textContent = totalQuantity;
+        badge.classList.toggle(
+            "hidden",
+            totalQuantity === 0
+        );
+    });
+
+    if (!cartItemsContainer) return;
+
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = "";
+
+        if (cartEmpty) {
+            cartEmpty.classList.remove("hidden");
+        }
+
+        return;
+    }
+
+    if (cartEmpty) {
+        cartEmpty.classList.add("hidden");
+    }
+
+    cartItemsContainer.innerHTML = cart
+        .map(cartItem => {
+            const item = menuItems.find(
+                food =>
+                    Number(food.id) === Number(cartItem.id)
+            );
+
+            if (!item) return "";
+
+            return `
+                <div class="cart-item">
+
+                    <img
+                        class="cart-item-image"
+                        src="${escapeHTML(item.image)}"
+                        alt="${escapeHTML(item.name)}">
+
+                    <div class="cart-item-info">
+                        <h4>${escapeHTML(item.name)}</h4>
+
+                        <span>
+                            ${formatPrice(item.price)}
+                        </span>
+
+                        <div class="cart-item-controls">
+
+                            <button
+                                onclick="changeCartQuantity(${item.id}, -1)">
+                                -
+                            </button>
+
+                            <span>
+                                ${cartItem.quantity}
+                            </span>
+
+                            <button
+                                onclick="changeCartQuantity(${item.id}, 1)">
+                                +
+                            </button>
+
+                            <button
+                                class="remove-cart-item"
+                                onclick="removeFromCart(${item.id})"
+                                aria-label="Remove item">
+                                <i class="fas fa-trash"></i>
+                            </button>
+
+                        </div>
+                    </div>
+
+                </div>
+            `;
+        })
+        .join("");
 }
 
 
@@ -706,27 +2316,61 @@ function toggleCart() {
     const overlay =
         document.getElementById("cart-overlay");
 
-    if (!sidebar || !overlay) return;
+    if (!sidebar) return;
 
-    sidebar.classList.toggle("open");
-    overlay.classList.toggle("show");
+    const isOpen =
+        sidebar.classList.contains("active") ||
+        sidebar.classList.contains("open");
 
-    document.body.classList.toggle(
-        "no-scroll",
-        sidebar.classList.contains("open")
-    );
+    if (isOpen) {
+        closeCart();
+    } else {
+        openCart();
+    }
 }
 
 
-function saveCart() {
-    localStorage.setItem(
-        "foodieCart",
-        JSON.stringify(cart)
-    );
+function openCart() {
+    const sidebar =
+        document.getElementById("cart-sidebar");
+
+    const overlay =
+        document.getElementById("cart-overlay");
+
+    if (sidebar) {
+        sidebar.classList.add("active");
+        sidebar.classList.add("open");
+    }
+
+    if (overlay) {
+        overlay.classList.add("active");
+    }
+
+    updateCartUI();
 }
 
 
-/* ==================== PROMO ==================== */
+function closeCart() {
+    const sidebar =
+        document.getElementById("cart-sidebar");
+
+    const overlay =
+        document.getElementById("cart-overlay");
+
+    if (sidebar) {
+        sidebar.classList.remove("active");
+        sidebar.classList.remove("open");
+    }
+
+    if (overlay) {
+        overlay.classList.remove("active");
+    }
+}
+
+
+/* =========================================================
+   PROMO CODE
+========================================================= */
 
 function applyPromoCode() {
     const input =
@@ -737,32 +2381,21 @@ function applyPromoCode() {
     const code =
         input.value.trim().toUpperCase();
 
-    if (!code) {
-        showToast(
-            "Please enter a promo code.",
-            "error"
-        );
-
-        return;
-    }
-
     if (code === "WELCOME20") {
         currentDiscount = 20;
 
-        localStorage.setItem(
-            "foodieDiscount",
-            currentDiscount
-        );
-
-        updateCartTotals();
+        updateCartUI();
 
         showToast(
-            "20% discount applied successfully!",
+            "Promo code applied! 20% discount mil gaya.",
             "success"
         );
 
         return;
     }
+
+    currentDiscount = 0;
+    updateCartUI();
 
     showToast(
         "Invalid promo code.",
@@ -772,9 +2405,13 @@ function applyPromoCode() {
 
 
 function copyPromoCode() {
+    const codeElement =
+        document.getElementById("promo-code-text");
+
+    if (!codeElement) return;
+
     const code =
-        document.getElementById("promo-code-text")?.textContent ||
-        "WELCOME20";
+        codeElement.textContent.trim();
 
     if (navigator.clipboard) {
         navigator.clipboard.writeText(code)
@@ -786,13 +2423,13 @@ function copyPromoCode() {
             })
             .catch(() => {
                 showToast(
-                    `Promo code: ${code}`,
+                    `Promo Code: ${code}`,
                     "success"
                 );
             });
     } else {
         showToast(
-            `Promo code: ${code}`,
+            `Promo Code: ${code}`,
             "success"
         );
     }
@@ -801,43 +2438,27 @@ function copyPromoCode() {
 
 /* =========================================================
    CHECKOUT
-   ========================================================= */
+========================================================= */
 
 function checkout() {
     if (cart.length === 0) {
         showToast(
-            "Your cart is empty. Add some food first.",
+            "Pehle cart mein item add karein.",
             "error"
         );
-
         return;
     }
 
-    const screen =
+    const checkoutScreen =
         document.getElementById("checkout-screen");
 
-    if (!screen) return;
+    if (!checkoutScreen) return;
 
-    renderCheckoutSummary();
-    togglePaymentInfo();
+    closeCart();
 
-    const sidebar =
-        document.getElementById("cart-sidebar");
+    checkoutScreen.classList.remove("hidden");
 
-    if (sidebar) {
-        sidebar.classList.remove("open");
-    }
-
-    const overlay =
-        document.getElementById("cart-overlay");
-
-    if (overlay) {
-        overlay.classList.remove("show");
-    }
-
-    screen.classList.remove("hidden");
-
-    document.body.classList.add("no-scroll");
+    updateCheckoutSummary();
 
     window.scrollTo({
         top: 0,
@@ -847,20 +2468,21 @@ function checkout() {
 
 
 function closeCheckoutModal() {
-    const screen =
+    const checkoutScreen =
         document.getElementById("checkout-screen");
 
-    if (screen) {
-        screen.classList.add("hidden");
+    if (checkoutScreen) {
+        checkoutScreen.classList.add("hidden");
     }
-
-    document.body.classList.remove("no-scroll");
 }
 
 
-function renderCheckoutSummary() {
+function updateCheckoutSummary() {
     const itemsContainer =
         document.getElementById("checkout-summary-items");
+
+    const countElement =
+        document.getElementById("checkout-summary-count");
 
     const subtotalElement =
         document.getElementById("checkout-subtotal");
@@ -868,74 +2490,62 @@ function renderCheckoutSummary() {
     const discountElement =
         document.getElementById("checkout-discount");
 
-    const totalElement =
+    const finalTotalElement =
         document.getElementById("checkout-final-total");
 
-    const countElement =
-        document.getElementById("checkout-summary-count");
-
-    if (!itemsContainer) return;
-
-    itemsContainer.innerHTML = "";
-
     let subtotal = 0;
-    let itemCount = 0;
+    let count = 0;
 
-    cart.forEach(item => {
+    if (itemsContainer) {
+        itemsContainer.innerHTML = "";
+    }
+
+    cart.forEach(cartItem => {
+        const item = menuItems.find(
+            product =>
+                Number(product.id) === Number(cartItem.id)
+        );
+
+        if (!item) return;
+
         const itemTotal =
-            item.price * item.quantity;
+            item.price * cartItem.quantity;
 
         subtotal += itemTotal;
-        itemCount += item.quantity;
+        count += cartItem.quantity;
 
-        const row =
-            document.createElement("div");
+        if (itemsContainer) {
+            itemsContainer.innerHTML += `
+                <div class="checkout-summary-item">
 
-        row.className =
-            "checkout-summary-item";
+                    <div>
+                        <strong>
+                            ${escapeHTML(item.name)}
+                        </strong>
 
-        row.innerHTML = `
-            <div class="checkout-summary-item-image">
+                        <small>
+                            x ${cartItem.quantity}
+                        </small>
+                    </div>
 
-                <img
-                    src="${item.image}"
-                    alt="${escapeHTML(item.name)}"
-                    onerror="this.src='https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=300&q=80';"
-                >
+                    <span>
+                        ${formatPrice(itemTotal)}
+                    </span>
 
-            </div>
-
-
-            <div class="checkout-summary-item-info">
-
-                <strong>
-                    ${escapeHTML(item.name)}
-                </strong>
-
-                <span>
-                    Qty: ${item.quantity}
-                </span>
-
-            </div>
-
-
-            <strong class="checkout-summary-item-price">
-                ${formatPrice(itemTotal)}
-            </strong>
-        `;
-
-        itemsContainer.appendChild(row);
+                </div>
+            `;
+        }
     });
 
     const discount =
         subtotal * (currentDiscount / 100);
 
-    const total =
+    const finalTotal =
         Math.max(0, subtotal - discount);
 
     if (countElement) {
         countElement.textContent =
-            itemCount;
+            `${count} item${count === 1 ? "" : "s"}`;
     }
 
     if (subtotalElement) {
@@ -950,9 +2560,9 @@ function renderCheckoutSummary() {
                 : formatPrice(0);
     }
 
-    if (totalElement) {
-        totalElement.textContent =
-            formatPrice(total);
+    if (finalTotalElement) {
+        finalTotalElement.textContent =
+            formatPrice(finalTotal);
     }
 }
 
@@ -960,93 +2570,85 @@ function renderCheckoutSummary() {
 function togglePaymentInfo() {
     const selected =
         document.querySelector(
-            'input[name="payment-method"]:checked'
+            'input[name="payment"]:checked'
         );
 
-    const details =
+    const extra =
         document.getElementById("payment-extra");
 
     const content =
         document.getElementById("payment-extra-content");
 
-    if (!selected || !details || !content) {
-        return;
-    }
+    if (!selected || !extra || !content) return;
 
-    const method =
-        selected.value;
+    const method = selected.value;
 
     if (method === "Cash on Delivery") {
-        details.classList.add("hidden");
+        extra.classList.add("hidden");
         content.innerHTML = "";
         return;
     }
 
-    details.classList.remove("hidden");
+    extra.classList.remove("hidden");
 
     if (method === "JazzCash") {
         content.innerHTML = `
-            <i class="fa-solid fa-mobile-screen-button"></i>
-
-            <div>
-                <strong>
-                    JazzCash Payment
-                </strong>
-
-                <span>
-                    After placing the order, send the payment
-                    to the Foodie Express JazzCash account shown
-                    by our team on WhatsApp.
-                </span>
-            </div>
+            <input
+                type="text"
+                id="payment-account"
+                placeholder="JazzCash mobile number"
+                required>
         `;
-    }
-
-    else if (method === "EasyPaisa") {
+    } else if (method === "EasyPaisa") {
         content.innerHTML = `
-            <i class="fa-solid fa-wallet"></i>
-
-            <div>
-                <strong>
-                    EasyPaisa Payment
-                </strong>
-
-                <span>
-                    After placing the order, our team will provide
-                    the EasyPaisa payment details through WhatsApp.
-                </span>
-            </div>
+            <input
+                type="text"
+                id="payment-account"
+                placeholder="EasyPaisa mobile number"
+                required>
         `;
-    }
-
-    else if (method === "Card") {
+    } else if (method === "Card") {
         content.innerHTML = `
-            <i class="fa-solid fa-credit-card"></i>
+            <input
+                type="text"
+                id="card-number"
+                placeholder="Card Number"
+                maxlength="19"
+                required>
 
-            <div>
-                <strong>
-                    Card Payment
-                </strong>
+            <div class="payment-row">
+                <input
+                    type="text"
+                    id="card-expiry"
+                    placeholder="MM/YY"
+                    required>
 
-                <span>
-                    Card payment instructions will be provided
-                    securely by our team through WhatsApp.
-                </span>
+                <input
+                    type="text"
+                    id="card-cvv"
+                    placeholder="CVV"
+                    maxlength="4"
+                    required>
             </div>
         `;
     }
 }
 
 
+/* =========================================================
+   PROCESS ORDER
+========================================================= */
+
 function processOrder(event) {
-    event.preventDefault();
+    if (event) {
+        event.preventDefault();
+    }
 
     if (cart.length === 0) {
         showToast(
-            "Your cart is empty.",
+            "Cart empty hai.",
             "error"
         );
-
         return;
     }
 
@@ -1068,45 +2670,58 @@ function processOrder(event) {
     const note =
         document.getElementById("delivery-note")?.value.trim();
 
-    const payment =
-        document.querySelector(
-            'input[name="payment-method"]:checked'
-        );
-
     if (!name || !phone || !email || !address || !city) {
         showToast(
-            "Please complete all required delivery details.",
+            "Please tamam required details fill karein.",
             "error"
         );
-
         return;
     }
 
-    if (!payment) {
-        showToast(
-            "Please select a payment method.",
-            "error"
+    const payment =
+        document.querySelector(
+            'input[name="payment"]:checked'
         );
 
-        return;
-    }
+    const paymentMethod =
+        payment ? payment.value : "Cash on Delivery";
 
-    const subtotal =
-        calculateSubtotal();
+    let subtotal = 0;
+
+    const orderItems = cart.map(cartItem => {
+        const product = menuItems.find(
+            item =>
+                Number(item.id) === Number(cartItem.id)
+        );
+
+        if (!product) return null;
+
+        const itemTotal =
+            product.price * cartItem.quantity;
+
+        subtotal += itemTotal;
+
+        return {
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            quantity: cartItem.quantity,
+            total: itemTotal
+        };
+    }).filter(Boolean);
 
     const discount =
         subtotal * (currentDiscount / 100);
 
-    const total =
+    const finalTotal =
         Math.max(0, subtotal - discount);
 
     const orderId =
-        "FE-" +
+        "FE" +
         Date.now().toString().slice(-8);
 
     const order = {
         id: orderId,
-        date: new Date().toLocaleString(),
         customer: {
             name,
             phone,
@@ -1115,679 +2730,236 @@ function processOrder(event) {
             city,
             note
         },
-        paymentMethod: payment.value,
-        items: cart.map(item => ({
-            id: item.id,
-            name: item.name,
-            price: item.price,
-            quantity: item.quantity
-        })),
+        items: orderItems,
         subtotal,
         discount,
-        total
+        total: finalTotal,
+        paymentMethod,
+        status: "Order Placed",
+        date: new Date().toISOString()
     };
 
     orderHistory.unshift(order);
 
-    if (orderHistory.length > 20) {
-        orderHistory =
-            orderHistory.slice(0, 20);
-    }
+    totalOrders++;
 
-    localStorage.setItem(
-        "foodieOrderHistory",
-        JSON.stringify(orderHistory)
+    loyaltyCoins += Math.floor(
+        finalTotal / 100
     );
 
-    const previousOrders =
-        Number(localStorage.getItem("foodieTotalOrders")) || 0;
-
-    localStorage.setItem(
-        "foodieTotalOrders",
-        previousOrders + 1
-    );
-
-    const previousCoins =
-        Number(localStorage.getItem("foodieCoins")) || 0;
-
-    localStorage.setItem(
-        "foodieCoins",
-        previousCoins + Math.floor(total / 100)
-    );
-
-    saveUserData(order.customer);
-
-    const whatsappItems =
-        order.items
-            .map(item =>
-                `• ${item.name} x${item.quantity} = ${formatPrice(item.price * item.quantity)}`
-            )
-            .join("\n");
-
-    const whatsappMessage = `
-*Foodie Express - New Order*
-
-*Order ID:* ${orderId}
-
-*Customer Details*
-Name: ${name}
-Phone: ${phone}
-Email: ${email}
-Address: ${address}
-City: ${city}
-Delivery Note: ${note || "None"}
-
-*Payment Method*
-${payment.value}
-
-*Order Items*
-${whatsappItems}
-
-*Subtotal:* ${formatPrice(subtotal)}
-*Discount:* ${formatPrice(discount)}
-*Final Total:* ${formatPrice(total)}
-
-Thank you for ordering from Foodie Express!
-`.trim();
+    saveOrderHistory();
+    saveUserData();
 
     cart = [];
-
     currentDiscount = 0;
 
-    saveCart();
+    saveCartToStorage();
 
-    localStorage.setItem(
-        "foodieDiscount",
-        "0"
-    );
+    updateCartUI();
 
-    renderCart();
-    renderDashboard();
-
-    const checkoutForm =
+    const form =
         document.getElementById("checkout-form");
 
-    if (checkoutForm) {
-        checkoutForm.reset();
+    if (form) {
+        form.reset();
     }
 
     closeCheckoutModal();
 
-    showToast(
-        `Order ${orderId} placed successfully!`,
-        "success"
-    );
+    showOrderSuccess(order);
 
-    playSuccessSound();
-
-    updateTrackingFromHistory();
-
-    document.getElementById("tracking-section")?.classList.remove(
-        "hidden"
-    );
-
-    document.getElementById("tracking-section")?.scrollIntoView({
-        behavior: "smooth"
-    });
-
-    const whatsappURL =
-        `https://wa.me/${adminWhatsAppNumber}?text=${encodeURIComponent(whatsappMessage)}`;
-
-    window.open(
-        whatsappURL,
-        "_blank",
-        "noopener,noreferrer"
-    );
-}
-
-
-/* ==================== LOCATION ==================== */
-
-function detectUserLocation(target = "hero") {
-    if (!navigator.geolocation) {
-        showToast(
-            "Location is not supported by this browser.",
-            "error"
-        );
-
-        return;
-    }
+    startOrderTracking(order);
 
     showToast(
-        "Getting your location...",
+        `Order ${orderId} successfully place ho gaya!`,
         "success"
     );
-
-    navigator.geolocation.getCurrentPosition(
-        position => {
-
-            const latitude =
-                position.coords.latitude;
-
-            const longitude =
-                position.coords.longitude;
-
-            if (target === "checkout") {
-                const address =
-                    document.getElementById("cust-address");
-
-                if (address) {
-                    address.value =
-                        `Location: ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`;
-                }
-            }
-
-            showToast(
-                "Location detected successfully.",
-                "success"
-            );
-        },
-
-        () => {
-            showToast(
-                "Unable to access your location.",
-                "error"
-            );
-        }
-    );
 }
 
 
-/* ==================== WISHLIST ==================== */
+/* =========================================================
+   ORDER SUCCESS
+========================================================= */
 
-function toggleWishlist(itemId) {
-    const item =
-        menuItems.find(food => food.id === itemId);
+function showOrderSuccess(order) {
+    let successScreen =
+        document.getElementById("success-screen");
 
-    if (!item) return;
+    if (!successScreen) {
+        successScreen =
+            document.createElement("section");
 
-    const index =
-        wishlist.findIndex(
-            food => food.id === itemId
-        );
+        successScreen.id = "success-screen";
+        successScreen.className =
+            "success-screen hidden";
 
-    if (index === -1) {
-        wishlist.push(item);
-
-        showToast(
-            `${item.name} added to favorites.`,
-            "success"
-        );
-    } else {
-        wishlist.splice(index, 1);
-
-        showToast(
-            `${item.name} removed from favorites.`,
-            "success"
-        );
+        document.body.appendChild(successScreen);
     }
 
-    saveWishlist();
-    renderMenu(menuItems);
-    renderWishlist();
-    renderDashboard();
-}
+    successScreen.innerHTML = `
+        <div class="success-card">
 
-
-function saveWishlist() {
-    localStorage.setItem(
-        "foodieWishlist",
-        JSON.stringify(wishlist)
-    );
-}
-
-
-function renderWishlist() {
-    const container =
-        document.getElementById("wishlist-container");
-
-    if (!container) return;
-
-    if (wishlist.length === 0) {
-        container.innerHTML = `
-            <div class="cart-empty visible">
-                <div class="cart-empty-icon">
-                    <i class="fa-regular fa-heart"></i>
-                </div>
-
-                <h3>
-                    No favorites yet
-                </h3>
-
-                <p>
-                    Save your favorite food here.
-                </p>
-            </div>
-        `;
-
-        return;
-    }
-
-    container.innerHTML =
-        wishlist.map(item => `
-            <div class="wishlist-item">
-
-                <div class="wishlist-item-info">
-
-                    <div class="wishlist-item-image">
-                        <img
-                            src="${item.image}"
-                            alt="${escapeHTML(item.name)}"
-                        >
-                    </div>
-
-                    <div>
-                        <strong>
-                            ${escapeHTML(item.name)}
-                        </strong>
-
-                        <span>
-                            ${formatPrice(item.price)}
-                        </span>
-                    </div>
-
-                </div>
-
-
-                <div style="display:flex;gap:7px;">
-
-                    <button
-                        class="add-cart-btn"
-                        type="button"
-                        onclick="addToCart(${item.id})"
-                    >
-                        <i class="fa-solid fa-plus"></i>
-                    </button>
-
-                    <button
-                        class="wishlist-remove"
-                        type="button"
-                        onclick="toggleWishlist(${item.id})"
-                    >
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-
-                </div>
-
-            </div>
-        `).join("");
-}
-
-
-/* ==================== ITEM DETAIL ==================== */
-
-function openItemDetailModal(itemId) {
-    const item =
-        menuItems.find(food => food.id === itemId);
-
-    const modal =
-        document.getElementById("item-detail-modal");
-
-    const body =
-        document.getElementById("item-detail-body");
-
-    if (!item || !modal || !body) return;
-
-    body.innerHTML = `
-        <div class="item-detail-content">
-
-            <div class="item-detail-image">
-                <img
-                    src="${item.image}"
-                    alt="${escapeHTML(item.name)}"
-                >
+            <div class="success-icon">
+                <i class="fas fa-check"></i>
             </div>
 
-            <span class="eyebrow">
-                ${escapeHTML(item.category)}
-            </span>
-
-            <h2>
-                ${escapeHTML(item.name)}
-            </h2>
+            <h2>Order Placed Successfully!</h2>
 
             <p>
-                ${escapeHTML(item.description)}
+                Thank you, ${escapeHTML(order.customer.name)}.
             </p>
 
-            <div style="display:flex;justify-content:space-between;align-items:center;margin:20px 0;">
+            <p>
+                Your Order ID:
+                <strong>${escapeHTML(order.id)}</strong>
+            </p>
 
-                <strong style="color:var(--primary);font-size:1.2rem;">
-                    ${formatPrice(item.price)}
-                </strong>
-
-                <span class="food-rating">
-                    <i class="fa-solid fa-star"></i>
-                    ${item.rating}
-                </span>
-
-            </div>
+            <p>
+                Total:
+                <strong>${formatPrice(order.total)}</strong>
+            </p>
 
             <button
-                class="primary-btn full-width"
-                type="button"
-                onclick="addToCart(${item.id}); closeItemDetailModal();"
-            >
-                Add To Cart
-                <i class="fa-solid fa-bag-shopping"></i>
+                class="add-cart-btn"
+                onclick="closeSuccessScreen()">
+                Continue Shopping
             </button>
 
         </div>
     `;
 
-    modal.classList.add("show");
-    document.body.classList.add("no-scroll");
+    successScreen.classList.remove("hidden");
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 }
 
 
-function closeItemDetailModal() {
-    const modal =
-        document.getElementById("item-detail-modal");
+function closeSuccessScreen() {
+    const screen =
+        document.getElementById("success-screen");
 
-    if (modal) {
-        modal.classList.remove("show");
+    if (screen) {
+        screen.classList.add("hidden");
     }
 
-    document.body.classList.remove("no-scroll");
-}
+    const menu =
+        document.getElementById("menu");
 
-
-/* ==================== AUTH ==================== */
-
-function openAuthModal(screen = "login") {
-    const modal =
-        document.getElementById("auth-modal");
-
-    if (!modal) return;
-
-    modal.classList.add("show");
-
-    switchAuthScreen(screen);
-
-    document.body.classList.add("no-scroll");
-}
-
-
-function closeAuthModal() {
-    const modal =
-        document.getElementById("auth-modal");
-
-    if (modal) {
-        modal.classList.remove("show");
-    }
-
-    document.body.classList.remove("no-scroll");
-}
-
-
-function switchAuthScreen(screen) {
-    const loginScreen =
-        document.getElementById("login-screen");
-
-    const signupScreen =
-        document.getElementById("signup-screen");
-
-    if (!loginScreen || !signupScreen) return;
-
-    if (screen === "signup") {
-        loginScreen.classList.add("hidden");
-        signupScreen.classList.remove("hidden");
-    } else {
-        signupScreen.classList.add("hidden");
-        loginScreen.classList.remove("hidden");
+    if (menu) {
+        menu.scrollIntoView({
+            behavior: "smooth"
+        });
     }
 }
 
 
-function handleAuth(event, type) {
-    event.preventDefault();
+/* =========================================================
+   ORDER TRACKING
+========================================================= */
 
-    if (type === "signup") {
-        const name =
-            document.getElementById("signup-name")?.value.trim();
+function startOrderTracking(order) {
+    const section =
+        document.getElementById("tracking-section");
 
-        const email =
-            document.getElementById("signup-email")?.value.trim();
+    const orderId =
+        document.getElementById("tracking-order-id");
 
-        const password =
-            document.getElementById("signup-password")?.value;
+    const message =
+        document.getElementById("tracking-message");
 
-        if (!name || !email || !password) {
-            showToast(
-                "Please complete all fields.",
-                "error"
-            );
+    if (!section) return;
 
-            return;
+    if (trackingTimer) {
+        clearInterval(trackingTimer);
+    }
+
+    section.classList.remove("hidden");
+
+    if (orderId) {
+        orderId.textContent = order.id;
+    }
+
+    const steps = [
+        "Order Placed",
+        "Preparing",
+        "On The Way",
+        "Delivered"
+    ];
+
+    let currentStep = 0;
+
+    updateTrackingUI(currentStep, steps);
+
+    trackingTimer = setInterval(() => {
+        currentStep++;
+
+        if (currentStep >= steps.length) {
+            clearInterval(trackingTimer);
+            trackingTimer = null;
+            currentStep = steps.length - 1;
         }
 
-        localStorage.setItem(
-            "foodieUser",
-            JSON.stringify({
-                name,
-                email,
-                password
-            })
+        updateTrackingUI(currentStep, steps);
+    }, 5000);
+
+    if (message) {
+        message.textContent =
+            "Your order is being processed.";
+    }
+}
+
+
+function updateTrackingUI(activeStep, steps) {
+    const trackingSteps =
+        document.querySelectorAll(
+            "#tracking-section .tracking-step"
         );
 
-        showToast(
-            "Account created successfully!",
-            "success"
+    trackingSteps.forEach((step, index) => {
+        step.classList.toggle(
+            "active",
+            index <= activeStep
         );
 
-        switchAuthScreen("login");
-
-        return;
-    }
-
-    const email =
-        document.getElementById("login-email")?.value.trim();
-
-    const password =
-        document.getElementById("login-password")?.value;
-
-    const savedUser =
-        JSON.parse(
-            localStorage.getItem("foodieUser") || "null"
+        step.classList.toggle(
+            "completed",
+            index < activeStep
         );
 
-    if (
-        savedUser &&
-        savedUser.email === email &&
-        savedUser.password === password
-    ) {
-        localStorage.setItem(
-            "foodieLoggedIn",
-            "true"
-        );
+        const title =
+            step.querySelector("h4, h3, span");
 
-        showToast(
-            `Welcome back, ${savedUser.name}!`,
-            "success"
-        );
+        if (title && steps[index]) {
+            const existing =
+                title.textContent.trim();
 
-        closeAuthModal();
-        renderDashboard();
+            if (!existing) {
+                title.textContent = steps[index];
+            }
+        }
+    });
 
-        return;
+    const message =
+        document.getElementById("tracking-message");
+
+    if (message && steps[activeStep]) {
+        message.textContent =
+            `Status: ${steps[activeStep]}`;
     }
-
-    if (!savedUser) {
-        showToast(
-            "No account found. Please create an account first.",
-            "error"
-        );
-
-        return;
-    }
-
-    showToast(
-        "Incorrect email or password.",
-        "error"
-    );
 }
 
 
-function handleLogout() {
-    localStorage.removeItem("foodieLoggedIn");
-
-    showToast(
-        "You have been logged out.",
-        "success"
-    );
-
-    closeDashboardModal();
-}
-
-
-/* ==================== DASHBOARD ==================== */
-
-function openDashboardModal() {
-    renderDashboard();
-
-    const modal =
-        document.getElementById("dashboard-modal");
-
-    if (!modal) return;
-
-    modal.classList.add("show");
-
-    document.body.classList.add("no-scroll");
-}
-
-
-function closeDashboardModal() {
-    const modal =
-        document.getElementById("dashboard-modal");
-
-    if (modal) {
-        modal.classList.remove("show");
-    }
-
-    document.body.classList.remove("no-scroll");
-}
-
-
-function renderDashboard() {
-    const ordersElement =
-        document.getElementById("total-orders-count");
-
-    const coinsElement =
-        document.getElementById("loyalty-coins-count");
-
-    const wishlistElement =
-        document.getElementById("wishlist-count");
-
-    const historyContainer =
-        document.getElementById("history-container");
-
-    const totalOrders =
-        Number(
-            localStorage.getItem("foodieTotalOrders")
-        ) || orderHistory.length;
-
-    const coins =
-        Number(
-            localStorage.getItem("foodieCoins")
-        ) || 0;
-
-    if (ordersElement) {
-        ordersElement.textContent =
-            totalOrders;
-    }
-
-    if (coinsElement) {
-        coinsElement.textContent =
-            coins;
-    }
-
-    if (wishlistElement) {
-        wishlistElement.textContent =
-            wishlist.length;
-    }
-
-    if (!historyContainer) return;
-
-    if (orderHistory.length === 0) {
-        historyContainer.innerHTML = `
-            <p style="color:var(--muted);font-size:.82rem;">
-                No orders yet.
-            </p>
-        `;
-
-        return;
-    }
-
-    historyContainer.innerHTML =
-        orderHistory.map(order => `
-            <div class="history-item">
-
-                <strong>
-                    ${escapeHTML(order.id)}
-                </strong>
-
-                <span>
-                    ${escapeHTML(order.date)}
-                </span>
-
-                <span>
-                    ${order.items.length} item(s) ·
-                    ${formatPrice(order.total)}
-                </span>
-
-            </div>
-        `).join("");
-}
-
-
-/* ==================== WISHLIST MODAL ==================== */
-
-function toggleWishlistModal() {
-    const modal =
-        document.getElementById("wishlist-modal");
-
-    if (!modal) return;
-
-    renderWishlist();
-
-    modal.classList.toggle("show");
-
-    document.body.classList.toggle(
-        "no-scroll",
-        modal.classList.contains("show")
-    );
-}
-
-
-function closeWishlistModal() {
-    const modal =
-        document.getElementById("wishlist-modal");
-
-    if (modal) {
-        modal.classList.remove("show");
-    }
-
-    document.body.classList.remove("no-scroll");
-}
-
-
-/* ==================== RESERVATION ==================== */
-
-function setReservationMinDate() {
-    const dateInput =
-        document.getElementById("reservation-date");
-
-    if (!dateInput) return;
-
-    const today =
-        new Date().toISOString().split("T")[0];
-
-    dateInput.min = today;
-}
-
+/* =========================================================
+   RESERVATION
+========================================================= */
 
 function submitReservation(event) {
-    event.preventDefault();
+    if (event) {
+        event.preventDefault();
+    }
 
     const name =
         document.getElementById("reservation-name")?.value.trim();
@@ -1809,339 +2981,901 @@ function submitReservation(event) {
 
     if (!name || !phone || !date || !time || !guests) {
         showToast(
-            "Please complete your reservation details.",
+            "Please reservation form complete karein.",
             "error"
         );
-
         return;
     }
 
-    const reservationMessage = `
-*Foodie Express - Table Reservation*
+    const reservation = {
+        name,
+        phone,
+        date,
+        time,
+        guests,
+        note,
+        createdAt: new Date().toISOString()
+    };
 
-Name: ${name}
-Phone: ${phone}
-Date: ${date}
-Time: ${time}
-Guests: ${guests}
-Special Request: ${note || "None"}
-`.trim();
+    localStorage.setItem(
+        "foodieExpressReservation",
+        JSON.stringify(reservation)
+    );
 
     showToast(
-        "Reservation request created successfully!",
+        `Reservation confirmed for ${name}!`,
         "success"
     );
 
-    const whatsappURL =
-        `https://wa.me/${adminWhatsAppNumber}?text=${encodeURIComponent(reservationMessage)}`;
+    const form =
+        document.querySelector(
+            'form[onsubmit="submitReservation(event)"]'
+        );
 
-    window.open(
-        whatsappURL,
-        "_blank",
-        "noopener,noreferrer"
-    );
-
-    event.target.reset();
-
-    setReservationMinDate();
-}
-
-
-/* ==================== TRACKING ==================== */
-
-function updateTrackingFromHistory() {
-    const trackingSection =
-        document.getElementById("tracking-section");
-
-    const latestOrder =
-        orderHistory[0];
-
-    if (!trackingSection || !latestOrder) {
-        return;
-    }
-
-    trackingSection.classList.remove("hidden");
-
-    const orderId =
-        document.getElementById("tracking-order-id");
-
-    const message =
-        document.getElementById("tracking-message");
-
-    if (orderId) {
-        orderId.textContent =
-            latestOrder.id;
-    }
-
-    if (message) {
-        message.textContent =
-            `Your order was placed on ${latestOrder.date}.`;
+    if (form) {
+        form.reset();
     }
 }
 
 
-/* ==================== USER DATA ==================== */
+/* =========================================================
+   WISHLIST
+========================================================= */
 
-function saveUserData(customer) {
-    if (!customer) return;
+function toggleWishlist(itemId) {
+    itemId = Number(itemId);
 
-    localStorage.setItem(
-        "foodieLastCustomer",
-        JSON.stringify(customer)
-    );
+    const index =
+        wishlist.findIndex(
+            id => Number(id) === itemId
+        );
+
+    const item =
+        menuItems.find(
+            food => Number(food.id) === itemId
+        );
+
+    if (index >= 0) {
+        wishlist.splice(index, 1);
+
+        showToast(
+            `${item ? item.name : "Item"} wishlist se remove ho gaya.`,
+            "success"
+        );
+    } else {
+        wishlist.push(itemId);
+
+        showToast(
+            `${item ? item.name : "Item"} wishlist mein add ho gaya!`,
+            "success"
+        );
+    }
+
+    saveWishlistToStorage();
+
+    renderMenu(searchMenu());
+
+    renderWishlist();
 }
 
 
-/* ==================== TOAST ==================== */
-
-function showToast(message, type = "success") {
+function renderWishlist() {
     const container =
-        document.getElementById("toast-container");
+        document.getElementById("wishlist-container");
 
     if (!container) return;
 
-    const toast =
-        document.createElement("div");
+    if (wishlist.length === 0) {
+        container.innerHTML = `
+            <div class="empty-wishlist">
+                <i class="far fa-heart"></i>
+                <h3>Your wishlist is empty</h3>
+                <p>Add your favourite food items here.</p>
+            </div>
+        `;
+        return;
+    }
 
-    toast.className =
-        `toast ${type}`;
+    container.innerHTML = wishlist
+        .map(id => {
+            const item =
+                menuItems.find(
+                    food => Number(food.id) === Number(id)
+                );
 
-    toast.textContent =
-        message;
+            if (!item) return "";
 
-    container.appendChild(toast);
+            return `
+                <div class="wishlist-item">
 
-    setTimeout(() => {
-        toast.style.opacity = "0";
-        toast.style.transform = "translateY(10px)";
+                    <img
+                        src="${escapeHTML(item.image)}"
+                        alt="${escapeHTML(item.name)}">
 
-        setTimeout(() => {
-            toast.remove();
-        }, 250);
+                    <div>
+                        <h4>${escapeHTML(item.name)}</h4>
+                        <p>${formatPrice(item.price)}</p>
+                    </div>
 
-    }, 3000);
+                    <div class="wishlist-actions">
+
+                        <button
+                            onclick="addToCart(${item.id})">
+                            <i class="fas fa-cart-plus"></i>
+                        </button>
+
+                        <button
+                            onclick="toggleWishlist(${item.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+            `;
+        })
+        .join("");
 }
 
 
-/* ==================== SUCCESS SOUND ==================== */
-
-function playSuccessSound() {
-    try {
-        const AudioContext =
-            window.AudioContext ||
-            window.webkitAudioContext;
-
-        if (!AudioContext) return;
-
-        const audioContext =
-            new AudioContext();
-
-        const oscillator =
-            audioContext.createOscillator();
-
-        const gain =
-            audioContext.createGain();
-
-        oscillator.type = "sine";
-
-        oscillator.frequency.setValueAtTime(
-            520,
-            audioContext.currentTime
-        );
-
-        oscillator.frequency.exponentialRampToValueAtTime(
-            760,
-            audioContext.currentTime + 0.15
-        );
-
-        gain.gain.setValueAtTime(
-            0.001,
-            audioContext.currentTime
-        );
-
-        gain.gain.exponentialRampToValueAtTime(
-            0.12,
-            audioContext.currentTime + 0.02
-        );
-
-        gain.gain.exponentialRampToValueAtTime(
-            0.001,
-            audioContext.currentTime + 0.25
-        );
-
-        oscillator.connect(gain);
-        gain.connect(audioContext.destination);
-
-        oscillator.start();
-
-        oscillator.stop(
-            audioContext.currentTime + 0.25
-        );
-
-    } catch (error) {
-        /* Audio is optional. */
-    }
-}
-
-
-/* ==================== GLOBAL KEYBOARD ==================== */
-
-function handleGlobalKeydown(event) {
-    if (event.key !== "Escape") {
-        return;
-    }
-
-    const checkoutScreen =
-        document.getElementById("checkout-screen");
-
-    if (
-        checkoutScreen &&
-        !checkoutScreen.classList.contains("hidden")
-    ) {
-        closeCheckoutModal();
-        return;
-    }
-
-    const authModal =
-        document.getElementById("auth-modal");
-
-    if (
-        authModal &&
-        authModal.classList.contains("show")
-    ) {
-        closeAuthModal();
-        return;
-    }
-
-    const dashboardModal =
-        document.getElementById("dashboard-modal");
-
-    if (
-        dashboardModal &&
-        dashboardModal.classList.contains("show")
-    ) {
-        closeDashboardModal();
-        return;
-    }
-
-    const wishlistModal =
+function toggleWishlistModal() {
+    const modal =
         document.getElementById("wishlist-modal");
 
-    if (
-        wishlistModal &&
-        wishlistModal.classList.contains("show")
-    ) {
+    if (!modal) return;
+
+    const isHidden =
+        modal.classList.contains("hidden");
+
+    if (isHidden) {
+        renderWishlist();
+        modal.classList.remove("hidden");
+    } else {
         closeWishlistModal();
-        return;
-    }
-
-    const itemModal =
-        document.getElementById("item-detail-modal");
-
-    if (
-        itemModal &&
-        itemModal.classList.contains("show")
-    ) {
-        closeItemDetailModal();
-        return;
-    }
-
-    const cartSidebar =
-        document.getElementById("cart-sidebar");
-
-    if (
-        cartSidebar &&
-        cartSidebar.classList.contains("open")
-    ) {
-        toggleCart();
     }
 }
 
 
-/* ==================== MODAL CLICK OUTSIDE ==================== */
+function closeWishlistModal() {
+    const modal =
+        document.getElementById("wishlist-modal");
 
-document.addEventListener("click", event => {
+    if (modal) {
+        modal.classList.add("hidden");
+    }
+}
 
-    const modalIds = [
-        "auth-modal",
-        "dashboard-modal",
-        "wishlist-modal",
-        "item-detail-modal"
-    ];
 
-    modalIds.forEach(id => {
+/* =========================================================
+   DASHBOARD
+========================================================= */
 
-        const modal =
-            document.getElementById(id);
+function renderDashboard() {
+    const ordersCount =
+        document.getElementById("total-orders-count");
+
+    const coinsCount =
+        document.getElementById("loyalty-coins-count");
+
+    const wishlistCount =
+        document.getElementById("wishlist-count");
+
+    if (ordersCount) {
+        ordersCount.textContent = totalOrders;
+    }
+
+    if (coinsCount) {
+        coinsCount.textContent = loyaltyCoins;
+    }
+
+    if (wishlistCount) {
+        wishlistCount.textContent = wishlist.length;
+    }
+
+    const historyContainer =
+        document.getElementById("history-container");
+
+    if (!historyContainer) return;
+
+    if (orderHistory.length === 0) {
+        historyContainer.innerHTML = `
+            <div class="empty-history">
+                <i class="fas fa-receipt"></i>
+                <h3>No orders yet</h3>
+                <p>Your order history will appear here.</p>
+            </div>
+        `;
+        return;
+    }
+
+    historyContainer.innerHTML =
+        orderHistory.map(order => `
+            <div class="order-history">
+
+                <div>
+                    <strong>
+                        ${escapeHTML(order.id)}
+                    </strong>
+
+                    <small>
+                        ${new Date(order.date).toLocaleString()}
+                    </small>
+                </div>
+
+                <div>
+                    <span>
+                        ${order.items.length} item(s)
+                    </span>
+
+                    <strong>
+                        ${formatPrice(order.total)}
+                    </strong>
+                </div>
+
+                <span class="order-status">
+                    ${escapeHTML(order.status)}
+                </span>
+
+            </div>
+        `).join("");
+}
+
+
+function openDashboardModal() {
+    const modal =
+        document.getElementById("dashboard-modal");
+
+    if (!modal) return;
+
+    renderDashboard();
+
+    modal.classList.remove("hidden");
+}
+
+
+function closeDashboardModal() {
+    const modal =
+        document.getElementById("dashboard-modal");
+
+    if (modal) {
+        modal.classList.add("hidden");
+    }
+}
+
+
+function handleLogout() {
+    currentUser = null;
+
+    localStorage.removeItem(
+        "foodieExpressUser"
+    );
+
+    closeDashboardModal();
+
+    showToast(
+        "You have been logged out.",
+        "success"
+    );
+}
+
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+function openAuthModal(type = "login") {
+    const modal =
+        document.getElementById("auth-modal");
+
+    if (!modal) return;
+
+    switchAuthScreen(type);
+
+    modal.classList.remove("hidden");
+}
+
+
+function closeAuthModal() {
+    const modal =
+        document.getElementById("auth-modal");
+
+    if (modal) {
+        modal.classList.add("hidden");
+    }
+}
+
+
+function switchAuthScreen(screen) {
+    const loginScreen =
+        document.getElementById("login-screen");
+
+    const signupScreen =
+        document.getElementById("signup-screen");
+
+    if (loginScreen) {
+        loginScreen.classList.toggle(
+            "hidden",
+            screen !== "login"
+        );
+    }
+
+    if (signupScreen) {
+        signupScreen.classList.toggle(
+            "hidden",
+            screen !== "signup"
+        );
+    }
+
+    document.querySelectorAll(
+        ".auth-screen"
+    ).forEach(element => {
+        const id = element.id.toLowerCase();
 
         if (
-            modal &&
-            event.target === modal
+            id.includes(screen) ||
+            id === `${screen}-screen`
         ) {
-            modal.classList.remove("show");
-
-            document.body.classList.remove(
-                "no-scroll"
-            );
+            element.classList.remove("hidden");
+        } else {
+            element.classList.add("hidden");
         }
     });
-
-});
-
-
-/* ==================== HTML ESCAPE ==================== */
-
-function escapeHTML(value) {
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
 }
 
 
-/* ==================== GLOBAL FUNCTIONS ==================== */
+function handleAuth(event, type) {
+    if (event) {
+        event.preventDefault();
+    }
 
-window.toggleTheme = toggleTheme;
-window.changeCurrency = changeCurrency;
-window.changeLanguage = changeLanguage;
+    if (type === "login") {
+        const email =
+            document.getElementById("login-email")?.value.trim();
 
-window.filterMenu = filterMenu;
-window.searchMenu = searchMenu;
-window.submitSearch = submitSearch;
-window.handleSearchKeydown = handleSearchKeydown;
-window.startVoiceSearch = startVoiceSearch;
+        const password =
+            document.getElementById("login-password")?.value;
 
-window.addToCart = addToCart;
-window.removeFromCart = removeFromCart;
-window.changeCartQuantity = changeCartQuantity;
-window.toggleCart = toggleCart;
+        if (!email || !password) {
+            showToast(
+                "Email aur password enter karein.",
+                "error"
+            );
+            return;
+        }
 
-window.applyPromoCode = applyPromoCode;
-window.copyPromoCode = copyPromoCode;
+        currentUser = {
+            email,
+            name: email.split("@")[0]
+        };
 
-window.checkout = checkout;
-window.closeCheckoutModal = closeCheckoutModal;
-window.togglePaymentInfo = togglePaymentInfo;
-window.processOrder = processOrder;
+        saveUserData();
 
-window.detectUserLocation = detectUserLocation;
+        closeAuthModal();
 
-window.toggleWishlist = toggleWishlist;
-window.toggleWishlistModal = toggleWishlistModal;
-window.closeWishlistModal = closeWishlistModal;
+        showToast(
+            "Login successful!",
+            "success"
+        );
 
-window.openItemDetailModal = openItemDetailModal;
-window.closeItemDetailModal = closeItemDetailModal;
+        return;
+    }
 
-window.openAuthModal = openAuthModal;
-window.closeAuthModal = closeAuthModal;
-window.switchAuthScreen = switchAuthScreen;
-window.handleAuth = handleAuth;
-window.handleLogout = handleLogout;
+    if (type === "signup") {
+        const name =
+            document.getElementById("signup-name")?.value.trim();
 
-window.openDashboardModal = openDashboardModal;
-window.closeDashboardModal = closeDashboardModal;
+        const email =
+            document.getElementById("signup-email")?.value.trim();
 
-window.submitReservation = submitReservation;
+        const password =
+            document.getElementById("signup-password")?.value;
+
+        if (!name || !email || !password) {
+            showToast(
+                "Please signup form complete karein.",
+                "error"
+            );
+            return;
+        }
+
+        currentUser = {
+            name,
+            email
+        };
+
+        saveUserData();
+
+        closeAuthModal();
+
+        showToast(
+            "Account successfully create ho gaya!",
+            "success"
+        );
+    }
+}
+
+
+/* =========================================================
+   THEME
+========================================================= */
+
+function toggleTheme() {
+    const html =
+        document.getElementById("html-root") ||
+        document.documentElement;
+
+    const current =
+        html.getAttribute("data-theme") || "light";
+
+    const next =
+        current === "dark"
+            ? "light"
+            : "dark";
+
+    html.setAttribute(
+        "data-theme",
+        next
+    );
+
+    localStorage.setItem(
+        "foodieExpressTheme",
+        next
+    );
+
+    const button =
+        document.querySelector(
+            '[onclick="toggleTheme()"]'
+        );
+
+    if (button) {
+        button.innerHTML =
+            next === "dark"
+                ? '<i class="fas fa-sun"></i>'
+                : '<i class="fas fa-moon"></i>';
+    }
+}
+
+
+/* =========================================================
+   CURRENCY
+========================================================= */
+
+function changeCurrency() {
+    const selector =
+        document.getElementById("currency-selector");
+
+    if (!selector) return;
+
+    currentCurrency =
+        selector.value || "PKR";
+
+    localStorage.setItem(
+        "foodieExpressCurrency",
+        currentCurrency
+    );
+
+    renderMenu(searchMenu());
+    updateCartUI();
+    updateCheckoutSummary();
+}
+
+
+/* =========================================================
+   LANGUAGE
+========================================================= */
+
+function changeLanguage() {
+    const selector =
+        document.getElementById("language-selector");
+
+    if (!selector) return;
+
+    currentLanguage =
+        selector.value || "en";
+
+    localStorage.setItem(
+        "foodieExpressLanguage",
+        currentLanguage
+    );
+
+    if (currentLanguage === "ur") {
+        showToast(
+            "Urdu language selected.",
+            "success"
+        );
+    } else {
+        showToast(
+            "English language selected.",
+            "success"
+        );
+    }
+}
+
+
+/* =========================================================
+   LOCATION
+========================================================= */
+
+function detectUserLocation(context = "home") {
+    if (!navigator.geolocation) {
+        showToast(
+            "Your browser location support nahi karta.",
+            "error"
+        );
+        return;
+    }
+
+    showToast(
+        "Location detect ho rahi hai...",
+        "success"
+    );
+
+    navigator.geolocation.getCurrentPosition(
+        position => {
+            const lat =
+                position.coords.latitude.toFixed(5);
+
+            const lng =
+                position.coords.longitude.toFixed(5);
+
+            if (context === "checkout") {
+                const address =
+                    document.getElementById("cust-address");
+
+                if (address) {
+                    address.value =
+                        `Location detected (${lat}, ${lng})`;
+                }
+
+                showToast(
+                    "Location detect ho gayi. Exact address bhi check kar dein.",
+                    "success"
+                );
+            } else {
+                showToast(
+                    `Your location detected: ${lat}, ${lng}`,
+                    "success"
+                );
+            }
+        },
+
+        () => {
+            showToast(
+                "Location permission nahi mili.",
+                "error"
+            );
+        },
+
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+        }
+    );
+}
+
+
+/* =========================================================
+   VOICE SEARCH
+========================================================= */
+
+function startVoiceSearch() {
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+        showToast(
+            "Voice search is not supported in this browser.",
+            "error"
+        );
+        return;
+    }
+
+    const recognition =
+        new SpeechRecognition();
+
+    recognition.lang =
+        currentLanguage === "ur"
+            ? "ur-PK"
+            : "en-US";
+
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+        showToast(
+            "Bolna start karein...",
+            "success"
+        );
+    };
+
+    recognition.onresult = event => {
+        const text =
+            event.results[0][0].transcript;
+
+        const input =
+            document.getElementById("search-input");
+
+        if (input) {
+            input.value = text;
+        }
+
+        searchMenu(text);
+    };
+
+    recognition.onerror = () => {
+        showToast(
+            "Voice search mein problem hui.",
+            "error"
+        );
+    };
+
+    recognition.start();
+}
+
+
+/* =========================================================
+   STORAGE LOAD
+========================================================= */
+
+function loadFoodieExpressData() {
+    try {
+        const savedCart =
+            localStorage.getItem(
+                "foodieExpressCart"
+            );
+
+        const savedWishlist =
+            localStorage.getItem(
+                "foodieExpressWishlist"
+            );
+
+        const savedOrders =
+            localStorage.getItem(
+                "foodieExpressOrders"
+            );
+
+        const savedUser =
+            localStorage.getItem(
+                "foodieExpressUser"
+            );
+
+        const savedCoins =
+            localStorage.getItem(
+                "foodieExpressCoins"
+            );
+
+        const savedTheme =
+            localStorage.getItem(
+                "foodieExpressTheme"
+            );
+
+        const savedCurrency =
+            localStorage.getItem(
+                "foodieExpressCurrency"
+            );
+
+        const savedLanguage =
+            localStorage.getItem(
+                "foodieExpressLanguage"
+            );
+
+        if (savedCart) {
+            cart = JSON.parse(savedCart);
+        }
+
+        if (savedWishlist) {
+            wishlist = JSON.parse(savedWishlist);
+        }
+
+        if (savedOrders) {
+            orderHistory =
+                JSON.parse(savedOrders);
+        }
+
+        if (savedUser) {
+            currentUser =
+                JSON.parse(savedUser);
+        }
+
+        if (savedCoins) {
+            loyaltyCoins =
+                Number(savedCoins) || 0;
+        }
+
+        totalOrders =
+            orderHistory.length;
+
+        if (savedTheme) {
+            const html =
+                document.getElementById("html-root") ||
+                document.documentElement;
+
+            html.setAttribute(
+                "data-theme",
+                savedTheme
+            );
+        }
+
+        if (savedCurrency) {
+            currentCurrency =
+                savedCurrency;
+
+            const selector =
+                document.getElementById(
+                    "currency-selector"
+                );
+
+            if (selector) {
+                selector.value =
+                    savedCurrency;
+            }
+        }
+
+        if (savedLanguage) {
+            currentLanguage =
+                savedLanguage;
+
+            const selector =
+                document.getElementById(
+                    "language-selector"
+                );
+
+            if (selector) {
+                selector.value =
+                    savedLanguage;
+            }
+        }
+
+    } catch (error) {
+        console.error(
+            "Foodie Express storage error:",
+            error
+        );
+    }
+}
+
+
+/* =========================================================
+   INITIALIZE WEBSITE
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        loadFoodieExpressData();
+
+        renderMenu(menuItems);
+
+        updateCartUI();
+
+        renderWishlist();
+
+        renderDashboard();
+
+        togglePaymentInfo();
+
+        const savedTheme =
+            localStorage.getItem(
+                "foodieExpressTheme"
+            );
+
+        if (savedTheme) {
+            const html =
+                document.getElementById("html-root") ||
+                document.documentElement;
+
+            html.setAttribute(
+                "data-theme",
+                savedTheme
+            );
+        }
+
+        /* Mobile menu */
+        const mobileMenuButton =
+            document.querySelector(
+                ".mobile-menu-btn, .mobile-menu-toggle, #mobile-menu-btn"
+            );
+
+        const nav =
+            document.querySelector(
+                ".nav-links, .navbar-links"
+            );
+
+        if (mobileMenuButton && nav) {
+            mobileMenuButton.addEventListener(
+                "click",
+                () => {
+                    nav.classList.toggle("active");
+                    mobileMenuButton.classList.toggle("active");
+                }
+            );
+        }
+
+        /* Close mobile nav after clicking a link */
+        document.querySelectorAll(
+            ".nav-links a, .navbar-links a"
+        ).forEach(link => {
+            link.addEventListener(
+                "click",
+                () => {
+                    if (nav) {
+                        nav.classList.remove("active");
+                    }
+
+                    if (mobileMenuButton) {
+                        mobileMenuButton.classList.remove("active");
+                    }
+                }
+            );
+        });
+
+        /* Back to top */
+        const backToTop =
+            document.querySelector(
+                ".back-to-top, #back-to-top"
+            );
+
+        if (backToTop) {
+            window.addEventListener(
+                "scroll",
+                () => {
+                    backToTop.classList.toggle(
+                        "show",
+                        window.scrollY > 400
+                    );
+                }
+            );
+
+            backToTop.addEventListener(
+                "click",
+                () => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth"
+                    });
+                }
+            );
+        }
+
+        /* Escape closes modals */
+        document.addEventListener(
+            "keydown",
+            event => {
+                if (event.key !== "Escape") return;
+
+                closeCart();
+                closeAuthModal();
+                closeDashboardModal();
+                closeWishlistModal();
+                closeItemDetailModal();
+                closeCheckoutModal();
+            }
+        );
+
+        /* Cart overlay */
+        const overlay =
+            document.getElementById("cart-overlay");
+
+        if (overlay) {
+            overlay.addEventListener(
+                "click",
+                closeCart
+            );
+        }
+
+        /* Page loader */
+        const loader =
+            document.querySelector(
+                ".page-loader, #page-loader"
+            );
+
+        if (loader) {
+            setTimeout(() => {
+                loader.classList.add("hidden");
+            }, 500);
+        }
+    }
+);
