@@ -285,6 +285,7 @@ const menuItems = [
         description: "Cool mint and citrus drink served ice cold for maximum refreshment.",
         badge: "Cool"
     }
+
 ];
 
 
@@ -317,15 +318,11 @@ function formatPrice(price) {
         price * (currencyRates[currentCurrency] || 1);
 
     if (currentCurrency === "PKR") {
-
         return `PKR ${Math.round(converted).toLocaleString()}`;
-
     }
 
     if (currentCurrency === "AED") {
-
         return `AED ${converted.toFixed(2)}`;
-
     }
 
     return `${currencySymbols[currentCurrency]}${converted.toFixed(2)}`;
@@ -342,7 +339,6 @@ function saveCartToStorage() {
         "foodieExpressCart",
         JSON.stringify(cart)
     );
-
 }
 
 
@@ -352,7 +348,6 @@ function saveWishlistToStorage() {
         "foodieExpressWishlist",
         JSON.stringify(wishlist)
     );
-
 }
 
 
@@ -362,7 +357,6 @@ function saveOrderHistory() {
         "foodieExpressOrders",
         JSON.stringify(orderHistory)
     );
-
 }
 
 
@@ -377,7 +371,6 @@ function saveUserData() {
         "foodieExpressCoins",
         String(loyaltyCoins)
     );
-
 }
 
 
@@ -385,20 +378,13 @@ function saveUserData() {
    TOAST
 ========================================================= */
 
-function showToast(
-    message,
-    type = "success"
-) {
+function showToast(message, type = "success") {
 
     const container =
-        document.getElementById(
-            "toast-container"
-        );
+        document.getElementById("toast-container");
 
     if (!container) {
-
         alert(message);
-
         return;
     }
 
@@ -408,17 +394,14 @@ function showToast(
     toast.className =
         `toast ${type}`;
 
-    toast.textContent =
-        message;
+    toast.textContent = message;
 
-    container.appendChild(
-        toast
-    );
+    container.appendChild(toast);
 
-    setTimeout(() => {
+    etTimeout(() => {
 
         toast.remove();
-
+s
     }, 3100);
 }
 
@@ -435,9 +418,7 @@ function playCustomSound() {
             window.AudioContext ||
             window.webkitAudioContext;
 
-        if (!AudioContext) {
-            return;
-        }
+        if (!AudioContext) return;
 
         const audioContext =
             new AudioContext();
@@ -448,8 +429,7 @@ function playCustomSound() {
         const gain =
             audioContext.createGain();
 
-        oscillator.type =
-            "sine";
+        oscillator.type = "sine";
 
         oscillator.frequency.setValueAtTime(
             700,
@@ -467,10 +447,7 @@ function playCustomSound() {
         );
 
         oscillator.connect(gain);
-
-        gain.connect(
-            audioContext.destination
-        );
+        gain.connect(audioContext.destination);
 
         oscillator.start();
 
@@ -478,12 +455,9 @@ function playCustomSound() {
             audioContext.currentTime + 0.15
         );
 
-    }
-    catch (error) {
+    } catch (error) {
 
-        console.log(
-            "Audio unavailable."
-        );
+        console.log("Audio unavailable.");
 
     }
 }
@@ -501,43 +475,26 @@ function searchMenu(value) {
             .toLowerCase();
 
     const container =
-        document.getElementById(
-            "menu-container"
-        );
+        document.getElementById("menu-container");
 
     const noResults =
-        document.getElementById(
-            "no-results"
-        );
+        document.getElementById("no-results");
 
-    if (!container) {
-        return;
-    }
+    if (!container) return;
 
     const filtered =
         menuItems.filter(item => {
 
             const matchesSearch =
-                item.name
-                    .toLowerCase()
-                    .includes(query) ||
-
-                item.category
-                    .toLowerCase()
-                    .includes(query) ||
-
-                item.description
-                    .toLowerCase()
-                    .includes(query);
+                item.name.toLowerCase().includes(query) ||
+                item.category.toLowerCase().includes(query) ||
+                item.description.toLowerCase().includes(query);
 
             const matchesCategory =
                 currentCategory === "All" ||
                 item.category === currentCategory;
 
-            return (
-                matchesSearch &&
-                matchesCategory
-            );
+            return matchesSearch && matchesCategory;
 
         });
 
@@ -558,32 +515,21 @@ function searchMenu(value) {
    FILTER MENU
 ========================================================= */
 
-function filterMenu(
-    category,
-    clickedButton = null
-) {
+function filterMenu(category, clickedButton = null) {
 
-    currentCategory =
-        category;
+    currentCategory = category;
 
     document
         .querySelectorAll(".filter-btn")
         .forEach(button => {
-
-            button.classList.remove(
-                "active"
-            );
-
+            button.classList.remove("active");
         });
 
     if (clickedButton) {
 
-        clickedButton.classList.add(
-            "active"
-        );
+        clickedButton.classList.add("active");
 
-    }
-    else {
+    } else {
 
         document
             .querySelectorAll(".filter-btn")
@@ -598,26 +544,16 @@ function filterMenu(
                     category === "All" &&
                     text.includes("all")
                 ) {
-
-                    button.classList.add(
-                        "active"
-                    );
-
+                    button.classList.add("active");
                 }
 
                 if (
                     category !== "All" &&
-                    text.includes(
-                        category
-                            .split(" ")[0]
-                            .toLowerCase()
+                    text.toLowerCase().includes(
+                        category.split(" ")[0].toLowerCase()
                     )
                 ) {
-
-                    button.classList.add(
-                        "active"
-                    );
-
+                    button.classList.add("active");
                 }
 
             });
@@ -625,18 +561,14 @@ function filterMenu(
     }
 
     const searchInput =
-        document.getElementById(
-            "search-input"
-        );
+        document.getElementById("search-input");
 
     const searchValue =
         searchInput
             ? searchInput.value
             : "";
 
-    searchMenu(
-        searchValue
-    );
+    searchMenu(searchValue);
 }
 
 
@@ -644,114 +576,95 @@ function filterMenu(
    RENDER MENU
 ========================================================= */
 
-function renderMenu(
-    items = menuItems
-) {
+function renderMenu(items = menuItems) {
 
     const container =
-        document.getElementById(
-            "menu-container"
-        );
+        document.getElementById("menu-container");
 
-    if (!container) {
-        return;
-    }
+    if (!container) return;
 
     container.innerHTML = "";
 
-    items.forEach(
-        (item, index) => {
+    items.forEach((item, index) => {
 
-            const isLiked =
-                wishlist.includes(
-                    item.id
-                );
+        const isLiked =
+            wishlist.includes(item.id);
 
-            const card =
-                document.createElement(
-                    "article"
-                );
+        const card =
+            document.createElement("article");
 
-            card.className =
-                "menu-card";
+        card.className = "menu-card";
 
-            card.style.animationDelay =
-                `${index * 0.04}s`;
+        card.style.animationDelay =
+            `${index * 0.04}s`;
 
-            card.innerHTML = `
+        card.innerHTML = `
+            <div class="menu-image">
 
-                <div class="menu-image">
+                <img
+                    src="${item.image}"
+                    alt="${escapeHTML(item.name)}"
+                    loading="lazy"
+                    onerror="this.src='https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80';">
 
-                    <img
-                        src="${item.image}"
-                        alt="${escapeHTML(item.name)}"
-                        loading="lazy"
-                        onerror="this.src='https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80';">
+                <span class="menu-badge">
+                    ${escapeHTML(item.badge)}
+                </span>
 
-                    <span class="menu-badge">
-                        ${escapeHTML(item.badge)}
-                    </span>
+                <button
+                    class="wishlist-btn ${isLiked ? "active" : ""}"
+                    onclick="toggleWishlist(${item.id})"
+                    title="Wishlist">
+
+                    <i class="${isLiked ? "fa-solid" : "fa-regular"} fa-heart"></i>
+
+                </button>
+
+            </div>
+
+            <div class="menu-info">
+
+                <span class="menu-category">
+                    ${escapeHTML(item.category)}
+                </span>
+
+                <h3>
+                    ${escapeHTML(item.name)}
+                </h3>
+
+                <p>
+                    ${escapeHTML(item.description)}
+                </p>
+
+                <div class="menu-bottom">
+
+                    <strong class="menu-price">
+                        ${formatPrice(item.price)}
+                    </strong>
 
                     <button
-                        class="wishlist-btn ${isLiked ? "active" : ""}"
-                        onclick="toggleWishlist(${item.id})"
-                        title="Wishlist">
+                        class="add-cart-btn"
+                        onclick="addToCart(${item.id})">
 
-                        <i class="${isLiked ? "fa-solid" : "fa-regular"} fa-heart"></i>
+                        <i class="fa-solid fa-cart-plus"></i>
+                        Add
 
                     </button>
 
                 </div>
 
+            </div>
+        `;
 
-                <div class="menu-info">
+        card.addEventListener(
+            "dblclick",
+            () => openItemDetail(item.id)
+        );
 
-                    <span class="menu-category">
-                        ${escapeHTML(item.category)}
-                    </span>
+        container.appendChild(card);
 
-                    <h3>
-                        ${escapeHTML(item.name)}
-                    </h3>
+    });
 
-                    <p>
-                        ${escapeHTML(item.description)}
-                    </p>
-
-                    <div class="menu-bottom">
-
-                        <strong class="menu-price">
-                            ${formatPrice(item.price)}
-                        </strong>
-
-                        <button
-                            class="add-cart-btn"
-                            onclick="addToCart(${item.id})">
-
-                            <i class="fa-solid fa-cart-plus"></i>
-                            Add
-
-                        </button>
-
-                    </div>
-
-                </div>
-            `;
-
-            card.addEventListener(
-                "dblclick",
-                () =>
-                    openItemDetail(
-                        item.id
-                    )
-            );
-
-            container.appendChild(
-                card
-            );
-
-        }
-    );
 }
 
 
@@ -762,26 +675,11 @@ function renderMenu(
 function escapeHTML(value) {
 
     return String(value)
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
 
@@ -789,41 +687,25 @@ function escapeHTML(value) {
    ITEM DETAIL
 ========================================================= */
 
-function openItemDetail(
-    itemId
-) {
+function openItemDetail(itemId) {
 
     const normalizedItemId =
         Number(itemId);
 
     const item =
         menuItems.find(
-            product =>
-                product.id ===
-                normalizedItemId
+            product => product.id === normalizedItemId
         );
 
     const modal =
-        document.getElementById(
-            "item-detail-modal"
-        );
+        document.getElementById("item-detail-modal");
 
     const body =
-        document.getElementById(
-            "item-detail-body"
-        );
+        document.getElementById("item-detail-body");
 
-    if (
-        !item ||
-        !modal ||
-        !body
-    ) {
-
-        return;
-    }
+    if (!item || !modal || !body) return;
 
     body.innerHTML = `
-
         <div class="item-detail">
 
             <div class="item-detail-image">
@@ -866,25 +748,17 @@ function openItemDetail(
         </div>
     `;
 
-    modal.classList.remove(
-        "hidden"
-    );
+    modal.classList.remove("hidden");
 }
 
 
 function closeItemDetailModal() {
 
     const modal =
-        document.getElementById(
-            "item-detail-modal"
-        );
+        document.getElementById("item-detail-modal");
 
     if (modal) {
-
-        modal.classList.add(
-            "hidden"
-        );
-
+        modal.classList.add("hidden");
     }
 }
 
@@ -893,13 +767,9 @@ function closeItemDetailModal() {
    ADD FLAVOR TO CART
 ========================================================= */
 
-function addFlavorToCart(
-    itemId
-) {
+function addFlavorToCart(itemId) {
 
-    addToCart(
-        itemId
-    );
+    addToCart(itemId);
 
 }
 
@@ -908,6 +778,12 @@ function addFlavorToCart(
    CART HELPERS
 ========================================================= */
 
+/*
+   Cart IDs ko hamesha number mein convert karta hai.
+   Is se LocalStorage mein string ID save hone ki wajah se
+   add / plus / minus / remove ka issue nahi hota.
+*/
+
 function normalizeCartData() {
 
     if (!Array.isArray(cart)) {
@@ -915,82 +791,62 @@ function normalizeCartData() {
         cart = [];
 
         return;
+
     }
 
     const normalizedCart = [];
 
-    cart.forEach(
-        savedItem => {
+    cart.forEach(savedItem => {
 
-            if (!savedItem) {
-                return;
-            }
+        if (!savedItem) return;
 
-            const itemId =
-                Number(
-                    savedItem.id
-                );
+        const itemId =
+            Number(savedItem.id);
 
-            const menuItem =
-                menuItems.find(
-                    product =>
-                        product.id ===
-                        itemId
-                );
+        const menuItem =
+            menuItems.find(
+                product => product.id === itemId
+            );
 
-            if (!menuItem) {
-                return;
-            }
+        if (!menuItem) return;
 
-            const quantity =
-                Math.max(
-                    1,
-                    Number(
-                        savedItem.quantity
-                    ) || 1
-                );
+        const quantity =
+            Math.max(
+                1,
+                Number(savedItem.quantity) || 1
+            );
 
-            const existing =
-                normalizedCart.find(
-                    cartItem =>
-                        cartItem.id ===
-                        itemId
-                );
+        const existing =
+            normalizedCart.find(
+                cartItem => cartItem.id === itemId
+            );
 
-            if (existing) {
+        if (existing) {
 
-                existing.quantity +=
-                    quantity;
+            existing.quantity += quantity;
 
-            }
-            else {
+        } else {
 
-                normalizedCart.push({
+            normalizedCart.push({
 
-                    id:
-                        menuItem.id,
+                id: menuItem.id,
 
-                    name:
-                        menuItem.name,
+                name: menuItem.name,
 
-                    price:
-                        menuItem.price,
+                price: menuItem.price,
 
-                    image:
-                        menuItem.image,
+                image: menuItem.image,
 
-                    quantity:
-                        quantity
+                quantity
 
-                });
-
-            }
+            });
 
         }
-    );
 
-    cart =
-        normalizedCart;
+    });
+
+    cart = normalizedCart;
+
 }
 
 
@@ -998,31 +854,22 @@ function normalizeCartData() {
    CART
 ========================================================= */
 
-function addToCart(
-    itemId
-) {
+function addToCart(itemId) {
 
     const normalizedItemId =
         Number(itemId);
 
     const item =
         menuItems.find(
-            product =>
-                product.id ===
-                normalizedItemId
+            product => product.id === normalizedItemId
         );
 
-    if (!item) {
-        return;
-    }
+    if (!item) return;
 
     const existing =
         cart.find(
             cartItem =>
-                Number(
-                    cartItem.id
-                ) ===
-                normalizedItemId
+                Number(cartItem.id) === normalizedItemId
         );
 
     if (existing) {
@@ -1033,30 +880,22 @@ function addToCart(
         existing.quantity =
             Math.max(
                 1,
-                Number(
-                    existing.quantity
-                ) || 1
+                Number(existing.quantity) || 1
             ) + 1;
 
-    }
-    else {
+    } else {
 
         cart.push({
 
-            id:
-                item.id,
+            id: item.id,
 
-            name:
-                item.name,
+            name: item.name,
 
-            price:
-                item.price,
+            price: item.price,
 
-            image:
-                item.image,
+            image: item.image,
 
-            quantity:
-                1
+            quantity: 1
 
         });
 
@@ -1073,13 +912,7 @@ function addToCart(
     showToast(
         `${item.name} added to your cart!`
     );
-}
-
-
-function updateQuantity(
-    itemId,
-    change
-) {
+}function updateQuantity(itemId, change) {
 
     const normalizedItemId =
         Number(itemId);
@@ -1088,52 +921,34 @@ function updateQuantity(
         Number(change);
 
     if (
-        !Number.isFinite(
-            normalizedItemId
-        ) ||
-        !Number.isFinite(
-            normalizedChange
-        )
+        !Number.isFinite(normalizedItemId) ||
+        !Number.isFinite(normalizedChange)
     ) {
-
         return;
     }
 
     const item =
         cart.find(
             cartItem =>
-                Number(
-                    cartItem.id
-                ) ===
-                normalizedItemId
+                Number(cartItem.id) === normalizedItemId
         );
 
-    if (!item) {
-        return;
-    }
+    if (!item) return;
 
     item.id =
         normalizedItemId;
 
     item.quantity =
-        Number(
-            item.quantity
-        ) || 1;
+        Number(item.quantity) || 1;
 
-    item.quantity +=
-        normalizedChange;
+    item.quantity += normalizedChange;
 
-    if (
-        item.quantity <= 0
-    ) {
+    if (item.quantity <= 0) {
 
         cart =
             cart.filter(
                 cartItem =>
-                    Number(
-                        cartItem.id
-                    ) !==
-                    normalizedItemId
+                    Number(cartItem.id) !== normalizedItemId
             );
 
     }
@@ -1146,9 +961,7 @@ function updateQuantity(
 }
 
 
-function removeFromCart(
-    itemId
-) {
+function removeFromCart(itemId) {
 
     const normalizedItemId =
         Number(itemId);
@@ -1156,19 +969,13 @@ function removeFromCart(
     const item =
         cart.find(
             cartItem =>
-                Number(
-                    cartItem.id
-                ) ===
-                normalizedItemId
+                Number(cartItem.id) === normalizedItemId
         );
 
     cart =
         cart.filter(
             cartItem =>
-                Number(
-                    cartItem.id
-                ) !==
-                normalizedItemId
+                Number(cartItem.id) !== normalizedItemId
         );
 
     normalizeCartData();
@@ -1197,54 +1004,43 @@ function updateCartUI() {
     normalizeCartData();
 
     const cartItems =
-        document.getElementById(
-            "cart-items"
-        );
+        document.getElementById("cart-items");
 
     const cartTotal =
-        document.getElementById(
-            "cart-total"
-        );
+        document.getElementById("cart-total");
 
     const cartDiscount =
-        document.getElementById(
-            "cart-discount"
-        );
+        document.getElementById("cart-discount");
 
     const floatingCount =
-        document.getElementById(
-            "floating-cart-count"
-        );
+        document.getElementById("floating-cart-count");
 
+
+    /*
+       Total items quantity:
+       Burger x2 + Pizza x1 = Counter 3
+    */
 
     const totalQuantity =
         cart.reduce(
-            (
-                sum,
-                item
-            ) => {
+            (sum, item) => {
 
                 const quantity =
-                    Number(
-                        item.quantity
-                    ) || 0;
+                    Number(item.quantity) || 0;
 
-                return (
-                    sum +
-                    quantity
-                );
+                return sum + quantity;
 
             },
             0
         );
 
 
+    /* ---------------- COUNTER ---------------- */
+
     if (floatingCount) {
 
         floatingCount.textContent =
-            String(
-                totalQuantity
-            );
+            String(totalQuantity);
 
         floatingCount.setAttribute(
             "aria-label",
@@ -1254,76 +1050,66 @@ function updateCartUI() {
     }
 
 
+    /* ---------------- SUBTOTAL ---------------- */
+
     let subtotal = 0;
 
-    cart.forEach(
-        item => {
+    cart.forEach(item => {
 
-            const quantity =
-                Number(
-                    item.quantity
-                ) || 0;
+        const quantity =
+            Number(item.quantity) || 0;
 
-            const price =
-                Number(
-                    item.price
-                ) || 0;
+        const price =
+            Number(item.price) || 0;
 
-            subtotal +=
-                price *
-                quantity;
+        subtotal +=
+            price * quantity;
 
-        }
-    );
+    });
 
+
+    /* ---------------- DISCOUNT ---------------- */
 
     const discountAmount =
         subtotal *
         (
-            Number(
-                currentDiscount
-            ) || 0
+            Number(currentDiscount) || 0
         ) /
         100;
 
 
+    /* ---------------- FINAL TOTAL ---------------- */
+
     const finalTotal =
         Math.max(
             0,
-            subtotal -
-            discountAmount
+            subtotal - discountAmount
         );
 
 
     if (cartDiscount) {
 
         cartDiscount.textContent =
-            formatPrice(
-                discountAmount
-            );
+            formatPrice(discountAmount);
 
     }
-
 
     if (cartTotal) {
 
         cartTotal.textContent =
-            formatPrice(
-                finalTotal
-            );
+            formatPrice(finalTotal);
 
     }
 
 
-    if (!cartItems) {
-        return;
-    }
+    /* ---------------- CART ITEMS ---------------- */
+
+    if (!cartItems) return;
 
 
     if (cart.length === 0) {
 
         cartItems.innerHTML = `
-
             <div class="empty-cart">
 
                 <i class="fa-solid fa-basket-shopping"></i>
@@ -1339,95 +1125,79 @@ function updateCartUI() {
     }
 
 
-    cartItems.innerHTML =
-        "";
+    cartItems.innerHTML = "";
 
 
-    cart.forEach(
-        item => {
+    cart.forEach(item => {
 
-            const quantity =
-                Number(
-                    item.quantity
-                ) || 1;
+        const quantity =
+            Number(item.quantity) || 1;
 
-            const element =
-                document.createElement(
-                    "div"
-                );
+        const element =
+            document.createElement("div");
 
-            element.className =
-                "cart-item";
+        element.className =
+            "cart-item";
 
+        element.innerHTML = `
+            <div class="cart-item-image">
 
-            element.innerHTML = `
+                <img
+                    src="${item.image}"
+                    alt="${escapeHTML(item.name)}">
 
-                <div class="cart-item-image">
+            </div>
 
-                    <img
-                        src="${item.image}"
-                        alt="${escapeHTML(item.name)}">
+            <div class="cart-item-info">
 
-                </div>
+                <h4>
+                    ${escapeHTML(item.name)}
+                </h4>
 
+                <p>
+                    ${formatPrice(item.price)}
+                </p>
 
-                <div class="cart-item-info">
+                <div class="quantity-controls">
 
-                    <h4>
-                        ${escapeHTML(item.name)}
-                    </h4>
+                    <button
+                        type="button"
+                        onclick="updateQuantity(${item.id}, -1)"
+                        aria-label="Decrease quantity">
+                        −
+                    </button>
 
-                    <p>
-                        ${formatPrice(item.price)}
-                    </p>
+                    <span>
+                        ${quantity}
+                    </span>
 
-                    <div class="quantity-controls">
-
-                        <button
-                            type="button"
-                            onclick="updateQuantity(${item.id}, -1)"
-                            aria-label="Decrease quantity">
-
-                            −
-
-                        </button>
-
-                        <span>
-                            ${quantity}
-                        </span>
-
-                        <button
-                            type="button"
-                            onclick="updateQuantity(${item.id}, 1)"
-                            aria-label="Increase quantity">
-
-                            +
-
-                        </button>
-
-                    </div>
+                    <button
+                        type="button"
+                        onclick="updateQuantity(${item.id}, 1)"
+                        aria-label="Increase quantity">
+                        +
+                    </button>
 
                 </div>
 
+            </div>
 
-                <button
-                    type="button"
-                    class="remove-cart-item"
-                    onclick="removeFromCart(${item.id})"
-                    title="Remove"
-                    aria-label="Remove ${escapeHTML(item.name)}">
+            <button
+                type="button"
+                class="remove-cart-item"
+                onclick="removeFromCart(${item.id})"
+                title="Remove"
+                aria-label="Remove ${escapeHTML(item.name)}">
 
-                    <i class="fa-solid fa-trash"></i>
+                <i class="fa-solid fa-trash"></i>
 
-                </button>
-            `;
+            </button>
+        `;
 
-            cartItems.appendChild(
-                element
-            );
+        cartItems.appendChild(element);
 
-        }
-    );
+    });
+
 }
 
 
@@ -1438,17 +1208,12 @@ function updateCartUI() {
 function toggleCart() {
 
     const sidebar =
-        document.getElementById(
-            "cart-sidebar"
-        );
+        document.getElementById("cart-sidebar");
 
-    if (!sidebar) {
-        return;
-    }
+    if (!sidebar) return;
 
-    sidebar.classList.toggle(
-        "open"
-    );
+    sidebar.classList.toggle("open");
+
 }
 
 
@@ -1459,19 +1224,14 @@ function toggleCart() {
 function applyCoupon() {
 
     const input =
-        document.getElementById(
-            "coupon-input"
-        );
+        document.getElementById("coupon-input");
 
-    if (!input) {
-        return;
-    }
+    if (!input) return;
 
     const code =
         input.value
             .trim()
             .toUpperCase();
-
 
     if (!code) {
 
@@ -1483,60 +1243,25 @@ function applyCoupon() {
         return;
     }
 
+    if (code === "FOODIE50") {
 
-    if (
-        code ===
-        "FOODIE50"
-    ) {
-
-        currentDiscount =
-            10;
-
-        /*
-           checkout.html uses the exact same
-           localStorage key.
-        */
-
-        localStorage.setItem(
-            "foodieExpressCheckoutDiscount",
-            String(
-                currentDiscount
-            )
-        );
+        currentDiscount = 10;
 
         showToast(
             "10% discount applied successfully!"
         );
 
-    }
-    else if (
-        code ===
-        "WELCOME"
-    ) {
+    } else if (code === "WELCOME") {
 
-        currentDiscount =
-            5;
-
-        localStorage.setItem(
-            "foodieExpressCheckoutDiscount",
-            String(
-                currentDiscount
-            )
-        );
+        currentDiscount = 5;
 
         showToast(
             "5% welcome discount applied!"
         );
 
-    }
-    else {
+    } else {
 
-        currentDiscount =
-            0;
-
-        localStorage.removeItem(
-            "foodieExpressCheckoutDiscount"
-        );
+        currentDiscount = 0;
 
         showToast(
             "Invalid promo code.",
@@ -1553,46 +1278,32 @@ function applyCoupon() {
    WISHLIST
 ========================================================= */
 
-function toggleWishlist(
-    itemId
-) {
+function toggleWishlist(itemId) {
 
     const normalizedItemId =
         Number(itemId);
 
     const item =
         menuItems.find(
-            product =>
-                product.id ===
-                normalizedItemId
+            product => product.id === normalizedItemId
         );
 
-    if (!item) {
-        return;
-    }
+    if (!item) return;
 
     const index =
-        wishlist.indexOf(
-            normalizedItemId
-        );
+        wishlist.indexOf(normalizedItemId);
 
     if (index === -1) {
 
-        wishlist.push(
-            normalizedItemId
-        );
+        wishlist.push(normalizedItemId);
 
         showToast(
             `${item.name} added to wishlist!`
         );
 
-    }
-    else {
+    } else {
 
-        wishlist.splice(
-            index,
-            1
-        );
+        wishlist.splice(index, 1);
 
         showToast(
             `${item.name} removed from wishlist.`
@@ -1613,14 +1324,10 @@ function toggleWishlist(
 function updateWishlistUI() {
 
     const count =
-        document.getElementById(
-            "wishlist-count"
-        );
+        document.getElementById("wishlist-count");
 
     const container =
-        document.getElementById(
-            "wishlist-items"
-        );
+        document.getElementById("wishlist-items");
 
     if (count) {
 
@@ -1629,15 +1336,11 @@ function updateWishlistUI() {
 
     }
 
-    if (!container) {
-        return;
-    }
-
+    if (!container) return;
 
     if (wishlist.length === 0) {
 
         container.innerHTML = `
-
             <div class="empty-state">
 
                 <i class="fa-regular fa-heart"></i>
@@ -1654,105 +1357,82 @@ function updateWishlistUI() {
         return;
     }
 
+    container.innerHTML = "";
 
-    container.innerHTML =
-        "";
+    wishlist.forEach(id => {
 
+        const normalizedId =
+            Number(id);
 
-    wishlist.forEach(
-        id => {
-
-            const normalizedId =
-                Number(id);
-
-            const item =
-                menuItems.find(
-                    product =>
-                        product.id ===
-                        normalizedId
-                );
-
-            if (!item) {
-                return;
-            }
-
-
-            const element =
-                document.createElement(
-                    "div"
-                );
-
-            element.className =
-                "wishlist-item";
-
-
-            element.innerHTML = `
-
-                <img
-                    src="${item.image}"
-                    alt="${escapeHTML(item.name)}">
-
-
-                <div class="wishlist-item-info">
-
-                    <h4>
-                        ${escapeHTML(item.name)}
-                    </h4>
-
-                    <p>
-                        ${formatPrice(item.price)}
-                    </p>
-
-                </div>
-
-
-                <div class="wishlist-item-actions">
-
-                    <button
-                        type="button"
-                        onclick="addToCart(${item.id})"
-                        title="Add to Cart">
-
-                        <i class="fa-solid fa-cart-plus"></i>
-
-                    </button>
-
-
-                    <button
-                        type="button"
-                        onclick="toggleWishlist(${item.id})"
-                        title="Remove">
-
-                        <i class="fa-solid fa-trash"></i>
-
-                    </button>
-
-                </div>
-            `;
-
-            container.appendChild(
-                element
+        const item =
+            menuItems.find(
+                product =>
+                    product.id === normalizedId
             );
 
-        }
-    );
+        if (!item) return;
+
+        const element =
+            document.createElement("div");
+
+        element.className =
+            "wishlist-item";
+
+        element.innerHTML = `
+            <img
+                src="${item.image}"
+                alt="${escapeHTML(item.name)}">
+
+            <div class="wishlist-item-info">
+
+                <h4>
+                    ${escapeHTML(item.name)}
+                </h4>
+
+                <p>
+                    ${formatPrice(item.price)}
+                </p>
+
+            </div>
+
+            <div class="wishlist-item-actions">
+
+                <button
+                    type="button"
+                    onclick="addToCart(${item.id})"
+                    title="Add to Cart">
+
+                    <i class="fa-solid fa-cart-plus"></i>
+
+                </button>
+
+                <button
+                    type="button"
+                    onclick="toggleWishlist(${item.id})"
+                    title="Remove">
+
+                    <i class="fa-solid fa-trash"></i>
+
+                </button>
+
+            </div>
+        `;
+
+        container.appendChild(element);
+
+    });
+
 }
 
 
 function toggleWishlistModal() {
 
     const modal =
-        document.getElementById(
-            "wishlist-modal"
-        );
+        document.getElementById("wishlist-modal");
 
-    if (!modal) {
-        return;
-    }
+    if (!modal) return;
 
-    modal.classList.toggle(
-        "hidden"
-    );
+    modal.classList.toggle("hidden");
 
     updateWishlistUI();
 }
@@ -1765,9 +1445,7 @@ function toggleWishlistModal() {
 function getVisibleMenuItems() {
 
     const searchInput =
-        document.getElementById(
-            "search-input"
-        );
+        document.getElementById("search-input");
 
     const query =
         searchInput
@@ -1776,39 +1454,27 @@ function getVisibleMenuItems() {
                 .toLowerCase()
             : "";
 
+    return menuItems.filter(item => {
 
-    return menuItems.filter(
-        item => {
+        const categoryMatch =
+            currentCategory === "All" ||
+            item.category === currentCategory;
 
-            const categoryMatch =
-                currentCategory === "All" ||
-                item.category ===
-                currentCategory;
+        const searchMatch =
+            !query ||
+            item.name.toLowerCase().includes(query) ||
+            item.category.toLowerCase().includes(query) ||
+            item.description.toLowerCase().includes(query);
 
-            const searchMatch =
-                !query ||
-                item.name
-                    .toLowerCase()
-                    .includes(query) ||
-                item.category
-                    .toLowerCase()
-                    .includes(query) ||
-                item.description
-                    .toLowerCase()
-                    .includes(query);
+        return categoryMatch && searchMatch;
 
-            return (
-                categoryMatch &&
-                searchMatch
-            );
+    });
 
-        }
-    );
 }
 
 
 /* =========================================================
-   DEDICATED CHECKOUT PAGE
+   CHECKOUT
 ========================================================= */
 
 function checkout() {
@@ -1823,78 +1489,24 @@ function checkout() {
         return;
     }
 
+    const modal =
+        document.getElementById("checkout-modal");
 
-    normalizeCartData();
+    if (!modal) return;
 
-    saveCartToStorage();
+    modal.classList.remove("hidden");
 
-
-    /*
-       checkout.html already has its own complete
-       frontend checkout system.
-
-       It reads:
-       foodieExpressCart
-       foodieExpressCurrency
-       foodieExpressUser
-       foodieExpressCheckoutDiscount
-    */
-
-    if (
-        currentDiscount > 0
-    ) {
-
-        localStorage.setItem(
-            "foodieExpressCheckoutDiscount",
-            String(
-                currentDiscount
-            )
-        );
-
-    }
-    else {
-
-        localStorage.removeItem(
-            "foodieExpressCheckoutDiscount"
-        );
-
-    }
-
-
-    localStorage.setItem(
-        "foodieExpressCheckoutOpen",
-        "true"
-    );
-
-
-    /*
-       IMPORTANT:
-       Do NOT open the old checkout modal here.
-       The actual dedicated checkout screen is checkout.html.
-    */
-
-    window.location.href =
-        "checkout.html";
 }
 
-
-/* =========================================================
-   OLD CHECKOUT MODAL
-   Kept for compatibility with existing HTML.
-========================================================= */
 
 function closeCheckoutModal() {
 
     const modal =
-        document.getElementById(
-            "checkout-modal"
-        );
+        document.getElementById("checkout-modal");
 
     if (modal) {
 
-        modal.classList.add(
-            "hidden"
-        );
+        modal.classList.add("hidden");
 
     }
 }
@@ -1903,23 +1515,12 @@ function closeCheckoutModal() {
 function togglePaymentInfo() {
 
     const method =
-        document.getElementById(
-            "payment-method"
-        );
+        document.getElementById("payment-method");
 
     const details =
-        document.getElementById(
-            "online-payment-details"
-        );
+        document.getElementById("online-payment-details");
 
-    if (
-        !method ||
-        !details
-    ) {
-
-        return;
-    }
-
+    if (!method || !details) return;
 
     const onlineMethods =
         [
@@ -1928,29 +1529,20 @@ function togglePaymentInfo() {
             "Card"
         ];
 
-
     details.classList.toggle(
         "hidden",
-        !onlineMethods.includes(
-            method.value
-        )
+        !onlineMethods.includes(method.value)
     );
 }
 
 
 /* =========================================================
-   OLD PROCESS ORDER
-   Kept for existing compatibility.
+   PROCESS ORDER
 ========================================================= */
 
-function processOrder(
-    event
-) {
+function processOrder(event) {
 
-    if (event) {
-        event.preventDefault();
-    }
-
+    event.preventDefault();
 
     if (cart.length === 0) {
 
@@ -1962,44 +1554,23 @@ function processOrder(
         return;
     }
 
-
     const name =
-        document.getElementById(
-            "cust-name"
-        )
-            ?.value
-            .trim();
-
+        document.getElementById("cust-name")
+            ?.value.trim();
 
     const phone =
-        document.getElementById(
-            "cust-phone"
-        )
-            ?.value
-            .trim();
-
+        document.getElementById("cust-phone")
+            ?.value.trim();
 
     const address =
-        document.getElementById(
-            "cust-address"
-        )
-            ?.value
-            .trim();
-
+        document.getElementById("cust-address")
+            ?.value.trim();
 
     const payment =
-        document.getElementById(
-            "payment-method"
-        )
+        document.getElementById("payment-method")
             ?.value;
 
-
-    if (
-        !name ||
-        !phone ||
-        !address ||
-        !payment
-    ) {
+    if (!name || !phone || !address || !payment) {
 
         showToast(
             "Please complete all checkout fields.",
@@ -2009,36 +1580,23 @@ function processOrder(
         return;
     }
 
-
     let subtotal = 0;
 
+    cart.forEach(item => {
 
-    cart.forEach(
-        item => {
+        subtotal +=
+            item.price * item.quantity;
 
-            subtotal +=
-                item.price *
-                item.quantity;
-
-        }
-    );
-
+    });
 
     const discount =
-        subtotal *
-        (
-            currentDiscount /
-            100
-        );
-
+        subtotal * (currentDiscount / 100);
 
     const total =
         Math.max(
             0,
-            subtotal -
-            discount
+            subtotal - discount
         );
-
 
     const orderId =
         "FE-" +
@@ -2046,28 +1604,21 @@ function processOrder(
             .toString()
             .slice(-8);
 
-
     const order = {
 
-        id:
-            orderId,
+        id: orderId,
 
         customer: {
-
             name,
             phone,
             address
-
         },
 
         payment,
 
-        items:
-            JSON.parse(
-                JSON.stringify(
-                    cart
-                )
-            ),
+        items: JSON.parse(
+            JSON.stringify(cart)
+        ),
 
         subtotal,
 
@@ -2075,33 +1626,21 @@ function processOrder(
 
         total,
 
-        currency:
-            currentCurrency,
+        currency: currentCurrency,
 
         date:
-            new Date()
-                .toLocaleString(),
+            new Date().toLocaleString(),
 
-        status:
-            "Order Placed"
+        status: "Order Placed"
 
     };
 
+    orderHistory.unshift(order);
 
-    orderHistory.unshift(
-        order
-    );
-
-    totalOrders +=
-        1;
-
+    totalOrders += 1;
 
     loyaltyCoins +=
-        Math.floor(
-            total /
-            100
-        );
-
+        Math.floor(total / 100);
 
     saveOrderHistory();
 
@@ -2114,14 +1653,6 @@ function processOrder(
 
     currentDiscount = 0;
 
-    localStorage.removeItem(
-        "foodieExpressCheckoutDiscount"
-    );
-
-    localStorage.removeItem(
-        "foodieExpressCheckoutOpen"
-    );
-
     saveCartToStorage();
 
     updateCartUI();
@@ -2133,11 +1664,8 @@ function processOrder(
 
     closeCheckoutModal();
 
-
     const form =
-        document.getElementById(
-            "checkout-form"
-        );
+        document.getElementById("checkout-form");
 
     if (form) {
 
@@ -2150,74 +1678,48 @@ function processOrder(
         `Order ${orderId} placed successfully!`
     );
 
-
     playCustomSound();
 
     startOrderTrackingSimulation();
 
 
     const sidebar =
-        document.getElementById(
-            "cart-sidebar"
-        );
+        document.getElementById("cart-sidebar");
 
     if (sidebar) {
 
-        sidebar.classList.remove(
-            "open"
-        );
+        sidebar.classList.remove("open");
 
     }
 
 
     const tracking =
-        document.getElementById(
-            "tracking-section"
-        );
+        document.getElementById("tracking-section");
 
     if (tracking) {
 
-        setTimeout(
-            () => {
+        setTimeout(() => {
 
-                tracking.scrollIntoView({
+            tracking.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
 
-                    behavior:
-                        "smooth",
-
-                    block:
-                        "start"
-
-                });
-
-            },
-            500
-        );
+        }, 500);
 
     }
-}
-
-
-/* =========================================================
+}/* =========================================================
    ORDER TRACKING
 ========================================================= */
 
 function startOrderTrackingSimulation() {
 
     const section =
-        document.getElementById(
-            "tracking-section"
-        );
+        document.getElementById("tracking-section");
 
-    if (!section) {
-        return;
-    }
+    if (!section) return;
 
-
-    section.classList.remove(
-        "hidden"
-    );
-
+    section.classList.remove("hidden");
 
     const steps =
         [
@@ -2227,86 +1729,57 @@ function startOrderTrackingSimulation() {
             "step-4"
         ];
 
+    steps.forEach((id, index) => {
 
-    steps.forEach(
-        (
-            id,
-            index
-        ) => {
+        const step =
+            document.getElementById(id);
+
+        if (step) {
+
+            step.classList.toggle(
+                "active",
+                index === 0
+            );
+
+        }
+
+    });
+
+    if (trackingTimer) {
+
+        clearInterval(trackingTimer);
+
+    }
+
+    let currentStep = 1;
+
+    trackingTimer =
+        setInterval(() => {
 
             const step =
                 document.getElementById(
-                    id
+                    `step-${currentStep}`
                 );
 
             if (step) {
 
-                step.classList.toggle(
-                    "active",
-                    index === 0
+                step.classList.add("active");
+
+            }
+
+            currentStep++;
+
+            if (currentStep > 4) {
+
+                clearInterval(trackingTimer);
+
+                showToast(
+                    "Your order has been delivered! Enjoy your meal 🎉"
                 );
 
             }
 
-        }
-    );
-
-
-    if (trackingTimer) {
-
-        clearInterval(
-            trackingTimer
-        );
-
-    }
-
-
-    let currentStep = 1;
-
-
-    trackingTimer =
-        setInterval(
-            () => {
-
-                const step =
-                    document.getElementById(
-                        `step-${currentStep}`
-                    );
-
-
-                if (step) {
-
-                    step.classList.add(
-                        "active"
-                    );
-
-                }
-
-
-                currentStep++;
-
-
-                if (
-                    currentStep >
-                    4
-                ) {
-
-                    clearInterval(
-                        trackingTimer
-                    );
-
-                    trackingTimer =
-                        null;
-
-                    showToast(
-                        "Your order has been delivered! Enjoy your meal 🎉"
-                    );
-
-                }
-
-            },
-            3500
-        );
+        }, 3500);
 }
 
 
@@ -2317,22 +1790,13 @@ function startOrderTrackingSimulation() {
 function renderOrderHistory() {
 
     const container =
-        document.getElementById(
-            "history-container"
-        );
+        document.getElementById("history-container");
 
-    if (!container) {
-        return;
-    }
+    if (!container) return;
 
-
-    if (
-        orderHistory.length ===
-        0
-    ) {
+    if (orderHistory.length === 0) {
 
         container.innerHTML = `
-
             <div class="empty-state">
 
                 <i class="fa-solid fa-receipt"></i>
@@ -2349,74 +1813,52 @@ function renderOrderHistory() {
         return;
     }
 
+    container.innerHTML = "";
 
-    container.innerHTML =
-        "";
+    orderHistory.forEach(order => {
 
+        const element =
+            document.createElement("div");
 
-    orderHistory.forEach(
-        order => {
+        element.className =
+            "history-item";
 
-            const element =
-                document.createElement(
-                    "div"
-                );
-
-            element.className =
-                "history-item";
-
-
-            const itemNames =
-                Array.isArray(
-                    order.items
+        const itemNames =
+            order.items
+                .map(
+                    item =>
+                        `${item.name} × ${item.quantity}`
                 )
-                    ? order.items
-                        .map(
-                            item =>
-                                `${item.name} × ${item.quantity}`
-                        )
-                        .join(", ")
-                    : "";
+                .join(", ");
 
+        element.innerHTML = `
+            <div class="history-item-top">
 
-            element.innerHTML = `
+                <strong>
+                    ${escapeHTML(order.id)}
+                </strong>
 
-                <div class="history-item-top">
-
-                    <strong>
-                        ${escapeHTML(order.id)}
-                    </strong>
-
-                    <span>
-                        ${formatPrice(
-                            order.total
-                        )}
-                    </span>
-
-                </div>
-
-
-                <div>
-                    ${escapeHTML(itemNames)}
-                </div>
-
-
-                <small>
-                    ${escapeHTML(
-                        order.date ||
-                        ""
+                <span>
+                    ${formatPrice(
+                        order.total
                     )}
-                </small>
+                </span>
 
-            `;
+            </div>
 
+            <div>
+                ${escapeHTML(itemNames)}
+            </div>
 
-            container.appendChild(
-                element
-            );
+            <small>
+                ${escapeHTML(order.date)}
+            </small>
 
-        }
-    );
+        `;
+
+        container.appendChild(element);
+
+    });
 }
 
 
@@ -2427,34 +1869,24 @@ function renderOrderHistory() {
 function openDashboardModal() {
 
     const modal =
-        document.getElementById(
-            "dashboard-modal"
-        );
+        document.getElementById("dashboard-modal");
 
-    if (!modal) {
-        return;
-    }
+    if (!modal) return;
 
     updateDashboard();
 
-    modal.classList.remove(
-        "hidden"
-    );
+    modal.classList.remove("hidden");
 }
 
 
 function closeDashboardModal() {
 
     const modal =
-        document.getElementById(
-            "dashboard-modal"
-        );
+        document.getElementById("dashboard-modal");
 
     if (modal) {
 
-        modal.classList.add(
-            "hidden"
-        );
+        modal.classList.add("hidden");
 
     }
 }
@@ -2463,46 +1895,34 @@ function closeDashboardModal() {
 function updateDashboard() {
 
     const name =
-        document.getElementById(
-            "dash-user-name"
-        );
+        document.getElementById("dash-user-name");
 
     const email =
-        document.getElementById(
-            "dash-user-email"
-        );
+        document.getElementById("dash-user-email");
 
     const coins =
-        document.getElementById(
-            "dash-user-coins"
-        );
+        document.getElementById("dash-user-coins");
 
     const orders =
-        document.getElementById(
-            "dash-total-orders"
-        );
-
+        document.getElementById("dash-total-orders");
 
     if (currentUser) {
 
         if (name) {
 
             name.textContent =
-                currentUser.name ||
-                "User";
+                currentUser.name || "User";
 
         }
 
         if (email) {
 
             email.textContent =
-                currentUser.email ||
-                "";
+                currentUser.email || "";
 
         }
 
-    }
-    else {
+    } else {
 
         if (name) {
 
@@ -2520,7 +1940,6 @@ function updateDashboard() {
 
     }
 
-
     if (coins) {
 
         coins.textContent =
@@ -2528,14 +1947,12 @@ function updateDashboard() {
 
     }
 
-
     if (orders) {
 
         orders.textContent =
             totalOrders;
 
     }
-
 
     renderOrderHistory();
 }
@@ -2548,88 +1965,48 @@ function updateDashboard() {
 function openAuthModal() {
 
     const modal =
-        document.getElementById(
-            "auth-modal"
-        );
+        document.getElementById("auth-modal");
 
-    if (!modal) {
-        return;
-    }
+    if (!modal) return;
 
-    modal.classList.remove(
-        "hidden"
-    );
+    modal.classList.remove("hidden");
 
-    switchAuthScreen(
-        "login"
-    );
+    switchAuthScreen("login");
 }
 
 
 function closeAuthModal() {
 
     const modal =
-        document.getElementById(
-            "auth-modal"
-        );
+        document.getElementById("auth-modal");
 
     if (modal) {
 
-        modal.classList.add(
-            "hidden"
-        );
+        modal.classList.add("hidden");
 
     }
 }
 
 
-function switchAuthScreen(
-    screen
-) {
+function switchAuthScreen(screen) {
 
     const login =
-        document.getElementById(
-            "login-screen"
-        );
+        document.getElementById("login-screen");
 
     const signup =
-        document.getElementById(
-            "signup-screen"
-        );
+        document.getElementById("signup-screen");
 
+    if (!login || !signup) return;
 
-    if (
-        !login ||
-        !signup
-    ) {
+    if (screen === "signup") {
 
-        return;
-    }
+        login.classList.add("hidden");
+        signup.classList.remove("hidden");
 
+    } else {
 
-    if (
-        screen ===
-        "signup"
-    ) {
-
-        login.classList.add(
-            "hidden"
-        );
-
-        signup.classList.remove(
-            "hidden"
-        );
-
-    }
-    else {
-
-        signup.classList.add(
-            "hidden"
-        );
-
-        login.classList.remove(
-            "hidden"
-        );
+        signup.classList.add("hidden");
+        login.classList.remove("hidden");
 
     }
 }
@@ -2639,47 +2016,25 @@ function switchAuthScreen(
    AUTH HANDLER
 ========================================================= */
 
-function handleAuth(
-    event,
-    type
-) {
+function handleAuth(event, type) {
 
     event.preventDefault();
 
-
-    if (
-        type ===
-        "signup"
-    ) {
+    if (type === "signup") {
 
         const name =
-            document.getElementById(
-                "signup-name"
-            )
-                ?.value
-                .trim();
-
+            document.getElementById("signup-name")
+                ?.value.trim();
 
         const email =
-            document.getElementById(
-                "signup-email"
-            )
-                ?.value
-                .trim();
-
+            document.getElementById("signup-email")
+                ?.value.trim();
 
         const password =
-            document.getElementById(
-                "signup-password"
-            )
+            document.getElementById("signup-password")
                 ?.value;
 
-
-        if (
-            !name ||
-            !email ||
-            !password
-        ) {
+        if (!name || !email || !password) {
 
             showToast(
                 "Please complete all fields.",
@@ -2689,39 +2044,27 @@ function handleAuth(
             return;
         }
 
-
         const user = {
-
             name,
             email,
             password
-
         };
-
 
         localStorage.setItem(
             "foodieExpressAccount",
-            JSON.stringify(
-                user
-            )
+            JSON.stringify(user)
         );
 
-
         currentUser = {
-
             name,
             email
-
         };
 
-
         saveUserData();
-
 
         showToast(
             "Account created successfully!"
         );
-
 
         closeAuthModal();
 
@@ -2734,25 +2077,17 @@ function handleAuth(
     /* ---------------- LOGIN ---------------- */
 
     const email =
-        document.getElementById(
-            "login-email"
-        )
-            ?.value
-            .trim();
-
+        document.getElementById("login-email")
+            ?.value.trim();
 
     const password =
-        document.getElementById(
-            "login-password"
-        )
+        document.getElementById("login-password")
             ?.value;
-
 
     const saved =
         localStorage.getItem(
             "foodieExpressAccount"
         );
-
 
     if (!saved) {
 
@@ -2761,26 +2096,19 @@ function handleAuth(
             "error"
         );
 
-        switchAuthScreen(
-            "signup"
-        );
+        switchAuthScreen("signup");
 
         return;
     }
 
-
     let account;
-
 
     try {
 
         account =
-            JSON.parse(
-                saved
-            );
+            JSON.parse(saved);
 
-    }
-    catch {
+    } catch {
 
         showToast(
             "Account data is corrupted.",
@@ -2790,39 +2118,27 @@ function handleAuth(
         return;
     }
 
-
     if (
-        account.email ===
-            email &&
-        account.password ===
-            password
+        account.email === email &&
+        account.password === password
     ) {
 
         currentUser = {
-
-            name:
-                account.name,
-
-            email:
-                account.email
-
+            name: account.name,
+            email: account.email
         };
 
-
         saveUserData();
-
 
         showToast(
             `Welcome back, ${account.name}!`
         );
 
-
         closeAuthModal();
 
         updateDashboard();
 
-    }
-    else {
+    } else {
 
         showToast(
             "Incorrect email or password.",
@@ -2839,8 +2155,7 @@ function handleAuth(
 
 function handleLogout() {
 
-    currentUser =
-        null;
+    currentUser = null;
 
     localStorage.removeItem(
         "foodieExpressUser"
@@ -2858,29 +2173,16 @@ function handleLogout() {
    CURRENCY
 ========================================================= */
 
-function changeCurrency(
-    currency
-) {
+function changeCurrency(currency) {
 
-    if (
-        !currencyRates[
-            currency
-        ]
-    ) {
+    if (!currencyRates[currency]) return;
 
-        return;
-    }
-
-
-    currentCurrency =
-        currency;
-
+    currentCurrency = currency;
 
     localStorage.setItem(
         "foodieExpressCurrency",
         currency
     );
-
 
     renderMenu(
         getVisibleMenuItems()
@@ -2892,7 +2194,6 @@ function changeCurrency(
 
     renderOrderHistory();
 
-
     showToast(
         `Currency changed to ${currency}.`
     );
@@ -2903,31 +2204,22 @@ function changeCurrency(
    LANGUAGE
 ========================================================= */
 
-function changeLanguage(
-    language
-) {
+function changeLanguage(language) {
 
-    currentLanguage =
-        language;
-
+    currentLanguage = language;
 
     localStorage.setItem(
         "foodieExpressLanguage",
         language
     );
 
-
-    if (
-        language ===
-        "ur"
-    ) {
+    if (language === "ur") {
 
         showToast(
             "Urdu language selected. Food names remain in English for consistency."
         );
 
-    }
-    else {
+    } else {
 
         showToast(
             "English language selected."
@@ -2944,56 +2236,37 @@ function changeLanguage(
 function toggleDarkMode() {
 
     const root =
-        document.getElementById(
-            "html-root"
-        );
+        document.getElementById("html-root");
 
-
-    if (!root) {
-        return;
-    }
-
+    if (!root) return;
 
     const current =
-        root.getAttribute(
-            "data-theme"
-        ) ||
+        root.getAttribute("data-theme") ||
         "light";
 
-
     const next =
-        current ===
-        "dark"
+        current === "dark"
             ? "light"
             : "dark";
-
 
     root.setAttribute(
         "data-theme",
         next
     );
 
-
     localStorage.setItem(
         "foodieExpressTheme",
         next
     );
 
-
     const button =
-        document.getElementById(
-            "dark-mode-btn"
-        );
-
+        document.getElementById("dark-mode-btn");
 
     if (button) {
 
         button.innerHTML =
-            next ===
-            "dark"
-
+            next === "dark"
                 ? '<i class="fa-solid fa-sun"></i>'
-
                 : '<i class="fa-solid fa-moon"></i>';
 
     }
@@ -3006,9 +2279,7 @@ function toggleDarkMode() {
 
 function detectUserLocation() {
 
-    if (
-        !navigator.geolocation
-    ) {
+    if (!navigator.geolocation) {
 
         showToast(
             "Location is not supported by your browser.",
@@ -3018,11 +2289,9 @@ function detectUserLocation() {
         return;
     }
 
-
     showToast(
         "Requesting your location..."
     );
-
 
     navigator.geolocation.getCurrentPosition(
 
@@ -3033,7 +2302,6 @@ function detectUserLocation() {
 
             const longitude =
                 position.coords.longitude;
-
 
             showToast(
                 `Location detected: ${latitude.toFixed(3)}, ${longitude.toFixed(3)}`
@@ -3064,7 +2332,6 @@ function startVoiceSearch() {
         window.SpeechRecognition ||
         window.webkitSpeechRecognition;
 
-
     if (!SpeechRecognition) {
 
         showToast(
@@ -3075,58 +2342,41 @@ function startVoiceSearch() {
         return;
     }
 
-
     const recognition =
         new SpeechRecognition();
 
+    recognition.lang = "en-US";
 
-    recognition.lang =
-        "en-US";
+    recognition.interimResults = false;
 
-    recognition.interimResults =
-        false;
-
-    recognition.maxAlternatives =
-        1;
-
+    recognition.maxAlternatives = 1;
 
     recognition.start();
-
 
     showToast(
         "Listening... Please say a food name."
     );
 
-
     recognition.onresult =
         event => {
 
             const text =
-                event
-                    .results[0][0]
-                    .transcript;
-
+                event.results[0][0].transcript;
 
             const input =
                 document.getElementById(
                     "search-input"
                 );
 
-
             if (input) {
 
-                input.value =
-                    text;
+                input.value = text;
 
             }
 
-
-            searchMenu(
-                text
-            );
+            searchMenu(text);
 
         };
-
 
     recognition.onerror =
         () => {
@@ -3160,7 +2410,6 @@ function startAICallSimulation() {
 
     ];
 
-
     const suggestion =
         suggestions[
             Math.floor(
@@ -3168,7 +2417,6 @@ function startAICallSimulation() {
                 suggestions.length
             )
         ];
-
 
     showToast(
         suggestion
@@ -3182,7 +2430,6 @@ function startAIVoiceInput() {
         window.SpeechRecognition ||
         window.webkitSpeechRecognition;
 
-
     if (!SpeechRecognition) {
 
         showToast(
@@ -3193,41 +2440,30 @@ function startAIVoiceInput() {
         return;
     }
 
-
     const recognition =
         new SpeechRecognition();
 
+    recognition.lang = "en-US";
 
-    recognition.lang =
-        "en-US";
-
-    recognition.interimResults =
-        false;
-
+    recognition.interimResults = false;
 
     recognition.start();
-
 
     showToast(
         "AI is listening..."
     );
 
-
     recognition.onresult =
         event => {
 
             const text =
-                event
-                    .results[0][0]
-                    .transcript;
-
+                event.results[0][0].transcript;
 
             showToast(
                 `AI heard: "${text}"`
             );
 
         };
-
 
     recognition.onerror =
         () => {
@@ -3252,11 +2488,7 @@ function toggleChatbot() {
             "chat-window"
         );
 
-
-    if (!chatWindow) {
-        return;
-    }
-
+    if (!chatWindow) return;
 
     chatWindow.classList.toggle(
         "hidden"
@@ -3264,14 +2496,9 @@ function toggleChatbot() {
 }
 
 
-function handleChatKeyPress(
-    event
-) {
+function handleChatKeyPress(event) {
 
-    if (
-        event.key ===
-        "Enter"
-    ) {
+    if (event.key === "Enter") {
 
         event.preventDefault();
 
@@ -3293,293 +2520,181 @@ function sendChatMessage() {
             "chat-messages"
         );
 
-
-    if (
-        !input ||
-        !messages
-    ) {
-
-        return;
-    }
-
+    if (!input || !messages) return;
 
     const userText =
         input.value.trim();
 
-
-    if (!userText) {
-        return;
-    }
-
+    if (!userText) return;
 
     const userMessage =
-        document.createElement(
-            "div"
-        );
-
+        document.createElement("div");
 
     userMessage.className =
         "chat-msg user";
 
-
     userMessage.textContent =
         userText;
-
 
     messages.appendChild(
         userMessage
     );
 
-
-    input.value =
-        "";
-
+    input.value = "";
 
     messages.scrollTop =
         messages.scrollHeight;
 
 
-    fetch(
-        "/api/ai",
-        {
+    fetch("/api/ai", {
 
-            method:
-                "POST",
+        method: "POST",
 
-            headers: {
+        headers: {
+            "Content-Type": "application/json"
+        },
 
-                "Content-Type":
-                    "application/json"
+        body: JSON.stringify({
+            message: userText
+        })
 
-            },
+    })
 
-            body:
-                JSON.stringify({
+    .then(response => response.json())
 
-                    message:
-                        userText
+    .then(data => {
 
-                })
+        const botMessage =
+            document.createElement("div");
 
-        }
-    )
+        botMessage.className =
+            "chat-msg bot";
 
-        .then(
-            response => {
+        botMessage.textContent =
+            data.reply ||
+            "Sorry, I could not get a response from AI.";
 
-                if (!response.ok) {
-
-                    throw new Error(
-                        `AI request failed: ${response.status}`
-                    );
-
-                }
-
-                return response.json();
-
-            }
-        )
-
-        .then(
-            data => {
-
-                const botMessage =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                botMessage.className =
-                    "chat-msg bot";
-
-
-                botMessage.textContent =
-                    data.reply ||
-                    "Sorry, I could not get a response from AI.";
-
-
-                messages.appendChild(
-                    botMessage
-                );
-
-
-                messages.scrollTop =
-                    messages.scrollHeight;
-
-            }
-        )
-
-        .catch(
-            error => {
-
-                console.error(
-                    "AI Chat Error:",
-                    error
-                );
-
-
-                const botMessage =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                botMessage.className =
-                    "chat-msg bot";
-
-
-                botMessage.textContent =
-                    "Sorry, AI service is currently unavailable.";
-
-
-                messages.appendChild(
-                    botMessage
-                );
-
-
-                messages.scrollTop =
-                    messages.scrollHeight;
-
-            }
+        messages.appendChild(
+            botMessage
         );
+
+        messages.scrollTop =
+            messages.scrollHeight;
+
+    })
+
+    .catch(error => {
+
+        console.error(
+            "AI Chat Error:",
+            error
+        );
+
+        const botMessage =
+            document.createElement("div");
+
+        botMessage.className =
+            "chat-msg bot";
+
+        botMessage.textContent =
+            "Sorry, AI service is currently unavailable.";
+
+        messages.appendChild(
+            botMessage
+        );
+
+        messages.scrollTop =
+            messages.scrollHeight;
+
+    });
 }
 
 
-function getChatbotReply(
-    text
-) {
+function getChatbotReply(text) {
 
     const message =
-        String(
-            text || ""
-        ).toLowerCase();
-
+        text.toLowerCase();
 
     if (
-        message.includes(
-            "delivery"
-        ) ||
-        message.includes(
-            "deliver"
-        )
+        message.includes("delivery") ||
+        message.includes("deliver")
     ) {
 
         return "Our estimated delivery time is around 30 minutes, depending on your location.";
 
     }
 
-
     if (
-        message.includes(
-            "discount"
-        ) ||
-        message.includes(
-            "promo"
-        ) ||
-        message.includes(
-            "coupon"
-        )
+        message.includes("discount") ||
+        message.includes("promo") ||
+        message.includes("coupon")
     ) {
 
         return "Try promo code FOODIE50 to receive a 10% discount.";
 
     }
 
-
     if (
-        message.includes(
-            "burger"
-        )
+        message.includes("burger")
     ) {
 
         return "Our Classic Zinger Burger and Loaded Beef Burger are popular choices.";
 
     }
 
-
     if (
-        message.includes(
-            "biryani"
-        ) ||
-        message.includes(
-            "desi"
-        )
+        message.includes("biryani") ||
+        message.includes("desi")
     ) {
 
         return "For desi food, try our Chicken Biryani or Chicken Karahi.";
 
     }
 
-
     if (
-        message.includes(
-            "bbq"
-        ) ||
-        message.includes(
-            "grill"
-        )
+        message.includes("bbq") ||
+        message.includes("grill")
     ) {
 
         return "Our BBQ Platter, Chicken Tikka and Malai Boti are great BBQ options.";
 
     }
 
-
     if (
-        message.includes(
-            "drink"
-        ) ||
-        message.includes(
-            "shake"
-        )
+        message.includes("drink") ||
+        message.includes("shake")
     ) {
 
         return "You can try our Mango Shake, Chocolate Shake or Fresh Lime.";
 
     }
 
-
     if (
-        message.includes(
-            "hello"
-        ) ||
-        message.includes(
-            "hi"
-        ) ||
-        message.includes(
-            "hey"
-        )
+        message.includes("hello") ||
+        message.includes("hi") ||
+        message.includes("hey")
     ) {
 
         return "Hello! 👋 Welcome to Foodie Express. What delicious food are you looking for?";
 
     }
 
-
     if (
-        message.includes(
-            "price"
-        ) ||
-        message.includes(
-            "cost"
-        )
+        message.includes("price") ||
+        message.includes("cost")
     ) {
 
         return "You can see the current price of every item directly on its food card.";
 
     }
 
-
     if (
-        message.includes(
-            "thank"
-        )
+        message.includes("thank")
     ) {
 
         return "You're very welcome! ❤️ Enjoy your meal.";
 
     }
-
 
     return "I can help you with food, prices, delivery, discounts and menu categories. What would you like to know?";
 }
@@ -3595,7 +2710,6 @@ function updateLoyaltyUI() {
         document.getElementById(
             "dash-user-coins"
         );
-
 
     if (coins) {
 
@@ -3619,23 +2733,25 @@ function loadSavedData() {
                 "foodieExpressCart"
             );
 
-
         if (savedCart) {
 
             cart =
-                JSON.parse(
-                    savedCart
-                );
+                JSON.parse(savedCart);
 
         }
 
-    }
-    catch {
+    } catch {
 
         cart = [];
 
     }
 
+
+    /*
+       IMPORTANT:
+       Purani LocalStorage cart values ko clean aur
+       numeric IDs / quantities mein convert karte hain.
+    */
 
     normalizeCartData();
 
@@ -3649,52 +2765,41 @@ function loadSavedData() {
                 "foodieExpressWishlist"
             );
 
-
         if (savedWishlist) {
 
             wishlist =
-                JSON.parse(
-                    savedWishlist
-                );
+                JSON.parse(savedWishlist);
 
         }
 
-    }
-    catch {
+    } catch {
 
         wishlist = [];
 
     }
 
 
-    if (
-        Array.isArray(
-            wishlist
-        )
-    ) {
+    /*
+       Wishlist IDs ko bhi numbers mein normalize karna.
+    */
+
+    if (Array.isArray(wishlist)) {
 
         wishlist =
             wishlist
-                .map(
-                    id =>
-                        Number(id)
-                )
+                .map(id => Number(id))
                 .filter(
                     id =>
                         menuItems.some(
-                            item =>
-                                item.id ===
-                                id
+                            item => item.id === id
                         )
                 );
 
-    }
-    else {
+    } else {
 
         wishlist = [];
 
     }
-
 
     saveWishlistToStorage();
 
@@ -3706,29 +2811,21 @@ function loadSavedData() {
                 "foodieExpressOrders"
             );
 
-
         if (savedOrders) {
 
             orderHistory =
-                JSON.parse(
-                    savedOrders
-                );
+                JSON.parse(savedOrders);
 
         }
 
-    }
-    catch {
+    } catch {
 
         orderHistory = [];
 
     }
 
 
-    if (
-        !Array.isArray(
-            orderHistory
-        )
-    ) {
+    if (!Array.isArray(orderHistory)) {
 
         orderHistory = [];
 
@@ -3742,18 +2839,14 @@ function loadSavedData() {
                 "foodieExpressUser"
             );
 
-
         if (savedUser) {
 
             currentUser =
-                JSON.parse(
-                    savedUser
-                );
+                JSON.parse(savedUser);
 
         }
 
-    }
-    catch {
+    } catch {
 
         currentUser = null;
 
@@ -3765,15 +2858,10 @@ function loadSavedData() {
             "foodieExpressCoins"
         );
 
-
-    if (
-        savedCoins !== null
-    ) {
+    if (savedCoins) {
 
         loyaltyCoins =
-            Number(
-                savedCoins
-            ) || 0;
+            Number(savedCoins) || 0;
 
     }
 
@@ -3787,12 +2875,9 @@ function loadSavedData() {
             "foodieExpressCurrency"
         );
 
-
     if (
         savedCurrency &&
-        currencyRates[
-            savedCurrency
-        ]
+        currencyRates[savedCurrency]
     ) {
 
         currentCurrency =
@@ -3801,49 +2886,10 @@ function loadSavedData() {
     }
 
 
-    /*
-       IMPORTANT:
-       Dedicated checkout.html uses this exact key.
-       When the user applies a coupon on the main cart,
-       the discount is available on checkout.html too.
-    */
-
-    const savedCheckoutDiscount =
-        localStorage.getItem(
-            "foodieExpressCheckoutDiscount"
-        );
-
-
-    if (
-        savedCheckoutDiscount !==
-        null
-    ) {
-
-        currentDiscount =
-            Math.max(
-                0,
-                Math.min(
-                    100,
-                    Number(
-                        savedCheckoutDiscount
-                    ) || 0
-                )
-            );
-
-    }
-    else {
-
-        currentDiscount =
-            0;
-
-    }
-
-
     const savedLanguage =
         localStorage.getItem(
             "foodieExpressLanguage"
         );
-
 
     if (savedLanguage) {
 
@@ -3858,12 +2904,10 @@ function loadSavedData() {
             "foodieExpressTheme"
         );
 
-
     const root =
         document.getElementById(
             "html-root"
         );
-
 
     if (root) {
 
@@ -3875,6 +2919,7 @@ function loadSavedData() {
         );
 
     }
+
 }
 
 
@@ -3894,7 +2939,6 @@ function updateSavedSelectors() {
             "language-selector"
         );
 
-
     if (currency) {
 
         currency.value =
@@ -3902,13 +2946,13 @@ function updateSavedSelectors() {
 
     }
 
-
     if (language) {
 
         language.value =
             currentLanguage;
 
     }
+
 }
 
 
@@ -3923,40 +2967,27 @@ function setupReservationDate() {
             "reservation-date"
         );
 
-
-    if (!dateInput) {
-        return;
-    }
-
+    if (!dateInput) return;
 
     const today =
         new Date();
 
-
     const year =
         today.getFullYear();
-
 
     const month =
         String(
             today.getMonth() + 1
-        ).padStart(
-            2,
-            "0"
-        );
-
+        ).padStart(2, "0");
 
     const day =
         String(
             today.getDate()
-        ).padStart(
-            2,
-            "0"
-        );
-
+        ).padStart(2, "0");
 
     dateInput.min =
         `${year}-${month}-${day}`;
+
 }
 
 
@@ -3970,37 +3001,27 @@ function setupEscapeKey() {
         "keydown",
         event => {
 
-            if (
-                event.key !==
-                "Escape"
-            ) {
-
+            if (event.key !== "Escape") {
                 return;
             }
-
 
             const modals =
                 document.querySelectorAll(
                     ".modal:not(.hidden)"
                 );
 
+            modals.forEach(modal => {
 
-            modals.forEach(
-                modal => {
+                modal.classList.add(
+                    "hidden"
+                );
 
-                    modal.classList.add(
-                        "hidden"
-                    );
-
-                }
-            );
-
+            });
 
             const sidebar =
                 document.getElementById(
                     "cart-sidebar"
                 );
-
 
             if (sidebar) {
 
@@ -4030,44 +3051,29 @@ function setupOutsideCartClick() {
                     "cart-sidebar"
                 );
 
-
             const cartButton =
                 document.querySelector(
                     ".floating-cart"
                 );
 
-
-            if (
-                !sidebar ||
-                !cartButton
-            ) {
-
+            if (!sidebar || !cartButton) {
                 return;
             }
-
 
             if (
                 !sidebar.classList.contains(
                     "open"
                 )
             ) {
-
                 return;
             }
-
 
             if (
-                sidebar.contains(
-                    event.target
-                ) ||
-                cartButton.contains(
-                    event.target
-                )
+                sidebar.contains(event.target) ||
+                cartButton.contains(event.target)
             ) {
-
                 return;
             }
-
 
             sidebar.classList.remove(
                 "open"
@@ -4075,72 +3081,6 @@ function setupOutsideCartClick() {
 
         }
     );
-}
-
-
-/* =========================================================
-   CHECKOUT TRACKING RETURN
-========================================================= */
-
-function handleCheckoutTrackingReturn() {
-
-    const shouldStartTracking =
-        localStorage.getItem(
-            "foodieExpressStartTracking"
-        );
-
-
-    if (
-        shouldStartTracking !==
-        "true"
-    ) {
-
-        return;
-    }
-
-
-    localStorage.removeItem(
-        "foodieExpressStartTracking"
-    );
-
-
-    /*
-       checkout.html has already saved the order,
-       updated coins, and cleared the checkout cart.
-
-       Here we only start the existing main-page
-       tracking UI.
-    */
-
-    startOrderTrackingSimulation();
-
-
-    const tracking =
-        document.getElementById(
-            "tracking-section"
-        );
-
-
-    if (tracking) {
-
-        setTimeout(
-            () => {
-
-                tracking.scrollIntoView({
-
-                    behavior:
-                        "smooth",
-
-                    block:
-                        "start"
-
-                });
-
-            },
-            300
-        );
-
-    }
 }
 
 
@@ -4173,8 +3113,6 @@ window.addEventListener(
         setupEscapeKey();
 
         setupOutsideCartClick();
-
-        handleCheckoutTrackingReturn();
 
     }
 );
