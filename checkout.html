@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en" id="checkout-html-root" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foodie Express | Secure Checkout</title>
+    <meta name="description" content="Foodie Express premium multi-step checkout page.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="checkout-page">
+
+<header class="checkout-topbar">
+    <a class="checkout-brand" href="index.html">
+        <i class="fa-solid fa-utensils"></i>
+        <span>Foodie <b>Express</b></span>
+    </a>
+    <div style="display:flex;gap:9px;align-items:center;">
+        <button class="checkout-theme-btn" type="button" onclick="toggleCheckoutTheme()" id="checkout-theme-btn" title="Toggle dark mode" aria-label="Toggle dark mode">
+            <i class="fa-solid fa-moon"></i>
+        </button>
+        <button class="checkout-back" type="button" onclick="returnToMenu()">
+            <i class="fa-solid fa-arrow-left"></i><span>Back to Menu</span>
+        </button>
+    </div>
+</header>
+
+<main class="checkout-shell" id="checkout-workspace">
+    <div class="checkout-heading">
+        <span>SECURE CHECKOUT</span>
+        <h1>Complete Your Order</h1>
+        <p>Review your food, add delivery details, choose payment, and confirm your order.</p>
+    </div>
+
+    <div class="checkout-progress" id="checkout-progress">
+        <button class="checkout-progress-step active" type="button" onclick="goToStep(1)"><span class="number">01</span>Customer</button>
+        <button class="checkout-progress-step" type="button" onclick="goToStep(2)"><span class="number">02</span>Delivery</button>
+        <button class="checkout-progress-step" type="button" onclick="goToStep(3)"><span class="number">03</span>Payment</button>
+        <button class="checkout-progress-step" type="button" onclick="goToStep(4)"><span class="number">04</span>Review</button>
+    </div>
+
+    <div class="checkout-layout">
+        <section class="checkout-main-card">
+
+            <div class="checkout-step active" data-step="1" id="checkout-step-1">
+                <div class="checkout-step-title">
+                    <h2><i class="fa-solid fa-user"></i> Customer Information</h2>
+                    <p>Tell us who will receive the order.</p>
+                </div>
+                <div class="checkout-form-grid">
+                    <div class="checkout-form-group">
+                        <label for="checkout-name">Full Name *</label>
+                        <input id="checkout-name" type="text" autocomplete="name" placeholder="Your full name">
+                        <small class="checkout-error" id="error-name"></small>
+                    </div>
+                    <div class="checkout-form-group">
+                        <label for="checkout-phone">Phone *</label>
+                        <input id="checkout-phone" type="tel" autocomplete="tel" placeholder="03XX XXXXXXX">
+                        <small class="checkout-error" id="error-phone"></small>
+                    </div>
+                    <div class="checkout-form-group full">
+                        <label for="checkout-email">Email</label>
+                        <input id="checkout-email" type="email" autocomplete="email" placeholder="you@example.com">
+                        <small class="checkout-error" id="error-email"></small>
+                    </div>
+                </div>
+                <div class="checkout-actions">
+                    <span></span>
+                    <button class="checkout-btn-main" type="button" onclick="nextCheckoutStep()">Continue to Delivery <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <div class="checkout-step" data-step="2" id="checkout-step-2">
+                <div class="checkout-step-title">
+                    <h2><i class="fa-solid fa-location-dot"></i> Delivery Information</h2>
+                    <p>Where should we deliver your order?</p>
+                </div>
+                <div class="checkout-form-grid">
+                    <div class="checkout-form-group full">
+                        <label for="checkout-address">Complete Address *</label>
+                        <textarea id="checkout-address" placeholder="House / Street / Block / Landmark"></textarea>
+                        <small class="checkout-error" id="error-address"></small>
+                    </div>
+                    <div class="checkout-form-group">
+                        <label for="checkout-city">City *</label>
+                        <input id="checkout-city" type="text" value="Rahim Yar Khan" autocomplete="address-level2">
+                        <small class="checkout-error" id="error-city"></small>
+                    </div>
+                    <div class="checkout-form-group">
+                        <label for="checkout-area">Area</label>
+                        <input id="checkout-area" type="text" placeholder="Area / Colony">
+                        <small class="checkout-error" id="error-area"></small>
+                    </div>
+                    <div class="checkout-form-group">
+                        <label for="checkout-postal">Postal Code</label>
+                        <input id="checkout-postal" type="text" inputmode="numeric" placeholder="64200">
+                        <small class="checkout-error" id="error-postal"></small>
+                    </div>
+                    <div class="checkout-form-group">
+                        <label for="checkout-note">Delivery Note</label>
+                        <input id="checkout-note" type="text" placeholder="e.g. Call when outside">
+                        <small class="checkout-error" id="error-note"></small>
+                    </div>
+                </div>
+
+                <div style="margin-top:22px;">
+                    <h3 style="font-size:.98rem;margin-bottom:10px;">Delivery Speed</h3>
+                    <div class="checkout-choice-grid">
+                        <label class="checkout-choice selected" id="delivery-standard-choice">
+                            <input type="radio" name="delivery-option" value="Standard" checked onchange="handleDeliveryOption()">
+                            <span><strong>Standard Delivery</strong><small>Approx. 35–50 min · Rs 150</small></span>
+                        </label>
+                        <label class="checkout-choice" id="delivery-express-choice">
+                            <input type="radio" name="delivery-option" value="Express" onchange="handleDeliveryOption()">
+                            <span><strong>Express Delivery</strong><small>Approx. 20–30 min · Rs 250</small></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="checkout-actions">
+                    <button class="checkout-btn-main secondary" type="button" onclick="previousCheckoutStep()"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                    <button class="checkout-btn-main" type="button" onclick="nextCheckoutStep()">Continue to Payment <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <div class="checkout-step" data-step="3" id="checkout-step-3">
+                <div class="checkout-step-title">
+                    <h2><i class="fa-solid fa-credit-card"></i> Payment Method</h2>
+                    <p>Choose how you want to pay. This frontend records the selected method; real gateway charging requires a backend gateway.</p>
+                </div>
+                <div class="checkout-choice-grid">
+                    <label class="checkout-choice selected" id="payment-cod-choice">
+                        <input type="radio" name="checkout-payment" value="Cash on Delivery" checked onchange="handlePaymentMethod()">
+                        <span><strong>Cash on Delivery</strong><small>Pay when your order arrives.</small></span>
+                    </label>
+                    <label class="checkout-choice" id="payment-jazz-choice">
+                        <input type="radio" name="checkout-payment" value="JazzCash" onchange="handlePaymentMethod()">
+                        <span><strong>JazzCash</strong><small>Mobile wallet payment.</small></span>
+                    </label>
+                    <label class="checkout-choice" id="payment-easy-choice">
+                        <input type="radio" name="checkout-payment" value="EasyPaisa" onchange="handlePaymentMethod()">
+                        <span><strong>EasyPaisa</strong><small>Mobile wallet payment.</small></span>
+                    </label>
+                    <label class="checkout-choice" id="payment-card-choice">
+                        <input type="radio" name="checkout-payment" value="Card" onchange="handlePaymentMethod()">
+                        <span><strong>Debit / Credit Card</strong><small>Frontend card validation.</small></span>
+                    </label>
+                </div>
+
+                <div class="checkout-payment-details hidden" id="wallet-details">
+                    <div class="checkout-form-grid">
+                        <div class="checkout-form-group full">
+                            <label for="wallet-number">Wallet Number *</label>
+                            <input id="wallet-number" type="tel" inputmode="numeric" placeholder="03XX XXXXXXX">
+                            <small class="checkout-error" id="error-wallet"></small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checkout-payment-details hidden" id="card-details">
+                    <div class="checkout-form-grid">
+                        <div class="checkout-form-group full">
+                            <label for="card-number">Card Number *</label>
+                            <input id="card-number" type="text" inputmode="numeric" maxlength="19" placeholder="1234 5678 9012 3456" oninput="handleCardNumberInput(event)">
+                            <small class="checkout-error" id="error-card"></small>
+                        </div>
+                        <div class="checkout-form-group">
+                            <label for="card-expiry">Expiry *</label>
+                            <input id="card-expiry" type="text" inputmode="numeric" maxlength="5" placeholder="MM/YY" oninput="handleExpiryInput(event)">
+                            <small class="checkout-error" id="error-expiry"></small>
+                        </div>
+                        <div class="checkout-form-group">
+                            <label for="card-cvv">CVV *</label>
+                            <input id="card-cvv" type="password" inputmode="numeric" maxlength="4" placeholder="123" oninput="handleCVVInput(event)">
+                            <small class="checkout-error" id="error-cvv"></small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checkout-actions">
+                    <button class="checkout-btn-main secondary" type="button" onclick="previousCheckoutStep()"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                    <button class="checkout-btn-main" type="button" onclick="nextCheckoutStep()">Review Order <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <div class="checkout-step" data-step="4" id="checkout-step-4">
+                <div class="checkout-step-title">
+                    <h2><i class="fa-solid fa-clipboard-check"></i> Review & Confirm</h2>
+                    <p>Check every detail before placing your order.</p>
+                </div>
+                <div class="checkout-review-grid">
+                    <div class="checkout-review-card" id="review-customer"></div>
+                    <div class="checkout-review-card" id="review-delivery"></div>
+                    <div class="checkout-review-card" id="review-payment"></div>
+                    <div class="checkout-review-card" id="review-items"></div>
+                </div>
+                <div class="checkout-actions">
+                    <button class="checkout-btn-main secondary" type="button" onclick="previousCheckoutStep()"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                    <button class="checkout-btn-main" type="button" onclick="processCheckoutOrder()"><i class="fa-solid fa-check"></i> Place Order</button>
+                </div>
+            </div>
+        </section>
+
+        <aside class="checkout-summary-card">
+            <h2 style="font-size:1.15rem;margin-bottom:15px;"><i class="fa-solid fa-bag-shopping"></i> Your Order</h2>
+            <div class="checkout-items" id="checkout-items"></div>
+            <div class="checkout-coupon">
+                <input id="checkout-coupon" type="text" placeholder="Promo code">
+                <button type="button" onclick="applyCheckoutCoupon()">Apply</button>
+            </div>
+            <div id="coupon-status" style="font-size:.78rem;color:var(--muted);min-height:18px;margin-bottom:5px;"></div>
+            <div id="checkout-totals"></div>
+        </aside>
+    </div>
+</main>
+
+<section class="checkout-confirmation-wrap" id="checkout-confirmation-wrap">
+    <div class="checkout-confirmation">
+        <div class="checkout-success-icon"><i class="fa-solid fa-check"></i></div>
+        <h2>Order Placed Successfully!</h2>
+        <p>Your Foodie Express order has been saved. You can return to the main website and watch the tracking simulation.</p>
+        <div class="checkout-order-id" id="confirmation-order-id">Order ID: FE-00000000</div>
+        <p id="confirmation-total"></p>
+        <div class="checkout-confirmation-actions">
+            <button class="checkout-btn-main" type="button" onclick="redirectToTracking()"><i class="fa-solid fa-route"></i> Track Order</button>
+            <button class="checkout-btn-main secondary" type="button" onclick="returnToMenu()"><i class="fa-solid fa-utensils"></i> Continue Shopping</button>
+        </div>
+    </div>
+</section>
+
+<div class="checkout-toast" id="checkout-toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+
+/* =========================================================
+   FOODIE EXPRESS — DEDICATED CHECKOUT
+   50+ real frontend checkout functions.
+========================================================= */
+
+let checkoutCart = [];
+let checkoutStep = 1;
+let checkoutDiscount = 0;
+let checkoutDiscountCode = "";
+let checkoutCurrency = "PKR";
+let checkoutOrder = null;
+let checkoutTheme = "light";
+
+const checkoutRates = { PKR: 1, USD: 0.00358, GBP: 0.00265, AED: 0.01315 };
+const checkoutSymbols = { PKR: "PKR", USD: "$", GBP: "£", AED: "AED" };
+
+function loadCheckoutData() {
+    loadCheckoutCart();
+    loadCheckoutCurrency();
+    loadCheckoutTheme();
+    loadCheckoutUser();
+    loadCheckoutDiscount();
+}
+
+function loadCheckoutCart() {
+    try { checkoutCart = JSON.parse(localStorage.getItem("foodieExpressCart") || "[]"); } catch { checkoutCart = []; }
+    normalizeCheckoutCart();
+}
+
+function normalizeCheckoutCart() {
+    if (!Array.isArray(checkoutCart)) checkoutCart = [];
+    checkoutCart = checkoutCart.filter(item => item && Number(item.id) && Number(item.quantity) > 0).map(item => ({
+        id: Number(item.id),
+        name: String(item.name || "Food Item"),
+        price: Number(item.price) || 0,
+        image: item.image || "",
+        quantity: Math.max(1, Number(item.quantity) || 1)
+    }));
+}
+
+function saveCheckoutCart() {
+    localStorage.setItem("foodieExpressCart", JSON.stringify(checkoutCart));
+}
+
+function loadCheckoutCurrency() {
+    const saved = localStorage.getItem("foodieExpressCurrency");
+    if (saved && checkoutRates[saved]) checkoutCurrency = saved;
+}
+
+function loadCheckoutTheme() {
+    checkoutTheme = localStorage.getItem("foodieExpressTheme") || "light";
+    if (checkoutTheme !== "dark") checkoutTheme = "light";
+    document.getElementById("checkout-html-root").setAttribute("data-theme", checkoutTheme);
+    updateCheckoutThemeButton();
+}
+
+function loadCheckoutUser() {
+    try {
+        const user = JSON.parse(localStorage.getItem("foodieExpressUser") || "null");
+        if (!user) return;
+        const name = user.name || user.fullName || user.username || "";
+        const email = user.email || "";
+        if (name) setFieldValue("checkout-name", name);
+        if (email) setFieldValue("checkout-email", email);
+        if (user.phone) setFieldValue("checkout-phone", user.phone);
+    } catch { /* guest checkout is allowed */ }
+}
+
+function loadCheckoutDiscount() {
+    checkoutDiscount = Number(localStorage.getItem("foodieExpressCheckoutDiscount") || 0);
+    checkoutDiscount = Math.max(0, Math.min(100, checkoutDiscount));
+    if (checkoutDiscount > 0) checkoutDiscountCode = "CART-DISCOUNT";
+}
+
+function setFieldValue(id, value) {
+    const field = document.getElementById(id);
+    if (field && !field.value) field.value = value;
+}
+
+function getFieldValue(id) {
+    return document.getElementById(id)?.value.trim() || "";
+}
+
+function formatCheckoutPrice(amount) {
+    const converted = amount * (checkoutRates[checkoutCurrency] || 1);
+    if (checkoutCurrency === "PKR") return `PKR ${Math.round(converted).toLocaleString()}`;
+    if (checkoutCurrency === "AED") return `AED ${converted.toFixed(2)}`;
+    return `${checkoutSymbols[checkoutCurrency]}${converted.toFixed(2)}`;
+}
+
+function calculateCheckoutSubtotal() {
+    return checkoutCart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+}
+
+function calculateCheckoutDiscount() {
+    return calculateCheckoutSubtotal() * (checkoutDiscount / 100);
+}
+
+function getSelectedDelivery() {
+    return document.querySelector('input[name="delivery-option"]:checked')?.value || "Standard";
+}
+
+function calculateDeliveryFee() {
+    if (getSelectedDelivery() === "Express") return 250;
+    return calculateCheckoutSubtotal() >= 2500 ? 0 : 150;
+}
+
+function calculateCheckoutGrandTotal() {
+    return Math.max(0, calculateCheckoutSubtotal() - calculateCheckoutDiscount() + calculateDeliveryFee());
+}
+
+function renderCheckoutCart() {
+    const container = document.getElementById("checkout-items");
+    if (!container) return;
+    if (!checkoutCart.length) {
+        container.innerHTML = '<div class="checkout-empty"><i class="fa-solid fa-basket-shopping"></i><p>Your cart is empty.</p><button class="checkout-btn-main" type="button" onclick="returnToMenu()">Go to Menu</button></div>';
+        return;
+    }
+    container.innerHTML = checkoutCart.map(renderCheckoutItem).join("");
+}
+
+function renderCheckoutItem(item) {
+    return `<div class="checkout-item">
+        <img src="${escapeCheckoutHTML(item.image)}" alt="${escapeCheckoutHTML(item.name)}">
+        <div>
+            <h4>${escapeCheckoutHTML(item.name)}</h4>
+            <small>${formatCheckoutPrice(item.price)} each</small>
+            <div class="checkout-item-controls">
+                <button class="checkout-qty-btn" type="button" onclick="decreaseCheckoutQuantity(${item.id})">−</button>
+                <strong>${item.quantity}</strong>
+                <button class="checkout-qty-btn" type="button" onclick="increaseCheckoutQuantity(${item.id})">+</button>
+                <button class="checkout-remove" type="button" onclick="removeCheckoutItem(${item.id})" title="Remove"><i class="fa-solid fa-trash"></i></button>
+            </div>
+        </div>
+        <strong class="checkout-item-price">${formatCheckoutPrice(item.price * item.quantity)}</strong>
+    </div>`;
+}
+
+function escapeCheckoutHTML(value) {
+    return String(value).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+
+function increaseCheckoutQuantity(id) {
+    const item = checkoutCart.find(product => product.id === Number(id));
+    if (!item) return;
+    item.quantity += 1;
+    saveCheckoutCart();
+    refreshCheckoutUI();
+}
+
+function decreaseCheckoutQuantity(id) {
+    const item = checkoutCart.find(product => product.id === Number(id));
+    if (!item) return;
+    item.quantity -= 1;
+    if (item.quantity <= 0) checkoutCart = checkoutCart.filter(product => product.id !== Number(id));
+    saveCheckoutCart();
+    refreshCheckoutUI();
+}
+
+function removeCheckoutItem(id) {
+    checkoutCart = checkoutCart.filter(item => item.id !== Number(id));
+    saveCheckoutCart();
+    refreshCheckoutUI();
+    showCheckoutToast("Item removed from checkout.", "success");
+}
+
+function refreshCheckoutUI() {
+    renderCheckoutCart();
+    renderCheckoutTotals();
+    if (checkoutStep === 4) renderOrderReview();
+}
+
+function renderCheckoutTotals() {
+    const target = document.getElementById("checkout-totals");
+    if (!target) return;
+    const subtotal = calculateCheckoutSubtotal();
+    const discount = calculateCheckoutDiscount();
+    const delivery = calculateDeliveryFee();
+    const total = calculateCheckoutGrandTotal();
+    target.innerHTML = `
+        <div class="checkout-total-row"><span>Subtotal</span><strong>${formatCheckoutPrice(subtotal)}</strong></div>
+        <div class="checkout-total-row"><span>Discount ${checkoutDiscount ? `(${checkoutDiscount}%)` : ""}</span><strong>${checkoutDiscount ? "- " : ""}${formatCheckoutPrice(discount)}</strong></div>
+        <div class="checkout-total-row"><span>Delivery</span><strong>${delivery === 0 ? "FREE" : formatCheckoutPrice(delivery)}</strong></div>
+        <div class="checkout-total-row grand"><span>Total</span><strong>${formatCheckoutPrice(total)}</strong></div>`;
+}
+
+function applyCheckoutCoupon() {
+    const input = document.getElementById("checkout-coupon");
+    const code = (input?.value || "").trim().toUpperCase();
+    const result = validateCheckoutCoupon(code);
+    if (!result.valid) {
+        checkoutDiscount = 0;
+        checkoutDiscountCode = "";
+        setCouponStatus(result.message, true);
+        refreshCheckoutUI();
+        return;
+    }
+    checkoutDiscount = result.percent;
+    checkoutDiscountCode = code;
+    setCouponStatus(`${result.percent}% discount applied successfully.`, false);
+    refreshCheckoutUI();
+}
+
+function validateCheckoutCoupon(code) {
+    if (code === "FOODIE50") return { valid: true, percent: 10, message: "10% discount" };
+    if (code === "WELCOME") return { valid: true, percent: 5, message: "5% discount" };
+    if (code === "CART-DISCOUNT" && Number(localStorage.getItem("foodieExpressCheckoutDiscount")) > 0) return { valid: true, percent: Number(localStorage.getItem("foodieExpressCheckoutDiscount")), message: "Saved cart discount" };
+    return { valid: false, percent: 0, message: "Invalid promo code." };
+}
+
+function setCouponStatus(message, isError) {
+    const status = document.getElementById("coupon-status");
+    if (!status) return;
+    status.textContent = message;
+    status.style.color = isError ? "var(--danger)" : "var(--success)";
+}
+
+function goToStep(step) {
+    const requested = Math.max(1, Math.min(4, Number(step) || 1));
+    if (requested > checkoutStep) {
+        if (!validateStepsBefore(requested)) return;
+    }
+    checkoutStep = requested;
+    updateStepIndicator();
+    showCheckoutStep();
+    if (checkoutStep === 4) renderOrderReview();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function nextCheckoutStep() {
+    if (!validateCurrentStep()) return;
+    if (checkoutStep < 4) goToStep(checkoutStep + 1);
+}
+
+function previousCheckoutStep() {
+    if (checkoutStep > 1) goToStep(checkoutStep - 1);
+}
+
+function updateStepIndicator() {
+    document.querySelectorAll(".checkout-progress-step").forEach((button, index) => {
+        const step = index + 1;
+        button.classList.toggle("active", step === checkoutStep);
+        button.classList.toggle("done", step < checkoutStep);
+    });
+}
+
+function showCheckoutStep() {
+    document.querySelectorAll(".checkout-step").forEach(step => step.classList.toggle("active", Number(step.dataset.step) === checkoutStep));
+}
+
+function validateStepsBefore(step) {
+    if (step >= 2 && !validateCustomerStep()) return false;
+    if (step >= 3 && !validateDeliveryStep()) return false;
+    if (step >= 4 && !validatePaymentStep()) return false;
+    return true;
+}
+
+function validateCurrentStep() {
+    if (checkoutStep === 1) return validateCustomerStep();
+    if (checkoutStep === 2) return validateDeliveryStep();
+    if (checkoutStep === 3) return validatePaymentStep();
+    return true;
+}
+
+function validateCustomerStep() {
+    const name = getFieldValue("checkout-name");
+    const phone = getFieldValue("checkout-phone");
+    const email = getFieldValue("checkout-email");
+    const nameOK = validateRequiredField("checkout-name", "error-name", "Please enter your name.");
+    const phoneOK = validatePhone(phone, "error-phone");
+    const emailOK = !email || validateEmail(email, "error-email");
+    return Boolean(name && nameOK && phoneOK && emailOK);
+}
+
+function validateDeliveryStep() {
+    const addressOK = validateRequiredField("checkout-address", "error-address", "Please enter your complete address.");
+    const cityOK = validateRequiredField("checkout-city", "error-city", "Please enter your city.");
+    return addressOK && cityOK;
+}
+
+function validatePaymentStep() {
+    const payment = getSelectedPaymentMethod();
+    if (!payment) { showCheckoutToast("Please select a payment method.", "error"); return false; }
+    if (payment === "Card") return validateCardDetails();
+    if (payment === "JazzCash" || payment === "EasyPaisa") return validateWalletDetails();
+    return true;
+}
+
+function validateRequiredField(fieldId, errorId, message) {
+    const value = getFieldValue(fieldId);
+    const error = document.getElementById(errorId);
+    if (!value) {
+        if (error) error.textContent = message;
+        return false;
+    }
+    if (error) error.textContent = "";
+    return true;
+}
+
+function validatePhone(value, errorId) {
+    const valid = /^(?:\+92|0)3\d{9}$/.test(value.replace(/[\s-]/g, ""));
+    const error = document.getElementById(errorId);
+    if (!valid) { if (error) error.textContent = "Enter a valid Pakistani mobile number."; return false; }
+    if (error) error.textContent = "";
+    return true;
+}
+
+function validateEmail(value, errorId) {
+    const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    const error = document.getElementById(errorId);
+    if (!valid) { if (error) error.textContent = "Enter a valid email address."; return false; }
+    if (error) error.textContent = "";
+    return true;
+}
+
+function handleDeliveryOption() {
+    document.querySelectorAll('[id^="delivery-"][id$="-choice"]').forEach(choice => choice.classList.remove("selected"));
+    const selected = document.querySelector('input[name="delivery-option"]:checked');
+    selected?.closest(".checkout-choice")?.classList.add("selected");
+    refreshCheckoutUI();
+}
+
+function getSelectedPaymentMethod() {
+    return document.querySelector('input[name="checkout-payment"]:checked')?.value || "";
+}
+
+function handlePaymentMethod() {
+    document.querySelectorAll('[id^="payment-"][id$="-choice"]').forEach(choice => choice.classList.remove("selected"));
+    const selected = document.querySelector('input[name="checkout-payment"]:checked');
+    selected?.closest(".checkout-choice")?.classList.add("selected");
+    togglePaymentFields();
+}
+
+function togglePaymentFields() {
+    const payment = getSelectedPaymentMethod();
+    document.getElementById("wallet-details")?.classList.toggle("hidden", !(payment === "JazzCash" || payment === "EasyPaisa"));
+    document.getElementById("card-details")?.classList.toggle("hidden", payment !== "Card");
+}
+
+function validateWalletDetails() {
+    const number = getFieldValue("wallet-number");
+    const error = document.getElementById("error-wallet");
+    const valid = /^(?:\+92|0)3\d{9}$/.test(number.replace(/[\s-]/g, ""));
+    if (!valid) { if (error) error.textContent = "Enter a valid wallet mobile number."; return false; }
+    if (error) error.textContent = "";
+    return true;
+}
+
+function handleCardNumberInput(event) {
+    const digits = event.target.value.replace(/\D/g, "").slice(0, 16);
+    event.target.value = digits.replace(/(.{4})/g, "$1 ").trim();
+}
+
+function handleExpiryInput(event) {
+    const digits = event.target.value.replace(/\D/g, "").slice(0, 4);
+    event.target.value = digits.length > 2 ? `${digits.slice(0,2)}/${digits.slice(2)}` : digits;
+}
+
+function handleCVVInput(event) {
+    event.target.value = event.target.value.replace(/\D/g, "").slice(0, 4);
+}
+
+function validateCardDetails() {
+    const card = getFieldValue("card-number").replace(/\s/g, "");
+    const expiry = getFieldValue("card-expiry");
+    const cvv = getFieldValue("card-cvv");
+    const cardOK = card.length === 16 && luhnCheck(card);
+    const expiryOK = /^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry) && !isExpiredCard(expiry);
+    const cvvOK = /^\d{3,4}$/.test(cvv);
+    setError("error-card", cardOK ? "" : "Enter a valid 16-digit card number.");
+    setError("error-expiry", expiryOK ? "" : "Enter a valid future expiry date.");
+    setError("error-cvv", cvvOK ? "" : "Enter a 3 or 4 digit CVV.");
+    return cardOK && expiryOK && cvvOK;
+}
+
+function luhnCheck(number) {
+    let sum = 0, doubleDigit = false;
+    for (let i = number.length - 1; i >= 0; i--) {
+        let digit = Number(number[i]);
+        if (doubleDigit) { digit *= 2; if (digit > 9) digit -= 9; }
+        sum += digit;
+        doubleDigit = !doubleDigit;
+    }
+    return sum % 10 === 0;
+}
+
+function isExpiredCard(expiry) {
+    const [month, year] = expiry.split("/").map(Number);
+    const now = new Date();
+    const fullYear = 2000 + year;
+    return fullYear < now.getFullYear() || (fullYear === now.getFullYear() && month < now.getMonth() + 1);
+}
+
+function setError(id, message) {
+    const element = document.getElementById(id);
+    if (element) element.textContent = message;
+}
+
+function renderOrderReview() {
+    renderReviewCustomer();
+    renderReviewDelivery();
+    renderReviewPayment();
+    renderReviewItems();
+}
+
+function renderReviewCustomer() {
+    document.getElementById("review-customer").innerHTML = `<h3><i class="fa-solid fa-user"></i> Customer</h3>${reviewLine("Name", getFieldValue("checkout-name"))}${reviewLine("Phone", getFieldValue("checkout-phone"))}${reviewLine("Email", getFieldValue("checkout-email") || "Not provided")}`;
+}
+
+function renderReviewDelivery() {
+    const address = getFieldValue("checkout-address");
+    const area = getFieldValue("checkout-area");
+    const city = getFieldValue("checkout-city");
+    const delivery = getSelectedDelivery();
+    document.getElementById("review-delivery").innerHTML = `<h3><i class="fa-solid fa-truck"></i> Delivery</h3>${reviewLine("Address", address)}${reviewLine("Area", area || "Not provided")}${reviewLine("City", city)}${reviewLine("Speed", delivery)}${reviewLine("Note", getFieldValue("checkout-note") || "None")}`;
+}
+
+function renderReviewPayment() {
+    const payment = getSelectedPaymentMethod();
+    document.getElementById("review-payment").innerHTML = `<h3><i class="fa-solid fa-credit-card"></i> Payment</h3>${reviewLine("Method", payment)}${payment === "Card" ? reviewLine("Card", maskCardNumber(getFieldValue("card-number"))) : ""}`;
+}
+
+function renderReviewItems() {
+    const items = checkoutCart.map(item => reviewLine(`${item.name} × ${item.quantity}`, formatCheckoutPrice(item.price * item.quantity))).join("");
+    const totals = reviewLine("Subtotal", formatCheckoutPrice(calculateCheckoutSubtotal())) + reviewLine("Discount", `- ${formatCheckoutPrice(calculateCheckoutDiscount())}`) + reviewLine("Delivery", calculateDeliveryFee() ? formatCheckoutPrice(calculateDeliveryFee()) : "FREE") + `<div class="checkout-review-line" style="font-weight:900;margin-top:7px;border-top:1px solid var(--border);padding-top:9px;"><span>Total</span><strong>${formatCheckoutPrice(calculateCheckoutGrandTotal())}</strong></div>`;
+    document.getElementById("review-items").innerHTML = `<h3><i class="fa-solid fa-bag-shopping"></i> Order Summary</h3>${items}${totals}`;
+}
+
+function reviewLine(label, value) {
+    return `<div class="checkout-review-line"><span>${escapeCheckoutHTML(label)}</span><strong>${escapeCheckoutHTML(value)}</strong></div>`;
+}
+
+function maskCardNumber(number) {
+    const digits = number.replace(/\s/g, "");
+    return digits.length >= 4 ? `•••• •••• •••• ${digits.slice(-4)}` : "Not provided";
+}
+
+function generateCheckoutOrderId() {
+    return "FE-" + Date.now().toString().slice(-8);
+}
+
+function buildCheckoutOrder() {
+    return {
+        id: generateCheckoutOrderId(),
+        customer: {
+            name: getFieldValue("checkout-name"),
+            phone: getFieldValue("checkout-phone"),
+            email: getFieldValue("checkout-email"),
+            address: getFieldValue("checkout-address"),
+            city: getFieldValue("checkout-city"),
+            area: getFieldValue("checkout-area"),
+            postalCode: getFieldValue("checkout-postal"),
+            note: getFieldValue("checkout-note")
+        },
+        delivery: getSelectedDelivery(),
+        payment: getSelectedPaymentMethod(),
+        items: JSON.parse(JSON.stringify(checkoutCart)),
+        subtotal: calculateCheckoutSubtotal(),
+        discount: calculateCheckoutDiscount(),
+        deliveryFee: calculateDeliveryFee(),
+        total: calculateCheckoutGrandTotal(),
+        currency: checkoutCurrency,
+        date: new Date().toLocaleString(),
+        status: "Order Placed"
+    };
+}
+
+function saveCheckoutOrder(order) {
+    let history = [];
+    try { history = JSON.parse(localStorage.getItem("foodieExpressOrders") || "[]"); } catch { history = []; }
+    if (!Array.isArray(history)) history = [];
+    history.unshift(order);
+    localStorage.setItem("foodieExpressOrders", JSON.stringify(history));
+    localStorage.setItem("totalOrders", String(history.length));
+}
+
+function updateCheckoutLoyalty(total) {
+    const earned = Math.floor(total / 100);
+    const current = Number(localStorage.getItem("foodieExpressCoins") || 0);
+    localStorage.setItem("foodieExpressCoins", String(current + earned));
+    return earned;
+}
+
+function clearCheckoutCart() {
+    checkoutCart = [];
+    localStorage.setItem("foodieExpressCart", "[]");
+    localStorage.removeItem("foodieExpressCheckoutDiscount");
+}
+
+function buildWhatsAppMessage(order) {
+    const items = order.items.map(item => `• ${item.name} × ${item.quantity} = ${formatCheckoutPrice(item.price * item.quantity)}`).join("\n");
+    return `🛍️ *NEW FOODIE EXPRESS ORDER*\n\n🆔 *Order ID:* ${order.id}\n👤 *Name:* ${order.customer.name}\n📞 *Phone:* ${order.customer.phone}\n📧 *Email:* ${order.customer.email || "Not provided"}\n📍 *Address:* ${order.customer.address}\n🏙️ *City:* ${order.customer.city}\n🛵 *Delivery:* ${order.delivery}\n💳 *Payment:* ${order.payment}\n\n🍔 *ITEMS*\n${items}\n\n💵 *Subtotal:* ${formatCheckoutPrice(order.subtotal)}\n🎟️ *Discount:* ${formatCheckoutPrice(order.discount)}\n🚚 *Delivery:* ${order.deliveryFee ? formatCheckoutPrice(order.deliveryFee) : "FREE"}\n💰 *TOTAL:* ${formatCheckoutPrice(order.total)}`;
+}
+
+function openCheckoutWhatsApp(order) {
+    const url = `https://wa.me/923312969666?text=${encodeURIComponent(buildWhatsAppMessage(order))}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+}
+
+function processCheckoutOrder() {
+    if (!checkoutCart.length) { showCheckoutToast("Your cart is empty.", "error"); return; }
+    if (!validateStepsBefore(4)) return;
+    checkoutOrder = buildCheckoutOrder();
+    saveCheckoutOrder(checkoutOrder);
+    const earned = updateCheckoutLoyalty(checkoutOrder.total);
+    clearCheckoutCart();
+    showCheckoutConfirmation(earned);
+    openCheckoutWhatsApp(checkoutOrder);
+}
+
+function showCheckoutConfirmation(earnedCoins) {
+    document.getElementById("checkout-workspace").style.display = "none";
+    document.getElementById("checkout-confirmation-wrap").classList.add("active");
+    document.getElementById("confirmation-order-id").textContent = `Order ID: ${checkoutOrder.id}`;
+    document.getElementById("confirmation-total").textContent = `${formatCheckoutPrice(checkoutOrder.total)} · ${earnedCoins} loyalty coins earned`;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function redirectToTracking() {
+    localStorage.setItem("foodieExpressStartTracking", "true");
+    window.location.href = "index.html#tracking-section";
+}
+
+function returnToMenu() {
+    window.location.href = "index.html#menu";
+}
+
+function toggleCheckoutTheme() {
+    checkoutTheme = checkoutTheme === "dark" ? "light" : "dark";
+    document.getElementById("checkout-html-root").setAttribute("data-theme", checkoutTheme);
+    localStorage.setItem("foodieExpressTheme", checkoutTheme);
+    updateCheckoutThemeButton();
+}
+
+function updateCheckoutThemeButton() {
+    const button = document.getElementById("checkout-theme-btn");
+    if (!button) return;
+    button.innerHTML = checkoutTheme === "dark" ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+}
+
+function showCheckoutToast(message, type = "success") {
+    const toast = document.getElementById("checkout-toast");
+    if (!toast) return;
+    toast.textContent = message;
+    toast.className = `checkout-toast ${type} show`;
+    clearTimeout(showCheckoutToast.timer);
+    showCheckoutToast.timer = setTimeout(() => toast.classList.remove("show"), 3000);
+}
+
+function handleCheckoutEscape(event) {
+    if (event.key === "Escape" && checkoutStep > 1) previousCheckoutStep();
+}
+
+function initializeCheckout() {
+    loadCheckoutData();
+    renderCheckoutCart();
+    renderCheckoutTotals();
+    updateStepIndicator();
+    showCheckoutStep();
+    handleDeliveryOption();
+    handlePaymentMethod();
+    if (!checkoutCart.length) showCheckoutToast("Your cart is empty. Please add food first.", "error");
+}
+
+window.addEventListener("keydown", handleCheckoutEscape);
+window.addEventListener("load", initializeCheckout);
+</script>
+</body>
+</html>
